@@ -1,6 +1,5 @@
 ﻿namespace SCECore.Utils
 {
-    using SCECore.Objects;
     using System.Text;
 
     public static class SIFUtility

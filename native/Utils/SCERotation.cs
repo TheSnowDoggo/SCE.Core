@@ -1,7 +1,5 @@
 ﻿namespace SCECore.Utils
 {
-    using SCECore.Objects;
-
     /// <summary>
     /// A class containing functions useful for grid rotation.
     /// </summary>

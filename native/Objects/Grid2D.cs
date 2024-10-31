@@ -1,11 +1,8 @@
 ﻿namespace SCECore.Objects
 {
-    using SCECore.Utils;
-
     using System;
     using System.Collections;
     using System.Collections.Generic;
-    using System.Diagnostics.CodeAnalysis;
 
     /// <summary>
     /// A wrapper class of a 2D-array with additional features.
@@ -15,8 +12,6 @@
         where T : IEquatable<T>
     {
         private const bool DefaultTryTrimOnOverflowState = false;
-
-        private T[,] data;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Grid2D{T}"/> class given its initial width and height.
@@ -43,7 +38,7 @@
         /// <param name="data">The initial data of the new grid.</param>
         public Grid2D(T[,] data)
         {
-            this.data = data;
+            Data = data;
         }
 
         /// <summary>
@@ -76,12 +71,7 @@
         /// <summary>
         /// Gets or sets the underlying 2D-array of this instance.
         /// </summary>
-        public T[,] Data
-        {
-            get => data;
-            [MemberNotNull("data")]
-            protected set => data = value;
-        }
+        public T[,] Data { get; protected set; }
 
         /// <summary>
         /// Gets or sets a <see cref="GridCall"/> delegate called whenever this instance has been resized.

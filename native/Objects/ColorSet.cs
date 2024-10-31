@@ -1,7 +1,5 @@
 ﻿namespace SCECore.Objects
 {
-    using SCECore.Utils;
-
     /// <summary>
     /// A struct storing a <see cref="FgColor"/> and <see cref="BgColor"/> <see cref="byte"/> color.
     /// Used by <see cref="Display"/> when CCS rendering.

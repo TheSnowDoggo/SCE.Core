@@ -1,7 +1,5 @@
 ﻿namespace SCECore.Objects
 {
-    using SCECore.Utils;
-
     /// <summary>
     /// A wrapper class of <see cref="Pixel"/> <see cref="Grid2D{T}"/> with additional filling and mapping features.
     /// </summary>
@@ -78,23 +76,22 @@
         /// <exception cref="ArgumentException">Thrown when the given <paramref name="elementGrid"/>, <paramref name="fgGrid"/> and <paramref name="bgGrid"/> don't all have the same dimensions.</exception>
         public static Grid2D<Pixel> ToPixelGrid(Grid2D<string> elementGrid, Grid2D<byte> fgGrid, Grid2D<byte> bgGrid)
         {
-            if (elementGrid.Dimensions == fgGrid.Dimensions && fgGrid.Dimensions == bgGrid.Dimensions)
-            {
-                Grid2D<Pixel> pixelGrid = new(elementGrid.Dimensions);
-                for (int x = 0; x < pixelGrid.Width; x++)
-                {
-                    for (int y = 0; y < pixelGrid.Height; y++)
-                    {
-                        pixelGrid[x, y] = new(elementGrid[x, y], fgGrid[x, y], bgGrid[x, y]);
-                    }
-                }
-
-                return pixelGrid;
-            }
-            else
+            if (elementGrid.Dimensions != fgGrid.Dimensions || fgGrid.Dimensions != bgGrid.Dimensions)
             {
                 throw new ArgumentException("Dimensions do not match");
             }
+
+            Grid2D<Pixel> pixelGrid = new(elementGrid.Dimensions);
+
+            for (int x = 0; x < pixelGrid.Width; x++)
+            {
+                for (int y = 0; y < pixelGrid.Height; y++)
+                {
+                    pixelGrid[x, y] = new(elementGrid[x, y], fgGrid[x, y], bgGrid[x, y]);
+                }
+            }
+
+            return pixelGrid;
         }
 
         /// <inheritdoc/>

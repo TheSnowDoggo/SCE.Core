@@ -1,7 +1,5 @@
 ﻿namespace SCECore.Utils
 {
-    using SCECore.Objects;
-
     /// <summary>
     /// Legacy <see cref="Grid2D{T}"/> scaling class.
     /// </summary>

@@ -1,7 +1,5 @@
 ﻿namespace SCECore.Utils
 {
-    using SCECore.Objects;
-
     /// <summary>
     /// SCEColor (<see cref="byte"/> color) managment class.
     /// </summary>

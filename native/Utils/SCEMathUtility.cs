@@ -1,7 +1,5 @@
 ﻿namespace SCECore.Utils
 {
-    using SCECore.Objects;
-
     public class SCEMathUtility
     {
         public static int ClosestHigherMultiple(int num, int multiplier)
