@@ -1,0 +1,1 @@
+A package containing core functionality used by LunaSCE.
