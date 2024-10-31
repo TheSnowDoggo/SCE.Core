@@ -1,4 +1,4 @@
-﻿namespace SCECore.Objects
+﻿namespace SCECore.Types
 {
     /// <summary>
     /// The exception that is thrown when an attempt is made to access an element of a grid with a position that is outside its bounds.

@@ -1,4 +1,4 @@
-﻿namespace SCECore.Objects
+﻿namespace SCECore.Types
 {
     /// <summary>
     /// Represents errors thrown when invalid dimensions are used to initialize a grid.

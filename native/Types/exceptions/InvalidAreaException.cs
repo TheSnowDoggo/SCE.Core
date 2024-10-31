@@ -1,4 +1,4 @@
-﻿namespace SCECore.Objects
+﻿namespace SCECore.Types
 {
     /// <summary>
     /// The exception that is thrown when an attempt is made to use an invalid <see cref="Area2D"/>.

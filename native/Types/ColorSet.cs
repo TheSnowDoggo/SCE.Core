@@ -1,4 +1,4 @@
-﻿namespace SCECore.Objects
+﻿namespace SCECore.Types
 {
     /// <summary>
     /// A struct storing a <see cref="FgColor"/> and <see cref="BgColor"/> <see cref="byte"/> color.

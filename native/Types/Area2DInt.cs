@@ -1,4 +1,4 @@
-﻿namespace SCECore.Objects
+﻿namespace SCECore.Types
 {
     /// <summary>
     /// A struct representing a 2D rectangular area defined by start and end corner vectors.

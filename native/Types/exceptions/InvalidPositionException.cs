@@ -1,4 +1,4 @@
-﻿namespace SCECore.Objects
+﻿namespace SCECore.Types
 {
     /// <summary>
     /// Represents errors thrown when an attempt is made to use an invalid <see cref="Vector2"/>.
