@@ -13,7 +13,7 @@
             { Color.DarkBlue, 'B' },  // DarkBlue
             { Color.DarkGreen, 'G' },  // DarkGreen
             { Color.DarkCyan, 'C' },  // DarkCyan
-            { Color.DarkYellow, 'R' },  // DarkRed
+            { Color.DarkRed, 'R' },  // DarkRed
             { Color.DarkMagenta, 'M' },  // DarkMagenta
             { Color.DarkYellow, 'Y' },  // DarkYellow
             { Color.Gray, 's' },  // Gray
