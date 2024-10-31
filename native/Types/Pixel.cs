@@ -28,6 +28,11 @@
         {
             if (element is null or "")
             {
+                element = EmptyElement;
+            }
+
+            if (element.Length != PIXELWIDTH)
+            {
                 throw new ArgumentException("Element is invalid.");
             }
 
