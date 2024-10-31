@@ -5,29 +5,6 @@
     /// </summary>
     public static class SCERotation
     {
-        private enum RotationType : byte
-        {
-            /// <summary>
-            /// Top-right position relative to the rotation axis.
-            /// </summary>
-            TopRight,
-
-            /// <summary>
-            /// Bottom-right position relative to the rotation axis.
-            /// </summary>
-            BottomRight,
-
-            /// <summary>
-            /// Bottom-left position relative to the rotation axis.
-            /// </summary>
-            BottomLeft,
-
-            /// <summary>
-            /// Top-left position relative to the rotation axis.
-            /// </summary>
-            TopLeft,
-        }
-
         public static Vector2Int RotationRange { get => new(0, 4); }
 
         public static Vector2 GetRotatedOffsetPosition(Vector2Int position, int rotationFactor, Vector2 rotationAxis)
@@ -81,6 +58,29 @@
                 RotationType.TopLeft => new(-1, 1),
                 _ => throw new NotImplementedException(),
             };
+        }
+
+        private enum RotationType : byte
+        {
+            /// <summary>
+            /// Top-right position relative to the rotation axis.
+            /// </summary>
+            TopRight,
+
+            /// <summary>
+            /// Bottom-right position relative to the rotation axis.
+            /// </summary>
+            BottomRight,
+
+            /// <summary>
+            /// Bottom-left position relative to the rotation axis.
+            /// </summary>
+            BottomLeft,
+
+            /// <summary>
+            /// Top-left position relative to the rotation axis.
+            /// </summary>
+            TopLeft,
         }
     }
 }

@@ -4,9 +4,14 @@
 
     public static class SCEString
     {
-        public static string PadToEven(string str)
+        public static string PadAfterToEven(string str)
         {
-            return str + (str.Length % 2 != 0 ? " " : string.Empty);
+            return str.Length % 2 == 0 ? str : $"{str} ";
+        }
+
+        public static string PadBeforeToEven(string str)
+        {
+            return str.Length % 2 == 0 ? str : $" {str}";
         }
 
         public static string FitToLength(string str, int length, char fill = ' ')
@@ -16,11 +21,14 @@
                 throw new ArgumentException("Length cannot be less than 0.");
             }
 
-            int difference = length - str.Length;
-            return difference switch
+            int dif = length - str.Length;
+
+            return dif switch
             {
                 0 => str,
-                > 0 => str += Copy(fill, difference),
+                // String is too short
+                > 0 => str += Copy(fill, dif),
+                // String is too long
                 < 0 => str[..length]
             };
         }
@@ -56,9 +64,9 @@
         }
 
         // Line split functions
-        public static string[] BasicSplitLineArray(string write, int maxLines)
+        public static string[] BasicSplitLineArray(string str, int maxLines)
         {
-            string[] lineArray = write.Split('\n');
+            string[] lineArray = str.Split('\n');
 
             if (lineArray.Length > maxLines)
             {
@@ -68,7 +76,7 @@
             return lineArray;
         }
 
-        public static string[] SmartSplitLineArray(string write, int maxLineLength, int maxLines)
+        public static string[] SmartSplitLineArray(string str, int maxLineLength, int maxLines)
         {
             if (maxLineLength < 0)
             {
@@ -87,16 +95,16 @@
             int i = 0;
             do
             {
-                bool last = i == write.Length - 1;
+                bool last = i == str.Length - 1;
 
-                char chr = write[i];
+                char chr = str[i];
 
                 if (chr != '\n')
                 {
                     strBuilder.Append(chr);
                 }
 
-                if (chr == '\n' || last || (strBuilder.Length == maxLineLength && write[i + 1] != '\n'))
+                if (chr == '\n' || last || (strBuilder.Length == maxLineLength && str[i + 1] != '\n'))
                 {
                     lineList.Add(strBuilder.ToString());
 
@@ -105,7 +113,7 @@
 
                 i++;
             }
-            while (i < write.Length && lineList.Count < maxLines);
+            while (i < str.Length && lineList.Count < maxLines);
 
             return lineList.ToArray();
         }
@@ -130,19 +138,7 @@
 
         public static string Copy(char chr, int copies)
         {
-            if (copies < 0)
-            {
-                throw new ArgumentException("Copies cannot be less than 0.");
-            }
-
-            StringBuilder strBuilder = new(copies);
-
-            for (int i = 0; i < copies; i++)
-            {
-                strBuilder.Append(chr);
-            }
-
-            return strBuilder.ToString();
+            return Copy(chr.ToString(), copies);
         }
     }
 }

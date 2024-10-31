@@ -1,17 +1,15 @@
 ﻿namespace SCECore.Types
 {
-    using SCECore.Utils;
-
     public class Text : IEquatable<Text>, ICloneable
     {
         private const bool DefaultNewLineOverflow = false;
 
         private const AlignLock DefaultAlignment = AlignLock.TopLeft;
 
-        private const byte DefaultFgColor = Color.White;
-        private const byte DefaultBgColor = Color.Transparent;
+        private const Color DefaultFgColor = Color.White;
+        private const Color DefaultBgColor = Color.Transparent;
 
-        public Text(string data, byte fgColor, byte bgColor, AlignLock alignment = DefaultAlignment, bool newLineOverflow = DefaultNewLineOverflow)
+        public Text(string data, Color fgColor, Color bgColor, AlignLock alignment = DefaultAlignment, bool newLineOverflow = DefaultNewLineOverflow)
         {
             Data = data;
             FgColor = fgColor;
@@ -22,7 +20,7 @@
             NewLineOverflow = newLineOverflow;
         }
 
-        public Text(string data, byte fgColor, AlignLock alignment = DefaultAlignment, bool newLineOverflow = DefaultNewLineOverflow)
+        public Text(string data, Color fgColor, AlignLock alignment = DefaultAlignment, bool newLineOverflow = DefaultNewLineOverflow)
             : this(data, fgColor, DefaultBgColor, alignment, newLineOverflow)
         {
         }
@@ -32,12 +30,12 @@
         {
         }
 
-        public Text(byte fgColor, byte bgColor, AlignLock alignment = DefaultAlignment, bool newLineOverflow = DefaultNewLineOverflow)
+        public Text(Color fgColor, Color bgColor, AlignLock alignment = DefaultAlignment, bool newLineOverflow = DefaultNewLineOverflow)
             : this(string.Empty, fgColor, bgColor, alignment, newLineOverflow)
         {
         }
 
-        public Text(byte fgColor, AlignLock alignment = DefaultAlignment, bool newLineOverflow = DefaultNewLineOverflow)
+        public Text(Color fgColor, AlignLock alignment = DefaultAlignment, bool newLineOverflow = DefaultNewLineOverflow)
             : this(fgColor, DefaultBgColor, alignment, newLineOverflow)
         {
         }
@@ -61,15 +59,13 @@
             BottomRight
         }
 
-        // Alignment properties
+        public string Data { get; set; }
+
+        public Color FgColor { get; set; }
+
+        public Color BgColor { get; set; }
+
         public AlignLock Alignment { get; set; }
-
-        // Main properties
-        public string Data { get; set; } = string.Empty;
-
-        public byte FgColor { get; set; } = DefaultFgColor;
-
-        public byte BgColor { get; set; } = DefaultBgColor;
 
         /// <summary>
         /// Renders a new line when the text overflows its container's width.
@@ -171,8 +167,8 @@
             return HorizontalAlign switch
             {
                 0 => 0,
-                1 => (width - GetPixelLength(stringLength)) / 2,
-                2 => width - GetPixelLength(stringLength),
+                1 => (width - Pixel.GetPixelLength(stringLength)) / 2,
+                2 => width - Pixel.GetPixelLength(stringLength),
                 _ => throw new NotImplementedException()
             };
         }
@@ -194,13 +190,9 @@
             {
                 0 => str,
                 1 => str,
-                2 => EvenString(str),
+                2 => SCEString.PadBeforeToEven(str),
                 _ => throw new NotImplementedException()
             };
         }
-
-        private static string EvenString(string str) => str.Length % 2 == 0 ? str : $" {str}";
-
-        private static int GetPixelLength(int textLength) => (int)Math.Ceiling(textLength / (double)Pixel.PIXELWIDTH);
     }
 }

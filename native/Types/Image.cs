@@ -6,7 +6,7 @@
     {
         private const bool DefaultActiveState = true;
 
-        private const byte DefaultBgColor = Color.Black;
+        private const Color DefaultBgColor = Color.Black;
 
         private const byte DefaultLayer = 0;
 
@@ -17,7 +17,7 @@
         /// <param name="bgColor">The initial background color of the new image.</param>
         /// <param name="cList">The initial cList of the new image.</param>
         /// <param name="isActive">The initial active state of the new image.</param>
-        public Image(Vector2Int dimensions, byte bgColor, CList cList, bool isActive = DefaultActiveState)
+        public Image(Vector2Int dimensions, Color bgColor, CList cList, bool isActive = DefaultActiveState)
             : base(dimensions, bgColor)
         {
             IsActive = isActive;
@@ -31,7 +31,7 @@
         /// <param name="dimensions">The initial dimensions of the new image.</param>
         /// <param name="bgColor">The initial background color of the new image.</param>
         /// <param name="isActive">The initial active state of the new image.</param>
-        public Image(Vector2Int dimensions, byte bgColor, bool isActive = DefaultActiveState)
+        public Image(Vector2Int dimensions, Color bgColor, bool isActive = DefaultActiveState)
             : this(dimensions, bgColor, new CList(), isActive)
         {
         }

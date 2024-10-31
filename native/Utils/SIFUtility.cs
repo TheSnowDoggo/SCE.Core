@@ -7,25 +7,25 @@
         private const char DigitCountDefine = '|';
 
         // Code library
-        private static readonly ValueMap<byte, char> SifCodeLibrary = new()
+        private static readonly Dictionary<Color, char> SifCodeDictionary = new()
         {
-            { 0, 'K' },  // Black
-            { 1, 'B' },  // DarkBlue
-            { 2, 'G' },  // DarkGreen
-            { 3, 'C' },  // DarkCyan
-            { 4, 'R' },  // DarkRed
-            { 5, 'M' },  // DarkMagenta
-            { 6, 'Y' },  // DarkYellow
-            { 7, 's' },  // Gray
-            { 8, 'S' },  // DarkGray
-            { 9, 'b' },  // Blue
-            { 10, 'g' }, // Green
-            { 11, 'c' }, // Cyan
-            { 12, 'r' }, // Red
-            { 13, 'm' }, // Magenta
-            { 14, 'y' }, // Yellow
-            { 15, 'W' }, // White
-            { 16, 'N' }, // Transparent
+            { Color.Black, 'K' },  // Black
+            { Color.DarkBlue, 'B' },  // DarkBlue
+            { Color.DarkGreen, 'G' },  // DarkGreen
+            { Color.DarkCyan, 'C' },  // DarkCyan
+            { Color.DarkYellow, 'R' },  // DarkRed
+            { Color.DarkMagenta, 'M' },  // DarkMagenta
+            { Color.DarkYellow, 'Y' },  // DarkYellow
+            { Color.Gray, 's' },  // Gray
+            { Color.DarkGray, 'S' },  // DarkGray
+            { Color.Blue, 'b' },  // Blue
+            { Color.Green, 'g' }, // Green
+            { Color.Cyan, 'c' }, // Cyan
+            { Color.Red, 'r' }, // Red
+            { Color.Magenta, 'm' }, // Magenta
+            { Color.Yellow, 'y' }, // Yellow
+            { Color.White, 'W' }, // White
+            { Color.Transparent, 'N' }, // Transparent
         };
 
         // Convert to SIF
@@ -52,9 +52,9 @@
 
                     textBuild.Append(SCEString.FitToLength(text, Pixel.PIXELWIDTH));
 
-                    fgColorBuild.Append(SifCodeLibrary[pixel.FgColor]);
+                    fgColorBuild.Append(SifCodeDictionary[pixel.FgColor]);
 
-                    bgColorBuild.Append(SifCodeLibrary[pixel.BgColor]);
+                    bgColorBuild.Append(SifCodeDictionary[pixel.BgColor]);
                 }
             }
 
@@ -84,9 +84,9 @@
             return new(ToTextGrid(textData, dimensions), ToColorGrid(fgData, dimensions), ToColorGrid(bgData, dimensions));
         }
 
-        public static Grid2D<byte> ToColorGrid(string gridData, Vector2Int dimensions)
+        public static Grid2D<Color> ToColorGrid(string gridData, Vector2Int dimensions)
         {
-            Grid2D<byte> colorGrid = new(dimensions);
+            Grid2D<Color> colorGrid = new(dimensions);
 
             string rawGridData = RLDecompress(gridData, false);
             int index = 0;
@@ -97,9 +97,9 @@
                 {
                     char code = rawGridData[index];
 
-                    if (SifCodeLibrary.Contains(code))
+                    if (SifCodeDictionary.ContainsValue(code))
                     {
-                        colorGrid[x, y] = SifCodeLibrary[code];
+                        colorGrid[x, y] = SifCodeDictionary.FirstOrDefault((x) => { return x.Value == code; }).Key;
                     }
                     else
                     {
@@ -247,19 +247,19 @@
         }
 
         // Get data functions
-        public static string GetSIFData(string sif)
+        private static string GetSIFData(string sif)
         {
             return sif[sif.IndexOf('[')..sif.IndexOf(']')];
         }
 
-        public static string GetGridData(string sif)
+        private static string GetGridData(string sif)
         {
             string sifData = GetSIFData(sif);
 
             return sifData[(sifData.IndexOf(')') + 1)..];
         }
 
-        public static Vector2Int GetSIFDimensions(string sif)
+        private static Vector2Int GetSIFDimensions(string sif)
         {
             string sifData = GetSIFData(sif);
 

@@ -6,7 +6,6 @@
     public static class SCEScaling
     {
         public static Grid2D<T> GetScaledGrid2D<T>(Grid2D<T> grid, int scaleFactor)
-            where T : IEquatable<T>
         {
             Grid2D<T> startGrid = grid.Clone(), newGrid = new(startGrid.Dimensions * scaleFactor);
 

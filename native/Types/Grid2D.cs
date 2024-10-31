@@ -9,7 +9,6 @@
     /// </summary>
     /// <typeparam name="T">The type of the elements in the grid.</typeparam>
     public class Grid2D<T> : IEnumerable<T>, ICloneable
-        where T : IEquatable<T>
     {
         private const bool DefaultTryTrimOnOverflowState = false;
 
@@ -20,7 +19,12 @@
         /// <param name="height">The initial height of the new grid.</param>
         public Grid2D(int width, int height)
         {
-            Data = DimensionsValid(width, height) ? new T[width, height] : throw new InvalidDimensionsException();
+            if (width < 0 || height < 0)
+            {
+                throw new InvalidDimensionsException("Dimensions are invalid.");
+            }
+
+            Data = new T[width, height];
         }
 
         /// <summary>
@@ -64,11 +68,6 @@
         public delegate void CycleAction(Vector2Int position);
 
         /// <summary>
-        /// A delegate type called by the <see cref="Grid2D{T}"/>.
-        /// </summary>
-        public delegate void GridCall();
-
-        /// <summary>
         /// Gets or sets the underlying 2D-array of this instance.
         /// </summary>
         public T[,] Data { get; protected set; }
@@ -76,37 +75,37 @@
         /// <summary>
         /// Gets or sets a <see cref="GridCall"/> delegate called whenever this instance has been resized.
         /// </summary>
-        public GridCall? OnResize { get; set; }
+        public Action? OnResize { get; set; }
 
         /// <summary>
         /// Gets or sets a <see cref="GridCall"/> delegate called whenever this instance has been cleared.
         /// </summary>
-        public GridCall? OnClear { get; set; }
-
-        /// <summary>
-        /// Gets the current <see cref="Area2D"/> area of the grid.
-        /// </summary>
-        public Area2DInt GridArea => new(Vector2Int.Zero, Dimensions);
-
-        /// <summary>
-        /// Gets the current <see cref="Vector2"/> dimensions of the grid.
-        /// </summary>
-        public Vector2Int Dimensions => new(Width, Height);
+        public Action? OnClear { get; set; }
 
         /// <summary>
         /// Gets the current <see cref="int"/> width of the grid.
         /// </summary>
-        public int Width => Data.GetLength(0);
+        public int Width { get => Data.GetLength(0); }
 
         /// <summary>
         /// Gets the current <see cref="int"/> height of the grid.
         /// </summary>
-        public int Height => Data.GetLength(1);
+        public int Height { get => Data.GetLength(1); }
+
+        /// <summary>
+        /// Gets the current <see cref="Vector2"/> dimensions of the grid.
+        /// </summary>
+        public Vector2Int Dimensions { get => new(Width, Height); }
+
+        /// <summary>
+        /// Gets the current <see cref="Area2D"/> area of the grid.
+        /// </summary>
+        public Area2DInt GridArea { get => new(Vector2Int.Zero, Dimensions); }
 
         /// <summary>
         /// Gets the current number of elements in the grid.
         /// </summary>
-        public int Size => Width * Height;
+        public int Elements { get => Width * Height; }
 
         /// <summary>
         /// Gets or sets the element at a specified position.
@@ -118,71 +117,103 @@
         {
             get
             {
-                return PositionValid(x, y) ? Data[x, y] : throw new PositionOutOfBoundsException();
-            }
+                if (!PositionValid(x, y))
+                {
+                    throw new PositionOutOfBoundsException("Position is invalid.");
+                }
 
+                return Data[x, y]; 
+            }
             set
             {
-                Data[x, y] = PositionValid(x, y) ? value : throw new PositionOutOfBoundsException();
+                if (!PositionValid(x, y))
+                {
+                    throw new PositionOutOfBoundsException("Position is invalid.");
+                }
+
+                Data[x, y] = value;
             }
         }
 
         /// <summary>
         /// Gets or sets the element at a specified position.
         /// </summary>
-        /// <param name="position">The zero-based coordinate of the element to get or set.</param>
+        /// <param name="pos">The zero-based coordinate of the element to get or set.</param>
         /// <returns>The element at the specified position.</returns>
-        public T this[Vector2Int position]
+        public T this[Vector2Int pos]
         {
             get
             {
-                return PositionValid(position) ? Data[position.X, position.Y] : throw new PositionOutOfBoundsException();
-            }
+                if (!PositionValid(pos))
+                {
+                    throw new PositionOutOfBoundsException("Position is invalid.");
+                }
 
+                return Data[pos.X, pos.Y];
+            }
             set
             {
-                Data[position.X, position.Y] = PositionValid(position) ? value : throw new PositionOutOfBoundsException();
+                if (!PositionValid(pos))
+                {
+                    throw new PositionOutOfBoundsException("Position is invalid.");
+                }
+
+                Data[pos.X, pos.Y] = value;
             }
         }
 
         /// <summary>
-        /// Indicates whether the given width and height are valid <see cref="Grid2D{T}"/> dimensions.
+        /// Converts all data in the <see cref="Grid2D{T}"/> if it implements <see cref="IConvertible"/>.
         /// </summary>
-        /// <param name="width">The grid width.</param>
-        /// <param name="height">The grid height.</param>
-        /// <returns><see langword="true"/> if the width and height are valid; otherwise, <see langword="false"/>.</returns>
-        public static bool DimensionsValid(int width, int height)
+        /// <typeparam name="T2">The data type of this <see cref="Grid2D{T}"/> which implements <see cref="IConvertible"/>.</typeparam>
+        /// <returns>A new <see cref="string"/> <see cref="Grid2D{T}"/> of all the converted data.</returns>
+        public static Grid2D<string> ToStringGrid<T2>(Grid2D<T2> grid)
+            where T2 : IConvertible
         {
-            return width > 0 && height > 0;
-        }
+            Grid2D<string> stringGrid = new(grid.Dimensions);
 
-        /// <summary>
-        /// Indicates whether the given <see cref="Vector2"/> dimensions is a valid <see cref="Grid2D{T}"/> dimension.
-        /// </summary>
-        /// <param name="dimensions">The <see cref="Vector2"/> grid dimension.</param>
-        /// <returns><see langword="true"/> if the width and height are valid; otherwise, <see langword="false"/>.</returns>
-        public static bool DimensionsValid(Vector2Int dimensions)
-        {
-            return DimensionsValid(dimensions.X, dimensions.Y);
+            void CycleAction(Vector2Int pos)
+            {
+                stringGrid[pos] = grid[pos].ToString() ?? string.Empty;
+            }
+
+            grid.GenericCycle(CycleAction);
+
+            return stringGrid;
         }
 
         /// <summary>
         /// Creates a shallow copy of this instance.
         /// </summary>
         /// <returns>A shallow copy of this instance.</returns>
-        public virtual Grid2D<T> Clone() => new((T[,])Data.Clone());
+        public virtual Grid2D<T> Clone()
+        {
+            return new((T[,])Data.Clone());
+        }
 
         /// <inheritdoc/>
-        object ICloneable.Clone() => Clone();
+        object ICloneable.Clone()
+        {
+            return Clone();
+        }
 
         /// <inheritdoc/>
-        public IEnumerator<T> GetEnumerator() => (IEnumerator<T>)Data.GetEnumerator();
+        public IEnumerator<T> GetEnumerator()
+        {
+            return (IEnumerator<T>)Data.GetEnumerator();
+        }
 
         /// <inheritdoc/>
-        IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return GetEnumerator();
+        }
 
         /// <inheritdoc/>
-        public override string ToString() => Dimensions.ToString(); 
+        public override string ToString()
+        {
+            return Dimensions.ToString();
+        }
 
         /// <summary>
         /// Indicates whether the given zero-based position is valid in the <see cref="Grid2D{T}"/>.
@@ -243,7 +274,7 @@
 
             bool CycleActionWhile(Vector2Int elementPos)
             {
-                if (this[elementPos].Equals(item))
+                if (Comparer<T>.Default.Compare(this[elementPos], item) == 0)
                 {
                     foundPosition = elementPos;
                     found = true;
@@ -559,12 +590,18 @@
         /// <summary>
         /// Rotates the <see cref="Grid2D{T}"/> clockwise by 90 degrees.
         /// </summary>
-        public virtual void RotateData90Clockwise() => RotateData90(1);
+        public virtual void RotateData90Clockwise()
+        {
+            RotateData90(1);
+        }
 
         /// <summary>
         /// Rotates the <see cref="Grid2D{T}"/> anticlockwise by 90 degrees.
         /// </summary>
-        public virtual void RotateData90Anticlockwise() => RotateData90(-1);
+        public virtual void RotateData90Anticlockwise()
+        {
+            RotateData90(-1);
+        }
 
         /// <summary>
         /// Rotates the <see cref="Grid2D{T}"/> by 90 degrees given the direction to rotate.
@@ -629,7 +666,7 @@
         /// <param name="height">The new height to resize the <see cref="Grid2D{T}"/> to.</param>
         public void MapResize(int width, int height)
         {
-            if (!DimensionsValid(width, height))
+            if (width < 0 || height < 0)
             {
                 throw new ArgumentException("Given dimensions are invalid.");
             }
@@ -666,19 +703,6 @@
             Array.Clear(Data);
 
             OnClear?.Invoke();
-        }
-
-        /// <summary>
-        /// Converts all data in the <see cref="Grid2D{T}"/> if it implements <see cref="IConvertible"/>.
-        /// </summary>
-        /// <typeparam name="T2">The data type of this <see cref="Grid2D{T}"/> which implements <see cref="IConvertible"/>.</typeparam>
-        /// <returns>A new <see cref="string"/> <see cref="Grid2D{T}"/> of all the converted data.</returns>
-        public Grid2D<string> ToStringGrid<T2>()
-            where T2 : IConvertible
-        {
-            Grid2D<string> stringGrid = new(Dimensions);
-            GenericCycle((Vector2Int pos) => stringGrid[pos] = this[pos].ToString() ?? string.Empty);
-            return stringGrid;
         }
     }
 }
