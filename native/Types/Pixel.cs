@@ -8,6 +8,9 @@
     /// </summary>
     public readonly struct Pixel : IEquatable<Pixel>
     {
+        /// <summary>
+        /// The global allowed string length of each <see cref="Pixel.Element"/>. Default is 2.
+        /// </summary>
         public const int PIXELWIDTH = 2;
 
         /// <summary>
@@ -65,17 +68,44 @@
 
         private static Exception ElementLengthException => new("Element length is not valid");
 
-        /// <inheritdoc/>
-        public override string ToString() => $"\"{Element}\",{FgColor},{BgColor}";
+        // Equals operators
+        public static bool operator ==(Pixel p1, Pixel p2) => Equals(p1, p2);
+
+        public static bool operator !=(Pixel p1, Pixel p2) => !(p1 == p2);
 
         /// <inheritdoc/>
-        public bool Equals(Pixel pixel) => pixel.Element == Element && pixel.FgColor == FgColor && pixel.BgColor == BgColor;
+        public override string ToString()
+        {
+            return $"\"{Element}\",{FgColor},{BgColor}"; 
+        }
 
         /// <inheritdoc/>
-        public override bool Equals(object? obj) => Equals((Pixel?)obj);
+        public bool Equals(Pixel pixel)
+        {
+            return pixel.Element == Element && pixel.FgColor == FgColor && pixel.BgColor == BgColor;
+        }
 
         /// <inheritdoc/>
-        public override int GetHashCode() => base.GetHashCode();
+        public override bool Equals(object? obj)
+        {
+            return obj is not null && Equals((Pixel)obj);
+        }
+
+        /// <inheritdoc/>
+        public override int GetHashCode()
+        {
+            return base.GetHashCode();
+        }
+
+        /// <summary>
+        /// Returns the number of <see cref="Pixel"/> the <paramref name="str"/> will occupy.
+        /// </summary>
+        /// <param name="str">The string to find the <see cref="Pixel"/> length of.</param>
+        /// <returns>The number of <see cref="Pixel"/> the <paramref name="str"/> will occupy.</returns>
+        public static int GetPixelLength(string str)
+        {
+            return (int)Math.Ceiling((double)str.Length / PIXELWIDTH);
+        }
 
         private static string ValidSetElement(string element)
         {
