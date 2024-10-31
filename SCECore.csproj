@@ -5,6 +5,14 @@
 	  <TargetType>library</TargetType>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
+    <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+    <PackageId>SCECore</PackageId>
+    <Title>SCECore</Title>
+    <Version>1.0.0</Version>
+    <Authors>Adam Giaziri</Authors>
+    <Product>SCECore</Product>
+    <Description>Contains core functionality used by LunaSCE.</Description>
+    <Copyright>MIT License</Copyright>
   </PropertyGroup>
 
 </Project>
