@@ -1,4 +1,4 @@
-﻿namespace SCECore.Components
+﻿namespace SCECore.ComponentSystem
 {
     using System.Collections;
 

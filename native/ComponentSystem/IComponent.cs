@@ -1,4 +1,4 @@
-﻿namespace SCECore.Components
+﻿namespace SCECore.ComponentSystem
 {
     /// <summary>
     /// Allows <see cref="IComponent"/> classes to modularly interface with their holder.

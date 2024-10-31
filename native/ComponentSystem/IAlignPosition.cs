@@ -1,6 +1,6 @@
 ﻿namespace SCECore.Interfaces
 {
-    using SCECore.Components;
+    using SCECore.ComponentSystem;
 
     /// <summary>
     /// An <see cref="IComponent"/> interface which aligns a <see cref="Vector2"/> position.

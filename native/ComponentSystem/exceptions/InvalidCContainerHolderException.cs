@@ -1,4 +1,4 @@
-﻿namespace SCECore.Components
+﻿namespace SCECore.ComponentSystem
 {
     /// <summary>
     /// Represents errors thrown when an incompatible <see cref="IComponent"/> is added to a component holder.

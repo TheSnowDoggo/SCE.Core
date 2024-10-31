@@ -1,6 +1,6 @@
 ﻿namespace SCECore.Types
 {
-    using SCECore.Components;
+    using SCECore.ComponentSystem;
 
     public class Image : DisplayMap, ICloneable, IRenderable, ICContainerHolder
     {

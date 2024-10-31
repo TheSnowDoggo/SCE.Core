@@ -1,4 +1,4 @@
-﻿namespace SCECore.Components
+﻿namespace SCECore.ComponentSystem
 {
     /// <summary>
     /// An interface between the CContainer and its holder instance.
