@@ -1,4 +1,4 @@
-﻿namespace SCECore.Objects;
+﻿namespace SCECore.Objects
 {
     using SCECore.Components;
 
