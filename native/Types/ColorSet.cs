@@ -60,7 +60,7 @@
         /// <inheritdoc/>
         public override int GetHashCode()
         {
-            return base.GetHashCode();
+            return HashCode.Combine(FgColor, BgColor);
         }
 
         /// <inheritdoc/>

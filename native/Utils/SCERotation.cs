@@ -29,7 +29,7 @@
 
         public static int GetNewRotation(int rotation, int direction)
         {
-            return SCEMathUtility.CutShift(RotationRange, rotation, direction);
+            return SCEMath.CutShift(RotationRange, rotation, direction);
         }
 
         private static RotationType GetNewRotation(RotationType rotation, int rotationFactor)

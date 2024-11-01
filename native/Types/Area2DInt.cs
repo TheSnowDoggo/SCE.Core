@@ -3,10 +3,10 @@
     /// <summary>
     /// A struct representing a 2D rectangular area defined by start and end corner vectors.
     /// </summary>
-    public readonly struct Area2DInt
+    public struct Area2DInt : IEquatable<Area2DInt>
     {
-        private readonly Vector2Int start;
-        private readonly Vector2Int end;
+        private Vector2Int start;
+        private Vector2Int end;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Area2DInt"/> struct given a start and end vector.
@@ -16,42 +16,75 @@
         /// <exception cref="ArgumentException">Throws exception if the end vector is less than or equal the start vector.</exception>
         public Area2DInt(Vector2Int start, Vector2Int end)
         {
+            if (end <= start)
+            {
+                throw new ArgumentException("End vector must be greater than start vector.");
+            }
+
             this.start = start;
-            this.end = end > start ? end : throw new ArgumentException("End vector cannot be less than start vector");
+            this.end = end;
         }
 
         /// <summary>
-        /// Gets the bottom left inclusive corner of the area.
+        /// Gets the bottom left start position of the area.
         /// </summary>
-        public Vector2Int Start => start;
+        public Vector2Int Start
+        {
+            get => start;
+            set => start = value;
+        }
 
         /// <summary>
-        /// Gets the top right exclusive corner of the area.
+        /// Gets the top right end position of the area.
         /// </summary>
-        public Vector2Int End => end;
+        public Vector2Int End
+        {
+            get => end;
+            set
+            {
+                if (value <= Start)
+                {
+                    throw new ArgumentException("End vector must be greater than start vector.");
+                }
 
-        /// <summary>
-        /// Gets the dimensions of the area.
-        /// </summary>
-        public Vector2Int Dimensions => new(Width, Height);
+                end = value;
+            }
+        }
 
         /// <summary>
         /// Gets the width of the area.
         /// </summary>
-        public int Width => End.X + 1 - Start.X;
+        public int Width { get => End.X - Start.X; }
 
         /// <summary>
         /// Gets the height of the area.
         /// </summary>
-        public int Height => End.Y + 1 - Start.Y;
+        public int Height { get => End.Y - Start.Y; }
+
+        /// <summary>
+        /// Gets the dimensions of the area.
+        /// </summary>
+        public Vector2Int Dimensions { get => new(Width, Height); }
 
         // Conversion
-        public static explicit operator Area2D(Area2DInt a) => a.ToArea2D();
+        public static implicit operator Area2D(Area2DInt a) => a.ToArea2D();
 
         // Equality
-        public static bool operator ==(Area2DInt a1, Area2DInt a2) => a1.Start == a2.Start && a1.End == a2.End;
+        public static bool operator ==(Area2DInt left, Area2DInt right) => left.Equals(right);
 
-        public static bool operator !=(Area2DInt a1, Area2DInt a2) => !(a1 == a2);
+        public static bool operator !=(Area2DInt left, Area2DInt right) => !(left == right);
+
+        // Greater than
+        public static bool operator >(Area2DInt a1, Area2DInt a2) => a1.Start > a2.Start && a1.End > a2.End;
+
+        // Less than
+        public static bool operator <(Area2DInt a1, Area2DInt a2) => a1.Start < a2.Start && a1.End < a2.End;
+
+        // Greater or equal than
+        public static bool operator >=(Area2DInt a1, Area2DInt a2) => a1.Start >= a2.Start && a1.End >= a2.End;
+
+        // Less or equal than
+        public static bool operator <=(Area2DInt a1, Area2DInt a2) => a1.Start <= a2.Start && a1.End <= a2.End;
 
         // Addition
         public static Area2DInt operator +(Area2DInt a1, Area2DInt a2) => new(a1.Start + a2.Start, a1.End + a2.End);
@@ -83,17 +116,11 @@
 
         public static Area2DInt operator /(Area2DInt a1, int num) => a1 / new Vector2Int(num, num);
 
-        // Greater than
-        public static bool operator >(Area2DInt a1, Area2DInt a2) => a1.Start > a2.Start && a1.End > a2.End;
-
-        // Less than
-        public static bool operator <(Area2DInt a1, Area2DInt a2) => a1.Start < a2.Start && a1.End < a2.End;
-
-        // Greater or equal than
-        public static bool operator >=(Area2DInt a1, Area2DInt a2) => a1.Start >= a2.Start && a1.End >= a2.End;
-
-        // Less or equal than
-        public static bool operator <=(Area2DInt a1, Area2DInt a2) => a1.Start <= a2.Start && a1.End <= a2.End;
+        /// <inheritdoc/>
+        public bool Equals(Area2DInt area)
+        {
+            return area.Start == Start && area.End == End;
+        }
 
         /// <inheritdoc/>
         public override bool Equals(object? obj)
@@ -104,13 +131,68 @@
         /// <inheritdoc/>
         public override int GetHashCode()
         {
-            return base.GetHashCode();
+            return HashCode.Combine(Start.GetHashCode(), End.GetHashCode());
         }
 
         /// <inheritdoc/>
         public override string ToString()
         {
             return $"({Start}),({End})";
+        }
+
+        public static bool Overlaps(Vector2Int start1, Vector2Int end1, Vector2Int start2, Vector2Int end2)
+        {
+            // X sides don't overlap
+            if (end1.X <= start2.X || start1.X >= end2.X)
+            {
+                return false;
+            }
+            // Y sides don't overlap
+            if (end1.Y <= start2.Y || start1.Y >= end2.Y)
+            {
+                return false;
+            }
+
+            return true;
+        }
+
+        public static bool Overlaps(Area2DInt a1, Area2DInt a2)
+        {
+            return Overlaps(a1.Start, a1.End, a2.Start, a2.End);
+        }
+
+        public static Area2DInt GetOverlap(Vector2Int start1, Vector2Int end1, Vector2Int start2, Vector2Int end2)
+        {
+            if (!Overlaps(start1, end1, start2, end2))
+            {
+                throw new ArgumentException("Areas do not overlap.");
+            }
+
+            Vector2Int v1 = new(Math.Max(start1.X, start2.X), Math.Max(start1.Y, start2.Y));
+
+            Vector2Int v2 = new(Math.Min(end1.X, end2.X), Math.Min(end1.Y, end2.Y));
+
+            Vector2Int start = Vector2Int.Min(v1, v2);
+
+            Vector2Int end = Vector2Int.Max(v1, v2);
+
+            return new(start, end);
+        }
+
+        public static Area2DInt GetOverlap(Area2DInt a1, Area2DInt a2)
+        {
+            return GetOverlap(a1.Start, a1.End, a2.Start, a2.End);
+        }
+
+        /// <summary>
+        /// Exposes the Start and End properties in this instance.
+        /// </summary>
+        /// <param name="start">The bottom left corner of the area.</param>
+        /// <param name="end">The top right corner of the area.</param>
+        public void Expose(out Vector2Int start, out Vector2Int end)
+        {
+            start = Start;
+            end = End;
         }
 
         /// <summary>
@@ -135,12 +217,12 @@
             {
                 if (trimStart.X < Start.X)
                 {
-                    trimStart = new(Start.X, trimStart.Y);
+                    trimStart.X = Start.X;
                 }
 
                 if (trimStart.Y < Start.Y)
                 {
-                    trimStart = new(trimStart.X, Start.Y);
+                    trimStart.Y = Start.Y;
                 }
             }
 
@@ -148,12 +230,12 @@
             {
                 if (trimEnd.X >= End.X)
                 {
-                    trimEnd = new(End.X, trimEnd.Y);
+                    trimEnd.X = End.X;
                 }
 
                 if (trimEnd.Y >= End.Y)
                 {
-                    trimEnd = new(trimEnd.X, End.Y);
+                    trimEnd.Y = End.Y;
                 }
             }
 
@@ -178,45 +260,33 @@
         }
 
         /// <summary>
-        /// Indicates whether a given <paramref name="area"/> and this instance overlap eachother.
-        /// </summary>
-        /// <param name="area">Area to check with.</param>
-        /// <returns><see langword="true"/> if <paramref name="area"/> and this instance overlap; otherwise, <see langword="false"/>.</returns>
-        public bool OverlapsWith(Area2DInt area)
-        {
-            return !(area.End.X <= Start.X || area.End.Y <= Start.Y || area.Start.X >= End.X || area.Start.Y >= End.Y);
-        }
-
-        /// <summary>
         /// Returns the specified area realigned to be bound inside this area.
         /// </summary>
         /// <param name="area">The area to bound inside this area.</param>
         /// <returns>The specified area realigned to be bound inside this area.</returns>
         public Area2DInt Bound(Area2DInt area)
         {
-            int xOffset = 0, yOffset = 0;
+            Vector2Int offset = Vector2Int.Zero;
 
             if (area.Start.X < Start.X)
             {
-                xOffset += Start.X - area.Start.X;
+                offset.X += Start.X - area.Start.X;
             }
 
             if (area.End.X > End.X)
             {
-                xOffset += End.X - area.End.X;
+                offset.X += End.X - area.End.X;
             }
 
             if (area.Start.Y < Start.Y)
             {
-                yOffset += Start.Y - area.Start.Y;
+                offset.Y += Start.Y - area.Start.Y;
             }
 
             if (area.End.Y > End.Y)
             {
-                yOffset += End.Y - area.End.Y;
+                offset.Y += End.Y - area.End.Y;
             }
-
-            Vector2Int offset = new(xOffset, yOffset);
 
             return area + offset;
         }
@@ -237,30 +307,6 @@
         }
 
         /// <summary>
-        /// Returns the area of overlap of this area and the specified area.
-        /// </summary>
-        /// <param name="area">The other overlapping area.</param>
-        /// <returns>The area of overlap of this area and the specified area.</returns>
-        /// <exception cref="ArgumentException">Thrown if the specified <paramref name="area"/> doesn't overlap with this area.</exception>
-        public Area2DInt GetOverlap(Area2DInt area)
-        {
-            if (OverlapsWith(area))
-            {
-                Vector2Int v1 = new(Math.Max(Start.X, area.Start.X), Math.Max(Start.Y, area.Start.Y));
-
-                Vector2Int v2 = new(Math.Min(End.X, area.End.X), Math.Min(End.Y, area.End.Y));
-
-                Vector2Int start = Vector2Int.Min(v1, v2);
-
-                Vector2Int end = Vector2Int.Max(v1, v2);
-
-                return new(start, end);
-            }
-
-            throw new ArgumentException("Areas do not overlap.");
-        }
-
-        /// <summary>
         /// Determines whether the specified area is contained inside this area.
         /// </summary>
         /// <param name="area">The area to check.</param>
@@ -278,17 +324,6 @@
         public bool Contains(Vector2Int position)
         {
             return position >= Start && position < End;
-        }
-
-        /// <summary>
-        /// Exposes the Start and End properties in this instance.
-        /// </summary>
-        /// <param name="start">The bottom left corner of the area.</param>
-        /// <param name="end">The top right corner of the area.</param>
-        public void Expose(out Vector2Int start, out Vector2Int end)
-        {
-            start = Start;
-            end = End;
         }
     }
 }

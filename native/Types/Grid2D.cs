@@ -73,12 +73,12 @@
         public T[,] Data { get; protected set; }
 
         /// <summary>
-        /// Gets or sets a <see cref="GridCall"/> delegate called whenever this instance has been resized.
+        /// Gets or sets a delegate called whenever this instance has been resized.
         /// </summary>
         public Action? OnResize { get; set; }
 
         /// <summary>
-        /// Gets or sets a <see cref="GridCall"/> delegate called whenever this instance has been cleared.
+        /// Gets or sets a delegate called whenever this instance has been cleared.
         /// </summary>
         public Action? OnClear { get; set; }
 
@@ -309,7 +309,7 @@
         /// <exception cref="AreaOutOfBoundsException">Thrown if <paramref name="tryTrimOnOverflow"/> is <see langword="false"/> and an overflow is found.</exception>
         public void GenericCycleArea(CycleActionWhile cycleActionWhile, Area2DInt area, bool tryTrimOnOverflow = DefaultTryTrimOnOverflowState)
         {
-            if (!GridArea.OverlapsWith(area))
+            if (!Area2DInt.Overlaps(GridArea, area))
             {
                 throw new InvalidAreaException("Given area doesn't overlap this grid.");
             }
@@ -453,7 +453,7 @@
         /// <exception cref="AreaOutOfBoundsException">Thrown if an <see cref="Area2D"/> is outside of the bounds of its associated <see cref="Grid2D{T}"/>.</exception>
         public void CustomMapToArea(CycleAction cycleAction, Grid2D<T> dataGrid, Area2DInt dataGridArea, Vector2Int positionOffset, bool tryTrimOnOverflow = DefaultTryTrimOnOverflowState)
         {
-            if (!dataGrid.GridArea.OverlapsWith(dataGridArea))
+            if (!Area2DInt.Overlaps(dataGrid.GridArea, dataGridArea))
             {
                 throw new InvalidAreaException("Given get area doesn't overlap the get grid.");
             }
@@ -465,7 +465,7 @@
 
             Area2DInt offsetArea = dataGridArea + positionOffset;
 
-            if (!GridArea.OverlapsWith(offsetArea))
+            if (!Area2DInt.Overlaps(GridArea, offsetArea))
             {
                 throw new AreaOutOfBoundsException("Offset area doesn't overlap this grid.");
             }
@@ -528,7 +528,7 @@
         /// <exception cref="AreaOutOfBoundsException">Thrown if an <see cref="Area2D"/> is outside of the bounds of its associated <see cref="Grid2D{T}"/>.</exception>
         public void CustomMapAreaFrom(CycleAction cycleAction, Grid2D<T> dataGrid, Area2DInt thisArea, Vector2Int positionOffset, bool tryTrimOnOverflow = DefaultTryTrimOnOverflowState)
         {
-            if (!GridArea.OverlapsWith(thisArea))
+            if (!Area2DInt.Overlaps(GridArea, thisArea))
             {
                 throw new InvalidAreaException("Given set area doesn't overlap with this grid.");
             }
@@ -540,7 +540,7 @@
 
             Area2DInt alignedGetArea = thisArea + positionOffset;
 
-            if (!dataGrid.GridArea.OverlapsWith(alignedGetArea))
+            if (!Area2DInt.Overlaps(dataGrid.GridArea, alignedGetArea))
             {
                 throw new InvalidAreaException("Offset area doesn't overlap with the get grid.");
             }

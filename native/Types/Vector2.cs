@@ -5,13 +5,9 @@
     /// <summary>
     /// Representation of floating point 2D vectors.
     /// </summary>
-    public readonly struct Vector2
+    public struct Vector2 : IEquatable<Vector2>
     {
         private const char VectorStringSplitChar = ',';
-
-        private readonly double x;
-
-        private readonly double y;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Vector2"/> struct.
@@ -20,8 +16,8 @@
         /// <param name="y">The y component of the vector.</param>
         public Vector2(double x, double y)
         {
-            this.x = x;
-            this.y = y;
+            X = x;
+            Y = y;
         }
 
         /// <summary>
@@ -52,12 +48,12 @@
         /// <summary>
         /// Gets the X component of this instance.
         /// </summary>
-        public double X { get => x; }
+        public double X { get; set; }
 
         /// <summary>
         /// Gets the Y component of this instance.
         /// </summary>
-        public double Y { get => y; }
+        public double Y { get; set; }
 
         /// <summary>
         /// Gets the length of the vector.
@@ -91,6 +87,20 @@
         public static bool operator ==(Vector2 v1, Vector2 v2) => v1.Equals(v2);
 
         public static bool operator !=(Vector2 v1, Vector2 v2) => !(v1 == v2);
+
+        // Greater or equal than
+        public static bool operator >=(Vector2 v1, Vector2 v2) => v1.X >= v2.X && v1.Y >= v2.Y;
+
+        public static bool operator >=(Vector2 v1, double num) => v1.X >= num && v1.Y >= num;
+
+        public static bool operator >=(Vector2 v1, int num) => v1 >= (double)num;
+
+        // Less or equal than
+        public static bool operator <=(Vector2 v1, Vector2 v2) => v1.X <= v2.X && v1.Y <= v2.Y;
+
+        public static bool operator <=(Vector2 v1, double num) => v1.X <= num && v1.Y <= num;
+
+        public static bool operator <=(Vector2 v1, int num) => v1 <= (double)num;
 
         // Addition
         public static Vector2 operator +(Vector2 v1, Vector2 v2) => new(v1.X + v2.X, v1.Y + v2.Y);
@@ -136,19 +146,33 @@
 
         public static bool operator <(Vector2 v1, int num) => v1 < (double)num;
 
-        // Greater or equal than
-        public static bool operator >=(Vector2 v1, Vector2 v2) => v1.X >= v2.X && v1.Y >= v2.Y;
+        /// <summary>
+        /// Indicates whether this vector and the specified vector are equal.
+        /// </summary>
+        /// <param name="other">The vector to compare with this vector.</param>
+        /// <returns><see langword="true"/> if this <paramref name="other"/> and this instance represent the same value; otherwise, <see langword="false"/>.</returns>
+        public bool Equals(Vector2 other)
+        {
+            return other.X == X && other.Y == Y;
+        }
 
-        public static bool operator >=(Vector2 v1, double num) => v1.X >= num && v1.Y >= num;
+        /// <inheritdoc/>
+        public override bool Equals(object? obj)
+        {
+            return obj != null && Equals((Vector2)obj);
+        }
 
-        public static bool operator >=(Vector2 v1, int num) => v1 >= (double)num;
+        /// <inheritdoc/>
+        public override int GetHashCode()
+        {
+            return HashCode.Combine(X, Y);
+        }
 
-        // Less or equal than
-        public static bool operator <=(Vector2 v1, Vector2 v2) => v1.X <= v2.X && v1.Y <= v2.Y;
-
-        public static bool operator <=(Vector2 v1, double num) => v1.X <= num && v1.Y <= num;
-
-        public static bool operator <=(Vector2 v1, int num) => v1 <= (double)num;
+        /// <inheritdoc/>
+        public override string ToString()
+        {
+            return $"{X},{Y}";
+        }
 
         /// <summary>
         /// Returns the vector representation of the given string vector.
@@ -200,7 +224,7 @@
         /// <param name="v1">The first vector.</param>
         /// <param name="v2">The second vector.</param>
         /// <returns>The smallest of the two vectors.</returns>
-        public static Vector2Int Min(Vector2Int v1, Vector2Int v2)
+        public static Vector2 Min(Vector2 v1, Vector2 v2)
         {
             return v1 <= v2 ? v1 : v2;
         }
@@ -211,37 +235,9 @@
         /// <param name="v1">The first vector.</param>
         /// <param name="v2">The second vector.</param>
         /// <returns>The largest of the two vectors.</returns>
-        public static Vector2Int Max(Vector2Int v1, Vector2Int v2)
+        public static Vector2 Max(Vector2 v1, Vector2 v2)
         {
             return v1 >= v2 ? v1 : v2;
-        }
-
-        /// <summary>
-        /// Indicates whether this vector and the specified vector are equal.
-        /// </summary>
-        /// <param name="v">The vector to compare with this vector.</param>
-        /// <returns><see langword="true"/> if this <paramref name="v"/> and this instance represent the same value; otherwise, <see langword="false"/>.</returns>
-        public bool Equals(Vector2 v)
-        {
-            return X == v.X && Y == v.Y;
-        }
-
-        /// <inheritdoc/>
-        public override bool Equals(object? obj)
-        {
-            return obj != null && Equals((Vector2)obj);
-        }
-
-        /// <inheritdoc/>
-        public override int GetHashCode()
-        {
-            return base.GetHashCode();
-        }
-
-        /// <inheritdoc/>
-        public override string ToString()
-        {
-            return $"{X},{Y}";
         }
 
         /// <inheritdoc cref="double.ToString(string?)"/>

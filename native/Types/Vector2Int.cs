@@ -5,13 +5,9 @@
     /// <summary>
     /// Representation of integer 2D vectors.
     /// </summary>
-    public readonly struct Vector2Int
+    public struct Vector2Int : IEquatable<Vector2Int>
     {
         private const char VectorStringSplitChar = ',';
-
-        private readonly int x;
-
-        private readonly int y;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Vector2Int"/> struct.
@@ -20,8 +16,8 @@
         /// <param name="y">The integer y component of the vector.</param>
         public Vector2Int(int x, int y)
         {
-            this.x = x;
-            this.y = y;
+            X = x;
+            Y = y;
         }
 
         /// <summary>
@@ -52,12 +48,12 @@
         /// <summary>
         /// Gets the integer x component of this instance.
         /// </summary>
-        public int X { get => x; }
+        public int X { get; set; }
 
         /// <summary>
         /// Gets the integer y component of this instance.
         /// </summary>
-        public int Y { get => y; }
+        public int Y { get; set; }
 
         /// <summary>
         /// Gets the inverse vector with swapped integer x and y components based on the current vector.
@@ -75,12 +71,32 @@
         public Vector2Int Midpoint { get => (new Vector2Int(X, Y) - 1) / 2; }
 
         // Conversion
-        public static explicit operator Vector2(Vector2Int v) => v.ToVector2();
+        public static implicit operator Vector2(Vector2Int v) => v.ToVector2();
 
         // Equal
         public static bool operator ==(Vector2Int v1, Vector2Int v2) => v1.Equals(v2);
 
         public static bool operator !=(Vector2Int v1, Vector2Int v2) => !(v1 == v2);
+
+        // Greater than
+        public static bool operator >(Vector2Int v1, Vector2Int v2) => v1.X > v2.X && v1.Y > v2.Y;
+
+        public static bool operator >(Vector2Int v1, int num) => v1.X > num && v1.Y > num;
+
+        // Less than
+        public static bool operator <(Vector2Int v1, Vector2Int v2) => v1.X < v2.X && v1.Y < v2.Y;
+
+        public static bool operator <(Vector2Int v1, int num) => v1.X < num && v1.Y < num;
+
+        // Greater or equal than
+        public static bool operator >=(Vector2Int v1, Vector2Int v2) => v1.X >= v2.X && v1.Y >= v2.Y;
+
+        public static bool operator >=(Vector2Int v1, int num) => v1.X >= num && v1.Y >= num;
+
+        // Less or equal than
+        public static bool operator <=(Vector2Int v1, Vector2Int v2) => v1.X <= v2.X && v1.Y <= v2.Y;
+
+        public static bool operator <=(Vector2Int v1, int num) => v1.X <= num && v1.Y <= num;
 
         // Addition
         public static Vector2Int operator +(Vector2Int v1, Vector2Int v2) => new(v1.X + v2.X, v1.Y + v2.Y);
@@ -104,25 +120,28 @@
 
         public static Vector2Int operator /(Vector2Int v1, int num) => new(v1.X / num, v1.Y / num);
 
-        // Greater than
-        public static bool operator >(Vector2Int v1, Vector2Int v2) => v1.X > v2.X && v1.Y > v2.Y;
+        public bool Equals(Vector2Int other)
+        {
+            return other.X == X && other.Y == Y;
+        }
 
-        public static bool operator >(Vector2Int v1, int num) => v1.X > num && v1.Y > num;
+        /// <inheritdoc/>
+        public override bool Equals(object? obj)
+        {
+            return obj != null && Equals((Vector2Int)obj);
+        }
 
-        // Less than
-        public static bool operator <(Vector2Int v1, Vector2Int v2) => v1.X < v2.X && v1.Y < v2.Y;
+        /// <inheritdoc/>
+        public override int GetHashCode()
+        {
+            return HashCode.Combine(X, Y);
+        }
 
-        public static bool operator <(Vector2Int v1, int num) => v1.X < num && v1.Y < num;
-
-        // Greater or equal than
-        public static bool operator >=(Vector2Int v1, Vector2Int v2) => v1.X >= v2.X && v1.Y >= v2.Y;
-
-        public static bool operator >=(Vector2Int v1, int num) => v1.X >= num && v1.Y >= num;
-
-        // Less or equal than
-        public static bool operator <=(Vector2Int v1, Vector2Int v2) => v1.X <= v2.X && v1.Y <= v2.Y;
-
-        public static bool operator <=(Vector2Int v1, int num) => v1.X <= num && v1.Y <= num;
+        /// <inheritdoc/>
+        public override string ToString()
+        {
+            return $"{X},{Y}";
+        }
 
         /// <summary>
         /// Returns the vector representation of the given string vector.
@@ -192,7 +211,7 @@
         /// <returns>A random vector from the specified max x and y value.</returns>
         public static Vector2Int Rand(int xMax, int yMax)
         {
-            return Rand(Vector2Int.Zero, new Vector2Int(xMax, yMax));
+            return Rand(Zero, new Vector2Int(xMax, yMax));
         }
 
         /// <summary>
@@ -226,31 +245,6 @@
         {
             return v1 >= v2 ? v1 : v2;
         }
-
-        /// <summary>
-        /// Indicates whether this vector and the specified vector are equal.
-        /// </summary>
-        /// <param name="v">The vector to compare with this vector.</param>
-        /// <returns><see langword="true"/> if this <paramref name="v"/> and this instance represent the same value; otherwise, <see langword="false"/>.</returns>
-        public bool Equals(Vector2Int v)
-        {
-            return X == v.X && Y == v.Y;
-        }
-
-        /// <inheritdoc/>
-        public override bool Equals(object? obj)
-        {
-            return obj != null && Equals((Vector2Int)obj);
-        }
-
-        /// <inheritdoc/>
-        public override int GetHashCode()
-        {
-            return base.GetHashCode();
-        }
-
-        /// <inheritdoc/>
-        public override string ToString() => $"{X},{Y}";
 
         /// <summary>
         /// Exposes the integer x and y components of the vector.

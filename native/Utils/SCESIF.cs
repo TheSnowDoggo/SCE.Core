@@ -2,7 +2,7 @@
 {
     using System.Text;
 
-    public static class SIFUtility
+    public static class SCESIF
     {
         private const char DigitCountDefine = '|';
 

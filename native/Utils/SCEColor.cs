@@ -5,7 +5,7 @@
     /// <summary>
     /// SCEColor managment class.
     /// </summary>
-    public static class SCEColorUtils
+    public static class SCEColor
     {
         /// <summary>
         /// Writes the text representation of the given type <typeparamref name="T"/> to the standard output stream with the given foreground and background colors.

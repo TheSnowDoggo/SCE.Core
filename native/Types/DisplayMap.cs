@@ -127,7 +127,7 @@
 
                 Pixel oldPixel = this[mappedPos];
 
-                this[mappedPos] = new(build, SCEColorUtils.GetStackColor(fgColor, oldPixel.FgColor), SCEColorUtils.GetStackColor(bgColor, oldPixel.BgColor));
+                this[mappedPos] = new(build, SCEColor.GetStackColor(fgColor, oldPixel.FgColor), SCEColor.GetStackColor(bgColor, oldPixel.BgColor));
             }
         }
 
@@ -321,7 +321,7 @@
                 {
                     Pixel pixel = dataGrid[position], oldPixel = this[mappedPos];
 
-                    this[mappedPos] = new(pixel.Element, SCEColorUtils.GetStackColor(pixel.FgColor, oldPixel.FgColor), SCEColorUtils.GetStackColor(pixel.BgColor, oldPixel.BgColor));
+                    this[mappedPos] = new(pixel.Element, SCEColor.GetStackColor(pixel.FgColor, oldPixel.FgColor), SCEColor.GetStackColor(pixel.BgColor, oldPixel.BgColor));
                 }
             }
 
@@ -347,7 +347,7 @@
                 {
                     Pixel pixel = dataGrid[mappedPos], oldPixel = this[pos];
 
-                    this[pos] = new(pixel.Element, SCEColorUtils.GetStackColor(pixel.FgColor, oldPixel.FgColor), SCEColorUtils.GetStackColor(pixel.BgColor, oldPixel.BgColor));
+                    this[pos] = new(pixel.Element, SCEColor.GetStackColor(pixel.FgColor, oldPixel.FgColor), SCEColor.GetStackColor(pixel.BgColor, oldPixel.BgColor));
                 }
             }
 

@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\redst\\source\\repos\\TheSnowDoggo\\SCECore\\SCECore.csproj": {}
+    "C:\\Users\\redst\\Source\\Repos\\TheSnowDoggo\\SCECore\\SCECore.csproj": {}
   },
   "projects": {
-    "C:\\Users\\redst\\source\\repos\\TheSnowDoggo\\SCECore\\SCECore.csproj": {
+    "C:\\Users\\redst\\Source\\Repos\\TheSnowDoggo\\SCECore\\SCECore.csproj": {
       "version": "1.0.0-RC.2",
       "restore": {
-        "projectUniqueName": "C:\\Users\\redst\\source\\repos\\TheSnowDoggo\\SCECore\\SCECore.csproj",
+        "projectUniqueName": "C:\\Users\\redst\\Source\\Repos\\TheSnowDoggo\\SCECore\\SCECore.csproj",
         "projectName": "SCECore",
-        "projectPath": "C:\\Users\\redst\\source\\repos\\TheSnowDoggo\\SCECore\\SCECore.csproj",
+        "projectPath": "C:\\Users\\redst\\Source\\Repos\\TheSnowDoggo\\SCECore\\SCECore.csproj",
         "packagesPath": "C:\\Users\\redst\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\redst\\source\\repos\\TheSnowDoggo\\SCECore\\obj\\",
+        "outputPath": "C:\\Users\\redst\\Source\\Repos\\TheSnowDoggo\\SCECore\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"

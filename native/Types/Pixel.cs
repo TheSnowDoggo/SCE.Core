@@ -26,17 +26,12 @@
         /// <param name="bgColor">The background color of the new instance.</param>
         public Pixel(string element, Color fgColor, Color bgColor)
         {
-            if (element is null or "")
-            {
-                element = EmptyElement;
-            }
-
-            if (element.Length != PIXELWIDTH)
+            if (!IsElementValid(element))
             {
                 throw new ArgumentException("Element is invalid.");
             }
 
-            Element = element;
+            Element = FixedEmptyElement(element); 
             FgColor = fgColor;
             BgColor = bgColor;
         }
@@ -75,30 +70,6 @@
 
         public static bool operator !=(Pixel p1, Pixel p2) => !(p1 == p2);
 
-        /// <inheritdoc/>
-        public bool Equals(Pixel pixel)
-        {
-            return pixel.Element == Element && pixel.FgColor == FgColor && pixel.BgColor == BgColor;
-        }
-
-        /// <inheritdoc/>
-        public override bool Equals(object? obj)
-        {
-            return obj is not null && Equals((Pixel)obj);
-        }
-
-        /// <inheritdoc/>
-        public override string ToString()
-        {
-            return $"\"{Element}\",{FgColor},{BgColor}"; 
-        }
-
-        /// <inheritdoc/>
-        public override int GetHashCode()
-        {
-            return base.GetHashCode();
-        }
-
         /// <summary>
         /// Returns the minimum number of <see cref="Pixel"/> required to store the specified number of characters.
         /// </summary>
@@ -117,6 +88,40 @@
         public static int GetPixelLength(string str)
         {
             return GetPixelLength(str.Length);
+        }
+
+        /// <inheritdoc/>
+        public bool Equals(Pixel pixel)
+        {
+            return pixel.Element == Element && pixel.FgColor == FgColor && pixel.BgColor == BgColor;
+        }
+
+        /// <inheritdoc/>
+        public override bool Equals(object? obj)
+        {
+            return obj is not null && Equals((Pixel)obj);
+        }
+
+        /// <inheritdoc/>
+        public override int GetHashCode()
+        {
+            return HashCode.Combine(Element, FgColor, BgColor);
+        }
+
+        /// <inheritdoc/>
+        public override string ToString()
+        {
+            return $"\"{Element}\",{FgColor},{BgColor}"; 
+        }
+
+        private static bool IsElementValid(string element)
+        {
+            return element.Length == PIXELWIDTH || element is null or "";
+        }
+
+        private static string FixedEmptyElement(string element)
+        {
+            return element is null or "" ? EmptyElement : element;
         }
     }
 }
