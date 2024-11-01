@@ -1,0 +1,23 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2012/06/nuspec.xsd">
+  <metadata>
+    <id>SCECore</id>
+    <version>1.0.0-RC.3</version>
+    <title>SCECore</title>
+    <authors>Adam Giaziri</authors>
+    <requireLicenseAcceptance>true</requireLicenseAcceptance>
+    <license type="file">LICENSE.txt</license>
+    <licenseUrl>https://aka.ms/deprecateLicenseUrl</licenseUrl>
+    <readme>README.md</readme>
+    <description>Contains core functionality used by LunaSCE.</description>
+    <copyright>MIT License</copyright>
+    <dependencies>
+      <group targetFramework="net6.0" />
+    </dependencies>
+  </metadata>
+  <files>
+    <file src="C:\Users\redst\Source\Repos\TheSnowDoggo\SCECore\bin\Debug\net6.0\SCECore.dll" target="lib\net6.0\SCECore.dll" />
+    <file src="C:\Users\redst\Source\Repos\TheSnowDoggo\SCECore\LICENSE.txt" target="\LICENSE.txt" />
+    <file src="C:\Users\redst\Source\Repos\TheSnowDoggo\SCECore\README.md" target="\README.md" />
+  </files>
+</package>
