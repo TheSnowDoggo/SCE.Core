@@ -18,6 +18,7 @@
         /// </summary>
         public const Color DefaultColor = Color.Black;
 
+
         /// <summary>
         /// Initializes a new instance of the <see cref="Pixel"/> struct given the element, foreground and background color.
         /// </summary>
@@ -116,7 +117,7 @@
 
         private static bool IsElementValid(string element)
         {
-            return element.Length == PIXELWIDTH || element is null or "";
+            return element is null or "" || element.Length == PIXELWIDTH; 
         }
 
         private static string FixedEmptyElement(string element)
