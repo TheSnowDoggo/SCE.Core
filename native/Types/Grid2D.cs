@@ -8,7 +8,7 @@
     /// A wrapper class of a 2D-array with additional features.
     /// </summary>
     /// <typeparam name="T">The type of the elements in the grid.</typeparam>
-    public class Grid2D<T> : IEnumerable<T>, ICloneable
+    public class Grid2D<T> : IEnumerable<T>, IEquatable<Grid2D<T>>, ICloneable
     {
         private const bool DefaultTryTrimOnOverflowState = false;
 
@@ -70,7 +70,7 @@
         /// <summary>
         /// Gets or sets the underlying 2D-array of this instance.
         /// </summary>
-        public T[,] Data { get; protected set; }
+        protected T[,] Data { get; set; }
 
         /// <summary>
         /// Gets or sets a delegate called whenever this instance has been resized.
@@ -195,6 +195,29 @@
         object ICloneable.Clone()
         {
             return Clone();
+        }
+
+        /// <inheritdoc/>
+        public bool Equals(Grid2D<T>? other)
+        {
+            if (other is null)
+            {
+                return false;
+            }
+
+            return other.OnResize == OnResize && ((IStructuralEquatable)Data).Equals(other.Data, EqualityComparer<T>.Default);
+        }
+
+        /// <inheritdoc/>
+        public override bool Equals(object? obj)
+        {
+            return obj is Grid2D<T> grid2D && Equals(grid2D);
+        }
+
+        /// <inheritdoc/>
+        public override int GetHashCode()
+        {
+            return HashCode.Combine(OnResize, ((IStructuralEquatable)Data).GetHashCode(EqualityComparer<Pixel>.Default));
         }
 
         /// <inheritdoc/>

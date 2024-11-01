@@ -137,11 +137,11 @@
         /// <summary>
         /// Determines whether the specified text is equal to the current text.
         /// </summary>
-        /// <param name="t">The text to compare with the current text.</param>
+        /// <param name="other">The text to compare with the current text.</param>
         /// <returns><see langword="true"/> if the specified text is equal to the current text; otherwise, <see langword="false"/>.</returns>
-        public bool Equals(Text? t)
+        public bool Equals(Text? other)
         {
-            return t is not null && t.Data == Data && t.FgColor == FgColor && t.BgColor == BgColor;
+            return other is not null && other.Data == Data && other.FgColor == FgColor && other.BgColor == BgColor && other.Alignment == Alignment && other.NewLineOverflow == NewLineOverflow;
         }
 
         /// <inheritdoc/>
@@ -153,7 +153,7 @@
         /// <inheritdoc/>
         public override int GetHashCode()
         {
-            return base.GetHashCode();
+            return HashCode.Combine(Data, FgColor, BgColor, Alignment, NewLineOverflow);
         }
 
         /// <inheritdoc/>

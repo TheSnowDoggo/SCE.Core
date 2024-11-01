@@ -1,6 +1,6 @@
 ﻿namespace SCECore.Types
 {
-    public class Image : DisplayMap, ICloneable, IRenderable
+    public class Image : DisplayMap, ICloneable, IEquatable<Image>, IRenderable
     {
         private const bool DefaultActiveState = true;
 
@@ -83,6 +83,26 @@
         object ICloneable.Clone()
         {
             return Clone();
+        }
+
+        public bool Equals(Image? other)
+        {
+            if (other is null)
+            {
+                return false;
+            }
+
+            return other.IsActive == IsActive && other.Position == Position && other.Layer == Layer && other.OnRender == OnRender && base.Equals(other);
+        }
+
+        public override bool Equals(object? obj)
+        {
+            return obj is Image image && Equals(image);
+        }
+
+        public override int GetHashCode()
+        {
+            return HashCode.Combine(IsActive, Position, Layer, OnRender, base.GetHashCode());
         }
 
         /// <inheritdoc/>

@@ -1,9 +1,11 @@
-﻿namespace SCECore.Types
+﻿using System.Collections;
+
+namespace SCECore.Types
 {
     /// <summary>
     /// A wrapper class of <see cref="Pixel"/> <see cref="Grid2D{T}"/> with additional filling and mapping features.
     /// </summary>
-    public class DisplayMap : Grid2D<Pixel>
+    public class DisplayMap : Grid2D<Pixel>, IEquatable<DisplayMap>
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="DisplayMap"/> class given its dimensions.
@@ -89,6 +91,21 @@
         public override DisplayMap Clone()
         {
             return new(base.Clone());
+        }
+
+        public bool Equals(DisplayMap? other)
+        {
+            return base.Equals(other);
+        }
+
+        public override bool Equals(object? obj)
+        {
+            return obj is DisplayMap displayMap && Equals(displayMap);
+        }
+
+        public override int GetHashCode()
+        {
+            return base.GetHashCode();
         }
 
         /// <summary>
