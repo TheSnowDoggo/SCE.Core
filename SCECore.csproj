@@ -8,7 +8,7 @@
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
     <PackageId>SCECore</PackageId>
     <Title>SCECore</Title>
-    <Version>1.0.0-RC.2</Version>
+    <Version>1.0.0-RC.3</Version>
     <Authors>Adam Giaziri</Authors>
     <Product>SCECore</Product>
     <Description>Contains core functionality used by LunaSCE.</Description>
