@@ -48,6 +48,23 @@
             };
         }
 
+        public static string MergeString(string mainStr, string underLayedStr, char mergeChr = ' ')
+        {
+            if (underLayedStr.Length < mainStr.Length)
+            {
+                throw new ArgumentException("Under layed string length cannot be less than main string.");
+            }
+
+            StringBuilder strBuilder = new();
+
+            for (int i = 0; i < mainStr.Length; i++)
+            {
+                strBuilder.Append(mainStr[i] != mergeChr ? mainStr[i] : underLayedStr[i]);
+            }
+
+            return strBuilder.ToString();
+        }
+
         public static int CountOf(string str, char countChr)
         {
             int total = 0;
