@@ -26,10 +26,25 @@
             return dif switch
             {
                 0 => str,
-                // String is too short
-                > 0 => str += Copy(fill, dif),
-                // String is too long
+                > 0 => str + Copy(fill, dif),
                 < 0 => str[..length]
+            };
+        }
+
+        public static string FormatNumberToLength(string numStr, int digitLength, char digitFill = '0')
+        {
+            if (digitLength < 0)
+            {
+                throw new ArgumentException("Length cannot be less than 0.");
+            }
+
+            int dif = digitLength - numStr.Length;
+
+            return dif switch
+            {
+                0 => numStr,
+                > 0 => Copy(digitFill, dif) + numStr,
+                < 0 => throw new InvalidOperationException("Number exceeds digit length.")
             };
         }
 
