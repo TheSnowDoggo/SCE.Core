@@ -148,7 +148,7 @@ namespace SCECore.Types
 
                 Color newFgColor = SCEColor.GetStackColor(fgColor, oldPixel.FgColor);
 
-                string newElement = newBgColor != Color.Transparent ? build : SCEString.MergeString(build, oldPixel.Element);
+                string newElement = bgColor != Color.Transparent ? build : SCEString.MergeString(build, oldPixel.Element);
 
                 this[mappedPos] = new(newElement, newFgColor, newBgColor);
             }
