@@ -65,16 +65,16 @@
             return strBuilder.ToString();
         }
 
-        public static string TakeBetween(string str, char leftChr, char rightChr)
+        public static string TakeBetween(string str, char leftBound, char rightBound)
         {
-            int leftIndex = str.IndexOf(leftChr);
+            int leftIndex = str.IndexOf(leftBound);
 
             if (leftIndex == -1)
             {
                 throw new ArgumentException("Left bound not found.");
             }
 
-            int rightIndex = str.IndexOf(rightChr, leftIndex + 1);
+            int rightIndex = str.IndexOf(rightBound, leftIndex + 1);
 
             if (rightIndex == -1)
             {
@@ -82,6 +82,40 @@
             }
 
             return str[leftIndex..rightIndex];
+        }
+
+        public static string[] SplitExcludingBounds(string str, char split, char leftBound, char rightBound)
+        {
+            List<string> stringList = new();
+
+            StringBuilder strBuilder = new();
+
+            bool inBound = false;
+
+            foreach (char chr in str)
+            {
+                if (!inBound && chr == leftBound)
+                {
+                    inBound = true;
+                }
+                else if (inBound && chr == rightBound)
+                {
+                    inBound = false;
+                }
+
+                if (!inBound && chr == split)
+                {
+                    stringList.Add(strBuilder.ToString());
+
+                    strBuilder.Clear();
+                }
+                else
+                {
+                    strBuilder.Append(chr);
+                }
+            }
+
+            return stringList.ToArray();
         }
 
         public static int CountOf(string str, char countChr)
