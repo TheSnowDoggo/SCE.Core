@@ -148,7 +148,7 @@ namespace SCECore.Types
 
                 Color newFgColor = SCEColor.GetStackColor(fgColor, oldPixel.FgColor);
 
-                string newElement = bgColor != Color.Transparent ? build : SCEString.MergeString(build, oldPixel.Element);
+                string newElement = bgColor != Color.Transparent ? build : SCEString.MergeString(SCEString.FitToLength(build, Pixel.PIXELWIDTH), oldPixel.Element);
 
                 this[mappedPos] = new(newElement, newFgColor, newBgColor);
             }
@@ -344,7 +344,7 @@ namespace SCECore.Types
                 {
                     Pixel pixel = dataGrid[position], oldPixel = this[mappedPos];
 
-                    this[mappedPos] = new(pixel.Element, SCEColor.GetStackColor(pixel.FgColor, oldPixel.FgColor), SCEColor.GetStackColor(pixel.BgColor, oldPixel.BgColor));
+                    this[mappedPos] = Pixel.MergeLayers(pixel, oldPixel); 
                 }
             }
 
@@ -370,7 +370,7 @@ namespace SCECore.Types
                 {
                     Pixel pixel = dataGrid[mappedPos], oldPixel = this[pos];
 
-                    this[pos] = new(pixel.Element, SCEColor.GetStackColor(pixel.FgColor, oldPixel.FgColor), SCEColor.GetStackColor(pixel.BgColor, oldPixel.BgColor));
+                    this[pos] = Pixel.MergeLayers(pixel, oldPixel);
                 }
             }
 

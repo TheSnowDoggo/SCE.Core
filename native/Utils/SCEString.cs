@@ -65,6 +65,25 @@
             return strBuilder.ToString();
         }
 
+        public static string TakeBetween(string str, char leftChr, char rightChr)
+        {
+            int leftIndex = str.IndexOf(leftChr);
+
+            if (leftIndex == -1)
+            {
+                throw new ArgumentException("Left bound not found.");
+            }
+
+            int rightIndex = str.IndexOf(rightChr, leftIndex + 1);
+
+            if (rightIndex == -1)
+            {
+                throw new ArgumentException("Right bound not found.");
+            }
+
+            return str[leftIndex..rightIndex];
+        }
+
         public static int CountOf(string str, char countChr)
         {
             int total = 0;

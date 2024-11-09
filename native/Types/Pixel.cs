@@ -115,6 +115,17 @@
             return $"\"{Element}\",{FgColor},{BgColor}"; 
         }
 
+        public static Pixel MergeLayers(Pixel topPixel, Pixel bottomPixel)
+        {
+            Color newBgColor = SCEColor.GetStackColor(topPixel.BgColor, bottomPixel.BgColor);
+
+            Color newFgColor = topPixel.Element == EmptyElement ? bottomPixel.FgColor : SCEColor.GetStackColor(topPixel.FgColor, bottomPixel.FgColor);
+
+            string newElement = topPixel.BgColor != Color.Transparent ? topPixel.Element : SCEString.MergeString(topPixel.Element, bottomPixel.Element);
+
+            return new(newElement, newFgColor, newBgColor);
+        }
+
         private static bool IsElementValid(string element)
         {
             return element is null or "" || element.Length == PIXELWIDTH; 
