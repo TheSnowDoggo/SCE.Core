@@ -45,6 +45,14 @@
         /// </summary>
         public static Vector2Int Left { get; } = new(-1, 0);
 
+        public static Vector2Int UpLeft { get; } = new(-1, 1);
+
+        public static Vector2Int UpRight { get; } = new(1, 1);
+
+        public static Vector2Int DownLeft { get; } = new(-1, -1);
+
+        public static Vector2Int DownRight { get; } = new(1, -1);
+
         /// <summary>
         /// Gets the integer x component of this instance.
         /// </summary>
