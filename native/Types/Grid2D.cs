@@ -8,7 +8,7 @@
     /// A wrapper class of a 2D-array with additional features.
     /// </summary>
     /// <typeparam name="T">The type of the elements in the grid.</typeparam>
-    public class Grid2D<T> : IEnumerable<T>, IEquatable<Grid2D<T>>, ICloneable
+    public class Grid2D<T> : IEquatable<Grid2D<T>>, ICloneable
     {
         private const bool DefaultTryTrimOnOverflowState = false;
 
@@ -217,19 +217,7 @@
         /// <inheritdoc/>
         public override int GetHashCode()
         {
-            return HashCode.Combine(OnResize, ((IStructuralEquatable)Data).GetHashCode(EqualityComparer<Pixel>.Default));
-        }
-
-        /// <inheritdoc/>
-        public IEnumerator<T> GetEnumerator()
-        {
-            return (IEnumerator<T>)Data.GetEnumerator();
-        }
-
-        /// <inheritdoc/>
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            return GetEnumerator();
+            throw new NotImplementedException();
         }
 
         /// <inheritdoc/>

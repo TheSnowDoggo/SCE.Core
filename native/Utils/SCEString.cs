@@ -67,21 +67,50 @@
 
         public static string TakeBetween(string str, char leftBound, char rightBound)
         {
-            int leftIndex = str.IndexOf(leftBound);
+            RangeBetween(str, leftBound, rightBound).Expose(out int leftIndex, out int rightIndex);
+
+            return str[leftIndex..rightIndex];
+        }
+
+        public static string TakeBetween(string str, char bound)
+        {
+            return TakeBetween(str, bound, bound);
+        }
+
+        public static string InsertBetween(string str, string insert, char leftBound, char rightBound)
+        {
+            RangeBetween(str, leftBound, rightBound).Expose(out int leftIndex, out int rightIndex);
+
+            return str.Remove(leftIndex, rightIndex - leftIndex).Insert(leftIndex, insert);
+        }
+
+        public static string InsertBetween(string str, string insert, char bound)
+        {
+            return InsertBetween(str, insert, bound, bound);
+        }
+
+        public static Vector2Int RangeBetween(string str, char leftBound, char rightBound)
+        {
+            int leftIndex = str.IndexOf(leftBound) + 1;
 
             if (leftIndex == -1)
             {
                 throw new ArgumentException("Left bound not found.");
             }
 
-            int rightIndex = str.IndexOf(rightBound, leftIndex + 1);
+            int rightIndex = str.IndexOf(rightBound, leftIndex);
 
             if (rightIndex == -1)
             {
                 throw new ArgumentException("Right bound not found.");
             }
 
-            return str[leftIndex..rightIndex];
+            return new(leftIndex, rightIndex);
+        }
+
+        public static Vector2Int RangeBetween(string str, char bound)
+        {
+            return RangeBetween(str, bound);
         }
 
         public static string[] SplitExcludingBounds(string str, char split, char leftBound, char rightBound)
@@ -92,8 +121,12 @@
 
             bool inBound = false;
 
-            foreach (char chr in str)
+            for (int i = 0; i < str.Length; ++i)
             {
+                bool last = i == str.Length - 1;
+
+                char chr = str[i];
+
                 if (!inBound && chr == leftBound)
                 {
                     inBound = true;
@@ -103,15 +136,14 @@
                     inBound = false;
                 }
 
-                if (!inBound && chr == split)
+                if (inBound || chr != split)
+                    strBuilder.Append(chr);
+
+                if (last || (!inBound && chr == split))
                 {
                     stringList.Add(strBuilder.ToString());
 
                     strBuilder.Clear();
-                }
-                else
-                {
-                    strBuilder.Append(chr);
                 }
             }
 

@@ -9,39 +9,13 @@
         private const Color DefaultFgColor = Color.White;
         private const Color DefaultBgColor = Color.Transparent;
 
-        public Text(string data, Color fgColor, Color bgColor, AlignLock alignment = DefaultAlignment, bool newLineOverflow = DefaultNewLineOverflow)
+        public Text(string data)
         {
             Data = data;
-            FgColor = fgColor;
-            BgColor = bgColor;
-
-            Alignment = alignment;
-
-            NewLineOverflow = newLineOverflow;
         }
 
-        public Text(string data, Color fgColor, AlignLock alignment = DefaultAlignment, bool newLineOverflow = DefaultNewLineOverflow)
-            : this(data, fgColor, DefaultBgColor, alignment, newLineOverflow)
-        {
-        }
-
-        public Text(string data, AlignLock alignment = DefaultAlignment, bool newLineOverflow = DefaultNewLineOverflow)
-            : this(data, DefaultFgColor, alignment, newLineOverflow)
-        {
-        }
-
-        public Text(Color fgColor, Color bgColor, AlignLock alignment = DefaultAlignment, bool newLineOverflow = DefaultNewLineOverflow)
-            : this(string.Empty, fgColor, bgColor, alignment, newLineOverflow)
-        {
-        }
-
-        public Text(Color fgColor, AlignLock alignment = DefaultAlignment, bool newLineOverflow = DefaultNewLineOverflow)
-            : this(fgColor, DefaultBgColor, alignment, newLineOverflow)
-        {
-        }
-
-        public Text(AlignLock alignment = DefaultAlignment, bool newLineOverflow = false)
-            : this(DefaultFgColor, alignment, newLineOverflow)
+        public Text()
+            : this(string.Empty)
         {
         }
 
@@ -61,17 +35,17 @@
 
         public string Data { get; set; }
 
-        public Color FgColor { get; set; }
+        public Color FgColor { get; set; } = DefaultFgColor;
 
-        public Color BgColor { get; set; }
+        public Color BgColor { get; set; } = DefaultBgColor;
 
-        public AlignLock Alignment { get; set; }
+        public AlignLock Alignment { get; set; } = DefaultAlignment;
 
         /// <summary>
         /// Renders a new line when the text overflows its container's width.
         /// This does not modify the text data
         /// </summary>
-        public bool NewLineOverflow { get; set; } = false;
+        public bool NewLineOverflow { get; set; } = DefaultNewLineOverflow;
 
         private byte HorizontalAlign
         {
@@ -131,7 +105,15 @@
         /// <inheritdoc/>
         public object Clone()
         {
-            return new Text(Data, FgColor, BgColor, Alignment, NewLineOverflow);
+            Text clone = new(Data)
+            {
+                FgColor = FgColor,
+                BgColor = BgColor,
+                Alignment = Alignment,
+                NewLineOverflow = NewLineOverflow,
+            };
+
+            return clone;
         }
 
         /// <summary>

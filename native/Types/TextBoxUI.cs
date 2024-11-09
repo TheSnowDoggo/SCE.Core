@@ -11,7 +11,9 @@
 
         private Color bgColor = Color.Black;
 
-        private Text? renderedText;
+        private Text? text = null;
+
+        private Text? renderedText = null;
 
         private TextBoxUI? renderedTextBoxUI;
 
@@ -21,27 +23,10 @@
         /// Initializes a new instance of the <see cref="TextBoxUI"/> class.
         /// </summary>
         /// <param name="dimensions">The dimensions of the text box.</param>
-        /// <param name="text">The text of the text box.</param>
-        /// <param name="isActive">The active state of the text box.</param>
-        public TextBoxUI(Vector2Int dimensions, Text? text = null, bool isActive = DefaultActiveState)
-            : base(dimensions, isActive)
+        public TextBoxUI(Vector2Int dimensions)
+            : base(dimensions)
         {
-            Text = text ?? new();
-
             OnResize += TextBoxUI_OnResize;
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="TextBoxUI"/> class.
-        /// </summary>
-        /// <param name="dimensions">The dimensions of the text box.</param>
-        /// <param name="bgColor">The background color of the text box used for previous text clearing if basic text box rendering is enabled.</param>
-        /// <param name="text">The text of the text box.</param>
-        /// <param name="isActive">The active state of the text box.</param>
-        public TextBoxUI(Vector2Int dimensions, Color bgColor, Text? text = null, bool isActive = DefaultActiveState)
-            : this(dimensions, text, isActive)
-        {
-            BgColor = bgColor;
         }
 
         /// <summary>
@@ -52,21 +37,20 @@
         /// <param name="isActive">The active state of the text box.</param>
         /// <param name="textCaching">The text caching state of the text box.</param>
         /// <param name="basicTextBoxRendering">The basic text box rendering state of the text box.</param>
-        public TextBoxUI(Image image, Text text, bool isActive, bool textCaching, bool basicTextBoxRendering)
+        public TextBoxUI(Image image)
             : base(image)
         {
-            Text = text;
-            IsActive = isActive;
-            TextCaching = textCaching;
-            BasicTextBoxRendering = basicTextBoxRendering;
-
             OnResize += TextBoxUI_OnResize;
         }
 
         /// <summary>
         /// Gets or sets the text to be rendered.
         /// </summary>
-        public Text Text { get; set; }
+        public Text Text
+        {
+            get => text ??= new();
+            set => text = value;
+        }
 
         /// <summary>
         /// Gets or sets the background color of the text box used for previous text clearing if basic text box rendering is enabled.
@@ -115,7 +99,15 @@
         /// <inheritdoc/>
         public override TextBoxUI Clone()
         {
-            return new(base.Clone(), (Text)Text.Clone(), IsActive, TextCaching, BasicTextBoxRendering);
+            TextBoxUI clone = new(base.Clone())
+            {
+                Text = (Text)Text.Clone(),
+                IsActive = IsActive,
+                TextCaching = TextCaching,
+                BasicTextBoxRendering = BasicTextBoxRendering,
+            };
+
+            return clone;
         }
 
         /// <summary>
@@ -138,7 +130,14 @@
 
         private TextBoxUI RenderClone()
         {
-            return new(base.Clone(), (Text)Text.Clone(), true, false, false);
+            TextBoxUI clone = new(base.Clone())
+            {
+                Text = (Text)Text.Clone(),
+                TextCaching = false,
+                BasicTextBoxRendering = false,
+            };
+
+            return clone;
         }
 
         // Smart text map functions

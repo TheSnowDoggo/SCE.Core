@@ -25,23 +25,14 @@
         /// </summary>
         /// <param name="dimensions">The dimensions of the console.</param>
         /// <param name="bgColor">The background color of the console.</param>
-        /// <param name="fgColor">The foreground color of the console.</param>
         /// <param name="isActive">The initial active state of the console.</param>
-        public SCEConsole(Vector2Int dimensions, Color bgColor, Color fgColor, bool isActive = DefaultActiveState)
+        public SCEConsole(Vector2Int dimensions, Color bgColor = DefaultBgColor)
         {
-            ui = new(dimensions, bgColor, DefaultText, isActive);
-            FgColor = fgColor;
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="SCEConsole"/> class.
-        /// </summary>
-        /// <param name="dimensions">The dimensions of the console.</param>
-        /// <param name="bgColor">The background color of the console.</param>
-        /// <param name="isActive">The initial active state of the console.</param>
-        public SCEConsole(Vector2Int dimensions, Color bgColor = DefaultBgColor, bool isActive = DefaultActiveState)
-        {
-            ui = new(dimensions, bgColor, DefaultText, isActive);
+            ui = new(dimensions)
+            {
+                Text = DefaultText,
+                BgColor = bgColor,
+            };
         }
 
         /// <summary>
@@ -49,15 +40,18 @@
         /// </summary>
         /// <param name="dimensions">The dimensions of the console.</param>
         /// <param name="isActive">The initial active state of the console.</param>
-        public SCEConsole(Vector2Int dimensions, bool isActive = DefaultActiveState)
+        public SCEConsole(Vector2Int dimensions)
         {
-            ui = new(dimensions, DefaultText, isActive);
+            ui = new(dimensions)
+            {
+                Text = DefaultText,
+            };
         }
 
         /// <summary>
         /// Gets the number of logs in this instance.
         /// </summary>
-        public int Logs => logList.Count;
+        public int Logs { get => logList.Count; }
 
         /// <summary>
         /// Gets or sets the index of the selected log.
@@ -104,19 +98,27 @@
         /// <summary>
         /// Gets or sets the layer of the console.
         /// </summary>
-        public byte Layer
+        public int Layer
         {
             get => ui.Layer;
             set => ui.Layer = value;
         }
 
-        private static Text DefaultText => new(DefaultFgColor, Color.Transparent, Text.AlignLock.TopLeft);
+        private static Text DefaultText 
+        {
+            get => new()
+            {
+                FgColor = DefaultFgColor,
+                BgColor = Color.Transparent,
+                Alignment = Text.AlignLock.TopLeft
+            };
+        }
 
-        private int MaxLines => ui.Height - 1;
+        private int MaxLines { get => ui.Height - 1; }
 
-        private string SmartHeader => $"- {VersionName} - Logs: {Logs}";
+        private string SmartHeader { get => $"- {VersionName} - Logs: {Logs}"; }
 
-        private string AdjustedHeader => SCEString.FitToLength(SmartHeader, ui.Width * Pixel.PIXELWIDTH);
+        private string AdjustedHeader { get => SCEString.FitToLength(SmartHeader, ui.Width * Pixel.PIXELWIDTH); }
 
         /// <summary>
         /// Gets or sets the <see cref="Log"/> at the specified index.
