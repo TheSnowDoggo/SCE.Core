@@ -112,9 +112,7 @@
         {
             DisplayMap transferMap = new(dimensions, BgColor);
 
-            Vector2Int end = Vector2Int.Min(image.Dimensions, dimensions);
-
-            transferMap.MapAreaFrom(image, new Area2DInt(Vector2Int.Zero, end));
+            transferMap.MapTo(image, Vector2Int.Up * (dimensions - Dimensions), true);
 
             image.CleanResize(dimensions);
 
