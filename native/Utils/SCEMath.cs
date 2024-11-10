@@ -8,6 +8,12 @@
             return modulus == 0 ? num : multiplier - modulus + num;
         }
 
+        public static int Mod(int a, int b)
+        {
+            int mod = a % b;
+            return mod < 0 ? mod + b : mod;
+        }
+
         public static int CutShift(Vector2Int range, int current, int shift)
         {
             range.Expose(out int min, out int max);

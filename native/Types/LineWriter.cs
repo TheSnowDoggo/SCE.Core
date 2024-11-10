@@ -62,6 +62,10 @@
             set => image.Layer = value;
         }
 
+        public int Width { get => image.Width; }
+
+        public int Height { get => image.Height; }
+
         public Vector2Int Dimensions { get => image.Dimensions; }
 
         public Image GetImage()
