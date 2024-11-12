@@ -4,6 +4,25 @@
 
     public static class SCEString
     {
+        public static char[] StringArrayToCharArray(string[] strArray)
+        {
+            char[] chrArray = new char[strArray.Length];
+
+            for (int i = 0; i < strArray.Length; i++)
+            {
+                string str = strArray[i];
+
+                if (str.Length != 1)
+                {
+                    throw new InvalidOperationException("String contains multiple characters.");
+                }
+
+                chrArray[i] = str[0];
+            }
+
+            return chrArray;
+        }
+
         public static string PadAfterToEven(string str)
         {
             return str.Length % 2 == 0 ? str : $"{str} ";
@@ -113,13 +132,13 @@
             return RangeBetween(str, bound);
         }
 
-        public static string[] SplitExcludingBounds(string str, char split, char leftBound, char rightBound)
+        public static string[] SplitExcludingBounds(string str, char split, char[] leftBoundArray, char[] rightBoundArray)
         {
             List<string> stringList = new();
 
             StringBuilder strBuilder = new();
 
-            bool inBound = false;
+            int boundLayer = 0;
 
             for (int i = 0; i < str.Length; ++i)
             {
@@ -127,19 +146,19 @@
 
                 char chr = str[i];
 
-                if (!inBound && chr == leftBound)
+                if (leftBoundArray.Contains(chr))
                 {
-                    inBound = true;
+                    boundLayer++;
                 }
-                else if (inBound && chr == rightBound)
+                else if (boundLayer > 0 && rightBoundArray.Contains(chr))
                 {
-                    inBound = false;
+                    boundLayer--;
                 }
 
-                if (inBound || chr != split)
+                if (boundLayer > 0 || chr != split)
                     strBuilder.Append(chr);
 
-                if (last || (!inBound && chr == split))
+                if (last || (boundLayer == 0 && chr == split))
                 {
                     stringList.Add(strBuilder.ToString());
 
@@ -148,6 +167,11 @@
             }
 
             return stringList.ToArray();
+        }
+
+        public static string[] SplitExcludingBounds(string str, char split, char leftBound, char rightBound)
+        {
+            return SplitExcludingBounds(str, split, new[] { leftBound }, new[] { rightBound });
         }
 
         public static int CountOf(string str, char countChr)

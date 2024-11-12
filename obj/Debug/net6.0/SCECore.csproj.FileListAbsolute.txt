@@ -22,3 +22,14 @@ C:\Users\redst\source\repos\SCECore\obj\Debug\net6.0\SCECore.dll
 C:\Users\redst\source\repos\SCECore\obj\Debug\net6.0\refint\SCECore.dll
 C:\Users\redst\source\repos\SCECore\obj\Debug\net6.0\SCECore.pdb
 C:\Users\redst\source\repos\SCECore\obj\Debug\net6.0\ref\SCECore.dll
+C:\Users\AdamG\Source\Repos\TheSnowDoggo\SCECore\bin\Debug\net6.0\SCECore.deps.json
+C:\Users\AdamG\Source\Repos\TheSnowDoggo\SCECore\bin\Debug\net6.0\SCECore.dll
+C:\Users\AdamG\Source\Repos\TheSnowDoggo\SCECore\bin\Debug\net6.0\SCECore.pdb
+C:\Users\AdamG\Source\Repos\TheSnowDoggo\SCECore\obj\Debug\net6.0\SCECore.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\AdamG\Source\Repos\TheSnowDoggo\SCECore\obj\Debug\net6.0\SCECore.AssemblyInfoInputs.cache
+C:\Users\AdamG\Source\Repos\TheSnowDoggo\SCECore\obj\Debug\net6.0\SCECore.AssemblyInfo.cs
+C:\Users\AdamG\Source\Repos\TheSnowDoggo\SCECore\obj\Debug\net6.0\SCECore.csproj.CoreCompileInputs.cache
+C:\Users\AdamG\Source\Repos\TheSnowDoggo\SCECore\obj\Debug\net6.0\SCECore.dll
+C:\Users\AdamG\Source\Repos\TheSnowDoggo\SCECore\obj\Debug\net6.0\refint\SCECore.dll
+C:\Users\AdamG\Source\Repos\TheSnowDoggo\SCECore\obj\Debug\net6.0\SCECore.pdb
+C:\Users\AdamG\Source\Repos\TheSnowDoggo\SCECore\obj\Debug\net6.0\ref\SCECore.dll
