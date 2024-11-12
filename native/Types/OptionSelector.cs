@@ -67,6 +67,8 @@
 
         public Option SelectedOption { get => AnyOptionSelected ? _optionList[Selected] : throw new Exception("No option selected."); }
 
+        public int Count { get => _optionList.Count; }
+
         public ColorSet SelectedColorSet
         {
             get => selectedColorSet;

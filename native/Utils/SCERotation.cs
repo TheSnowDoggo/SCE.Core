@@ -7,20 +7,41 @@
     {
         public static Vector2Int RotationRange { get => new(0, 4); }
 
-        public static Vector2 GetRotatedOffsetPosition(Vector2Int position, int rotationFactor, Vector2 rotationAxis)
+        public static Vector2 RotatePositionBy(Vector2 position, int rotationFactor, Vector2 rotationAxis)
         {
-            if (Math.Abs(rotationFactor) != 1)
+            rotationFactor = SCEMath.Mod(rotationFactor, RotationRange.Y);
+
+            int direction = 1;
+
+            if (rotationFactor > 3)
             {
-                throw new ArgumentException("Rotation factor must have a magnitude of 1");
+                rotationFactor = 1;
+                direction = -1;
+            }
+
+            Vector2 newPos = position;
+            for (int i = 0; i < rotationFactor; i++)
+            {
+                newPos = GetRotatedOffsetPosition(newPos, direction, rotationAxis);
+            }
+
+            return newPos;
+        }
+
+        public static Vector2 GetRotatedOffsetPosition(Vector2 position, int direction, Vector2 rotationAxis)
+        {
+            if (Math.Abs(direction) != 1)
+            {
+                throw new ArgumentException("Direction must be either -1 or 1");
             }
 
             RotationType rotationType, newRotation;
 
-            Vector2 offsetPos = position.ToVector2() - rotationAxis;
+            Vector2 offsetPos = position - rotationAxis;
 
             rotationType = GetOffsetRotation(offsetPos);
 
-            newRotation = GetNewRotation(rotationType, rotationFactor);
+            newRotation = GetNewRotation(rotationType, direction);
 
             Vector2 newSign = GetRotationOffsetSign(newRotation);
 

@@ -14,6 +14,16 @@
             return mod < 0 ? mod + b : mod;
         }
 
+        public static int Cycle(Vector2Int range, int newValue)
+        {
+            if (range.Y <= range.X)
+            {
+                throw new ArgumentException("Range is invalid.");
+            }
+
+            return range.X + Mod(newValue, range.Y - range.X);
+        }
+
         public static int CutShift(Vector2Int range, int current, int shift)
         {
             range.Expose(out int min, out int max);
