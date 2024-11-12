@@ -18,9 +18,11 @@
 
         private readonly List<Option> _optionList = new();
 
-        public event EventHandler<OptionSelectionEventArgs>? OnInvokeEvent;
+        public event EventHandler<OptionSelectorInvokeEventArgs>? OnInvokeEvent;
 
-        public event EventHandler<OptionSelectionEventArgs>? PostInvokeEvent;
+        public event EventHandler<OptionSelectorInvokeEventArgs>? PostInvokeEvent;
+
+        public event EventHandler? SelectedModifyEvent;
 
         private ColorSet selectedColorSet = DefaultSelectedColorSet;
         private ColorSet unselectedColorSet = DefaultUnselectedColorSet;
@@ -60,6 +62,8 @@
                     if (selected != -1)
                         Enqueue(selected);
                 }
+
+                SelectedModifyEvent?.Invoke(this, EventArgs.Empty);
             }
         }
 

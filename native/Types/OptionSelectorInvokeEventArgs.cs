@@ -1,8 +1,8 @@
 ﻿namespace SCECore.Types
 {
-    public class OptionSelectionEventArgs : EventArgs
+    public class OptionSelectorInvokeEventArgs : EventArgs
     {
-        public OptionSelectionEventArgs(Option option)
+        public OptionSelectorInvokeEventArgs(Option option)
         {
             Option = option;
         }
