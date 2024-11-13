@@ -171,7 +171,7 @@
             return HorizontalAlign switch
             {
                 0 => str,
-                1 => str,
+                1 => SCEString.PadBeforeToEven(str),
                 2 => SCEString.PadBeforeToEven(str),
                 _ => throw new NotImplementedException()
             };
