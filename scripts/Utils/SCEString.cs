@@ -169,6 +169,11 @@
             return stringList.ToArray();
         }
 
+        public static string[] SplitExcludingBounds(string str, char split, char[] boundArray)
+        {
+            return SplitExcludingBounds(str, split, boundArray, boundArray);
+        }
+
         public static string[] SplitExcludingBounds(string str, char split, char leftBound, char rightBound)
         {
             return SplitExcludingBounds(str, split, new[] { leftBound }, new[] { rightBound });
