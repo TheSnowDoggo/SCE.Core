@@ -1,0 +1,8 @@
+﻿################################################################################
+# This .gitignore file was automatically created by Microsoft(R) Visual Studio.
+################################################################################
+
+/.vs/SCECore/FileContentIndex
+/.vs/SCECore/FileContentIndex
+/.vs/SCECore/FileContentIndex/355b132c-df9c-4890-b03c-9ef0f222b495.vsidx
+/obj/Debug/net6.0/SCECore.csproj.AssemblyReference.cache
