@@ -15,11 +15,9 @@
             _document = document;
         }
 
-        public Config(string relativePath)
+        public Config(string fullPath)
             : this(new XmlDocument())
         {
-            string fullPath = Path.Combine(Directory.GetCurrentDirectory(), relativePath);
-
             _document.Load(fullPath);
         }
 

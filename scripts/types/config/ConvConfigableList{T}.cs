@@ -19,7 +19,7 @@
 
         public string TagName { get; set; }
 
-        public IList<T> ValueIList { get => valueList.AsReadOnly(); }
+        public IList<T> Value { get => valueList.AsReadOnly(); }
 
         public char[]? LeftBoundArray { get; set; }
 
