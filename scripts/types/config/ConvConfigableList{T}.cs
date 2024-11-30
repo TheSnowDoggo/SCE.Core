@@ -24,32 +24,30 @@
 
         public char SplitChar { get; set; } = DEF_SPLIT_CHAR;
 
-        public event EventHandler OnLoadEvent;
+        public event EventHandler? OnLoadEvent;
 
         public void Load(XmlNode node)
         {
-            if (node.Name == TagName && node.Value is not null)
-            {
-                string[] valueStrArray = SplitValueList(node.Value);   
+            if (node.Name != TagName || node.Value is null)
+                return;
 
-                valueList.Clear();
-                foreach (string valueStr in valueStrArray)
-                {
-                    valueList.Add(ConvertString(valueStr));
-                }
+            string[] valueStrArray = SplitValueList(node.Value);
+
+            valueList.Clear();
+            foreach (string valueStr in valueStrArray)
+            {
+                valueList.Add(ConvertString(valueStr));
             }
+
+            OnLoadEvent?.Invoke(this, EventArgs.Empty);
         }
 
         private string[] SplitValueList(string listStr)
         {
             if (LeftBoundArray is null)
-            {
                 return listStr.Split(SplitChar);
-            }
             if (RightBoundArray is null)
-            {
                 return StringUtils.SplitExcludingBounds(listStr, SplitChar, LeftBoundArray);
-            }
             return StringUtils.SplitExcludingBounds(listStr, SplitChar, LeftBoundArray, RightBoundArray);
         }
 
