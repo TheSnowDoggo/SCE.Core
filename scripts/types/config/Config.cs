@@ -4,7 +4,7 @@
 
     using System.Collections;
 
-    internal class Config : IEnumerable<IConfigable>
+    public class Config : IEnumerable<IConfigable>
     {
         private readonly XmlDocument _document;
 

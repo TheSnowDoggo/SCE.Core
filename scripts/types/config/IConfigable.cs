@@ -2,7 +2,7 @@
 {
     using System.Xml;
 
-    internal interface IConfigable
+    public interface IConfigable
     {
         void Load(XmlNode node);
     }

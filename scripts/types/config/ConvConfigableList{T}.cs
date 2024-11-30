@@ -2,7 +2,7 @@
 {
     using System.Xml;
 
-    internal class ConvConfigableList<T> : IConfigable
+    public class ConvConfigableList<T> : IConfigable
         where T : IConvertible
     {
         private const char DEF_SPLIT_CHAR = ',';

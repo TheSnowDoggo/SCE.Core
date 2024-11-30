@@ -2,7 +2,7 @@
 {
     using System.Xml;
 
-    internal class ConvConfigable<T> : IConfigable
+    public class ConvConfigable<T> : IConfigable
         where T : IConvertible
     {
         private T? value;
