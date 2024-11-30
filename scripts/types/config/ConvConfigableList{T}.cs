@@ -9,10 +9,13 @@
 
         private readonly List<T> valueList = new();
 
-        public ConvConfigableList(string tagName)
+        public ConvConfigableList(string name, string tagName)
         {
+            Name = name;
             TagName = tagName;
         }
+
+        public string Name { get; set; }
 
         public string TagName { get; set; }
 
@@ -36,7 +39,8 @@
             valueList.Clear();
             foreach (string valueStr in valueStrArray)
             {
-                valueList.Add(ConvertString(valueStr));
+                if ((T)Convert.ChangeType(valueStr, typeof(T)) is T t)
+                    valueList.Add(t);
             }
 
             OnLoadEvent?.Invoke(this, EventArgs.Empty);
@@ -49,11 +53,6 @@
             if (RightBoundArray is null)
                 return StringUtils.SplitExcludingBounds(listStr, SplitChar, LeftBoundArray);
             return StringUtils.SplitExcludingBounds(listStr, SplitChar, LeftBoundArray, RightBoundArray);
-        }
-
-        private T ConvertString(string valueStr)
-        {
-            return (T)Convert.ChangeType(valueStr, typeof(T)) ?? throw new NullReferenceException("Result is null.");
         }
     }
 }

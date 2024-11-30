@@ -6,10 +6,13 @@
         where T : IConvertible
     {
         private T? value;
-        public ConvConfigable(string tagName)
+        public ConvConfigable(string name, string tagName)
         {
+            Name = name;
             TagName = tagName;
         }
+
+        public string Name { get; set; }
 
         public string TagName { get; set; }
 
@@ -21,14 +24,13 @@
 
         public void Load(XmlNode node)
         {
-            if (node.Name == TagName)
+            if (node.Name != TagName)
+                return;
+
+            if (Convert.ChangeType(node.Value, typeof(T)) is T t)
             {
-                object? value = Convert.ChangeType(node.Value, typeof(T));
-                if (value is T t)
-                {
-                    value = t;
-                    OnLoadEvent?.Invoke(this, EventArgs.Empty);
-                }
+                value = t;
+                OnLoadEvent?.Invoke(this, EventArgs.Empty);
             }
         }
     }
