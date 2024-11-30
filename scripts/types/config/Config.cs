@@ -23,6 +23,8 @@
 
         public int Count { get => _configableList.Count; }
 
+        public bool ForceLoadConfigs { get; set; } = true;
+
         public IConfigable this[int index]
         {
             get => _configableList[index];
@@ -39,20 +41,26 @@
             return GetEnumerator();
         }
 
-        public void Setup()
+        public void Initialize()
         {
-            foreach (XmlNode node in _document)
+            XmlNodeList nodeList = _document.ChildNodes;
+
+            foreach (IConfigable configable in this)
             {
-                Load(node);
+                if (!LoadTo(configable, nodeList) && ForceLoadConfigs)
+                    throw new UnloadedConfigException(); 
             }
         }
 
-        private void Load(XmlNode node)
+        private bool LoadTo(IConfigable configable, XmlNodeList nodeList)
         {
-            foreach (IConfigable configable in this)
+            bool loaded = false;
+            foreach (XmlNode node in nodeList)
             {
-                configable.Load(node);
+                if (configable.Load(node))
+                    loaded = true;
             }
+            return loaded;
         }
 
         #region Add

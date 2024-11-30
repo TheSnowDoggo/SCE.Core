@@ -5,6 +5,6 @@
     public interface IConfigable
     {
         string Name { get; }
-        void Load(XmlNode node);
+        bool Load(XmlNode node);
     }
 }

@@ -5,7 +5,8 @@
     public class ConvConfigable<T> : IConfigable
         where T : IConvertible
     {
-        private T? value;
+        private T? value = default;
+
         public ConvConfigable(string name, string tagName)
         {
             Name = name;
@@ -22,16 +23,18 @@
 
         public event EventHandler? OnLoadEvent;
 
-        public void Load(XmlNode node)
+        public bool Load(XmlNode node)
         {
             if (node.Name != TagName)
-                return;
+                return false;
 
             if (Convert.ChangeType(node.Value, typeof(T)) is T t)
             {
                 value = t;
                 OnLoadEvent?.Invoke(this, EventArgs.Empty);
             }
+
+            return true;
         }
     }
 }

@@ -29,10 +29,10 @@
 
         public event EventHandler? OnLoadEvent;
 
-        public void Load(XmlNode node)
+        public bool Load(XmlNode node)
         {
             if (node.Name != TagName || node.Value is null)
-                return;
+                return false;
 
             string[] valueStrArray = SplitValueList(node.Value);
 
@@ -44,6 +44,8 @@
             }
 
             OnLoadEvent?.Invoke(this, EventArgs.Empty);
+
+            return true;
         }
 
         private string[] SplitValueList(string listStr)
