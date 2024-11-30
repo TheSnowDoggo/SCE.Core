@@ -8,10 +8,6 @@
 
         private const StackMode DefaultMode = StackMode.TopDown;
 
-        private static ColorSet DefaultSelectedColorSet { get; } = new(Color.Black, Color.White);
-
-        private static ColorSet DefaultUnselectedColorSet { get; } = new(Color.White, Color.Black);
-
         private readonly LineRenderer lineRenderer;
 
         private readonly Queue<int> _updateQueue = new();
@@ -19,9 +15,7 @@
         private readonly List<Option> _optionList = new();
 
         public event EventHandler<OptionSelectorInvokeEventArgs>? OnInvokeEvent;
-
         public event EventHandler<OptionSelectorInvokeEventArgs>? PostInvokeEvent;
-
         public event EventHandler? SelectedModifyEvent;
 
         private ColorSet selectedColorSet = DefaultSelectedColorSet;
@@ -31,10 +25,7 @@
 
         public OptionSelector(Vector2Int dimensions, Color bgColor, StackMode mode = DefaultMode)
         {
-            lineRenderer = new(dimensions, bgColor, mode)
-            {
-                FitLinesToLength = true,
-            };
+            lineRenderer = new(dimensions, bgColor, mode) { FitLinesToLength = true };
         }
 
         public OptionSelector(Vector2Int dimensions, StackMode mode = DefaultMode)
@@ -42,15 +33,17 @@
         {
         }
 
+        private static ColorSet DefaultSelectedColorSet { get; } = new(Color.Black, Color.White);
+
+        private static ColorSet DefaultUnselectedColorSet { get; } = new(Color.White, Color.Black);
+
         public int Selected
         {
             get => selected;
             set
             {
                 if ((value < 0 || value >= Dimensions.Y) && value != -1)
-                {
                     throw new ArgumentOutOfRangeException("Selected is invalid.");
-                }
 
                 int previous = selected;
 
@@ -161,9 +154,7 @@
         public void Add(Option option)
         {
             if (_optionList.Count == MaxOptions)
-            {
                 throw new Exception("Max options reached.");
-            }
 
             _optionList.Add(option);
             Enqueue(_optionList.Count - 1);
@@ -172,14 +163,10 @@
         public void Add(Option[] optionArray)
         {
             if (optionArray.Length + _optionList.Count > MaxOptions)
-            {
                 throw new ArgumentException("Option array will exceed max options.");
-            }
 
             foreach (Option option in optionArray)
-            {
                 Add(option);
-            }
         }
 
         public void Add(List<Option> optionList)
@@ -194,22 +181,20 @@
 
         public bool RemoveAt(int index)
         {
-            if (index >= 0 && index < _optionList.Count)
+            if (index < 0 || index >= _optionList.Count)
+                return false;
+
+            _optionList.RemoveAt(index);
+
+            for (int i = index; i <= _optionList.Count; ++i)
             {
-                _optionList.RemoveAt(index);
-
-                for (int i = index; i <= _optionList.Count; ++i)
-                {
-                    Enqueue(i);
-                }
-
-                if (Selected >= index)
-                {
-                    CycleSelected(-1);
-                }
+                Enqueue(i);
             }
 
-            return index != -1;
+            if (Selected >= index)
+                CycleSelected(-1);
+
+            return true;
         }
 
         public void Clear()
@@ -251,19 +236,18 @@
         {
             foreach (int i in _updateQueue)
             {
-                if (i != -1)
-                {
-                    Line line;
+                if (i == -1)
+                    continue;
 
-                    if (i >= _optionList.Count)
-                        line = new("", Color.White, BgColor);
-                    else if (i == Selected)
-                        line = new(_optionList[i].Name, SelectedColorSet.FgColor, SelectedColorSet.BgColor);
-                    else
-                        line = new(_optionList[i].Name, UnselectedColorSet.FgColor, UnselectedColorSet.BgColor);
+                Line line;
+                if (i >= _optionList.Count)
+                    line = new("", Color.White, BgColor);
+                else if (i == Selected)
+                    line = new(_optionList[i].Name, SelectedColorSet.FgColor, SelectedColorSet.BgColor);
+                else
+                    line = new(_optionList[i].Name, UnselectedColorSet.FgColor, UnselectedColorSet.BgColor);
 
-                    lineRenderer[i] = line;
-                }
+                lineRenderer[i] = line;
             }
 
             _updateQueue.Clear();
