@@ -32,9 +32,9 @@
             {
                 value = t;
                 OnLoadEvent?.Invoke(this, EventArgs.Empty);
+                return true;
             }
-
-            return true;
+            return false;
         }
     }
 }
