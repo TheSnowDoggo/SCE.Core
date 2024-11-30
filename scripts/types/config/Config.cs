@@ -43,7 +43,11 @@
 
         public void Initialize()
         {
-            XmlNodeList nodeList = _document.ChildNodes;
+            if (_document.DocumentElement is null)
+                throw new NullReferenceException("Root node not found.");
+
+            XmlNode root = _document.DocumentElement;
+            XmlNodeList nodeList = root.ChildNodes;
 
             foreach (IConfigable configable in this)
             {

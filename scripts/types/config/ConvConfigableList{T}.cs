@@ -31,10 +31,10 @@
 
         public bool Load(XmlNode node)
         {
-            if (node.Name != TagName || node.Value is null)
+            if (node.Name != TagName)
                 return false;
 
-            string[] valueStrArray = SplitValueList(node.Value);
+            string[] valueStrArray = SplitValueList(node.InnerText);
 
             valueList.Clear();
             foreach (string valueStr in valueStrArray)

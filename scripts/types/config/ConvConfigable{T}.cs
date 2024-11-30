@@ -26,9 +26,9 @@
         public bool Load(XmlNode node)
         {
             if (node.Name != TagName)
-                return false;
+                return false; 
 
-            if (Convert.ChangeType(node.Value, typeof(T)) is T t)
+            if (Convert.ChangeType(node.InnerText, typeof(T)) is T t)
             {
                 value = t;
                 OnLoadEvent?.Invoke(this, EventArgs.Empty);
