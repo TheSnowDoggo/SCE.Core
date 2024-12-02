@@ -1,4 +1,4 @@
-﻿namespace SCECore
+﻿namespace SCE
 {
     /// <summary>
     /// An interface used for getting the <see cref="Image"/> to render to the <see cref="Display"/>.

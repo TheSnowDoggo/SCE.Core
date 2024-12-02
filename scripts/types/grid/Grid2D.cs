@@ -1,4 +1,4 @@
-﻿namespace SCECore
+﻿namespace SCE
 {
     using System;
     using System.Collections;

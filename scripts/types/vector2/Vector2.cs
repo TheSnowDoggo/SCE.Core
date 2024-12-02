@@ -1,4 +1,4 @@
-﻿namespace SCECore
+﻿namespace SCE
 {
     /// <summary>
     /// Representation of floating point 2D vectors.

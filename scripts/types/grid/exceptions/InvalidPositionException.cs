@@ -1,4 +1,4 @@
-﻿namespace SCECore
+﻿namespace SCE
 {
     /// <summary>
     /// Represents errors thrown when an attempt is made to use an invalid <see cref="Vector2"/>.

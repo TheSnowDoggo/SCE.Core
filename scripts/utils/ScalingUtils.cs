@@ -1,4 +1,4 @@
-﻿namespace SCECore
+﻿namespace SCE
 {
     /// <summary>
     /// Legacy <see cref="Grid2D{T}"/> scaling class.

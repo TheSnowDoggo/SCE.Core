@@ -1,4 +1,4 @@
-﻿namespace SCECore
+﻿namespace SCE
 {
     /// <summary>
     /// Represents a text box UI element.

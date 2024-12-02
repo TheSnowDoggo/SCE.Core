@@ -1,4 +1,4 @@
-﻿namespace SCECore
+﻿namespace SCE
 {
     using System.Text;
 
@@ -53,9 +53,7 @@
         public static string FormatNumberToLength(string numStr, int digitLength, char digitFill = '0')
         {
             if (digitLength < 0)
-            {
                 throw new ArgumentException("Length cannot be less than 0.");
-            }
 
             int dif = digitLength - numStr.Length;
 
@@ -70,16 +68,12 @@
         public static string MergeString(string mainStr, string underLayedStr, char mergeChr = ' ')
         {
             if (underLayedStr.Length < mainStr.Length)
-            {
                 throw new ArgumentException("Under layed string length cannot be less than main string.");
-            }
 
             StringBuilder strBuilder = new();
 
             for (int i = 0; i < mainStr.Length; i++)
-            {
                 strBuilder.Append(mainStr[i] != mergeChr ? mainStr[i] : underLayedStr[i]);
-            }
 
             return strBuilder.ToString();
         }

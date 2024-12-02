@@ -1,13 +1,13 @@
-﻿namespace SCECore
+﻿namespace SCE
 {
     using System.Diagnostics;
     using Seconds = Double;
 
-    internal class Timer
+    public class STimer
     {
         private readonly Stopwatch _stopwatch = new();
 
-        public Timer(Seconds length)
+        public STimer(Seconds length)
         {
             Length = length;
         }
@@ -18,9 +18,9 @@
 
         public event EventHandler? OnEndEvent;
 
-        public static Timer GetNew(Seconds length)
+        public static STimer GetNew(Seconds length)
         {
-            Timer timer = new(length);
+            STimer timer = new(length);
             timer.Start();
             return timer;
         }

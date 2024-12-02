@@ -1,4 +1,4 @@
-﻿namespace SCECore
+﻿namespace SCE
 {
     /// <summary>
     /// Interface for programs that contain multiple IAutoloadbles to be loaded into GameHandler.

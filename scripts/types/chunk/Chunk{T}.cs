@@ -1,4 +1,4 @@
-﻿namespace SCECore
+﻿namespace SCE
 {
     internal class Chunk<T> : Grid2D<T>
     {

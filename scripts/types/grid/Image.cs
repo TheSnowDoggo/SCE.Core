@@ -1,4 +1,4 @@
-﻿namespace SCECore
+﻿namespace SCE
 {
     public class Image : DisplayMap, ICloneable, IEquatable<Image>, IRenderable
     {

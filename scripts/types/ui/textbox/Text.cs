@@ -1,4 +1,4 @@
-﻿namespace SCECore
+﻿namespace SCE
 {
     public class Text : IEquatable<Text>, ICloneable
     {

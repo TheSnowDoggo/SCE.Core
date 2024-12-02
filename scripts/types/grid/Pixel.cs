@@ -1,4 +1,4 @@
-﻿namespace SCECore
+﻿namespace SCE
 {
     /// <summary>
     /// A struct storing a <see cref="Element"/>, and a <see cref="FgColor"/> and <see cref="BgColor"/> <see cref="byte"/> color.
@@ -26,9 +26,7 @@
         public Pixel(string element, Color fgColor, Color bgColor)
         {
             if (!IsElementValid(element))
-            {
                 throw new ArgumentException("Element is invalid.");
-            }
 
             Element = FixedEmptyElement(element); 
             FgColor = fgColor;
@@ -119,7 +117,7 @@
 
             Color newFgColor = topPixel.Element == EmptyElement ? bottomPixel.FgColor : ColorUtils.GetStackColor(topPixel.FgColor, bottomPixel.FgColor);
 
-            string newElement = topPixel.BgColor != Color.Transparent ? topPixel.Element : StringUtils.MergeString(topPixel.Element, bottomPixel.Element);
+            string newElement = topPixel.BgColor != Color.Transparent ? topPixel.Element : StringUtils.MergeString(topPixel.Element ?? EmptyElement, bottomPixel.Element ?? EmptyElement);
 
             return new(newElement, newFgColor, newBgColor);
         }

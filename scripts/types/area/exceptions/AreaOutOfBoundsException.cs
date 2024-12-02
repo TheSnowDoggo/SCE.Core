@@ -1,4 +1,4 @@
-﻿namespace SCECore
+﻿namespace SCE
 {
     /// <summary>
     /// Represents errors thrown when an attempt is made to access an <see cref="Area2D"/> on a <see cref="Grid2D{T}"/> that is outside its bounds.

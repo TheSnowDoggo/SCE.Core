@@ -1,4 +1,4 @@
-﻿namespace SCECore
+﻿namespace SCE
 {
     /// <summary>
     /// Represents errors thrown when invalid dimensions are used to initialize a grid.
