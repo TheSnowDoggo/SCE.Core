@@ -3,7 +3,7 @@
     /// <summary>
     /// Representation of floating point 2D vectors.
     /// </summary>
-    public struct Vector2 : IEquatable<Vector2>
+    public struct Vector2 : IEquatable<Vector2>, IFormattable
     {
         private const char VectorStringSplitChar = ',';
 
@@ -240,6 +240,11 @@
         public string ToString(string? format)
         {
             return $"{X.ToString(format)},{Y.ToString(format)}";
+        }
+
+        public string ToString(string? format, IFormatProvider? provider)
+        {
+            return ToString(format);
         }
 
         /// <summary>
