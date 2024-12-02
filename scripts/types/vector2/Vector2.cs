@@ -244,6 +244,8 @@
 
         public string ToString(string? format, IFormatProvider? provider)
         {
+            if (provider is not null)
+                throw new NotImplementedException("Providers not implemented.");
             return ToString(format);
         }
 
