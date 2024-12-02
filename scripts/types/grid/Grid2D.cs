@@ -21,7 +21,6 @@
         {
             if (width < 0 || height < 0)
                 throw new InvalidDimensionsException("Dimensions are invalid.");
-
             Data = new T[width, height];
         }
 
@@ -116,19 +115,13 @@
             get
             {
                 if (!PositionValid(x, y))
-                {
                     throw new PositionOutOfBoundsException("Position is invalid.");
-                }
-
                 return Data[x, y]; 
             }
             set
             {
                 if (!PositionValid(x, y))
-                {
                     throw new PositionOutOfBoundsException("Position is invalid.");
-                }
-
                 Data[x, y] = value;
             }
         }
@@ -143,19 +136,13 @@
             get
             {
                 if (!PositionValid(pos))
-                {
                     throw new PositionOutOfBoundsException("Position is invalid.");
-                }
-
                 return Data[pos.X, pos.Y];
             }
             set
             {
                 if (!PositionValid(pos))
-                {
                     throw new PositionOutOfBoundsException("Position is invalid.");
-                }
-
                 Data[pos.X, pos.Y] = value;
             }
         }
@@ -199,10 +186,7 @@
         public bool Equals(Grid2D<T>? other)
         {
             if (other is null)
-            {
                 return false;
-            }
-
             return other.OnResize == OnResize && ((IStructuralEquatable)Data).Equals(other.Data, EqualityComparer<T>.Default);
         }
 
