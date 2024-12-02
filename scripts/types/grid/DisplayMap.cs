@@ -5,6 +5,11 @@
     /// </summary>
     public class DisplayMap : Grid2D<Pixel>, IEquatable<DisplayMap>
     {
+        public DisplayMap(int width, int height)
+            : base(width, height)
+        {
+        }
+
         /// <summary>
         /// Initializes a new instance of the <see cref="DisplayMap"/> class given its dimensions.
         /// </summary>
@@ -12,6 +17,13 @@
         public DisplayMap(Vector2Int dimensions)
             : base(dimensions)
         {
+        }
+
+        public DisplayMap(int width, int height, Color bgColor)
+            : base(width, height)
+        {
+            if (bgColor != Color.Black)
+                BgColorFill(bgColor);
         }
 
         /// <summary>
@@ -23,9 +35,7 @@
             : base(dimensions)
         {
             if (bgColor != Color.Black)
-            {
                 BgColorFill(bgColor);
-            }
         }
 
         /// <summary>
@@ -117,17 +127,13 @@
         public void MapLine(Vector2Int position, string line, Color fgColor = Color.White, Color bgColor = Color.Transparent)
         {
             if (!PositionValid(position))
-            {
                 throw new ArgumentException("Starting position is not valid");
-            }
 
             line = StringUtils.PadAfterToEven(line);
 
             int pixelLength = line.Length / Pixel.PIXELWIDTH, endX = position.X + pixelLength;
             if (endX > Dimensions.X)
-            {
                 throw new ArgumentException($"Line (Length:{pixelLength}px,posX:{position.X}) will overflow current width ({Dimensions.X}px) by {endX - Dimensions.X}");
-            }
 
             for (int x = 0; x < pixelLength; x++)
             {
@@ -161,9 +167,7 @@
         public void MapText(Text text, CustomMapLine? customMapLine = null)
         {
             if (text.Data == string.Empty)
-            {
                 throw new ArgumentException("Text data is empty");
-            }
 
             customMapLine ??= MapLine;
 
@@ -191,13 +195,9 @@
         public string[] GetSplitLineArray(Text text)
         {
             if (text.NewLineOverflow)
-            {
                 return StringUtils.SmartSplitLineArray(text.Data, Width * Pixel.PIXELWIDTH, Height);
-            }
             else
-            {
                 return StringUtils.BasicSplitLineArray(text.Data, Height);
-            }
         }
 
         /// <summary>
