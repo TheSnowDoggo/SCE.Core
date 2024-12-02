@@ -17,10 +17,7 @@
         public Area2DInt(Vector2Int start, Vector2Int end)
         {
             if (end <= start)
-            {
                 throw new ArgumentException("End vector must be greater than start vector.");
-            }
-
             this.start = start;
             this.end = end;
         }
@@ -43,10 +40,7 @@
             set
             {
                 if (value <= Start)
-                {
                     throw new ArgumentException("End vector must be greater than start vector.");
-                }
-
                 end = value;
             }
         }
@@ -142,17 +136,10 @@
 
         public static bool Overlaps(Vector2Int start1, Vector2Int end1, Vector2Int start2, Vector2Int end2)
         {
-            // X sides don't overlap
-            if (end1.X <= start2.X || start1.X >= end2.X)
-            {
+            if (end1.X <= start2.X || start1.X >= end2.X) // X sides don't overlap
+                return false;          
+            if (end1.Y <= start2.Y || start1.Y >= end2.Y) // Y sides don't overlap
                 return false;
-            }
-            // Y sides don't overlap
-            if (end1.Y <= start2.Y || start1.Y >= end2.Y)
-            {
-                return false;
-            }
-
             return true;
         }
 
@@ -164,9 +151,7 @@
         public static Area2DInt GetOverlap(Vector2Int start1, Vector2Int end1, Vector2Int start2, Vector2Int end2)
         {
             if (!Overlaps(start1, end1, start2, end2))
-            {
                 throw new ArgumentException("Areas do not overlap.");
-            }
 
             Vector2Int v1 = new(Math.Max(start1.X, start2.X), Math.Max(start1.Y, start2.Y));
 
@@ -216,27 +201,19 @@
             if (trimEnd > Start)
             {
                 if (trimStart.X < Start.X)
-                {
                     trimStart.X = Start.X;
-                }
 
                 if (trimStart.Y < Start.Y)
-                {
                     trimStart.Y = Start.Y;
-                }
             }
 
             if (trimStart < End)
             {
                 if (trimEnd.X >= End.X)
-                {
                     trimEnd.X = End.X;
-                }
 
                 if (trimEnd.Y >= End.Y)
-                {
                     trimEnd.Y = End.Y;
-                }
             }
 
             Area2DInt trimArea = new(trimStart, trimEnd);
@@ -269,24 +246,13 @@
             Vector2Int offset = Vector2Int.Zero;
 
             if (area.Start.X < Start.X)
-            {
                 offset.X += Start.X - area.Start.X;
-            }
-
             if (area.End.X > End.X)
-            {
                 offset.X += End.X - area.End.X;
-            }
-
             if (area.Start.Y < Start.Y)
-            {
                 offset.Y += Start.Y - area.Start.Y;
-            }
-
             if (area.End.Y > End.Y)
-            {
                 offset.Y += End.Y - area.End.Y;
-            }
 
             return area + offset;
         }

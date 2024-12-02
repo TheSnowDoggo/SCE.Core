@@ -90,7 +90,7 @@
         /// <returns>The string representation of this instance formatted to a given pixel width.</returns>
         public string ToString(int pixelWidth)
         {
-            return StringUtils.FitToLength(ToString(), pixelWidth * Pixel.PIXELWIDTH);
+            return StringUtils.PostFitToLength(ToString(), pixelWidth * Pixel.PIXELWIDTH);
         }
     }
 }

@@ -19,7 +19,6 @@
 
                 newGrid.FillArea(value, area);
             }
-
             startGrid.GenericCycle(CycleAction);
 
             return newGrid;

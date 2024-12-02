@@ -13,9 +13,7 @@
                 string str = strArray[i];
 
                 if (str.Length != 1)
-                {
                     throw new InvalidOperationException("String contains multiple characters.");
-                }
 
                 chrArray[i] = str[0];
             }
@@ -23,6 +21,18 @@
             return chrArray;
         }
 
+        public static string MergeString(string mainStr, string underLayedStr, char mergeChr = ' ')
+        {
+            if (underLayedStr.Length < mainStr.Length)
+                throw new ArgumentException("Under layed string length cannot be less than main string.");
+
+            StringBuilder strBuilder = new(underLayedStr.Length);
+            for (int i = 0; i < mainStr.Length; i++)
+                strBuilder.Append(mainStr[i] != mergeChr ? mainStr[i] : underLayedStr[i]);
+            return strBuilder.ToString();
+        }
+
+        #region PadTo
         public static string PadAfterToEven(string str)
         {
             return str.Length % 2 == 0 ? str : $"{str} ";
@@ -32,56 +42,38 @@
         {
             return str.Length % 2 == 0 ? str : $" {str}";
         }
+        #endregion
 
-        public static string FitToLength(string str, int length, char fill = ' ')
+        #region FitToLength
+        private static string FitToLength(bool postFit, string str, int length, char fill = ' ')
         {
             if (length < 0)
-            {
                 throw new ArgumentException("Length cannot be less than 0.");
+
+            int difference = length - str.Length;
+            switch (difference)
+            {
+                case 0:  return str;
+                case >0: return postFit ? str + Copy(fill, difference) : Copy(fill, difference) + str;
+                case <0: return str[..length];
             }
-
-            int dif = length - str.Length;
-
-            return dif switch
-            {
-                0 => str,
-                > 0 => str + Copy(fill, dif),
-                < 0 => str[..length]
-            };
         }
 
-        public static string FormatNumberToLength(string numStr, int digitLength, char digitFill = '0')
+        public static string PostFitToLength(string str, int length, char fill = ' ')
         {
-            if (digitLength < 0)
-                throw new ArgumentException("Length cannot be less than 0.");
-
-            int dif = digitLength - numStr.Length;
-
-            return dif switch
-            {
-                0 => numStr,
-                > 0 => Copy(digitFill, dif) + numStr,
-                < 0 => throw new InvalidOperationException("Number exceeds digit length.")
-            };
+            return FitToLength(true, str, length, fill);
         }
 
-        public static string MergeString(string mainStr, string underLayedStr, char mergeChr = ' ')
+        public static string PreFitToLength(string str, int length, char fill = ' ')
         {
-            if (underLayedStr.Length < mainStr.Length)
-                throw new ArgumentException("Under layed string length cannot be less than main string.");
-
-            StringBuilder strBuilder = new();
-
-            for (int i = 0; i < mainStr.Length; i++)
-                strBuilder.Append(mainStr[i] != mergeChr ? mainStr[i] : underLayedStr[i]);
-
-            return strBuilder.ToString();
+            return FitToLength(false, str, length, fill);
         }
+        #endregion
 
+        #region Bounds
         public static string TakeBetween(string str, char leftBound, char rightBound)
         {
             RangeBetween(str, leftBound, rightBound).Expose(out int leftIndex, out int rightIndex);
-
             return str[leftIndex..rightIndex];
         }
 
@@ -93,7 +85,6 @@
         public static string InsertBetween(string str, string insert, char leftBound, char rightBound)
         {
             RangeBetween(str, leftBound, rightBound).Expose(out int leftIndex, out int rightIndex);
-
             return str.Remove(leftIndex, rightIndex - leftIndex).Insert(leftIndex, insert);
         }
 
@@ -107,16 +98,12 @@
             int leftIndex = str.IndexOf(leftBound) + 1;
 
             if (leftIndex == -1)
-            {
                 throw new ArgumentException("Left bound not found.");
-            }
 
             int rightIndex = str.IndexOf(rightBound, leftIndex);
 
             if (rightIndex == -1)
-            {
                 throw new ArgumentException("Right bound not found.");
-            }
 
             return new(leftIndex, rightIndex);
         }
@@ -141,13 +128,9 @@
                 char chr = str[i];
 
                 if (leftBoundArray.Contains(chr))
-                {
                     boundLayer++;
-                }
                 else if (boundLayer > 0 && rightBoundArray.Contains(chr))
-                {
                     boundLayer--;
-                }
 
                 if (boundLayer > 0 || chr != split)
                     strBuilder.Append(chr);
@@ -172,7 +155,9 @@
         {
             return SplitExcludingBounds(str, split, new[] { leftBound }, new[] { rightBound });
         }
+        #endregion
 
+        #region StringCharManipulation
         public static int CountOf(string str, char countChr)
         {
             int total = 0;
@@ -194,31 +179,23 @@
             }
             return strBuilder.ToString();
         }
+        #endregion
 
-        // Line split functions
+        #region LineSplitting
         public static string[] BasicSplitLineArray(string str, int maxLines)
         {
             string[] lineArray = str.Split('\n');
-
             if (lineArray.Length > maxLines)
-            {
                 Array.Resize(ref lineArray, maxLines);
-            }
-
             return lineArray;
         }
 
         public static string[] SmartSplitLineArray(string str, int maxLineLength, int maxLines)
         {
             if (maxLineLength < 0)
-            {
                 throw new ArgumentException("Max line length cannot be less than 0.");
-            }
-
             if (maxLines < 0)
-            {
                 throw new ArgumentException("Max lines cannot be less than 0.");
-            }
 
             List<string> lineList = new();
 
@@ -232,9 +209,7 @@
                 char chr = str[i];
 
                 if (chr != '\n')
-                {
                     strBuilder.Append(chr);
-                }
 
                 if (chr == '\n' || last || (strBuilder.Length == maxLineLength && str[i + 1] != '\n'))
                 {
@@ -249,14 +224,15 @@
 
             return lineList.ToArray();
         }
+        #endregion
 
-        // Copy functions
+        #region Copy
         public static string Copy(string str, int copies)
         {
             if (copies < 0)
                 throw new ArgumentException("Copies cannot be less than 0.");
 
-            StringBuilder strBuilder = new(copies * str.Length);
+            StringBuilder strBuilder = new(str.Length * copies);
             for (int i = 0; i < copies; i++)
                 strBuilder.Append(str);
             return strBuilder.ToString();
@@ -272,5 +248,6 @@
                 chrArr[i] = chr;
             return new(chrArr);
         }
+        #endregion
     }
 }

@@ -38,9 +38,7 @@
         public static string[] BuildPixelGrid(Grid2D<Pixel> pixelGrid)
         {
             StringBuilder textBuild = new();
-
             StringBuilder fgColorBuild = new();
-
             StringBuilder bgColorBuild = new();
 
             for (int y = pixelGrid.Height - 1; y >= 0; y--)
@@ -50,10 +48,8 @@
                     Pixel pixel = pixelGrid[x, y];
                     string text = pixel.Element ?? string.Empty;
 
-                    textBuild.Append(StringUtils.FitToLength(text, Pixel.PIXELWIDTH));
-
+                    textBuild.Append(StringUtils.PostFitToLength(text, Pixel.PIXELWIDTH));
                     fgColorBuild.Append(SifCodeDictionary[pixel.FgColor]);
-
                     bgColorBuild.Append(SifCodeDictionary[pixel.BgColor]);
                 }
             }

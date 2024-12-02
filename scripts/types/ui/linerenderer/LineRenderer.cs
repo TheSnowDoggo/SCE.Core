@@ -90,7 +90,7 @@
 
                 Line line = lineArray[y];
 
-                string data = FitLinesToLength ? StringUtils.FitToLength(line.Data, Width * Pixel.PIXELWIDTH) : line.Data;
+                string data = FitLinesToLength ? StringUtils.PostFitToLength(line.Data, Width * Pixel.PIXELWIDTH) : line.Data;
 
                 if (Pixel.GetPixelLength(data) > Width)
                 {

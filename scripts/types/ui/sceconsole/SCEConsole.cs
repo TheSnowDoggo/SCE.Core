@@ -118,7 +118,7 @@
 
         private string SmartHeader { get => $"- {VersionName} - Logs: {Logs}"; }
 
-        private string AdjustedHeader { get => StringUtils.FitToLength(SmartHeader, ui.Width * Pixel.PIXELWIDTH); }
+        private string AdjustedHeader { get => StringUtils.PostFitToLength(SmartHeader, ui.Width * Pixel.PIXELWIDTH); }
 
         /// <summary>
         /// Gets or sets the <see cref="Log"/> at the specified index.
@@ -187,7 +187,7 @@
 
                     foreach (string line in lineArray)
                     {
-                        strBuilder.Append(StringUtils.FitToLength(line, ui.Width * Pixel.PIXELWIDTH));
+                        strBuilder.Append(StringUtils.PostFitToLength(line, ui.Width * Pixel.PIXELWIDTH));
                     }
 
                     lines += lineArray.Length;

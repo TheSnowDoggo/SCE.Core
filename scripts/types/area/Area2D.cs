@@ -17,10 +17,7 @@
         public Area2D(Vector2 start, Vector2 end)
         {
             if (end <= start)
-            {
                 throw new ArgumentException("End vector must be greater than start vector.");
-            }
-
             this.start = start;
             this.end = end;
         }
@@ -43,10 +40,7 @@
             set
             {
                 if (value <= Start)
-                {
                     throw new ArgumentException("End vector must be greater than start vector.");
-                }
-
                 end = value;
             }
         }
@@ -54,12 +48,12 @@
         /// <summary>
         /// Gets the width of the area.
         /// </summary>
-        public double Width { get => End.X - Start.X; }
+        public float Width { get => End.X - Start.X; }
 
         /// <summary>
         /// Gets the height of the area.
         /// </summary>
-        public double Height { get => End.Y - Start.Y; }
+        public float Height { get => End.Y - Start.Y; }
 
         /// <summary>
         /// Gets the dimensions of the area.
@@ -91,18 +85,18 @@
 
         public static Area2D operator +(Area2D a1, Vector2 v) => new(a1.Start + v, a1.End + v);
 
-        public static Area2D operator +(Area2D a1, double num) => a1 + new Vector2(num, num);
+        public static Area2D operator +(Area2D a1, float num) => a1 + new Vector2(num, num);
 
-        public static Area2D operator +(Area2D a1, int num) => a1 + (double)num;
+        public static Area2D operator +(Area2D a1, int num) => a1 + (float)num;
 
         // Subtraction
         public static Area2D operator -(Area2D a1, Area2D a2) => new(a1.Start - a2.Start, a1.End - a2.End);
 
         public static Area2D operator -(Area2D a1, Vector2 v) => new(a1.Start - v, a1.End - v);
 
-        public static Area2D operator -(Area2D a1, double num) => a1 - new Vector2(num, num);
+        public static Area2D operator -(Area2D a1, float num) => a1 - new Vector2(num, num);
 
-        public static Area2D operator -(Area2D a1, int num) => a1 - (double)num;
+        public static Area2D operator -(Area2D a1, int num) => a1 - (float)num;
 
         public static Area2D operator -(Area2D a) => new(-a.Start, -a.End);
 
@@ -111,32 +105,25 @@
 
         public static Area2D operator *(Area2D a1, Vector2 v) => new(a1.Start * v, a1.End + v);
 
-        public static Area2D operator *(Area2D a1, double num) => a1 * new Vector2(num, num);
+        public static Area2D operator *(Area2D a1, float num) => a1 * new Vector2(num, num);
 
-        public static Area2D operator *(Area2D a1, int num) => a1 * (double)num;
+        public static Area2D operator *(Area2D a1, int num) => a1 * (float)num;
 
         // Division
         public static Area2D operator /(Area2D a1, Area2D a2) => new(a1.Start / a2.Start, a1.End / a2.End);
 
         public static Area2D operator /(Area2D a1, Vector2 v) => new(a1.Start / v, a1.End + v);
 
-        public static Area2D operator /(Area2D a1, double num) => a1 / new Vector2(num, num);
+        public static Area2D operator /(Area2D a1, float num) => a1 / new Vector2(num, num);
 
-        public static Area2D operator /(Area2D a1, int num) => a1 / (double)num;
+        public static Area2D operator /(Area2D a1, int num) => a1 / (float)num;
 
         public static bool Overlaps(Vector2 start1, Vector2 end1, Vector2 start2, Vector2 end2)
-        {
-            // X sides don't overlap
-            if (end1.X <= start2.X || start1.X >= end2.X)
-            {
+        {         
+            if (end1.X <= start2.X || start1.X >= end2.X) // X sides don't overlap
+                return false;           
+            if (end1.Y <= start2.Y || start1.Y >= end2.Y) // Y sides don't overlap
                 return false;
-            }
-            // Y sides don't overlap
-            if (end1.Y <= start2.Y || start1.Y >= end2.Y)
-            {
-                return false;
-            }
-
             return true;
         }
 
@@ -210,12 +197,8 @@
         {
             Vector2Int end = (Vector2Int)End;
             Vector2Int start = (Vector2Int)Start;
-
             if (end <= start)
-            {
                 throw new InvalidAreaException("Converted area is invalid.");
-            }
-
             return new(start, end);
         }
 
@@ -231,27 +214,19 @@
             if (trimEnd > Start)
             {
                 if (trimStart.X < Start.X)
-                {
                     trimStart.X = Start.X;
-                }
 
                 if (trimStart.Y < Start.Y)
-                {
                     trimStart.Y = Start.Y;
-                }
             }
 
             if (trimStart < End)
             {
                 if (trimEnd.X > End.X)
-                {
                     trimEnd.X = End.X;
-                }
 
                 if (trimEnd.Y > End.Y)
-                {
                     trimEnd.Y = End.Y;
-                }
             }
 
             return new(trimStart, trimEnd); 
@@ -282,24 +257,13 @@
             Vector2 offset = Vector2.Zero;
 
             if (area.Start.X < Start.X)
-            {
                 offset.X += Start.X - area.Start.X;
-            }
-
             if (area.End.X > End.X)
-            {
                 offset.X += End.X - area.End.X;
-            }
-
             if (area.Start.Y < Start.Y)
-            {
                 offset.Y += Start.Y - area.Start.Y;
-            }
-
             if (area.End.Y > End.Y)
-            {
                 offset.Y += End.Y - area.End.Y;
-            }
 
             return area + offset;
         }

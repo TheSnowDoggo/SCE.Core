@@ -12,7 +12,7 @@
         /// </summary>
         /// <param name="x">The x component of the vector.</param>
         /// <param name="y">The y component of the vector.</param>
-        public Vector2(double x, double y)
+        public Vector2(float x, float y)
         {
             X = x;
             Y = y;
@@ -46,17 +46,17 @@
         /// <summary>
         /// Gets the X component of this instance.
         /// </summary>
-        public double X { get; set; }
+        public float X { get; set; }
 
         /// <summary>
         /// Gets the Y component of this instance.
         /// </summary>
-        public double Y { get; set; }
+        public float Y { get; set; }
 
         /// <summary>
         /// Gets the length of the vector.
         /// </summary>
-        public double Magnitude { get => Math.Sqrt((X * X) + (Y * Y)); }
+        public float Magnitude { get => MathF.Sqrt((X * X) + (Y * Y)); }
 
         /// <summary>
         /// Gets the normalized (unit) vector based on the current vector if the magnitude is not equal to 0.
@@ -89,21 +89,21 @@
         // Greater or equal than
         public static bool operator >=(Vector2 v1, Vector2 v2) => v1.X >= v2.X && v1.Y >= v2.Y;
 
-        public static bool operator >=(Vector2 v1, double num) => v1.X >= num && v1.Y >= num;
+        public static bool operator >=(Vector2 v1, float num) => v1.X >= num && v1.Y >= num;
 
-        public static bool operator >=(Vector2 v1, int num) => v1 >= (double)num;
+        public static bool operator >=(Vector2 v1, int num) => v1 >= (float)num;
 
         // Less or equal than
         public static bool operator <=(Vector2 v1, Vector2 v2) => v1.X <= v2.X && v1.Y <= v2.Y;
 
-        public static bool operator <=(Vector2 v1, double num) => v1.X <= num && v1.Y <= num;
+        public static bool operator <=(Vector2 v1, float num) => v1.X <= num && v1.Y <= num;
 
-        public static bool operator <=(Vector2 v1, int num) => v1 <= (double)num;
+        public static bool operator <=(Vector2 v1, int num) => v1 <= (float)num;
 
         // Addition
         public static Vector2 operator +(Vector2 v1, Vector2 v2) => new(v1.X + v2.X, v1.Y + v2.Y);
 
-        public static Vector2 operator +(Vector2 v1, double num) => new(v1.X + num, v1.Y + num);
+        public static Vector2 operator +(Vector2 v1, float num) => new(v1.X + num, v1.Y + num);
 
         public static Vector2 operator +(Vector2 v1, int num) => new(v1.X + num, v1.Y + num);
 
@@ -112,37 +112,37 @@
 
         public static Vector2 operator -(Vector2 v1, Vector2 v2) => new(v1.X - v2.X, v1.Y - v2.Y);
 
-        public static Vector2 operator -(Vector2 v1, double num) => new(v1.X - num, v1.Y - num);
+        public static Vector2 operator -(Vector2 v1, float num) => new(v1.X - num, v1.Y - num);
 
         public static Vector2 operator -(Vector2 v1, int num) => new(v1.X - num, v1.Y - num);
 
         // Multiplication
         public static Vector2 operator *(Vector2 v1, Vector2 v2) => new(v1.X * v2.X, v1.Y * v2.Y);
 
-        public static Vector2 operator *(Vector2 v1, double num) => new(v1.X * num, v1.Y * num);
+        public static Vector2 operator *(Vector2 v1, float num) => new(v1.X * num, v1.Y * num);
 
         public static Vector2 operator *(Vector2 v1, int num) => new(v1.X * num, v1.Y * num);
 
         // Division
         public static Vector2 operator /(Vector2 v1, Vector2 v2) => new(v1.X / v2.X, v1.Y / v2.Y);
 
-        public static Vector2 operator /(Vector2 v1, double num) => new(v1.X / num, v1.Y / num);
+        public static Vector2 operator /(Vector2 v1, float num) => new(v1.X / num, v1.Y / num);
 
         public static Vector2 operator /(Vector2 v1, int num) => new(v1.X / num, v1.Y / num);
 
         // Greater than
         public static bool operator >(Vector2 v1, Vector2 v2) => v1.X > v2.X && v1.Y > v2.Y;
 
-        public static bool operator >(Vector2 v1, double num) => v1.X > num && v1.Y > num;
+        public static bool operator >(Vector2 v1, float num) => v1.X > num && v1.Y > num;
 
-        public static bool operator >(Vector2 v1, int num) => v1 > (double)num;
+        public static bool operator >(Vector2 v1, int num) => v1 > (float)num;
 
         // Less than
         public static bool operator <(Vector2 v1, Vector2 v2) => v1.X < v2.X && v1.Y < v2.Y;
 
-        public static bool operator <(Vector2 v1, double num) => v1.X < num && v1.Y < num;
+        public static bool operator <(Vector2 v1, float num) => v1.X < num && v1.Y < num;
 
-        public static bool operator <(Vector2 v1, int num) => v1 < (double)num;
+        public static bool operator <(Vector2 v1, int num) => v1 < (float)num;
 
         /// <summary>
         /// Indicates whether this vector and the specified vector are equal.
@@ -181,37 +181,27 @@
         public static Vector2 ReadVectorString(string vectorStr)
         {
             if (vectorStr.Length < 3)
-            {
                 throw new ArgumentException("String vector must be atleast 3 characters long");
-            }
 
             vectorStr = StringUtils.RemoveInstancesOf(vectorStr, ' ');
 
             int splitIndex = vectorStr.IndexOf(VectorStringSplitChar), lastIndex = vectorStr.LastIndexOf(VectorStringSplitChar);
 
             if (splitIndex == -1)
-            {
                 throw new ArgumentException("String vector didn't contain a valid split char");
-            }
 
             if (lastIndex != splitIndex)
-            {
                 throw new ArgumentException("String vector contained multiple split chars");
-            }
 
             int yStartIndex = splitIndex + 1;
 
             string xStr = vectorStr[..splitIndex], yStr = vectorStr[yStartIndex..];
 
-            if (!double.TryParse(xStr, out double x))
-            {
+            if (!float.TryParse(xStr, out float x))
                 throw new ArgumentException("Found x was not valid");
-            }
 
-            if (!double.TryParse(yStr, out double y))
-            {
+            if (!float.TryParse(yStr, out float y))
                 throw new ArgumentException("Found y was not valid");
-            }
 
             return new(x, y);
         }
@@ -279,7 +269,7 @@
         /// <returns>The ceiled vector.</returns>
         public Vector2 Ceil()
         {
-            return new(Math.Ceiling(X), Math.Ceiling(Y));
+            return new(MathF.Ceiling(X), MathF.Ceiling(Y));
         }
 
         /// <summary>
@@ -288,7 +278,7 @@
         /// <returns>The floored vector.</returns>
         public Vector2 Floor()
         {
-            return new(Math.Floor(X), Math.Floor(Y));
+            return new(MathF.Floor(X), MathF.Floor(Y));
         }
 
         /// <summary>
@@ -297,7 +287,7 @@
         /// <returns>The away from zero rounded vector.</returns>
         public Vector2 Round()
         {
-            return new(Math.Round(X, 0, MidpointRounding.AwayFromZero), Math.Round(Y, 0, MidpointRounding.AwayFromZero));
+            return new(MathF.Round(X, 0, MidpointRounding.AwayFromZero), MathF.Round(Y, 0, MidpointRounding.AwayFromZero));
         }
 
         /// <summary>
@@ -370,10 +360,7 @@
         public Vector2 Normalize()
         {
             if (Magnitude == 0)
-            {
                 throw new DivideByZeroException("Magnitude cannot be zero.");
-            }
-
             return new Vector2(X, Y) / Magnitude;
         }
 

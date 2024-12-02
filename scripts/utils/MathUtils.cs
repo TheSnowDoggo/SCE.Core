@@ -17,10 +17,7 @@
         public static int Cycle(Vector2Int range, int newValue)
         {
             if (range.Y <= range.X)
-            {
                 throw new ArgumentException("Range is invalid.");
-            }
-
             return range.X + Mod(newValue, range.Y - range.X);
         }
 

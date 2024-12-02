@@ -152,7 +152,7 @@
 
                 Color newFgColor = ColorUtils.GetStackColor(fgColor, oldPixel.FgColor);
 
-                string newElement = bgColor != Color.Transparent ? build : StringUtils.MergeString(StringUtils.FitToLength(build, Pixel.PIXELWIDTH), oldPixel.Element);
+                string newElement = bgColor != Color.Transparent ? build : StringUtils.MergeString(StringUtils.PostFitToLength(build, Pixel.PIXELWIDTH), oldPixel.Element);
 
                 this[mappedPos] = new(newElement, newFgColor, newBgColor);
             }
