@@ -1,6 +1,6 @@
 ﻿namespace SCE
 {
-    internal interface ISearcheable
+    public interface ISearcheable
     {
         string Name { get; }
     }

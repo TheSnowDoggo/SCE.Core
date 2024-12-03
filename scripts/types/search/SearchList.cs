@@ -2,7 +2,7 @@
 {
     using System.Collections;
 
-    internal class SearchList : IEnumerable<ISearcheable>
+    public class SearchList : IEnumerable<ISearcheable>
     {
         private readonly List<ISearcheable> _list;
 
