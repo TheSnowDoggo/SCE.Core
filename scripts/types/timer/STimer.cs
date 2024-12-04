@@ -57,6 +57,14 @@
             _stopwatch.Restart();
         }
 
+        public void Toggle()
+        {
+            if (IsRunning)
+                Stop();
+            else
+                Start();
+        }
+
         public void Update()
         {
             if (RemainingSeconds <= 0)
