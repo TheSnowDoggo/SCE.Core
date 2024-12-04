@@ -22,7 +22,7 @@
 
         public long ElapsedMilliseconds { get => _stopwatch.ElapsedMilliseconds; }
 
-        public long RemainingMilliseconds { get => (long)Length - _stopwatch.ElapsedMilliseconds; }
+        public long RemainingMilliseconds { get => (long)(Length * 1000) - _stopwatch.ElapsedMilliseconds; }
 
         public double RemainingSeconds { get => Length - _stopwatch.Elapsed.TotalSeconds; }
 
