@@ -13,7 +13,7 @@
 
         public STimer(long lengthMilliseconds)
         {
-            Length = (long)(lengthMilliseconds / 1000);
+            Length = (double)lengthMilliseconds / 1000;
         }
 
         public double Length { get; set; }
