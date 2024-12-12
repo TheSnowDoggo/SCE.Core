@@ -83,7 +83,7 @@
         public bool BasicTextBoxRendering { get; set; } = true;
 
         /// <inheritdoc/>
-        public override Image GetImage()
+        public override DisplayMap GetMap()
         {
             OnRender?.Invoke();
 

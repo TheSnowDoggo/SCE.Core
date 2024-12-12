@@ -12,13 +12,13 @@
 
         private const Color DefaultFgColor = Color.White;
 
-        private readonly Image image;
+        private readonly DisplayMap dpMap;
 
         private Vector2Int cursorPos = Vector2Int.Zero;
 
         public LineWriter(Vector2Int dimensions, Color initialBgColor)
         {
-            image = new(dimensions, initialBgColor);
+            dpMap = new(dimensions, initialBgColor);
 
             BgColor = initialBgColor;
         }
@@ -50,27 +50,19 @@
             }
         }
 
-        public Vector2Int Position
+        public Vector2Int Position { get; set; }
+
+        public int Layer { get; set; }
+
+        public int Width { get => dpMap.Width; }
+
+        public int Height { get => dpMap.Height; }
+
+        public Vector2Int Dimensions { get => dpMap.Dimensions; }
+
+        public DisplayMap GetMap()
         {
-            get => image.Position;
-            set => image.Position = value;
-        }
-
-        public int Layer
-        {
-            get => image.Layer;
-            set => image.Layer = value;
-        }
-
-        public int Width { get => image.Width; }
-
-        public int Height { get => image.Height; }
-
-        public Vector2Int Dimensions { get => image.Dimensions; }
-
-        public Image GetImage()
-        {
-            return image;
+            return dpMap;
         }
 
         public enum HandleType
@@ -84,7 +76,7 @@
 
         public void Clear(bool resetCursor = true)
         {
-            image.Fill(new Pixel(BgColor));
+            dpMap.Fill(new Pixel(BgColor));
 
             if (resetCursor)
                 ResetCursor();
@@ -102,25 +94,25 @@
 
         private bool IsNewCursorValid(Vector2Int newPos)
         {
-            return image.GridArea.Contains(Translate(newPos));
+            return dpMap.GridArea.Contains(Translate(newPos));
         }
 
         public void CleanResize(Vector2Int dimensions)
         {
-            image.CleanResize(dimensions);
+            dpMap.CleanResize(dimensions);
 
-            image.BgColorFill(BgColor);
+            dpMap.BgColorFill(BgColor);
         }
 
         public void Resize(Vector2Int dimensions)
         {
             DisplayMap transferMap = new(dimensions, BgColor);
 
-            transferMap.MapTo(image, Vector2Int.Up * (dimensions - Dimensions), true);
+            transferMap.MapTo(dpMap, Vector2Int.Up * (dimensions - Dimensions), true);
 
-            image.CleanResize(dimensions);
+            dpMap.CleanResize(dimensions);
 
-            image.MapTo(transferMap);
+            dpMap.MapTo(transferMap);
         }
 
         #region Write
@@ -133,7 +125,7 @@
             {
                 Vector2Int pos = Translate(cursorPos);
 
-                buffer.Append(image[pos].Element is null ? StringUtils.Copy(' ', mod) : image[pos].Element[..mod]);
+                buffer.Append(dpMap[pos].Element is null ? StringUtils.Copy(' ', mod) : dpMap[pos].Element[..mod]);
             }
 
             for (int i = 0; i < str.Length; ++i)
@@ -186,7 +178,7 @@
 
                     Vector2Int mapPos = new((cursorPos.X - bufferStr.Length) / Pixel.PIXELWIDTH, TranslateY(cursorPos.Y));
 
-                    image.MapLine(mapPos, bufferStr, FgColor, BgColor);
+                    dpMap.MapLine(mapPos, bufferStr, FgColor, BgColor);
                 }
 
                 if (carriageReturn)

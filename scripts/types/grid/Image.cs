@@ -58,7 +58,7 @@
         public int Layer { get; set; } = DefaultLayer;
 
         /// <summary>
-        /// Gets or sets the action called before returning itself in <see cref="GetImage"/> (called by <see cref="IRenderable"/>).
+        /// Gets or sets the action called before returning itself in <see cref="GetMap"/> (called by <see cref="IRenderable"/>).
         /// </summary>
         public Action? OnRender { get; set; }
 
@@ -102,7 +102,7 @@
         }
 
         /// <inheritdoc/>
-        public virtual Image GetImage()
+        public virtual DisplayMap GetMap()
         {
             OnRender?.Invoke();
             return this;

@@ -99,23 +99,11 @@
             set => lineRenderer.BgColor = value;
         }
 
-        public bool IsActive
-        {
-            get => lineRenderer.IsActive;
-            set => lineRenderer.IsActive = value;
-        }
+        public bool IsActive { get; set; }
 
-        public int Layer
-        {
-            get => lineRenderer.Layer;
-            set => lineRenderer.Layer = value;
-        }
+        public int Layer { get; set; }
 
-        public Vector2Int Position
-        {
-            get => lineRenderer.Position;
-            set => lineRenderer.Position = value;
-        }
+        public Vector2Int Position { get; set; }
 
         public Vector2Int Dimensions { get => lineRenderer.Dimensions; }
 
@@ -145,10 +133,10 @@
             return GetEnumerator();
         }
 
-        public Image GetImage()
+        public DisplayMap GetMap()
         {
             Update();
-            return lineRenderer.GetImage();
+            return lineRenderer.GetMap();
         }
 
         public void Add(Option option)

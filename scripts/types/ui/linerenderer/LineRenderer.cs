@@ -10,7 +10,7 @@
 
         private const StackMode DefaultMode = StackMode.TopDown;
 
-        private readonly Image image;
+        private readonly DisplayMap dpMap;
 
         private readonly Queue<int> updateQueue = new();
 
@@ -18,7 +18,7 @@
 
         public LineRenderer(Vector2Int dimensions, Color bgColor, StackMode mode = DefaultMode)
         {
-            image = new(dimensions, bgColor);
+            dpMap = new(dimensions, bgColor);
 
             lineArray = new Line[Dimensions.Y];
 
@@ -40,23 +40,15 @@
 
         public bool FitLinesToLength { get; set; } = DefaultFitLinesToLength;
 
-        public Vector2Int Position
-        {
-            get => image.Position;
-            set => image.Position = value;
-        }
+        public Vector2Int Position { get; set; }
 
-        public int Layer
-        {
-            get => image.Layer;
-            set => image.Layer = value;
-        }
+        public int Layer { get; set; }
 
-        public int Width { get => image.Width; }
+        public int Width { get => dpMap.Width; }
 
-        public int Height { get => image.Height; }
+        public int Height { get => dpMap.Height; }
 
-        public Vector2Int Dimensions { get => image.Dimensions; }
+        public Vector2Int Dimensions { get => dpMap.Dimensions; }
 
         public Line this[int y]
         {
@@ -69,15 +61,15 @@
             }
         }
 
-        public Image GetImage()
+        public DisplayMap GetMap()
         {
             RenderQueue();
-            return image;
+            return dpMap;
         }
 
         public void Clear()
         {
-            image.Fill(new Pixel(BgColor));
+            dpMap.Fill(new Pixel(BgColor));
             lineArray = new Line[Dimensions.Y];
             updateQueue.Clear();
         }
@@ -86,7 +78,7 @@
         {
             foreach (int y in updateQueue)
             {
-                image.FillHorizontal(new Pixel(BgColor), y);
+                dpMap.FillHorizontal(new Pixel(BgColor), y);
 
                 Line line = lineArray[y];
 
@@ -97,7 +89,7 @@
                     throw new InvalidOperationException("Text data exceeds dimensions.");
                 }
 
-                image.MapLine(new Vector2Int(0, y), data, line.FgColor, line.BgColor);
+                dpMap.MapLine(new Vector2Int(0, y), data, line.FgColor, line.BgColor);
             }
 
             updateQueue.Clear();

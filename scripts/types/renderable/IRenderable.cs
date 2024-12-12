@@ -10,10 +10,10 @@
         /// </summary>
         bool IsActive { get; }
 
-        /// <summary>
-        /// Returns the <see cref="Image"/> to render to the <see cref="Display"/>.
-        /// </summary>
-        /// <returns>The <see cref="Image"/> to render to the <see cref="Display"/>.</returns>
-        Image GetImage();
+        Vector2Int Position { get; }
+
+        int Layer { get; }
+
+        DisplayMap GetMap();
     }
 }

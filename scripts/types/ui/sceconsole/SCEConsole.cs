@@ -71,11 +71,7 @@
         /// <summary>
         /// Gets or sets a value indicating whether the console is active.
         /// </summary>
-        public bool IsActive
-        {
-            get => ui.IsActive;
-            set => ui.IsActive = value;
-        }
+        public bool IsActive { get; set; }
 
         /// <summary>
         /// Gets or sets the foreground color of the console.
@@ -89,20 +85,12 @@
         /// <summary>
         /// Gets or sets the position of the console.
         /// </summary>
-        public Vector2Int Position
-        {
-            get => ui.Position;
-            set => ui.Position = value;
-        }
+        public Vector2Int Position { get; set; }
 
         /// <summary>
         /// Gets or sets the layer of the console.
         /// </summary>
-        public int Layer
-        {
-            get => ui.Layer;
-            set => ui.Layer = value;
-        }
+        public int Layer { get; set; }
 
         private static Text DefaultText 
         {
@@ -132,10 +120,10 @@
         }
 
         /// <inheritdoc/>
-        public Image GetImage()
+        public DisplayMap GetMap()
         {
             ui.Text.Data = BuildLogList();
-            return ui.GetImage();
+            return ui.GetMap();
         }
 
         /// <summary>
