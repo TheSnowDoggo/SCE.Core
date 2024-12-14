@@ -30,6 +30,12 @@
 
         public bool IsActive { get; set; } = DefaultActiveState;
 
+        public Vector2Int Position { get; set; }
+
+        public int Layer { get; set; }
+
+        public Anchor Anchor { get; set; }
+
         public HandleType OverflowHandling { get; set; } = DefaultOverflowHandling;
 
         public Color FgColor { get; set; } = DefaultFgColor;
@@ -49,10 +55,6 @@
                 cursorPos = value;
             }
         }
-
-        public Vector2Int Position { get; set; }
-
-        public int Layer { get; set; }
 
         public int Width { get => dpMap.Width; }
 

@@ -74,15 +74,6 @@
         public bool IsActive { get; set; }
 
         /// <summary>
-        /// Gets or sets the foreground color of the console.
-        /// </summary>
-        public Color FgColor
-        {
-            get => ui.Text.FgColor;
-            set => ui.Text.FgColor = value;
-        }
-
-        /// <summary>
         /// Gets or sets the position of the console.
         /// </summary>
         public Vector2Int Position { get; set; }
@@ -91,6 +82,17 @@
         /// Gets or sets the layer of the console.
         /// </summary>
         public int Layer { get; set; }
+
+        public Anchor Anchor { get; set; }
+
+        /// <summary>
+        /// Gets or sets the foreground color of the console.
+        /// </summary>
+        public Color FgColor
+        {
+            get => ui.Text.FgColor;
+            set => ui.Text.FgColor = value;
+        }
 
         private static Text DefaultText 
         {

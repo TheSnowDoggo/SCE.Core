@@ -14,6 +14,8 @@
 
         int Layer { get; }
 
+        public Anchor Anchor { get; }
+
         DisplayMap GetMap();
     }
 }

@@ -101,9 +101,11 @@
 
         public bool IsActive { get; set; }
 
+        public Vector2Int Position { get; set; }
+
         public int Layer { get; set; }
 
-        public Vector2Int Position { get; set; }
+        public Anchor Anchor { get; set; }
 
         public Vector2Int Dimensions { get => lineRenderer.Dimensions; }
 

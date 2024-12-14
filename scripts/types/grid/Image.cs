@@ -57,6 +57,8 @@
         /// </summary>
         public int Layer { get; set; } = DefaultLayer;
 
+        public Anchor Anchor { get; set; }
+
         /// <summary>
         /// Gets or sets the action called before returning itself in <see cref="GetMap"/> (called by <see cref="IRenderable"/>).
         /// </summary>
