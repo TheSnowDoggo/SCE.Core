@@ -133,18 +133,8 @@
         /// <returns>The element at the specified position.</returns>
         public T this[Vector2Int pos]
         {
-            get
-            {
-                if (!PositionValid(pos))
-                    throw new PositionOutOfBoundsException("Position is invalid.");
-                return Data[pos.X, pos.Y];
-            }
-            set
-            {
-                if (!PositionValid(pos))
-                    throw new PositionOutOfBoundsException("Position is invalid.");
-                Data[pos.X, pos.Y] = value;
-            }
+            get => this[pos.X, pos.Y];
+            set => this[pos.X, pos.Y] = value;
         }
 
         /// <summary>
@@ -303,14 +293,10 @@
         public void GenericCycleArea(CycleActionWhile cycleActionWhile, Area2DInt area, bool tryTrimOnOverflow = DefaultTryTrimOnOverflowState)
         {
             if (!Area2DInt.Overlaps(GridArea, area))
-            {
                 throw new InvalidAreaException("Given area doesn't overlap this grid.");
-            }
 
             if (!tryTrimOnOverflow && !AreaValid(area))
-            {
                 throw new AreaOutOfBoundsException("Given area is outside of the bounds of the grid.");
-            }
 
             Area2DInt newArea = GridArea.TrimArea(area);
 
@@ -321,9 +307,7 @@
                 for (int y = start.Y; y < end.Y; y++)
                 {
                     if (!cycleActionWhile.Invoke(new(x, y)))
-                    {
                         return;
-                    }
                 }
             }
         }
@@ -447,21 +431,15 @@
         public void CustomMapToArea(CycleAction cycleAction, Grid2D<T> dataGrid, Area2DInt dataGridArea, Vector2Int positionOffset, bool tryTrimOnOverflow = DefaultTryTrimOnOverflowState)
         {
             if (!Area2DInt.Overlaps(dataGrid.GridArea, dataGridArea))
-            {
                 throw new InvalidAreaException("Given get area doesn't overlap the get grid.");
-            }
 
             if (!tryTrimOnOverflow && !dataGrid.AreaValid(dataGridArea))
-            {
                 throw new AreaOutOfBoundsException("Given get area is outside of the bounds of the get grid.");
-            }
 
             Area2DInt offsetArea = dataGridArea + positionOffset;
 
             if (!Area2DInt.Overlaps(GridArea, offsetArea))
-            {
                 throw new AreaOutOfBoundsException("Offset area doesn't overlap this grid.");
-            }
 
             dataGridArea = GridArea.TrimArea(offsetArea, out bool hasFixed) - positionOffset;
 
@@ -522,21 +500,15 @@
         public void CustomMapAreaFrom(CycleAction cycleAction, Grid2D<T> dataGrid, Area2DInt thisArea, Vector2Int positionOffset, bool tryTrimOnOverflow = DefaultTryTrimOnOverflowState)
         {
             if (!Area2DInt.Overlaps(GridArea, thisArea))
-            {
                 throw new InvalidAreaException("Given set area doesn't overlap with this grid.");
-            }
 
             if (!tryTrimOnOverflow && !AreaValid(thisArea))
-            {
                 throw new AreaOutOfBoundsException("Given set area is outside of the bounds of this grid.");
-            }
 
             Area2DInt alignedGetArea = thisArea + positionOffset;
 
             if (!Area2DInt.Overlaps(dataGrid.GridArea, alignedGetArea))
-            {
                 throw new InvalidAreaException("Offset area doesn't overlap with the get grid.");
-            }
 
             thisArea = dataGrid.GridArea.TrimArea(alignedGetArea, out bool hasFixed) - positionOffset;
 
@@ -604,9 +576,7 @@
         public virtual void RotateData90(int direction)
         {
             if (Math.Abs(direction) != 1)
-            {
                 throw new ArgumentException("Rotation factor must be either -1 or 1");
-            }
 
             T[,] newData = new T[Height, Width];
 
@@ -660,9 +630,7 @@
         public void MapResize(int width, int height)
         {
             if (width < 0 || height < 0)
-            {
                 throw new ArgumentException("Given dimensions are invalid.");
-            }
 
             Grid2D<T> transferGrid = new(width, height);
 

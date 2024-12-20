@@ -7,8 +7,6 @@
     /// </summary>
     public class SCEConsole : IRenderable
     {
-        private const bool DefaultActiveState = true;
-
         private const string VersionName = "SCEConsole V1.1";
 
         private const Color DefaultBgColor = Color.Black;
@@ -68,19 +66,12 @@
             }
         }
 
-        /// <summary>
-        /// Gets or sets a value indicating whether the console is active.
-        /// </summary>
-        public bool IsActive { get; set; }
+        public string Name { get; set; } = "";
 
-        /// <summary>
-        /// Gets or sets the position of the console.
-        /// </summary>
+        public bool IsActive { get; set; } = true;
+
         public Vector2Int Position { get; set; }
 
-        /// <summary>
-        /// Gets or sets the layer of the console.
-        /// </summary>
         public int Layer { get; set; }
 
         public Anchor Anchor { get; set; }
@@ -100,7 +91,7 @@
             {
                 FgColor = DefaultFgColor,
                 BgColor = Color.Transparent,
-                Alignment = Text.AlignLock.TopLeft
+                Anchor = Anchor.TopLeft,
             };
         }
 

@@ -5,8 +5,6 @@
     /// </summary>
     public class TextBoxUI : Image, IRenderable
     {
-        private const bool DefaultActiveState = true;
-
         private readonly List<Area2DInt> renderedAreaList = new();
 
         private Color bgColor = Color.Black;
@@ -143,7 +141,7 @@
         // Smart text map functions
         private void SmartMapLine(Vector2Int position, string line, Color fgColor = Color.White, Color bgColor = Color.Transparent)
         {
-            MapLine(position, line, fgColor, bgColor);
+            MapString(position, line, fgColor, bgColor);
 
             if (BasicTextBoxRendering)
             {

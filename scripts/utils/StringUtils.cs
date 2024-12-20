@@ -32,6 +32,38 @@
             return strBuilder.ToString();
         }
 
+        public static string PlrSwt(int quantity, string singular = "", string plural = "s")
+        {
+            return quantity == 1 ? singular : plural;
+        }
+
+        public static string Reverse(string str)
+        {
+            char[] charArr = new char[str.Length];
+            for (int i = 0; i < charArr.Length; ++i)
+                charArr[i] = str[str.Length - i - 1];
+            return new(charArr);
+        }
+
+        public static string TimeSpanToString(TimeSpan timeSpan)
+        {
+            StringBuilder strBuilder = new();
+
+            if (timeSpan.Days > 0)
+                strBuilder.Append(timeSpan.Days + " day" + PlrSwt(timeSpan.Days) + ' ');
+            if (timeSpan.Hours > 0)
+                strBuilder.Append(timeSpan.Hours + " hour" + PlrSwt(timeSpan.Hours) + ' ');
+            if (timeSpan.Minutes > 0)
+                strBuilder.Append(timeSpan.Minutes + " minute" + PlrSwt(timeSpan.Minutes) + ' ');
+            if (timeSpan.Seconds > 0)
+                strBuilder.Append(timeSpan.Seconds + " second" + PlrSwt(timeSpan.Seconds) + ' ');
+
+            if (strBuilder.Length > 0)
+                strBuilder.Remove(strBuilder.Length - 1, 1);
+
+            return strBuilder.ToString();
+        }
+
         #region PadTo
         public static string PadAfterToEven(string str)
         {

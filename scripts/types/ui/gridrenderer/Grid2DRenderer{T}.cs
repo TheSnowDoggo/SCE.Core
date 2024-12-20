@@ -1,0 +1,40 @@
+﻿namespace SCE
+{
+    public class Grid2DRenderer<T> : UIBase
+    {
+        public Grid2DRenderer(Grid2D<T> grid2D, Func<Vector2Int, Pixel>? renderFunc = null)
+            : base(grid2D.Dimensions)
+        {
+            Grid = grid2D;
+            RenderFunc = renderFunc;
+        }
+
+        public Grid2D<T> Grid { get; set; }
+
+        public Func<Vector2Int, Pixel>? RenderFunc { get; set; }
+
+        public bool RenderOnUpdate { get; set; } = false;
+
+        public void Update()
+        {
+            if (RenderOnUpdate)
+                Render();
+        }
+
+        protected override void Render()
+        {
+            if (RenderOnUpdate)
+                return;
+
+            if (RenderFunc is null)
+                throw new NullReferenceException("Render function is null.");
+
+            void CycleAction(Vector2Int pos)
+            {
+                _dpMap[pos] = RenderFunc.Invoke(pos);
+            }
+
+            _dpMap.GenericCycle(CycleAction);
+        }
+    }
+}

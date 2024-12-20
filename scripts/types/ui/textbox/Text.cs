@@ -4,8 +4,6 @@
     {
         private const bool DefaultNewLineOverflow = false;
 
-        private const AlignLock DefaultAlignment = AlignLock.TopLeft;
-
         private const Color DefaultFgColor = Color.White;
         private const Color DefaultBgColor = Color.Transparent;
 
@@ -19,83 +17,19 @@
         {
         }
 
-        // AlignLock
-        public enum AlignLock : byte
-        {
-            TopLeft,
-            TopCenter,
-            TopRight,
-            MiddleLeft,
-            MiddleCenter,
-            MiddleRight,
-            BottomLeft,
-            BottomCenter,
-            BottomRight
-        }
-
         public string Data { get; set; }
 
         public Color FgColor { get; set; } = DefaultFgColor;
 
         public Color BgColor { get; set; } = DefaultBgColor;
 
-        public AlignLock Alignment { get; set; } = DefaultAlignment;
+        public Anchor Anchor { get; set; }
 
         /// <summary>
         /// Renders a new line when the text overflows its container's width.
         /// This does not modify the text data
         /// </summary>
         public bool NewLineOverflow { get; set; } = DefaultNewLineOverflow;
-
-        private byte HorizontalAlign
-        {
-            get
-            {
-                byte byteAlign = (byte)Alignment;
-
-                if (byteAlign % 3 == 0)
-                {
-                    return 0;
-                }
-
-                if ((byteAlign - 1) % 3 == 0)
-                {
-                    return 1;
-                }
-
-                if ((byteAlign - 2) % 3 == 0)
-                {
-                    return 2;
-                }
-
-                throw new NotImplementedException();
-            }
-        }
-
-        private byte VerticalAlign
-        {
-            get
-            {
-                byte byteAlign = (byte)Alignment;
-
-                if (byteAlign is >= 0 and < 3)
-                {
-                    return 0;
-                }
-
-                if (byteAlign is >= 3 and < 6)
-                {
-                    return 1;
-                }
-
-                if (byteAlign is >= 6 and < 9)
-                {
-                    return 2;
-                }
-
-                throw new NotImplementedException();
-            }
-        }
 
         // Equality
         public static bool operator ==(Text? t1, Text? t2) => t1 is not null && t1.Equals(t2);
@@ -109,7 +43,7 @@
             {
                 FgColor = FgColor,
                 BgColor = BgColor,
-                Alignment = Alignment,
+                Anchor = Anchor,
                 NewLineOverflow = NewLineOverflow,
             };
 
@@ -123,7 +57,7 @@
         /// <returns><see langword="true"/> if the specified text is equal to the current text; otherwise, <see langword="false"/>.</returns>
         public bool Equals(Text? other)
         {
-            return other is not null && other.Data == Data && other.FgColor == FgColor && other.BgColor == BgColor && other.Alignment == Alignment && other.NewLineOverflow == NewLineOverflow;
+            return other is not null && other.Data == Data && other.FgColor == FgColor && other.BgColor == BgColor && other.Anchor == Anchor && other.NewLineOverflow == NewLineOverflow;
         }
 
         /// <inheritdoc/>
@@ -135,7 +69,7 @@
         /// <inheritdoc/>
         public override int GetHashCode()
         {
-            return HashCode.Combine(Data, FgColor, BgColor, Alignment, NewLineOverflow);
+            return HashCode.Combine(Data, FgColor, BgColor, Anchor, NewLineOverflow);
         }
 
         /// <inheritdoc/>
@@ -146,35 +80,62 @@
 
         public int GetStartMapX(int stringLength, int width)
         {
-            return HorizontalAlign switch
+            switch (Anchor)
             {
-                0 => 0,
-                1 => (width - Pixel.GetPixelLength(stringLength)) / 2,
-                2 => width - Pixel.GetPixelLength(stringLength),
-                _ => throw new NotImplementedException()
-            };
+                case Anchor.BottomLeft:
+                case Anchor.MiddleLeft:
+                case Anchor.TopLeft: 
+                    return 0;
+                case Anchor.BottomCenter:
+                case Anchor.MiddleCenter:
+                case Anchor.TopCenter:
+                    return (width - Pixel.GetPixelLength(stringLength)) / 2;
+                case Anchor.BottomRight:
+                case Anchor.MiddleRight:
+                case Anchor.TopRight:
+                    return width - Pixel.GetPixelLength(stringLength);
+            }
+            throw new NotImplementedException("Unknown alignment.");
         }
 
         public int GetStartMapY(int rows, int height)
         {
-            return VerticalAlign switch
+            switch (Anchor)
             {
-                0 => 0,
-                1 => (height - rows) / 2,
-                2 => height - rows,
-                _ => throw new NotImplementedException()
-            };
+                case Anchor.BottomLeft:
+                case Anchor.BottomCenter:
+                case Anchor.BottomRight:
+                    return height - rows;              
+                case Anchor.MiddleLeft:
+                case Anchor.MiddleCenter:
+                case Anchor.MiddleRight:
+                    return (height - rows) / 2;
+                case Anchor.TopLeft:
+                case Anchor.TopCenter:
+                case Anchor.TopRight:
+                    return 0;
+            }
+            throw new NotImplementedException("Unknown alignment.");
         }
 
         public string GetFormattedBody(string str)
         {
-            return HorizontalAlign switch
+            switch (Anchor)
             {
-                0 => str,
-                1 => StringUtils.PadBeforeToEven(str),
-                2 => StringUtils.PadBeforeToEven(str),
-                _ => throw new NotImplementedException()
-            };
+                case Anchor.BottomLeft:
+                case Anchor.MiddleLeft:
+                case Anchor.TopLeft:
+                    return str;
+                case Anchor.BottomCenter:
+                case Anchor.MiddleCenter:
+                case Anchor.TopCenter:
+                    return StringUtils.PadBeforeToEven(str);
+                case Anchor.BottomRight:
+                case Anchor.MiddleRight:
+                case Anchor.TopRight:
+                    return StringUtils.PadBeforeToEven(str);
+            }
+            throw new NotImplementedException("Unknown alignment.");
         }
     }
 }

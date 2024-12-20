@@ -2,43 +2,26 @@
 {
     using System.Text;
 
-    public class LineWriter : IRenderable
+    public class LineWriter : UIBase
     {
-        private const bool DefaultActiveState = true;
-
         private const HandleType DefaultOverflowHandling = HandleType.Error;
-
-        private const Color DefaultBgColor = Color.Black;
-
-        private const Color DefaultFgColor = Color.White;
-
-        private readonly DisplayMap dpMap;
 
         private Vector2Int cursorPos = Vector2Int.Zero;
 
-        public LineWriter(Vector2Int dimensions, Color initialBgColor)
+        public LineWriter(Vector2Int dimensions, Color bgColor)
+            : base(dimensions, bgColor)
         {
-            dpMap = new(dimensions, initialBgColor);
-
-            BgColor = initialBgColor;
+            BgColor = bgColor;
         }
 
         public LineWriter(Vector2Int dimensions)
-            : this(dimensions, DefaultBgColor)
+            : this(dimensions, Color.Black)
         {
         }
 
-        public bool IsActive { get; set; } = DefaultActiveState;
-
-        public Vector2Int Position { get; set; }
-
-        public int Layer { get; set; }
-
-        public Anchor Anchor { get; set; }
-
         public HandleType OverflowHandling { get; set; } = DefaultOverflowHandling;
 
-        public Color FgColor { get; set; } = DefaultFgColor;
+        public Color FgColor { get; set; } = Color.White;
 
         public Color BgColor { get; set; }
 
@@ -56,17 +39,6 @@
             }
         }
 
-        public int Width { get => dpMap.Width; }
-
-        public int Height { get => dpMap.Height; }
-
-        public Vector2Int Dimensions { get => dpMap.Dimensions; }
-
-        public DisplayMap GetMap()
-        {
-            return dpMap;
-        }
-
         public enum HandleType
         {
             Error,
@@ -78,7 +50,7 @@
 
         public void Clear(bool resetCursor = true)
         {
-            dpMap.Fill(new Pixel(BgColor));
+            _dpMap.Fill(new Pixel(BgColor));
 
             if (resetCursor)
                 ResetCursor();
@@ -96,25 +68,25 @@
 
         private bool IsNewCursorValid(Vector2Int newPos)
         {
-            return dpMap.GridArea.Contains(Translate(newPos));
+            return _dpMap.GridArea.Contains(Translate(newPos));
         }
 
         public void CleanResize(Vector2Int dimensions)
         {
-            dpMap.CleanResize(dimensions);
+            _dpMap.CleanResize(dimensions);
 
-            dpMap.BgColorFill(BgColor);
+            _dpMap.BgColorFill(BgColor);
         }
 
         public void Resize(Vector2Int dimensions)
         {
             DisplayMap transferMap = new(dimensions, BgColor);
 
-            transferMap.MapTo(dpMap, Vector2Int.Up * (dimensions - Dimensions), true);
+            transferMap.MapTo(_dpMap, Vector2Int.Up * (dimensions - Dimensions), true);
 
-            dpMap.CleanResize(dimensions);
+            _dpMap.CleanResize(dimensions);
 
-            dpMap.MapTo(transferMap);
+            _dpMap.MapTo(transferMap);
         }
 
         #region Write
@@ -127,7 +99,7 @@
             {
                 Vector2Int pos = Translate(cursorPos);
 
-                buffer.Append(dpMap[pos].Element is null ? StringUtils.Copy(' ', mod) : dpMap[pos].Element[..mod]);
+                buffer.Append(_dpMap[pos].Element is null ? StringUtils.Copy(' ', mod) : _dpMap[pos].Element[..mod]);
             }
 
             for (int i = 0; i < str.Length; ++i)
@@ -180,7 +152,7 @@
 
                     Vector2Int mapPos = new((cursorPos.X - bufferStr.Length) / Pixel.PIXELWIDTH, TranslateY(cursorPos.Y));
 
-                    dpMap.MapLine(mapPos, bufferStr, FgColor, BgColor);
+                    _dpMap.MapString(mapPos, bufferStr, FgColor, BgColor);
                 }
 
                 if (carriageReturn)

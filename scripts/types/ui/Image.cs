@@ -2,8 +2,6 @@
 {
     public class Image : DisplayMap, ICloneable, IEquatable<Image>, IRenderable
     {
-        private const bool DefaultActiveState = true;
-
         private const int DefaultLayer = 0;
 
         public Image(int width, int height)
@@ -44,17 +42,12 @@
         {
         }
 
-        /// <inheritdoc/>
-        public bool IsActive { get; set; } = DefaultActiveState;
+        public string Name { get; set; } = "";
 
-        /// <summary>
-        /// Gets or sets the base <see cref="Vector2Int"/> position of the <see cref="Image"/>.
-        /// </summary>
+        public bool IsActive { get; set; } = true;
+
         public Vector2Int Position { get; set; }
 
-        /// <summary>
-        /// Gets or sets the <see cref="int"/> layer of the <see cref="Image"/>.
-        /// </summary>
         public int Layer { get; set; } = DefaultLayer;
 
         public Anchor Anchor { get; set; }

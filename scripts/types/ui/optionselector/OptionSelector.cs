@@ -99,6 +99,8 @@
             set => lineRenderer.BgColor = value;
         }
 
+        public string Name { get; set; } = "";
+
         public bool IsActive { get; set; }
 
         public Vector2Int Position { get; set; }

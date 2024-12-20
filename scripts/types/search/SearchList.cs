@@ -1,29 +1,31 @@
 ﻿namespace SCE
 {
+    using System;
     using System.Collections;
 
-    public class SearchList : IEnumerable<ISearcheable>
+    public class SearchList<T> : IEnumerable<T>
+        where T : ISearcheable
     {
-        private readonly List<ISearcheable> _list;
+        protected readonly List<T> _list;
 
-        public SearchList(List<ISearcheable> list)
+        public SearchList(List<T> list)
         {
             _list = list;
         }
         public SearchList()
-            : this(new List<ISearcheable>())
+            : this(new List<T>())
         {
         }
 
         public int Count { get => _list.Count; }
 
-        public ISearcheable this[int index]
+        public T this[int index]
         {
             get => _list[index];
             set => _list[index] = value;
         }
 
-        public IEnumerator<ISearcheable> GetEnumerator()
+        public IEnumerator<T> GetEnumerator()
         {
             return _list.GetEnumerator();
         }
@@ -34,26 +36,26 @@
         }
 
         #region List
-        public void Add(ISearcheable iSearcheable)
+        public void Add(T t)
         {
-            _list.Add(iSearcheable);
+            _list.Add(t);
         }
 
-        public void Add(ISearcheable[] iSearcheableArray)
+        public void Add(T[] tArray)
         {
-            foreach (ISearcheable iSearcheable in iSearcheableArray)
-                Add(iSearcheable);
+            foreach (T t in tArray)
+                Add(t);
         }
 
-        public void Add(List<ISearcheable> iSearcheableList)
+        public void Add(List<T> tList)
         {
-            foreach (ISearcheable searcheable in iSearcheableList)
-                Add(searcheable);
+            foreach (T t in tList)
+                Add(t);
         }
 
-        public bool Remove(ISearcheable iSearcheable)
+        public bool Remove(T t)
         {
-            return _list.Remove(iSearcheable);
+            return _list.Remove(t);
         }
 
         public void RemoveAt(int index)
@@ -68,21 +70,38 @@
         #endregion
 
         #region Search
-        public bool Contains(Func<ISearcheable, bool> func, out int index)
+        public int IndexOf(T t)
+        {
+            return _list.IndexOf(t);
+        }
+
+        public bool Contains(T t)
+        {
+            return _list.Contains(t);
+        }
+
+        public int IndexOf(Func<T, bool> func)
         {
             for (int i = 0; i < Count; ++i)
             {
                 if (func.Invoke(_list[i]))
-                {
-                    index = i;
-                    return true;
-                }
+                    return i;
             }
-            index = -1;
-            return false;
+            return -1;
         }
 
-        public bool Contains(Func<ISearcheable, bool> func)
+        public int IndexOf(string name)
+        {
+            return IndexOf((t) => t.Name == name);
+        }
+
+        public bool Contains(Func<T, bool> func, out int index)
+        {
+            index = IndexOf(func);
+            return index != -1;
+        }
+
+        public bool Contains(Func<T, bool> func)
         {
             return Contains(func, out _);
         }
@@ -97,7 +116,7 @@
             return Contains(name, out _);
         }
 
-        public ISearcheable Get(Func<ISearcheable, bool> func)
+        public ISearcheable Get(Func<T, bool> func)
         {
             if (!Contains(func, out int index))
                 throw new SearchNotFoundException("No ISearcheable found.");
@@ -111,20 +130,20 @@
             return _list[index];
         }
 
-        public T Get<T>(Func<ISearcheable, bool> func)
-            where T : ISearcheable
+        public U Get<U>(Func<U, bool> func)
+            where U : ISearcheable
         {
-            if (Get(func) is not T t)
-                throw new InvalidCastException("ISearcheable cannot be cast to given type.");
-            return t;
+            if (Get(func) is not U u)
+                throw new InvalidCastException("Cannot cast to given type.");
+            return u;
         }
 
-        public T Get<T>(string name)
-            where T : ISearcheable
+        public U Get<U>(string name)
+            where U : ISearcheable
         {
-            if (Get(name) is not T t)
-                throw new InvalidCastException("ISearcheable cannot be cast to given type.");
-            return t;
+            if (Get(name) is not U u)
+                throw new InvalidCastException("Cannot cast to given type.");
+            return u;
         }
         #endregion
     }

@@ -124,7 +124,7 @@
         /// <param name="fgColor">The foreground color to fill every affected <see cref="Pixel"/> with.</param>
         /// <param name="bgColor">The background color to fill every affected <see cref="Pixel"/> with.</param>
         /// <exception cref="ArgumentException">Throws exception when the starting position is invalid or the line will overflow this instance.</exception>
-        public void MapLine(Vector2Int position, string line, Color fgColor = Color.White, Color bgColor = Color.Transparent)
+        public void MapString(Vector2Int position, string line, Color fgColor = Color.White, Color bgColor = Color.Transparent)
         {
             if (!PositionValid(position))
                 throw new ArgumentException("Starting position is not valid");
@@ -137,12 +137,10 @@
 
             for (int x = 0; x < pixelLength; x++)
             {
-                string build = string.Empty;
+                char[] chrArr = new char[Pixel.PIXELWIDTH];
 
                 for (int i = 0; i < Pixel.PIXELWIDTH; i++)
-                {
-                    build += line[(x * Pixel.PIXELWIDTH) + i];
-                }
+                    chrArr[i] = line[(x * Pixel.PIXELWIDTH) + i];
 
                 Vector2Int mappedPos = position + new Vector2Int(x, 0);
 
@@ -151,6 +149,8 @@
                 Color newBgColor = ColorUtils.GetStackColor(bgColor, oldPixel.BgColor);
 
                 Color newFgColor = ColorUtils.GetStackColor(fgColor, oldPixel.FgColor);
+
+                string build = new(chrArr);
 
                 string newElement = bgColor != Color.Transparent ? build : StringUtils.MergeString(StringUtils.PostFitToLength(build, Pixel.PIXELWIDTH), oldPixel.Element);
 
@@ -169,7 +169,7 @@
             if (text.Data == string.Empty)
                 throw new ArgumentException("Text data is empty");
 
-            customMapLine ??= MapLine;
+            customMapLine ??= MapString;
 
             string[] lineArray = GetSplitLineArray(text);
 

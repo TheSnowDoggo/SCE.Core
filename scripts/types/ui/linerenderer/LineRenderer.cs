@@ -1,25 +1,20 @@
 ﻿namespace SCE
 {
-    public class LineRenderer : IRenderable
+    public class LineRenderer : UIBase
     {
-        private const bool DefaultActiveState = true;
-
         private const bool DefaultFitLinesToLength = false;
 
         private const Color DefaultBgColor = Color.Black;
 
         private const StackMode DefaultMode = StackMode.TopDown;
 
-        private readonly DisplayMap dpMap;
-
         private readonly Queue<int> updateQueue = new();
 
         private Line[] lineArray;
 
         public LineRenderer(Vector2Int dimensions, Color bgColor, StackMode mode = DefaultMode)
+            : base(dimensions, bgColor)
         {
-            dpMap = new(dimensions, bgColor);
-
             lineArray = new Line[Dimensions.Y];
 
             BgColor = bgColor;
@@ -32,25 +27,11 @@
         {
         }
 
-        public bool IsActive { get; set; } = DefaultActiveState;
-
-        public Vector2Int Position { get; set; }
-
-        public int Layer { get; set; }
-
-        public Anchor Anchor { get; set; }
-
         public Color BgColor { get; set; }
 
         public StackMode Mode { get; }
 
         public bool FitLinesToLength { get; set; } = DefaultFitLinesToLength;
-
-        public int Width { get => dpMap.Width; }
-
-        public int Height { get => dpMap.Height; }
-
-        public Vector2Int Dimensions { get => dpMap.Dimensions; }
 
         public Line this[int y]
         {
@@ -63,35 +44,27 @@
             }
         }
 
-        public DisplayMap GetMap()
-        {
-            RenderQueue();
-            return dpMap;
-        }
-
         public void Clear()
         {
-            dpMap.Fill(new Pixel(BgColor));
+            _dpMap.Fill(new Pixel(BgColor));
             lineArray = new Line[Dimensions.Y];
             updateQueue.Clear();
         }
 
-        private void RenderQueue()
+        protected override void Render()
         {
             foreach (int y in updateQueue)
             {
-                dpMap.FillHorizontal(new Pixel(BgColor), y);
+                _dpMap.FillHorizontal(new Pixel(BgColor), y);
 
                 Line line = lineArray[y];
 
                 string data = FitLinesToLength ? StringUtils.PostFitToLength(line.Data, Width * Pixel.PIXELWIDTH) : line.Data;
 
                 if (Pixel.GetPixelLength(data) > Width)
-                {
                     throw new InvalidOperationException("Text data exceeds dimensions.");
-                }
 
-                dpMap.MapLine(new Vector2Int(0, y), data, line.FgColor, line.BgColor);
+                _dpMap.MapString(new Vector2Int(0, y), data, line.FgColor, line.BgColor);
             }
 
             updateQueue.Clear();
