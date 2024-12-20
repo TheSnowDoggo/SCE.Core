@@ -116,17 +116,17 @@
             return Contains(name, out _);
         }
 
-        public ISearcheable Get(Func<T, bool> func)
+        public T Get(Func<T, bool> func)
         {
             if (!Contains(func, out int index))
-                throw new SearchNotFoundException("No ISearcheable found.");
+                throw new SearchNotFoundException("No matching element found.");
             return _list[index];
         }
 
-        public ISearcheable Get(string name)
+        public T Get(string name)
         {
             if (!Contains(name, out int index))
-                throw new SearchNotFoundException($"No ISearcheable with name \"{name}\" found.");
+                throw new SearchNotFoundException($"No element with name \"{name}\" found.");
             return _list[index];
         }
 
@@ -144,6 +144,16 @@
             if (Get(name) is not U u)
                 throw new InvalidCastException("Cannot cast to given type.");
             return u;
+        }
+
+        public U GetFirst<U>()
+        {
+            foreach (T t in _list)
+            {
+                if (t is U u)
+                    return u;
+            }
+            throw new SearchNotFoundException("No element of type U found.");
         }
         #endregion
     }
