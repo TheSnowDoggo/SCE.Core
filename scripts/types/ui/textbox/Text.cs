@@ -2,11 +2,6 @@
 {
     public class Text : IEquatable<Text>, ICloneable
     {
-        private const bool DefaultNewLineOverflow = false;
-
-        private const Color DefaultFgColor = Color.White;
-        private const Color DefaultBgColor = Color.Transparent;
-
         public Text(string data)
         {
             Data = data;
@@ -19,9 +14,9 @@
 
         public string Data { get; set; }
 
-        public Color FgColor { get; set; } = DefaultFgColor;
+        public Color FgColor { get; set; } = Color.White;
 
-        public Color BgColor { get; set; } = DefaultBgColor;
+        public Color BgColor { get; set; } = Color.Transparent;
 
         public Anchor Anchor { get; set; }
 
@@ -29,7 +24,7 @@
         /// Renders a new line when the text overflows its container's width.
         /// This does not modify the text data
         /// </summary>
-        public bool NewLineOverflow { get; set; } = DefaultNewLineOverflow;
+        public bool NewLineOverflow { get; set; } = false;
 
         // Equality
         public static bool operator ==(Text? t1, Text? t2) => t1 is not null && t1.Equals(t2);

@@ -17,6 +17,12 @@
         {
         }
 
+        protected Action<T>? OnAdd;
+
+        protected Action<T>? OnRemove;
+
+        protected Action? OnClear;
+
         public int Count { get => _list.Count; }
 
         public T this[int index]
@@ -39,6 +45,7 @@
         public void Add(T t)
         {
             _list.Add(t);
+            OnAdd?.Invoke(t);
         }
 
         public void Add(T[] tArray)
@@ -55,16 +62,24 @@
 
         public bool Remove(T t)
         {
+            OnRemove?.Invoke(t);
             return _list.Remove(t);
         }
 
         public void RemoveAt(int index)
         {
-            _list.RemoveAt(index);
+            Remove(this[index]);
+        }
+
+        public void RemoveRange(int index, int count)
+        {
+            for (int i = 0; i < count; ++i)
+                Remove(this[index + i]);
         }
 
         public void Clear()
         {
+            OnClear?.Invoke();
             _list.Clear();
         }
         #endregion
@@ -90,6 +105,12 @@
             return -1;
         }
 
+        public int IndexOf<U>()
+            where U : ISearcheable
+        {
+            return IndexOf((t) => t is U);
+        }
+
         public int IndexOf(string name)
         {
             return IndexOf((t) => t.Name == name);
@@ -104,6 +125,19 @@
         public bool Contains(Func<T, bool> func)
         {
             return Contains(func, out _);
+        }
+
+        public bool Contains<U>(out int index)
+            where U : ISearcheable
+        {
+            index = IndexOf<U>();
+            return index != -1;
+        }
+
+        public bool Contains<U>()
+            where U : ISearcheable
+        {
+            return Contains<U>(out _);
         }
 
         public bool Contains(string name, out int index)
@@ -147,13 +181,11 @@
         }
 
         public U GetFirst<U>()
+            where U : ISearcheable
         {
-            foreach (T t in _list)
-            {
-                if (t is U u)
-                    return u;
-            }
-            throw new SearchNotFoundException("No element of type U found.");
+            if (!Contains<U>(out int index))
+                throw new SearchNotFoundException("No element of type U found.");
+            return (U)(object)this[index];
         }
         #endregion
     }

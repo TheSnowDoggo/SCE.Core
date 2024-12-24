@@ -12,7 +12,7 @@
         }
 
         public static implicit operator FlagSet16(FlagSet8 f) => f.ToFlagset16();
-
+        
         public static explicit operator byte(FlagSet8 f) => f.data;
 
         public static FlagSet8 operator ~(FlagSet8 f) => new((byte)~f.data);

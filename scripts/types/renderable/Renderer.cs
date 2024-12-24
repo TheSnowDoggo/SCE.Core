@@ -68,9 +68,9 @@
         {
             foreach (IRenderable renderable in _renderList)
             {
-                var rMap = renderable.GetMap();
-                Vector2Int pos = AnchorUtils.AnchorTo(renderable.Anchor, _dpMap.Dimensions, rMap.Dimensions) + renderable.Position;
-                _dpMap.MapTo(rMap, pos, true);
+                var dpMap = renderable.GetMap();
+                Vector2Int pos = AnchorUtils.AnchorTo(renderable.Anchor, _dpMap.Dimensions, dpMap.Dimensions) + renderable.Position;
+                _dpMap.MapTo(dpMap, pos, true);
             }
         }
     }
