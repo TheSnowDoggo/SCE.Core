@@ -149,6 +149,26 @@
             return $"{X},{Y}";
         }
 
+        public static bool OrLess(Vector2Int v1, Vector2Int v2)
+        {
+            return v1.X < v2.X || v1.Y < v2.Y;
+        }
+
+        public static bool OrGreater(Vector2Int v1, Vector2Int v2)
+        {
+            return v1.X > v2.X || v1.Y > v2.Y;
+        }
+
+        public static bool OrLessEqual(Vector2Int v1, Vector2Int v2)
+        {
+            return v1.X <= v2.X || v1.Y <= v2.Y;
+        }
+
+        public static bool OrGreaterEqual(Vector2Int v1, Vector2Int v2)
+        {
+            return v1.X >= v2.X || v1.Y >= v2.Y;
+        }
+
         /// <summary>
         /// Returns the vector representation of the given string vector.
         /// </summary>

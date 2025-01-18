@@ -167,7 +167,7 @@
         public void MapText(Text text, CustomMapLine? customMapLine = null)
         {
             if (text.Data == string.Empty)
-                throw new ArgumentException("Text data is empty");
+                return;
 
             customMapLine ??= MapString;
 

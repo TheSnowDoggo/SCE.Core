@@ -15,7 +15,7 @@
 
         private TextBoxUI? renderedTextBoxUI;
 
-        private bool forceRender = false;
+        private bool forceRender = true;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="TextBoxUI"/> class.
@@ -59,7 +59,6 @@
             set
             {
                 bgColor = value;
-
                 FillBackground();
             }
         }
@@ -147,7 +146,12 @@
             {
                 int pixelLength = Pixel.GetPixelLength(line);
 
-                renderedAreaList.Add(new Area2DInt(position, position + new Vector2Int(pixelLength, 1)));
+                if (pixelLength > 0)
+                {
+                    Area2DInt area = new(position, position + new Vector2Int(pixelLength, 1));
+
+                    renderedAreaList.Add(area);
+                }
             }
         }
 

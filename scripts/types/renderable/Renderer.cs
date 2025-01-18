@@ -16,6 +16,10 @@
 
         public Color BgColor { get; set; }
 
+        public bool ClearOnRender { get; set; } = true;
+
+        public bool IgnoreOutOfBoundRenderables { get; set; } = true;
+
         public SearchList<IRenderable> Renderables { get; } = new();
 
         public void Resize(int width, int height)
@@ -30,16 +34,14 @@
 
         protected override void Render()
         {
-            FillBackground();
+            if (ClearOnRender)
+                FillBackground();
             UpdateRenderList();
         }
 
         private void FillBackground()
         {
-            if (BgColor == Color.Black)
-                _dpMap.Clear();
-            else
-                _dpMap.BgColorFill(BgColor);
+            _dpMap.BgColorFill(BgColor);
         }
 
         private void UpdateRenderList()
@@ -70,7 +72,10 @@
             {
                 var dpMap = renderable.GetMap();
                 Vector2Int pos = AnchorUtils.AnchorTo(renderable.Anchor, _dpMap.Dimensions, dpMap.Dimensions) + renderable.Position;
-                _dpMap.MapTo(dpMap, pos, true);
+ 
+               
+                if (!IgnoreOutOfBoundRenderables || Area2DInt.Overlaps(dpMap.GridArea + pos, _dpMap.GridArea))
+                    _dpMap.MapTo(dpMap, pos, true);
             }
         }
     }

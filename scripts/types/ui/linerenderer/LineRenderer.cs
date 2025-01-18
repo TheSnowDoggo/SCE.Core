@@ -36,12 +36,14 @@
         public Line this[int y]
         {
             get => lineArray[TranslateY(y)];
-            set
-            {
-                int translatedY = TranslateY(y);
-                lineArray[translatedY] = value;
-                updateQueue.Enqueue(translatedY);
-            }
+            set => SetLine(y, value);
+        }
+
+        public void SetLine(int y, Line line)
+        {
+            int translatedY = TranslateY(y);
+            lineArray[translatedY] = line;
+            updateQueue.Enqueue(translatedY);
         }
 
         public void Clear()

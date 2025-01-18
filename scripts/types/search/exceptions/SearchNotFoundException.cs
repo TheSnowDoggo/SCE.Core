@@ -1,6 +1,6 @@
 ﻿namespace SCE
 {
-    internal class SearchNotFoundException : Exception
+    public class SearchNotFoundException : Exception
     {
         public SearchNotFoundException()
             : base()

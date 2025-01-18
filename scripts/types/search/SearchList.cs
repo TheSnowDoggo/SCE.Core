@@ -8,13 +8,19 @@
     {
         protected readonly List<T> _list;
 
-        public SearchList(List<T> list)
+        public SearchList(int capacity)
         {
-            _list = list;
+            _list = new(capacity);
         }
-        public SearchList()
-            : this(new List<T>())
+
+        public SearchList(IEnumerable<T> collection)
         {
+            _list = new(collection);
+        }
+
+        public SearchList()
+        {
+            _list = new();
         }
 
         protected Action<T>? OnAdd;
@@ -48,15 +54,9 @@
             OnAdd?.Invoke(t);
         }
 
-        public void Add(T[] tArray)
+        public void Add(IEnumerable<T> collection)
         {
-            foreach (T t in tArray)
-                Add(t);
-        }
-
-        public void Add(List<T> tList)
-        {
-            foreach (T t in tList)
+            foreach (T t in collection)
                 Add(t);
         }
 

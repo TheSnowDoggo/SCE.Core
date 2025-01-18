@@ -180,6 +180,26 @@
             return $"{X},{Y}";
         }
 
+        public static bool OrLess(Vector2 v1, Vector2 v2)
+        {
+            return v1.X < v2.X || v1.Y < v2.Y;
+        }
+
+        public static bool OrGreater(Vector2 v1, Vector2 v2)
+        {
+            return v1.X > v2.X || v1.Y > v2.Y;
+        }
+
+        public static bool OrLessEqual(Vector2 v1, Vector2 v2)
+        {
+            return v1.X <= v2.X || v1.Y <= v2.Y;
+        }
+
+        public static bool OrGreaterEqual(Vector2 v1, Vector2 v2)
+        {
+            return v1.X >= v2.X || v1.Y >=  v2.Y;
+        }
+
         /// <summary>
         /// Returns the vector representation of the given string vector.
         /// </summary>

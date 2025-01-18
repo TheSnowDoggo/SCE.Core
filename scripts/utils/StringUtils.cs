@@ -4,6 +4,33 @@
 
     public static class StringUtils
     {
+        public static bool DoesMatchTo(string entry, string suggestion, bool cutEmpty = false)
+        {
+            int length = Math.Min(entry.Length, suggestion.Length);
+
+            if (cutEmpty && length == 0)
+                return false;
+
+            for (int i = 0; i < length; ++i)
+            {
+                if (entry[i] == ' ')
+                    return entry[..i] == suggestion;
+                if (entry[i] != suggestion[i])
+                    return false;
+            }
+            return true;
+        }
+
+        public static void TrimFirst(ref string[] arr)
+        {
+            if (arr.Length == 0)
+                return;
+            string[] temp = new string[arr.Length - 1];
+            for (int i = 0; i < temp.Length; ++i)
+                temp[i] = arr[i + 1];
+            arr = temp;
+        }
+
         public static char[] StringArrayToCharArray(string[] strArray)
         {
             char[] chrArray = new char[strArray.Length];
@@ -23,6 +50,8 @@
 
         public static string MergeString(string mainStr, string underLayedStr, char mergeChr = ' ')
         {
+            if (underLayedStr is null)
+                return mainStr;
             if (underLayedStr.Length < mainStr.Length)
                 throw new ArgumentException("Under layed string length cannot be less than main string.");
 

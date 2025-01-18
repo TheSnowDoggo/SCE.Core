@@ -16,7 +16,7 @@
         /// <exception cref="ArgumentException">Throws exception if the end vector is less than or equal the start vector.</exception>
         public Area2DInt(Vector2Int start, Vector2Int end)
         {
-            if (end <= start)
+            if (Vector2Int.OrLessEqual(end, start))
                 throw new ArgumentException("End vector must be greater than start vector.");
             this.start = start;
             this.end = end;
@@ -28,7 +28,12 @@
         public Vector2Int Start
         {
             get => start;
-            set => start = value;
+            set
+            {
+                if (Vector2Int.OrLessEqual(End, value))
+                    throw new ArgumentException("End vector must be greater than start vector.");
+                start = value;
+            }
         }
 
         /// <summary>
@@ -39,7 +44,7 @@
             get => end;
             set
             {
-                if (value <= Start)
+                if (Vector2Int.OrLessEqual(value, Start))
                     throw new ArgumentException("End vector must be greater than start vector.");
                 end = value;
             }

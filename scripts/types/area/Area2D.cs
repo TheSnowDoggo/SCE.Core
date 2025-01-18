@@ -16,7 +16,7 @@
         /// <exception cref="ArgumentException">Throws exception if the end vector is less than or equal the start vector.</exception>
         public Area2D(Vector2 start, Vector2 end)
         {
-            if (end <= start)
+            if (Vector2.OrLessEqual(end, start))
                 throw new ArgumentException("End vector must be greater than start vector.");
             this.start = start;
             this.end = end;
@@ -28,7 +28,12 @@
         public Vector2 Start
         {
             get => start;
-            set => start = value;
+            set
+            {
+                if (Vector2.OrLessEqual(End, value))
+                    throw new ArgumentException("End vector must be greater than start vector.");
+                start = value;
+            }
         }
 
         /// <summary>
@@ -39,7 +44,7 @@
             get => end;
             set
             {
-                if (value <= Start)
+                if (Vector2.OrLessEqual(value, Start))
                     throw new ArgumentException("End vector must be greater than start vector.");
                 end = value;
             }

@@ -293,7 +293,7 @@
         public void GenericCycleArea(CycleActionWhile cycleActionWhile, Area2DInt area, bool tryTrimOnOverflow = DefaultTryTrimOnOverflowState)
         {
             if (!Area2DInt.Overlaps(GridArea, area))
-                throw new InvalidAreaException("Given area doesn't overlap this grid.");
+                throw new InvalidAreaException("Given area doesn't ovaerlap this grid.");
 
             if (!tryTrimOnOverflow && !AreaValid(area))
                 throw new AreaOutOfBoundsException("Given area is outside of the bounds of the grid.");
