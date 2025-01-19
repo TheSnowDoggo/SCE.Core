@@ -56,7 +56,8 @@
 
         public void AddRange(IEnumerable<T> collection)
         {
-            _list.AddRange(collection);
+            foreach (T t in collection)
+                Add(t);
         }
 
         public bool Remove(T t)
