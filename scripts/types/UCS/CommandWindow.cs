@@ -12,10 +12,14 @@
 
         protected override void Render()
         {
+            Clear();
+
             string[] displayArr = CommandProcessor.GetDisplay();
 
             for (int i = 0; i < displayArr.Length; ++i)
-                SetLine(i, new(displayArr[i])); 
+                SetLine(i, new(displayArr[i]??string.Empty));
+
+            base.Render();
         }
     }
 }

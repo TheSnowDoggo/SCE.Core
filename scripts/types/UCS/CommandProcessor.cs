@@ -35,30 +35,43 @@
             args = search.Split(' ');
             StringUtils.TrimFirst(ref args);
 
-            matches = FindMatches(input);
+            matches = FindMatches(input, CaseSensitive);
+        }
+
+        public void ClearInput()
+        {
+            ReceiveInput("");
+        }
+
+        public void TryRunCommand()
+        {
+            if (matches.Length > 0)
+                matches[0].Run(args);
         }
 
         public string[] GetDisplay()
         {
-            string[] matchArr = BuildMatches(args.Length);
-            string[] displayArr = new string[matchArr.Length + 1];
+            string[] matchesStr = BuildMatches(args.Length, PreviewMode);
+            string[] displayStr = new string[matchesStr.Length + 1];
 
-            for (int i = 0; i < matchArr.Length; ++i)
-                displayArr[i + 1] = matchArr[i];
+            displayStr[0] = search;
 
-            return displayArr;
+            for (int i = 0; i < matchesStr.Length; ++i)
+                displayStr[i + 1] = matchesStr[i];
+
+            return displayStr;
         }
 
-        private Command[] FindMatches(string entry)
+        private Command[] FindMatches(string entry, bool caseSensitive)
         {
-            if (!CaseSensitive)
+            if (!caseSensitive)
                 entry = entry.ToLower();
 
             List<Command> matchList = new(CommandList.Count);
 
             foreach (var command in CommandList)
             {
-                string commandName = CaseSensitive ? command.Name : command.Name.ToLower();
+                string commandName = caseSensitive ? command.Name : command.Name.ToLower();
 
                 if (StringUtils.DoesMatchTo(commandName, entry, CutEmpty))
                     matchList.Add(command);
@@ -67,24 +80,29 @@
             return matchList.ToArray();
         }
 
-        private string[] BuildMatches(int argsLen)
+        private string[] BuildMatches(int argsLen, ArgumentPreviewMode previewMode)
         {
             string[] build = new string[matches.Length];
             for (int i = 0; i < build.Length; ++i)
             {
                 Command command = matches[i];
 
-                int previewLength = PreviewMode switch
-                {
-                    ArgumentPreviewMode.ShowNext => argsLen,
-                    ArgumentPreviewMode.ShowAlways => -1,
-                    ArgumentPreviewMode.ShowOnCommand => matches.Length == 1 ? -1 : 0,
-                    _ => throw new NotImplementedException()
-                };
+                int previewLength = GetPreviewLength(argsLen, previewMode);
 
                 build[i] = command.Name + command.BuildPreview(previewLength);
             }
             return build;
+        }
+
+        private int GetPreviewLength(int argsLen, ArgumentPreviewMode previewMode)
+        {
+            return previewMode switch
+            {
+                ArgumentPreviewMode.ShowNext => argsLen,
+                ArgumentPreviewMode.ShowAlways => -1,
+                ArgumentPreviewMode.ShowOnCommand => matches.Length == 1 ? -1 : 0,
+                _ => throw new NotImplementedException()
+            };
         }
     }
 }
