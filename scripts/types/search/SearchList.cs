@@ -54,10 +54,9 @@
             OnAdd?.Invoke(t);
         }
 
-        public void Add(IEnumerable<T> collection)
+        public void AddRange(IEnumerable<T> collection)
         {
-            foreach (T t in collection)
-                Add(t);
+            _list.AddRange(collection);
         }
 
         public bool Remove(T t)

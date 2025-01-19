@@ -28,6 +28,8 @@
 
         public bool CutEmpty { get; set; } = true;
 
+        public string EmptySearch { get; set; } = "...";
+
         public void ReceiveInput(string input)
         {
             search = input;
@@ -54,7 +56,7 @@
             string[] matchesStr = BuildMatches(args.Length, PreviewMode);
             string[] displayStr = new string[matchesStr.Length + 1];
 
-            displayStr[0] = search;
+            displayStr[0] = search.Length == 0 ? EmptySearch : search;
 
             for (int i = 0; i < matchesStr.Length; ++i)
                 displayStr[i + 1] = matchesStr[i];
