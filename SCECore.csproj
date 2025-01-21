@@ -30,4 +30,8 @@
     </None>
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="scripts\types\searchhash\" />
+  </ItemGroup>
+
 </Project>

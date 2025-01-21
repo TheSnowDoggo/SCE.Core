@@ -28,7 +28,9 @@
             if (!IsElementValid(element))
                 throw new ArgumentException("Element is invalid.");
 
-            Element = FixedEmptyElement(element); 
+            IsEmpty = element is null or "" || element == EmptyElement;
+            Element = IsEmpty ? EmptyElement : element ?? throw new NotImplementedException(); 
+
             FgColor = fgColor;
             BgColor = bgColor;
         }
@@ -61,6 +63,8 @@
         /// Gets the <see cref="byte"/> background color of this instance.
         /// </summary>
         public Color BgColor { get; }
+
+        public bool IsEmpty { get; }
 
         // Equality operators
         public static bool operator ==(Pixel p1, Pixel p2) => Equals(p1, p2);
@@ -125,11 +129,6 @@
         private static bool IsElementValid(string element)
         {
             return element is null or "" || element.Length == PIXELWIDTH; 
-        }
-
-        private static string FixedEmptyElement(string element)
-        {
-            return element is null or "" ? EmptyElement : element;
         }
     }
 }

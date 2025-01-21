@@ -2,6 +2,6 @@
 {
     public interface ISearcheable
     {
-        string Name { get; }
+        string Name { get; set; }
     }
 }
