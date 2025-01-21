@@ -4,21 +4,26 @@
 
     public static class StringUtils
     {
-        public static bool DoesMatchTo(string entry, string suggestion, bool cutEmpty = false)
+        public static bool Matches(string entry, string suggestion)
         {
-            int length = Math.Min(entry.Length, suggestion.Length);
+            int matching = MatchingCharacters(entry, suggestion);
+            if (matching == entry.Length || (matching == suggestion.Length && entry[matching] == ' '))
+                return true;
+            return false;
+        }
 
-            if (cutEmpty && length == 0)
-                return false;
-
+        public static int MatchingCharacters(string str1, string str2)
+        {
+            int length = Math.Min(str1.Length, str2.Length);
+            int matching = 0;
             for (int i = 0; i < length; ++i)
             {
-                if (entry[i] == ' ')
-                    return entry[..i] == suggestion;
-                if (entry[i] != suggestion[i])
-                    return false;
+                if (str1[i] == str2[i])
+                    matching++;
+                else
+                    break;
             }
-            return true;
+            return matching;
         }
 
         public static void TrimFirst(ref string[] arr)
