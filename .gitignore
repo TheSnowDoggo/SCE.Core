@@ -3,3 +3,5 @@
 ################################################################################
 
 /.vs/SCECore/
+/obj/Debug/net6.0/SCECore.assets.cache
+/obj/Debug/net6.0/SCECore.GeneratedMSBuildEditorConfig.editorconfig
