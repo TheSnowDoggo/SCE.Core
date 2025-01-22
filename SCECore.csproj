@@ -20,6 +20,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="scripts\types\searchhash\**" />
+    <EmbeddedResource Remove="scripts\types\searchhash\**" />
+    <None Remove="scripts\types\searchhash\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Update="LICENSE.txt">
       <Pack>True</Pack>
       <PackagePath>\</PackagePath>
@@ -28,10 +34,6 @@
       <Pack>True</Pack>
       <PackagePath>\</PackagePath>
     </None>
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="scripts\types\searchhash\" />
   </ItemGroup>
 
 </Project>

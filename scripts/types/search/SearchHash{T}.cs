@@ -5,9 +5,9 @@ namespace SCE
     public class SearchHash<T> : IEnumerable<T>
         where T : ISearcheable
     {
-        private readonly HashSet<T> _hashSet;
+        protected readonly HashSet<T> _hashSet;
 
-        private readonly Dictionary<string, T> _nameDict;
+        protected readonly Dictionary<string, T> _nameDict;
 
         private int uniqueId = 0;
 
@@ -48,7 +48,7 @@ namespace SCE
             return GetEnumerator();
         }
 
-        public void Add(T t)
+        public virtual void Add(T t)
         {
             if (_nameDict.ContainsKey(t.Name))
             {
@@ -68,7 +68,7 @@ namespace SCE
                 Add(t);
         }
 
-        public bool Remove(T t)
+        public virtual bool Remove(T t)
         {
             _nameDict.Remove(t.Name);
             bool result = _hashSet.Remove(t);
@@ -76,7 +76,7 @@ namespace SCE
             return result;
         }
 
-        public void Clear()
+        public virtual void Clear()
         {
             _hashSet.Clear();
             _nameDict.Clear();
