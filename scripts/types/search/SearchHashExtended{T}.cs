@@ -3,7 +3,7 @@
     public class SearchHashExtended<T> : SearchHash<T>
         where T : ISearcheable
     {
-        protected readonly HashSet<Type> _typeSet;
+        protected readonly HashSet<Type> _typeSet = new();
 
         public SearchHashExtended(int capacity)
             : base(capacity)
