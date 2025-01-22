@@ -18,7 +18,7 @@
         }
 
         public SearchHashExtended(IEnumerable<T> collection)
-            : base(collection)
+            : base()
         {
             _typeSet = new();
             AddRange(collection);
