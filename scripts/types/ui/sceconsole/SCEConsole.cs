@@ -5,12 +5,13 @@
     /// <summary>
     /// A <see cref="TextBoxUI"/> wrapper class representing a console used for in-engine logging.
     /// </summary>
-    public class SCEConsole : IRenderable
+    public class SCEConsole : UIBase
     {
-        private const string VersionName = "SCEConsole V1.1";
+        private const string DEFAULT_NAME = "sce_console";
+        private const string VERSION_NAME = "SCEConsole V1.1";
 
-        private const Color DefaultBgColor = Color.Black;
-        private const Color DefaultFgColor = Color.White;
+        private const Color DEFAULT_BGCOLOR = Color.Black;
+        private const Color DEFAULT_FGCOLOR = Color.White;
 
         private readonly List<Log> logList = new();
 
@@ -24,13 +25,12 @@
         /// <param name="dimensions">The dimensions of the console.</param>
         /// <param name="bgColor">The background color of the console.</param>
         /// <param name="isActive">The initial active state of the console.</param>
-        public SCEConsole(Vector2Int dimensions, Color bgColor = DefaultBgColor)
+        public SCEConsole(string name, Vector2Int dimensions, Color? bgColor = null)
+            : base(name)
         {
-            ui = new(dimensions)
-            {
-                Text = DefaultText,
-                BgColor = bgColor,
-            };
+            ui = new(dimensions) { Text = DefaultText };
+            if (bgColor is Color color)
+                ui.BgColor = color;
         }
 
         /// <summary>
@@ -38,12 +38,9 @@
         /// </summary>
         /// <param name="dimensions">The dimensions of the console.</param>
         /// <param name="isActive">The initial active state of the console.</param>
-        public SCEConsole(Vector2Int dimensions)
+        public SCEConsole(Vector2Int dimensions, Color? bgColor = null)
+            : this(DEFAULT_NAME, dimensions, bgColor)
         {
-            ui = new(dimensions)
-            {
-                Text = DefaultText,
-            };
         }
 
         /// <summary>
@@ -66,16 +63,6 @@
             }
         }
 
-        public string Name { get; set; } = "";
-
-        public bool IsActive { get; set; } = true;
-
-        public Vector2Int Position { get; set; }
-
-        public int Layer { get; set; }
-
-        public Anchor Anchor { get; set; }
-
         /// <summary>
         /// Gets or sets the foreground color of the console.
         /// </summary>
@@ -89,7 +76,7 @@
         {
             get => new()
             {
-                FgColor = DefaultFgColor,
+                FgColor = DEFAULT_FGCOLOR,
                 BgColor = Color.Transparent,
                 Anchor = Anchor.TopLeft,
             };
@@ -97,7 +84,7 @@
 
         private int MaxLines { get => ui.Height - 1; }
 
-        private string SmartHeader { get => $"- {VersionName} - Logs: {Logs}"; }
+        private string SmartHeader { get => $"- {VERSION_NAME} - Logs: {Logs}"; }
 
         private string AdjustedHeader { get => StringUtils.PostFitToLength(SmartHeader, ui.Width * Pixel.PIXELWIDTH); }
 
@@ -113,7 +100,7 @@
         }
 
         /// <inheritdoc/>
-        public DisplayMap GetMap()
+        public override DisplayMap GetMap()
         {
             ui.Text.Data = BuildLogList();
             return ui.GetMap();

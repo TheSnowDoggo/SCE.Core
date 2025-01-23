@@ -2,20 +2,24 @@
 {
     using System.Text;
 
-    public class LineWriter : UIBase
-    {
+    public class LineWriter : UIBaseExt
+    {        
+        private const string DEFAULT_NAME = "line_writer";
+
+        private const Color DEFAULT_BGCOLOR = Color.Black;
+
         private const HandleType DefaultOverflowHandling = HandleType.Error;
 
         private Vector2Int cursorPos = Vector2Int.Zero;
 
-        public LineWriter(Vector2Int dimensions, Color bgColor)
-            : base(dimensions, bgColor)
+        public LineWriter(string name, Vector2Int dimensions, Color? bgColor = null)
+            : base(name, dimensions, bgColor)
         {
-            BgColor = bgColor;
+            BgColor = bgColor ?? DEFAULT_BGCOLOR;
         }
 
-        public LineWriter(Vector2Int dimensions)
-            : this(dimensions, Color.Black)
+        public LineWriter(Vector2Int dimensions, Color? bgColor = null)
+            : this(DEFAULT_NAME, dimensions, bgColor)
         {
         }
 

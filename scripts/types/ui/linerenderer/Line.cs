@@ -2,24 +2,14 @@
 {
     public readonly struct Line
     {
-        private const Color DefaultFgColor = Color.White;
-        private const Color DefaultBgColor = Color.Black;
+        private const Color DEFAULT_FG_COLOR = Color.White;
+        private const Color DEFAULT_BG_COLOR = Color.Transparent;
 
-        public Line(string data, Color fgColor, Color bgColor)
+        public Line(string data, Color fgColor = DEFAULT_FG_COLOR, Color bgColor = DEFAULT_BG_COLOR)
         {
             Data = data;
             FgColor = fgColor;
             BgColor = bgColor;
-        }
-
-        public Line(string data, Color fgColor)
-            : this(data, fgColor, DefaultBgColor)
-        {
-        }
-
-        public Line(string data)
-            : this(data, DefaultFgColor)
-        {
         }
 
         public string Data { get; }

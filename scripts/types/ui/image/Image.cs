@@ -2,19 +2,20 @@
 {
     public class Image : DisplayMap, ICloneable, IEquatable<Image>, IRenderable
     {
-        private const int DefaultLayer = 0;
+        private const string DEFAULT_NAME = "image";
 
-        public Image(int width, int height)
+        private const int DEFAULT_LAYER = 0;
+
+        public Image(string name, int width, int height, Color? bgColor = null)
             : base(width, height)
         {
+            if (bgColor is Color color)
+                BgColorFill(color);
+            Name = name;
         }
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="Image"/> class.
-        /// </summary>
-        /// <param name="dimensions">The initial dimensions of the new image.</param>
-        public Image(Vector2Int dimensions)
-            : base(dimensions)
+        public Image(string name, Vector2Int dimensions, Color? bgColor = null)
+            : this(name, dimensions.X, dimensions.Y, bgColor)
         {
         }
 
@@ -23,22 +24,19 @@
         {
         }
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="Image"/> class.
-        /// </summary>
-        /// <param name="dimensions">The initial dimensions of the new image.</param>
-        /// <param name="bgColor">The initial background color of the new image.</param>
-        public Image(Vector2Int dimensions, Color bgColor)
-            : base(dimensions, bgColor)
+        public Image(Vector2Int dimensions, Color? bgColor = null)
+            : this(DEFAULT_NAME, dimensions.X, dimensions.Y, bgColor)
         {
         }
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="Image"/> class.
-        /// </summary>
-        /// <param name="displayMap">The base <see cref="DisplayMap"/> of the new image.</param>
-        public Image(DisplayMap displayMap)
+        public Image(string name, DisplayMap displayMap)
             : base(displayMap)
+        {
+            Name = name;
+        }
+
+        public Image(DisplayMap displayMap)
+            : this(DEFAULT_NAME, displayMap)
         {
         }
 
@@ -48,7 +46,7 @@
 
         public Vector2Int Position { get; set; }
 
-        public int Layer { get; set; } = DefaultLayer;
+        public int Layer { get; set; } = DEFAULT_LAYER;
 
         public Anchor Anchor { get; set; }
 

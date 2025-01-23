@@ -1,6 +1,6 @@
 ﻿namespace SCE
 {
-    public class Renderer : UIBase
+    public class Renderer : UIBaseExt
     {
         private readonly List<IRenderable> _renderList = new();
 

@@ -5,6 +5,8 @@
     /// </summary>
     public class TextBoxUI : Image, IRenderable
     {
+        private const string DEFAULT_NAME = "textbox";
+
         private readonly List<Area2DInt> renderedAreaList = new();
 
         private Color bgColor = Color.Black;
@@ -17,28 +19,36 @@
 
         private bool forceRender = true;
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="TextBoxUI"/> class.
-        /// </summary>
-        /// <param name="dimensions">The dimensions of the text box.</param>
-        public TextBoxUI(Vector2Int dimensions)
-            : base(dimensions)
+        public TextBoxUI(string name, int width, int height)
+            : base(name, width, height)
         {
             OnResize += TextBoxUI_OnResize;
         }
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="TextBoxUI"/> class.
-        /// </summary>
-        /// <param name="image">The base image of the text box.</param>
-        /// <param name="text">The text of the text box.</param>
-        /// <param name="isActive">The active state of the text box.</param>
-        /// <param name="textCaching">The text caching state of the text box.</param>
-        /// <param name="basicTextBoxRendering">The basic text box rendering state of the text box.</param>
-        public TextBoxUI(Image image)
-            : base(image)
+        public TextBoxUI(string name, Vector2Int dimensions)
+            : this(name, dimensions.X, dimensions.Y)
+        {
+        }
+
+        public TextBoxUI(int width, int height)
+            : this(DEFAULT_NAME, width, height)
+        {
+        }
+
+        public TextBoxUI(Vector2Int dimensions)
+            : this(DEFAULT_NAME, dimensions)
+        {
+        }
+
+        public TextBoxUI(string name, DisplayMap displayMap)
+            : base(name, displayMap)
         {
             OnResize += TextBoxUI_OnResize;
+        }
+
+        public TextBoxUI(DisplayMap displayMap)
+            : this(DEFAULT_NAME, displayMap)
+        {
         }
 
         /// <summary>

@@ -5,56 +5,20 @@
     /// </summary>
     public class DisplayMap : Grid2D<Pixel>, IEquatable<DisplayMap>
     {
-        public DisplayMap(int width, int height)
+        public DisplayMap(int width, int height, Color? bgColor = null)
             : base(width, height)
         {
+            if (bgColor is Color color)
+                BgColorFill(color);
         }
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="DisplayMap"/> class given its dimensions.
-        /// </summary>
-        /// <param name="dimensions">The dimensions of the new instance.</param>
-        public DisplayMap(Vector2Int dimensions)
-            : base(dimensions)
+        public DisplayMap(Vector2Int dimensions, Color? bgColor = null)
+            : this(dimensions.X, dimensions.Y, bgColor)
         {
         }
 
-        public DisplayMap(int width, int height, Color bgColor)
-            : base(width, height)
-        {
-            if (bgColor != Color.Black)
-                BgColorFill(bgColor);
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="DisplayMap"/> class given its dimensions and initial background color.
-        /// </summary>
-        /// <param name="dimensions">The dimensions of the new instance.</param>
-        /// <param name="bgColor">The starting background color to fill the new instance with.</param>
-        public DisplayMap(Vector2Int dimensions, Color bgColor)
-            : base(dimensions)
-        {
-            if (bgColor != Color.Black)
-                BgColorFill(bgColor);
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="DisplayMap"/> class given a base <see cref="Pixel"/> <see cref="Grid2D{T}"/>.
-        /// </summary>
-        /// <param name="pixelGrid">The base <see cref="Grid2D{T}"/> to set the new instance to.</param>
         public DisplayMap(Grid2D<Pixel> pixelGrid)
             : base(pixelGrid)
-        {
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="DisplayMap"/> class given a base set of <see cref="Grid2D{T}"/> of each element to be converted to a <see cref="Pixel"/> <see cref="Grid2D{T}"/>.
-        /// </summary>
-        /// <param name="elementGrid">The grid containing every element of the overal <see cref="Pixel"/> <see cref="Grid2D{T}"/>.</param>
-        /// <param name="fgGrid">The grid containing every foreground color of the overal <see cref="Pixel"/> <see cref="Grid2D{T}"/>.</param>
-        /// <param name="bgGrid">The grid containing every background color of the overal <see cref="Pixel"/> <see cref="Grid2D{T}"/>.</param>
-        public DisplayMap(Grid2D<string> elementGrid, Grid2D<Color> fgGrid, Grid2D<Color> bgGrid)
-            : base(ToPixelGrid(elementGrid, fgGrid, bgGrid))
         {
         }
 
@@ -78,9 +42,7 @@
         public static Grid2D<Pixel> ToPixelGrid(Grid2D<string> elementGrid, Grid2D<Color> fgGrid, Grid2D<Color> bgGrid)
         {
             if (elementGrid.Dimensions != fgGrid.Dimensions || fgGrid.Dimensions != bgGrid.Dimensions)
-            {
                 throw new ArgumentException("Dimensions do not match");
-            }
 
             Grid2D<Pixel> pixelGrid = new(elementGrid.Dimensions);
 

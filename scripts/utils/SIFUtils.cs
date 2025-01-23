@@ -77,7 +77,7 @@
 
             Vector2Int dimensions = GetSIFDimensions(sif);
 
-            return new(ToTextGrid(textData, dimensions), ToColorGrid(fgData, dimensions), ToColorGrid(bgData, dimensions));
+            return DisplayMap.ToPixelGrid(ToTextGrid(textData, dimensions), ToColorGrid(fgData, dimensions), ToColorGrid(bgData, dimensions));
         }
 
         public static Grid2D<Color> ToColorGrid(string gridData, Vector2Int dimensions)

@@ -2,9 +2,11 @@
 {
     using System.Collections;
 
-    public class OptionSelector : IRenderable, IEnumerable<Option>
+    public class OptionSelector : UIBase, IEnumerable<Option>
     {
-        private const Color DefaultBgColor = Color.Transparent;
+        private const string DEFAULT_NAME = "option_selector";
+
+        private const Color DEFAULT_BGCOLOR = Color.Transparent;
 
         private const StackMode DefaultMode = StackMode.TopDown;
 
@@ -23,13 +25,25 @@
 
         private int selected;
 
-        public OptionSelector(Vector2Int dimensions, Color bgColor, StackMode mode = DefaultMode)
+        public OptionSelector(string name, int width, int height, Color? bgColor = null)
+            : base(name)
         {
-            lineRenderer = new(dimensions, bgColor, mode) { FitLinesToLength = true };
+            lineRenderer = bgColor is Color color ? new(width, height, color) : new(width, height);
+            lineRenderer.FitLinesToLength = true;
         }
 
-        public OptionSelector(Vector2Int dimensions, StackMode mode = DefaultMode)
-            : this(dimensions, DefaultBgColor, mode)
+        public OptionSelector(string name, Vector2Int dimensions, Color? bgColor = null)
+            : this(name, dimensions.X, dimensions.Y, bgColor)
+        {
+        }
+
+        public OptionSelector(int width, int height, Color? bgColor = null)
+            : this(DEFAULT_NAME, width, height, bgColor)
+        {
+        }
+
+        public OptionSelector(Vector2Int dimensions, Color? bgColor = null)
+            : this(DEFAULT_NAME, dimensions, bgColor)
         {
         }
 
@@ -99,16 +113,6 @@
             set => lineRenderer.BgColor = value;
         }
 
-        public string Name { get; set; } = "";
-
-        public bool IsActive { get; set; }
-
-        public Vector2Int Position { get; set; }
-
-        public int Layer { get; set; }
-
-        public Anchor Anchor { get; set; }
-
         public Vector2Int Dimensions { get => lineRenderer.Dimensions; }
 
         public int Width { get => lineRenderer.Width; }
@@ -137,7 +141,7 @@
             return GetEnumerator();
         }
 
-        public DisplayMap GetMap()
+        public override DisplayMap GetMap()
         {
             Update();
             return lineRenderer.GetMap();

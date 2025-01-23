@@ -1,37 +1,42 @@
 ﻿namespace SCE
 {
-    public class LineRenderer : UIBase
+    public class LineRenderer : UIBaseExt
     {
-        private const bool DefaultFitLinesToLength = false;
+        private const string DEFAULT_NAME = "line_renderer";
 
-        private const Color DefaultBgColor = Color.Black;
-
-        private const StackMode DefaultMode = StackMode.TopDown;
+        private const Color DEFAULT_BGCOLOR = Color.Black;
 
         private readonly Queue<int> updateQueue = new();
 
         private Line[] lineArray;
 
-        public LineRenderer(Vector2Int dimensions, Color bgColor, StackMode mode = DefaultMode)
-            : base(dimensions, bgColor)
+        public LineRenderer(string name, int width, int height, Color? bgColor = null)
+            : base(name, width, height, bgColor)
         {
             lineArray = new Line[Dimensions.Y];
-
-            BgColor = bgColor;
-
-            Mode = mode;
+            BgColor = bgColor ?? DEFAULT_BGCOLOR;
         }
 
-        public LineRenderer(Vector2Int dimensions, StackMode mode = DefaultMode)
-            : this(dimensions, DefaultBgColor, mode)
+        public LineRenderer(string name, Vector2Int dimensions, Color? bgColor = null)
+            : this(name, dimensions.X, dimensions.Y, bgColor)
+        {
+        }
+
+        public LineRenderer(int width, int height, Color? bgColor = null)
+            : this(DEFAULT_NAME, width, height, bgColor)
+        {
+        }
+
+        public LineRenderer(Vector2Int dimensions, Color? bgColor = null)
+            : this(DEFAULT_NAME, dimensions, bgColor)
         {
         }
 
         public Color BgColor { get; set; }
 
-        public StackMode Mode { get; }
+        public StackMode Mode { get; } = StackMode.TopDown;
 
-        public bool FitLinesToLength { get; set; } = DefaultFitLinesToLength;
+        public bool FitLinesToLength { get; set; } = false;
 
         public Line this[int y]
         {
@@ -46,11 +51,32 @@
             updateQueue.Enqueue(translatedY);
         }
 
+        public void ShiftUp(int shift)
+        {
+            var newLineArray = new Line[lineArray.Length - shift];
+            for (int i = 0; i < newLineArray.Length; ++i)
+            {
+            }
+            Clear();
+        }
+
         public void Clear()
         {
-            _dpMap.Fill(new Pixel(BgColor));
+            _dpMap.BgColorFill(BgColor);
             lineArray = new Line[Dimensions.Y];
             updateQueue.Clear();
+        }
+
+        public void Resize(int width, int height)
+        {
+            _dpMap.CleanResize(width, height);
+            lineArray = new Line[height];
+            updateQueue.Clear();
+        }
+
+        public void Resize(Vector2Int dimensions)
+        {
+            Resize(dimensions.X, dimensions.Y);
         }
 
         protected override void Render()
@@ -59,7 +85,7 @@
             {
                 _dpMap.FillHorizontal(new Pixel(BgColor), y);
 
-                Line line = lineArray[y];
+                var line = lineArray[y];
 
                 string data = FitLinesToLength ? StringUtils.PostFitToLength(line.Data, Width * Pixel.PIXELWIDTH) : line.Data;
 
