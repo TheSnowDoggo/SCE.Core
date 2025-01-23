@@ -36,6 +36,8 @@ namespace SCE
 
         public int Count { get => _hashSet.Count; }
 
+        public bool IsEmpty { get => Count == 0; }
+
         public bool AssignUniqueName { get; set; } = true;
 
         public IEnumerator<T> GetEnumerator()

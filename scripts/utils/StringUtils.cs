@@ -4,6 +4,37 @@
 
     public static class StringUtils
     {
+        public static bool ContainsLessThan(string str, char of, int amount)
+        {
+            int count = 0;
+            foreach (var c in str)
+            {
+                if (c == of && ++count >= amount)
+                    return false;
+            }
+            return true;
+        }
+        
+        public static int LongestSubstringBetween(string str, char seperator)
+        {
+            int longest = 0;
+            int length = 0;
+            for (int i = 0;  i < str.Length; ++i)
+            {
+                if (str[i] != seperator)
+                    ++length;
+                else
+                {
+                    if (length > longest)
+                        longest = length;
+                    length = 0;
+                    if (str.Length - i < longest)
+                        break;
+                }
+            }
+            return length > longest ? length : longest;
+        }
+        
         public static bool Matches(string entry, string suggestion)
         {
             int matching = MatchingCharacters(entry, suggestion);
