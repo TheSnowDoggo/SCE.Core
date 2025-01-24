@@ -60,9 +60,6 @@
             set => text = value;
         }
 
-        /// <summary>
-        /// Gets or sets the background color of the text box used for previous text clearing if basic text box rendering is enabled.
-        /// </summary>
         public Color BgColor
         {
             get => bgColor;
@@ -89,7 +86,6 @@
         /// </remarks>
         public bool BasicTextBoxRendering { get; set; } = true;
 
-        /// <inheritdoc/>
         public override DisplayMap GetMap()
         {
             OnRender?.Invoke();
@@ -103,7 +99,6 @@
             return renderedTextBoxUI ?? this;
         }
 
-        /// <inheritdoc/>
         public override TextBoxUI Clone()
         {
             TextBoxUI clone = new(base.Clone())
@@ -117,17 +112,11 @@
             return clone;
         }
 
-        /// <summary>
-        /// Forces the text to be rendered on the next update.
-        /// </summary>
         public void ForceNextRender()
         {
             forceRender = true;
         }
 
-        /// <summary>
-        /// Clears stored non-setting data.
-        /// </summary>
         public void ClearData()
         {
             OnRender = null;
@@ -147,59 +136,87 @@
             return clone;
         }
 
-        // Smart text map functions
-        private void SmartMapLine(Vector2Int position, string line, Color fgColor = Color.White, Color bgColor = Color.Transparent)
-        {
-            MapString(position, line, fgColor, bgColor);
-
-            if (BasicTextBoxRendering)
-            {
-                int pixelLength = Pixel.GetPixelLength(line);
-
-                if (pixelLength > 0)
-                {
-                    Area2DInt area = new(position, position + new Vector2Int(pixelLength, 1));
-
-                    renderedAreaList.Add(area);
-                }
-            }
-        }
-
-        private void SmartMapText(Text text)
-        {
-            MapText(text, SmartMapLine);
-        }
-
         private void Render()
         {
             if (BasicTextBoxRendering)
             {
                 SmartClear();
                 renderedText = (Text)Text.Clone();
-                SmartMapText(renderedText);
+                MapText(renderedText, true);
             }
             else
             {
                 renderedTextBoxUI = RenderClone();
                 renderedText = renderedTextBoxUI.Text;
-                renderedTextBoxUI.MapText(renderedText);
+                renderedTextBoxUI.MapText(renderedText, false);
             }
         }
+
+        #region Mapping
+        private void RecordArea(Vector2Int position, string line)
+        {
+            int pixelLength = Pixel.GetPixelLength(line);
+
+            if (pixelLength > 0)
+            {
+                Area2DInt area = new(position, position + new Vector2Int(pixelLength, 1));
+
+                renderedAreaList.Add(area);
+            }
+        }
+
+        /// <summary>
+        /// Returns a <see cref="string"/> array of every line the <see cref="Text.Data"/> of the given <paramref name="text"/> can be split into.
+        /// </summary>
+        /// <param name="text">The <see cref="Text"/> to split up its <see cref="Text.Data"/>.</param>
+        /// <returns>A <see cref="string"/> array of every line the <see cref="Text.Data"/> of the given <paramref name="text"/> can be split into.</returns>
+        public string[] GetSplitLineArray(Text text)
+        {
+            if (text.NewLineOverflow)
+                return StringUtils.SmartSplitLineArray(text.Data, Width * Pixel.PIXELWIDTH, Height);
+            else
+                return StringUtils.BasicSplitLineArray(text.Data, Height);
+        }
+
+        private void MapText(Text text, bool recordArea)
+        {
+            if (text.Data == string.Empty)
+                return;
+
+            string[] lineArray = GetSplitLineArray(text);
+
+            int i = 0, topY = Height - 1, startY = text.GetStartMapY(lineArray.Length, Height);
+            do
+            {
+                string line = text.GetFormattedBody(lineArray[i]);
+
+                Vector2Int position = new(text.GetStartMapX(line.Length, Width), topY - (startY + i));
+
+                MapString(position, line, text.FgColor, text.BgColor);
+
+                if (recordArea && BasicTextBoxRendering)
+                    RecordArea(position, line);
+
+                ++i;
+            }
+            while (i < lineArray.Length && i < Height);
+        }
+        #endregion
 
         /// <summary>
         /// Clears old text when basic text box rendering is enable.
         /// </summary>
         private void SmartClear()
         {
-            foreach (Area2DInt area in renderedAreaList)
-            {
-                FillArea(new Pixel(Pixel.EmptyElement, Color.Black, BgColor), area);
-            }
-
+            foreach (var area in renderedAreaList)
+                FillArea(new Pixel(BgColor), area);
             renderedAreaList.Clear();
         }
 
-        private void FillBackground() => BgColorFill(BgColor);
+        private void FillBackground()
+        {
+            BgColorFill(BgColor);
+        }
 
         private void TextBoxUI_OnResize()
         {
@@ -209,7 +226,6 @@
 
                 FillBackground();
             }
-
             forceRender = true;
         }
     }
