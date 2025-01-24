@@ -8,7 +8,7 @@
 
         private const Color DEFAULT_BGCOLOR = Color.Transparent;
 
-        private const StackMode DefaultMode = StackMode.TopDown;
+        private const StackType DefaultMode = StackType.TopDown;
 
         private readonly LineRenderer lineRenderer;
 

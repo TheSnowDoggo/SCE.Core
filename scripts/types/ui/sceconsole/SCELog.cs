@@ -3,28 +3,28 @@
     /// <summary>
     /// A struct representing a log containing a message and the log time.
     /// </summary>
-    public readonly struct Log : IEquatable<Log>
+    public readonly struct SCELog : IEquatable<SCELog>
     {
         private readonly string message;
 
         private readonly DateTime logTime;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="Log"/> struct.
+        /// Initializes a new instance of the <see cref="SCELog"/> struct.
         /// </summary>
         /// <param name="message">The log message.</param>
         /// <param name="logTime">The log time.</param>
-        public Log(string message, DateTime logTime)
+        public SCELog(string message, DateTime logTime)
         {
             this.message = message;
             this.logTime = logTime;
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="Log"/> struct with a log time of the current time.
+        /// Initializes a new instance of the <see cref="SCELog"/> struct with a log time of the current time.
         /// </summary>
         /// <param name="message">The log message.</param>
-        public Log(string message)
+        public SCELog(string message)
             : this(message, DateTime.Now)
         {
         }
@@ -55,12 +55,12 @@
         public int Lines { get => StringUtils.CountOf(Message, '\n'); }
 
         // Equals operators
-        public static bool operator ==(Log left, Log right) => left.Equals(right);
+        public static bool operator ==(SCELog left, SCELog right) => left.Equals(right);
 
-        public static bool operator !=(Log left, Log right) => !(left == right);
+        public static bool operator !=(SCELog left, SCELog right) => !(left == right);
 
         /// <inheritdoc/>
-        public bool Equals(Log log)
+        public bool Equals(SCELog log)
         {
             return log.Message == Message && log.LogTime == LogTime;
         }
@@ -68,7 +68,7 @@
         /// <inheritdoc/>
         public override bool Equals(object? other)
         {
-            return other is Log log && Equals(log);
+            return other is SCELog log && Equals(log);
         }
 
         /// <inheritdoc/>

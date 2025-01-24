@@ -16,7 +16,6 @@
         /// </summary>
         public const Color DefaultColor = Color.Black;
 
-
         /// <summary>
         /// Initializes a new instance of the <see cref="Pixel"/> struct given the element, foreground and background color.
         /// </summary>
@@ -48,6 +47,8 @@
         /// Gets the empty <see cref="string"/> element determined by the <see cref="PIXELWIDTH"/>.
         /// </summary>
         public static string EmptyElement { get; } = StringUtils.Copy(' ', PIXELWIDTH);
+
+        public static Pixel Empty { get; } = new Pixel();
 
         /// <summary>
         /// Gets the <see cref="string"/> value of this instance.

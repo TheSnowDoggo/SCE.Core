@@ -1,6 +1,6 @@
 ﻿namespace SCE
 {
-    public enum StackMode
+    public enum StackType
     {
         BottomUp,
         TopDown,

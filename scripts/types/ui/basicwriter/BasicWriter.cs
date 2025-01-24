@@ -25,5 +25,6 @@ namespace SCE
             : base(DEFAULT_NAME, dimensions, bgColor)
         {
         }
+
     }
 }

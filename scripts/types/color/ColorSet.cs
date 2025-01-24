@@ -16,14 +16,8 @@
             BgColor = bgColor;
         }
 
-        /// <summary>
-        /// Gets the foreground color.
-        /// </summary>
         public Color FgColor { get; }
 
-        /// <summary>
-        /// Gets the background color.
-        /// </summary>
         public Color BgColor { get; }
 
         // Conversion operators
@@ -45,28 +39,24 @@
             bgColor = BgColor;
         }
  
-        /// <inheritdoc/>
         public bool Equals(ColorSet colorSet)
         {
             return colorSet.FgColor == FgColor && colorSet.BgColor == BgColor;
         }
 
-        /// <inheritdoc/>
         public override bool Equals(object? obj)
         {
             return obj is not null && Equals((ColorSet)obj);
         }
 
-        /// <inheritdoc/>
         public override int GetHashCode()
         {
             return HashCode.Combine(FgColor, BgColor);
         }
 
-        /// <inheritdoc/>
         public override string ToString()
         {
-            return $"{FgColor},{BgColor}";
+            return $"ColorSet({FgColor},{BgColor})";
         }
     }
 }

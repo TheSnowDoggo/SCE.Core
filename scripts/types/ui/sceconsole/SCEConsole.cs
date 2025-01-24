@@ -13,7 +13,7 @@
         private const Color DEFAULT_BGCOLOR = Color.Black;
         private const Color DEFAULT_FGCOLOR = Color.White;
 
-        private readonly List<Log> logList = new();
+        private readonly List<SCELog> logList = new();
 
         private readonly TextBoxUI ui;
 
@@ -89,11 +89,11 @@
         private string AdjustedHeader { get => StringUtils.PostFitToLength(SmartHeader, ui.Width * Pixel.PIXELWIDTH); }
 
         /// <summary>
-        /// Gets or sets the <see cref="Log"/> at the specified index.
+        /// Gets or sets the <see cref="SCELog"/> at the specified index.
         /// </summary>
-        /// <param name="index">The zero-based index of the <see cref="Log"/>.</param>
-        /// <returns>The <see cref="Log"/> at the specified <paramref name="index"/>.</returns>
-        public Log this[int index]
+        /// <param name="index">The zero-based index of the <see cref="SCELog"/>.</param>
+        /// <returns>The <see cref="SCELog"/> at the specified <paramref name="index"/>.</returns>
+        public SCELog this[int index]
         {
             get => logList[index];
             set => logList[index] = value;
@@ -112,22 +112,22 @@
         public void Clear() => logList.Clear();
 
         /// <inheritdoc cref="List{T}.Add(T)"/>
-        public void Add(Log log)
+        public void Add(SCELog log)
         {
             logList.Add(log);
         }
 
         /// <summary>
-        /// Creates and adds a new <see cref="Log"/> with a specified message.
+        /// Creates and adds a new <see cref="SCELog"/> with a specified message.
         /// </summary>
         /// <param name="message">The log message.</param>
         public void AddNew(string message)
         {
-            logList.Add(new Log(message));
+            logList.Add(new SCELog(message));
         }
 
         /// <inheritdoc cref="List{T}.Remove(T)"/>
-        public bool Remove(Log log)
+        public bool Remove(SCELog log)
         {
             return logList.Remove(log);
         }
@@ -150,7 +150,7 @@
                 {
                     strBuilder.Append('\n');
 
-                    Log log = this[i];
+                    SCELog log = this[i];
                     string[] lineArray = StringUtils.BasicSplitLineArray(log.FullMessage, MaxLines - lines); 
 
                     foreach (string line in lineArray)

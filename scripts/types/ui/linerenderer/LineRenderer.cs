@@ -34,7 +34,7 @@
 
         public Color BgColor { get; set; }
 
-        public StackMode Mode { get; } = StackMode.TopDown;
+        public StackType Mode { get; } = StackType.TopDown;
 
         public bool FitLinesToLength { get; set; } = false;
 
@@ -102,8 +102,8 @@
         {
             return Mode switch
             {
-                StackMode.BottomUp => y,
-                StackMode.TopDown => Dimensions.Y - 1 - y,
+                StackType.BottomUp => y,
+                StackType.TopDown => Dimensions.Y - 1 - y,
                 _ => throw new NotImplementedException("Unknown mode.")
             };
         }
