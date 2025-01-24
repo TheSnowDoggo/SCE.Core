@@ -1,27 +1,27 @@
 ﻿namespace SCE
 {
-    public class SearchHashExtended<T> : SearchHash<T>
+    public class SearchHashTypeExt<T> : SearchHash<T>
         where T : ISearcheable
     {
         protected readonly HashSet<Type> _typeSet = new();
 
-        public SearchHashExtended(int capacity)
+        public SearchHashTypeExt(IEnumerable<T> collection)
+            : base()
+        {
+            _typeSet = new();
+            AddRange(collection);
+        }
+
+        public SearchHashTypeExt(int capacity)
             : base(capacity)
         {
             _typeSet = new(capacity);
         }
 
-        public SearchHashExtended()
+        public SearchHashTypeExt()
             : base()
         {
             _typeSet = new();
-        }
-
-        public SearchHashExtended(IEnumerable<T> collection)
-            : base()
-        {
-            _typeSet = new();
-            AddRange(collection);
         }
 
         public override void Add(T t)

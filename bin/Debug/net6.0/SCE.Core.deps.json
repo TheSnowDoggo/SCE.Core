@@ -6,15 +6,15 @@
   "compilationOptions": {},
   "targets": {
     ".NETCoreApp,Version=v6.0": {
-      "SCECore/1.0.0-RC.3": {
+      "SCE.Core/1.0.0-RC.3": {
         "runtime": {
-          "SCECore.dll": {}
+          "SCE.Core.dll": {}
         }
       }
     }
   },
   "libraries": {
-    "SCECore/1.0.0-RC.3": {
+    "SCE.Core/1.0.0-RC.3": {
       "type": "project",
       "serviceable": false,
       "sha512": ""

@@ -7,7 +7,7 @@
     public readonly struct Pixel : IEquatable<Pixel>
     {
         /// <summary>
-        /// The global allowed string length of each <see cref="Pixel.Element"/>. Default is 2.
+        /// The global allowed string length of each <see cref="Element"/>. Default is 2.
         /// </summary>
         public const int PIXELWIDTH = 2;
 
@@ -117,9 +117,9 @@
 
         public static Pixel MergeLayers(Pixel topPixel, Pixel bottomPixel)
         {
-            Color newBgColor = ColorUtils.GetStackColor(topPixel.BgColor, bottomPixel.BgColor);
+            var newBgColor = ColorUtils.GetStackColor(topPixel.BgColor, bottomPixel.BgColor);
 
-            Color newFgColor = topPixel.Element == EmptyElement ? bottomPixel.FgColor : ColorUtils.GetStackColor(topPixel.FgColor, bottomPixel.FgColor);
+            var newFgColor = topPixel.Element == EmptyElement ? bottomPixel.FgColor : ColorUtils.GetStackColor(topPixel.FgColor, bottomPixel.FgColor);
 
             string newElement = topPixel.BgColor != Color.Transparent ? topPixel.Element : StringUtils.MergeString(topPixel.Element ?? EmptyElement, bottomPixel.Element ?? EmptyElement);
 
