@@ -3,55 +3,72 @@
     public class SearchHashTypeExt<T> : SearchHash<T>
         where T : ISearcheable
     {
-        protected readonly HashSet<Type> _typeSet = new();
+        protected readonly Dictionary<Type, int> _typeDict = new();
 
         public SearchHashTypeExt(IEnumerable<T> collection)
             : base()
         {
-            _typeSet = new();
+            _typeDict = new();
             AddRange(collection);
         }
 
         public SearchHashTypeExt(int capacity)
             : base(capacity)
         {
-            _typeSet = new(capacity);
+            _typeDict = new(capacity);
         }
 
         public SearchHashTypeExt()
             : base()
         {
-            _typeSet = new();
+            _typeDict = new();
         }
 
         public override void Add(T t)
         {
             base.Add(t);
-            _typeSet.Add(t.GetType());
+            AddType(t.GetType());
         }
 
         public override bool Remove(T t)
         {
-            _typeSet.Remove(t.GetType());
+            RemoveType(t.GetType());
             return base.Remove(t);
         }
 
         public override void Clear()
         {
             base.Clear();
-            _typeSet.Clear();
+            _typeDict.Clear();
+        }
+
+        protected void AddType(Type type)
+        {
+            if (_typeDict.ContainsKey(type))
+                ++_typeDict[type];
+            else
+                _typeDict.Add(type, 1);
+        }
+
+        protected void RemoveType(Type type)
+        {
+            if (!_typeDict.TryGetValue(type, out int value))
+                return;
+            if (value <= 1)
+                _typeDict.Remove(type);
+            else
+                --_typeDict[type];
         }
 
         #region Search
         public bool Contains<U>()
-            where U : ISearcheable
         {
             return Contains(typeof(U));
         }
 
         public bool Contains(Type type)
         {
-            return _typeSet.Contains(type);
+            return _typeDict.TryGetValue(type, out int value) && value > 0;
         }
         #endregion
     }

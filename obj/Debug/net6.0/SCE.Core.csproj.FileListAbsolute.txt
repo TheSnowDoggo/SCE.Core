@@ -10,3 +10,14 @@ C:\Users\redst\source\repos\TheSnowDoggo\SCE.Core\obj\Debug\net6.0\SCE.Core.dll
 C:\Users\redst\source\repos\TheSnowDoggo\SCE.Core\obj\Debug\net6.0\refint\SCE.Core.dll
 C:\Users\redst\source\repos\TheSnowDoggo\SCE.Core\obj\Debug\net6.0\SCE.Core.pdb
 C:\Users\redst\source\repos\TheSnowDoggo\SCE.Core\obj\Debug\net6.0\ref\SCE.Core.dll
+C:\Users\AdamG\Source\Repos\TheSnowDoggo\SCECore\obj\Debug\net6.0\SCE.Core.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\AdamG\Source\Repos\TheSnowDoggo\SCECore\obj\Debug\net6.0\SCE.Core.AssemblyInfoInputs.cache
+C:\Users\AdamG\Source\Repos\TheSnowDoggo\SCECore\obj\Debug\net6.0\SCE.Core.AssemblyInfo.cs
+C:\Users\AdamG\Source\Repos\TheSnowDoggo\SCECore\obj\Debug\net6.0\SCE.Core.csproj.CoreCompileInputs.cache
+C:\Users\AdamG\Source\Repos\TheSnowDoggo\SCECore\obj\Debug\net6.0\SCE.Core.dll
+C:\Users\AdamG\Source\Repos\TheSnowDoggo\SCECore\obj\Debug\net6.0\refint\SCE.Core.dll
+C:\Users\AdamG\Source\Repos\TheSnowDoggo\SCECore\obj\Debug\net6.0\SCE.Core.pdb
+C:\Users\AdamG\Source\Repos\TheSnowDoggo\SCECore\bin\Debug\net6.0\SCE.Core.deps.json
+C:\Users\AdamG\Source\Repos\TheSnowDoggo\SCECore\bin\Debug\net6.0\SCE.Core.dll
+C:\Users\AdamG\Source\Repos\TheSnowDoggo\SCECore\bin\Debug\net6.0\SCE.Core.pdb
+C:\Users\AdamG\Source\Repos\TheSnowDoggo\SCECore\obj\Debug\net6.0\ref\SCE.Core.dll
