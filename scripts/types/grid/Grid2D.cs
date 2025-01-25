@@ -12,6 +12,7 @@
 
         private T[,] data;
 
+        #region Constructors
         public Grid2D(int width, int height)
         {
             if (width < 0 || height < 0)
@@ -35,6 +36,7 @@
             : this(grid.data)
         {
         }
+        #endregion
 
         #region Actions
         public Action? OnResize;

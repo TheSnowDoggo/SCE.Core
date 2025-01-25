@@ -5,14 +5,15 @@
     /// </summary>
     public class DisplayMap : Grid2D<Pixel>, IEquatable<DisplayMap>
     {
-        public DisplayMap(int width, int height, Color? bgColor = null)
+        #region Constructors
+        public DisplayMap(int width, int height, SCEColor? bgColor = null)
             : base(width, height)
         {
-            if (bgColor is Color color)
+            if (bgColor is SCEColor color)
                 BgColorFill(color);
         }
 
-        public DisplayMap(Vector2Int dimensions, Color? bgColor = null)
+        public DisplayMap(Vector2Int dimensions, SCEColor? bgColor = null)
             : this(dimensions.X, dimensions.Y, bgColor)
         {
         }
@@ -20,26 +21,6 @@
         public DisplayMap(Grid2D<Pixel> pixelGrid)
             : base(pixelGrid)
         {
-        }
-
-        #region Conversion
-        public static Grid2D<Pixel> ToPixelGrid(Grid2D<string> elementGrid, Grid2D<Color> fgGrid, Grid2D<Color> bgGrid)
-        {
-            if (elementGrid.Dimensions != fgGrid.Dimensions || fgGrid.Dimensions != bgGrid.Dimensions)
-                throw new ArgumentException("Dimensions do not match");
-
-            Grid2D<Pixel> pixelGrid = new(elementGrid.Dimensions);
-            for (int x = 0; x < pixelGrid.Width; x++)
-            {
-                for (int y = 0; y < pixelGrid.Height; y++)
-                    pixelGrid[x, y] = new(elementGrid[x, y], fgGrid[x, y], bgGrid[x, y]);
-            }
-            return pixelGrid;
-        }
-
-        public static DisplayMap ToDisplayMap(Grid2D<string> elementGrid, Grid2D<Color> fgGrid, Grid2D<Color> bgGrid)
-        {
-            return new(ToPixelGrid(elementGrid, fgGrid, bgGrid));
         }
         #endregion
 
@@ -68,7 +49,7 @@
         #endregion
 
         #region MapString
-        public void MapString(Vector2Int position, string line, Color fgColor, Color bgColor)
+        public void MapString(Vector2Int position, string line, SCEColor fgColor, SCEColor bgColor)
         {
             if (!PositionValid(position))
                 throw new InvalidPositionException($"Position {position} is not valid.");
@@ -101,7 +82,7 @@
             MapString(position, line, colorSet.FgColor, colorSet.BgColor);
         }
 
-        public void MapString(int y, string line, Color fgColor, Color bgColor)
+        public void MapString(int y, string line, SCEColor fgColor, SCEColor bgColor)
         {
             MapString(new Vector2Int(0, y), line, fgColor, bgColor);
         }
@@ -125,44 +106,44 @@
         #endregion
 
         #region FgColorFill
-        public void FgColorFillArea(Color fgColor, Area2DInt area, bool ignoreOverflow = false)
+        public void FgColorFillArea(SCEColor fgColor, Area2DInt area, bool ignoreOverflow = false)
         {
             GenericCycleArea((pos) => this[pos] = new(this[pos].Element, fgColor, this[pos].BgColor), area, ignoreOverflow);
         }
 
-        public void FgColorFill(Color fgColor)
+        public void FgColorFill(SCEColor fgColor)
         {
             FgColorFillArea(fgColor, GridArea);
         }
         #endregion
 
         #region BgColorFill
-        public void BgColorFillArea(Color bgColor, Area2DInt area, bool ignoreOverflow = false)
+        public void BgColorFillArea(SCEColor bgColor, Area2DInt area, bool ignoreOverflow = false)
         {
             GenericCycleArea((pos) => this[pos] = new(this[pos].Element, this[pos].FgColor, bgColor), area, ignoreOverflow);
         }
 
-        public void BgColorFill(Color bgColor)
+        public void BgColorFill(SCEColor bgColor)
         {
             BgColorFillArea(bgColor, GridArea);
         }
 
-        public void BgColorFillHorizontalArea(Color bgColor, int y, Vector2Int range)
+        public void BgColorFillHorizontalArea(SCEColor bgColor, int y, Vector2Int range)
         {
             BgColorFillArea(bgColor, new Area2DInt(new Vector2Int(range.X, y), new Vector2Int(range.Y, y + 1)));
         }
 
-        public void BgColorFillVerticalArea(Color bgColor, int x, Vector2Int range)
+        public void BgColorFillVerticalArea(SCEColor bgColor, int x, Vector2Int range)
         {
             BgColorFillArea(bgColor, new Area2DInt(new(x, range.X), new(x + 1, range.Y)));
         }
 
-        public void BgColorFillHorizontal(Color bgColor, int y)
+        public void BgColorFillHorizontal(SCEColor bgColor, int y)
         {
             BgColorFillHorizontalArea(bgColor, y, new(0, Width));
         }
 
-        public void BgColorFillVertical(Color bgColor, int x)
+        public void BgColorFillVertical(SCEColor bgColor, int x)
         {
             BgColorFillVerticalArea(bgColor, x, new(0, Height));
         }

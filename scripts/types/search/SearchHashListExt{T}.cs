@@ -26,8 +26,8 @@
 
         public override void Add(T t)
         {
-            base.Add(t);
             _list.Add(t);
+            base.Add(t);
         }
 
         public override bool Remove(T t)

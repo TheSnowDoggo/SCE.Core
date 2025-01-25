@@ -38,7 +38,7 @@
         {
             foreach (var scene in this)
             {
-                if (scene.IsActive && scene.IsStarting)
+                if (scene.IsActive)
                     scene.Start();
             }
         }
@@ -47,7 +47,7 @@
         {
             foreach (var scene in this)
             {
-                if (scene.IsActive && scene.IsRunning)
+                if (scene.IsActive)
                     scene.Update();
             }
         }

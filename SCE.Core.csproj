@@ -8,15 +8,17 @@
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
     <PackageId>SCECore</PackageId>
     <Title>SCECore</Title>
-    <Version>1.0.0-RC.3</Version>
+    <Version>1.0.0-RC.4</Version>
     <Authors>Adam Giaziri</Authors>
     <Product>SCECore</Product>
-    <Description>Contains core functionality used by LunaSCE.</Description>
+    <Description>SCE Utilities and Types required by all SCE assemblies.</Description>
     <Copyright>MIT License</Copyright>
     <PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
     <PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>
     <NeutralLanguage>en</NeutralLanguage>
     <PackageReadmeFile>README.md</PackageReadmeFile>
+    <SignAssembly>True</SignAssembly>
+    <AssemblyOriginatorKeyFile>C:\Users\redst\source\repos\SnowTestPlace\sgKey.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
 
   <ItemGroup>

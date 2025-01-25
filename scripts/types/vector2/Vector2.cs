@@ -67,11 +67,6 @@
         public float Magnitude { get => MathF.Sqrt((X * X) + (Y * Y)); }
 
         /// <summary>
-        /// Gets the normalized (unit) vector based on the current vector if the magnitude is not equal to 0.
-        /// </summary>
-        public Vector2 Normalized { get => Normalize(); }
-
-        /// <summary>
         /// Gets the inverse vector with swapped x and y components based on the current vector.
         /// </summary>
         public Vector2 Inverse { get => new(Y, X); }

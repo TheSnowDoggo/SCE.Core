@@ -10,15 +10,15 @@
         /// </summary>
         /// <param name="fgColor">The foreground <see cref="byte"/> color.</param>
         /// <param name="bgColor">The background <see cref="byte"/> color.</param>
-        public ColorSet(Color fgColor, Color bgColor)
+        public ColorSet(SCEColor fgColor, SCEColor bgColor)
         {
             FgColor = fgColor;
             BgColor = bgColor;
         }
 
-        public Color FgColor { get; }
+        public SCEColor FgColor { get; }
 
-        public Color BgColor { get; }
+        public SCEColor BgColor { get; }
 
         // Conversion operators
         public static implicit operator ColorSet(Pixel pixel) => new(pixel.FgColor, pixel.BgColor);
@@ -33,7 +33,7 @@
         /// </summary>
         /// <param name="fgColor">The foregrorund <see cref="byte"/> color.</param>
         /// <param name="bgColor">The backgrround <see cref="byte"/> color.</param>
-        public void Expose(out Color fgColor, out Color bgColor)
+        public void Expose(out SCEColor fgColor, out SCEColor bgColor)
         {
             fgColor = FgColor;
             bgColor = BgColor;

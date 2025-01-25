@@ -14,7 +14,7 @@
         /// <summary>
         /// The constant default <see cref="byte"/> color used in construction.
         /// </summary>
-        public const Color DefaultColor = Color.Black;
+        public const SCEColor DefaultColor = SCEColor.Black;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Pixel"/> struct given the element, foreground and background color.
@@ -22,7 +22,7 @@
         /// <param name="element">The <see cref="string"/> value of the new instance.</param>
         /// <param name="fgColor">The foreground color of the new instance.</param>
         /// <param name="bgColor">The background color of the new instance.</param>
-        public Pixel(string element, Color fgColor, Color bgColor)
+        public Pixel(string element, SCEColor fgColor, SCEColor bgColor)
         {
             if (!IsElementValid(element))
                 throw new ArgumentException("Element is invalid.");
@@ -38,7 +38,7 @@
         /// Initializes a new instance of the <see cref="Pixel"/> struct given the background color.
         /// </summary>
         /// <param name="bgColor">The background color of the new instance.</param>
-        public Pixel(Color bgColor)
+        public Pixel(SCEColor bgColor)
             : this(string.Empty, DefaultColor, bgColor)
         {
         }
@@ -58,12 +58,12 @@
         /// <summary>
         /// Gets the foreground color of this instance.
         /// </summary>
-        public Color FgColor { get; }
+        public SCEColor FgColor { get; }
 
         /// <summary>
         /// Gets the <see cref="byte"/> background color of this instance.
         /// </summary>
-        public Color BgColor { get; }
+        public SCEColor BgColor { get; }
 
         public bool IsEmpty { get; }
 
@@ -122,7 +122,7 @@
 
             var newFgColor = topPixel.Element == EmptyElement ? bottomPixel.FgColor : ColorUtils.GetStackColor(topPixel.FgColor, bottomPixel.FgColor);
 
-            string newElement = topPixel.BgColor != Color.Transparent ? topPixel.Element : StringUtils.MergeString(topPixel.Element ?? EmptyElement, bottomPixel.Element ?? EmptyElement);
+            string newElement = topPixel.BgColor != SCEColor.Transparent ? topPixel.Element : StringUtils.MergeString(topPixel.Element ?? EmptyElement, bottomPixel.Element ?? EmptyElement);
 
             return new(newElement, newFgColor, newBgColor);
         }

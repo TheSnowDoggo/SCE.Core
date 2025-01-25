@@ -4,7 +4,7 @@
     {
         bool IsActive { get; }
 
-        Vector2Int Position { get; }
+        Vector2Int Offset { get; }
 
         int Layer { get; }
 
