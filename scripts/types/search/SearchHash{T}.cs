@@ -28,12 +28,6 @@ namespace SCE
             AddRange(collection);
         }
 
-        protected Action<T>? OnAdd;
-
-        protected Action<T>? OnRemove;
-
-        protected Action? OnClear;
-
         public int Count { get => _hashSet.Count; }
 
         public bool IsEmpty { get => Count == 0; }
@@ -61,7 +55,6 @@ namespace SCE
             }
             _nameDict.Add(t.Name, t);
             _hashSet.Add(t);
-            OnAdd?.Invoke(t);
         }
 
         public void AddRange(IEnumerable<T> collection)
@@ -73,9 +66,7 @@ namespace SCE
         public virtual bool Remove(T t)
         {
             _nameDict.Remove(t.Name);
-            bool result = _hashSet.Remove(t);
-            OnRemove?.Invoke(t);
-            return result;
+            return _hashSet.Remove(t);
         }
 
         public virtual void Clear()

@@ -1,13 +1,10 @@
 ﻿namespace SCE
 {
-    public class Log
+    public class Log : Line
     {
-        private static ColorSet DefaultColors { get; } = new ColorSet(Color.White, Color.Black);
-
         public Log(string message, ColorSet? colorSet = null, DateTime? logTime = null)
+            : base(message, colorSet)
         {
-            Message = message;
-            Colors = colorSet ?? DefaultColors;
             LogTime = logTime ?? DateTime.Now;
         }
 
@@ -18,13 +15,9 @@
 
         public DateTime LogTime { get; set; }
 
-        public string Message { get; set; }
-
-        public ColorSet Colors { get; set; }
-
         public override string ToString()
         {
-            return $"[{LogTime:G}] {Message}";
+            return $"[{LogTime:T}] {Message}";
         }
     }
 }

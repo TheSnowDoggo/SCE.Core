@@ -1,20 +1,26 @@
-﻿namespace SCE
+﻿using System.Collections;
+
+namespace SCE
 {
-    public class LineRenderer : UIBaseExt
+    public class LineRenderer : UIBaseExt, IEnumerable<Log?>
     {
         private const string DEFAULT_NAME = "line_renderer";
 
         private const Color DEFAULT_BGCOLOR = Color.Black;
 
-        private readonly Queue<int> updateQueue = new();
+        private Color bgColor;
 
-        private Line[] lineArray;
+        private StackType stackMode = StackType.BottomUp;
+
+        private bool fitToLength = false;
+
+        private Line?[] lineArr;
 
         public LineRenderer(string name, int width, int height, Color? bgColor = null)
             : base(name, width, height, bgColor)
         {
-            lineArray = new Line[Dimensions.Y];
-            BgColor = bgColor ?? DEFAULT_BGCOLOR;
+            lineArr = new Line[Height];
+            this.bgColor = bgColor ?? DEFAULT_BGCOLOR;
         }
 
         public LineRenderer(string name, Vector2Int dimensions, Color? bgColor = null)
@@ -32,80 +38,152 @@
         {
         }
 
-        public Color BgColor { get; set; }
+        public int Count { get => lineArr.Length; }
 
-        public StackType Mode { get; } = StackType.TopDown;
-
-        public bool FitLinesToLength { get; set; } = false;
-
-        public Line this[int y]
+        #region Settings
+        public Color BgColor
         {
-            get => lineArray[TranslateY(y)];
-            set => SetLine(y, value);
-        }
-
-        public void SetLine(int y, Line line)
-        {
-            int translatedY = TranslateY(y);
-            lineArray[translatedY] = line;
-            updateQueue.Enqueue(translatedY);
-        }
-
-        public void ShiftUp(int shift)
-        {
-            var newLineArray = new Line[lineArray.Length - shift];
-            for (int i = 0; i < newLineArray.Length; ++i)
+            get => bgColor;
+            set
             {
+                bgColor = value;
+                FullRender();
             }
-            Clear();
         }
 
+        public StackType StackMode
+        {
+            get => stackMode;
+            set
+            {
+                stackMode = value;
+                FullRender();
+            }
+        }
+
+        public bool FitToLength
+        {
+            get => fitToLength;
+            set
+            {
+                fitToLength = value;
+                FullRender();
+            }
+        }
+        #endregion
+
+        #region Indexers
+        public Line? this[int y]
+        {
+            get => y >= 0 && y < lineArr.Length ? lineArr[Translate(y)] : 
+                throw new IndexOutOfRangeException("Specified y is invalid.");
+            set
+            {
+                if (!SetLine(y, value))
+                    throw new IndexOutOfRangeException("Specified y is invalid.");
+            }
+        }
+        #endregion
+
+        #region Enumeration
+        public IEnumerator<Log?> GetEnumerator()
+        {
+            return (IEnumerator<Log?>)lineArr.GetEnumerator();
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return GetEnumerator();
+        }
+        #endregion
+
+        #region SetLine
+        public bool SetLine(int y, Line? line)
+        {
+            if (y < 0 || y >= lineArr.Length)
+                return false;
+            int mappedY = Translate(y);
+            lineArr[mappedY] = line;
+            RenderLine(mappedY);
+            return true;
+        }
+
+        public bool SetLine(int y, string message, ColorSet? colorSet = null)
+        {
+            return SetLine(y, new Line(message, colorSet));
+        }
+
+        public bool SetLine(int y, string message, Color fgColor, Color? bgColor = null)
+        {
+            return SetLine(y, new Line(message, fgColor, bgColor));
+        }
+
+        public bool RemoveLine(int y)
+        {
+            return SetLine(y, null);
+        }
+        #endregion
+
+        #region Render
+        private void RenderLine(int mappedY)
+        {
+            Line? rawLine = lineArr[mappedY];
+            if (rawLine is not null)
+                MapLine(mappedY, rawLine);
+            else
+                ClearAt(mappedY);
+        }
+
+        private void FullRender()
+        {
+            for (int y = 0; y < Height; ++y)
+                RenderLine(Translate(y));
+        }
+
+        private void MapLine(int y, Line line)
+        {
+            if (fitToLength)
+                _dpMap.MapString(y, StringUtils.PostFitToLength(line.Message, Width * Pixel.PIXELWIDTH), line.Colors);
+            else
+            {
+                ClearAt(y);
+                _dpMap.MapString(y, line.Message, line.Colors);
+            }
+        }
+
+        private void ClearAt(int y)
+        {
+            _dpMap.FillHorizontal(new Pixel(BgColor), y);
+        }
+        #endregion
+
+        #region Clear
         public void Clear()
         {
-            _dpMap.BgColorFill(BgColor);
-            lineArray = new Line[Dimensions.Y];
-            updateQueue.Clear();
+            _dpMap.Fill(new Pixel(BgColor));
+            Array.Clear(lineArr);
         }
+        #endregion
 
+        #region Resize
         public void Resize(int width, int height)
         {
             _dpMap.CleanResize(width, height);
-            lineArray = new Line[height];
-            updateQueue.Clear();
+            _dpMap.Fill(new Pixel(BgColor));
+            lineArr = new Line[height];
         }
 
         public void Resize(Vector2Int dimensions)
         {
             Resize(dimensions.X, dimensions.Y);
         }
+        #endregion
 
-        protected override void Render()
+        #region Translate
+        private int Translate(int y)
         {
-            foreach (int y in updateQueue)
-            {
-                _dpMap.FillHorizontal(new Pixel(BgColor), y);
-
-                var line = lineArray[y];
-
-                string data = FitLinesToLength ? StringUtils.PostFitToLength(line.Data, Width * Pixel.PIXELWIDTH) : line.Data;
-
-                if (Pixel.GetPixelLength(data) > Width)
-                    throw new InvalidOperationException("Text data exceeds dimensions.");
-
-                _dpMap.MapString(new Vector2Int(0, y), data, line.FgColor, line.BgColor);
-            }
-
-            updateQueue.Clear();
+            return StackMode == StackType.BottomUp ? y : Height - y - 1;
         }
-
-        private int TranslateY(int y)
-        {
-            return Mode switch
-            {
-                StackType.BottomUp => y,
-                StackType.TopDown => Dimensions.Y - 1 - y,
-                _ => throw new NotImplementedException("Unknown mode.")
-            };
-        }
+        #endregion
     }
 }

@@ -1,21 +1,27 @@
 ﻿namespace SCE
 {
-    public readonly struct Line
+    public class Line
     {
-        private const Color DEFAULT_FG_COLOR = Color.White;
-        private const Color DEFAULT_BG_COLOR = Color.Transparent;
+        protected static ColorSet DEFAULT_COLORS { get; } = new(Color.Gray, Color.Transparent);
 
-        public Line(string data, Color fgColor = DEFAULT_FG_COLOR, Color bgColor = DEFAULT_BG_COLOR)
+        public Line(string message, ColorSet? colors = null)
         {
-            Data = data;
-            FgColor = fgColor;
-            BgColor = bgColor;
+            Message = message;
+            Colors = colors ?? DEFAULT_COLORS;
         }
 
-        public string Data { get; }
+        public Line(string message, Color fgColor, Color? bgColor = null)
+            : this(message, new ColorSet(fgColor, bgColor ?? DEFAULT_COLORS.BgColor))
+        {
+        }
 
-        public Color FgColor { get; }
+        public string Message { get; set; }
 
-        public Color BgColor { get; }
+        public ColorSet Colors { get; set; }
+
+        public override string ToString()
+        {
+            return Message;
+        }
     }
 }

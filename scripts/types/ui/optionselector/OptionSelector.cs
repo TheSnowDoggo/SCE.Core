@@ -29,7 +29,6 @@
             : base(name)
         {
             lineRenderer = bgColor is Color color ? new(width, height, color) : new(width, height);
-            lineRenderer.FitLinesToLength = true;
         }
 
         public OptionSelector(string name, Vector2Int dimensions, Color? bgColor = null)
@@ -239,11 +238,11 @@
                 if (i >= _optionList.Count)
                     line = new("", Color.White, BgColor);
                 else if (i == Selected)
-                    line = new(_optionList[i].Name, SelectedColorSet.FgColor, SelectedColorSet.BgColor);
+                    line = new(_optionList[i].Name, SelectedColorSet);
                 else
-                    line = new(_optionList[i].Name, UnselectedColorSet.FgColor, UnselectedColorSet.BgColor);
+                    line = new(_optionList[i].Name, UnselectedColorSet);
 
-                lineRenderer[i] = line;
+                lineRenderer.SetLine(i, line);
             }
 
             _updateQueue.Clear();

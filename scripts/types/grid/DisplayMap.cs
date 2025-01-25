@@ -95,6 +95,21 @@
                 this[mappedPos] = Pixel.MergeLayers(newPixel, this[mappedPos]);
             }
         }
+
+        public void MapString(Vector2Int position, string line, ColorSet colorSet)
+        {
+            MapString(position, line, colorSet.FgColor, colorSet.BgColor);
+        }
+
+        public void MapString(int y, string line, Color fgColor, Color bgColor)
+        {
+            MapString(new Vector2Int(0, y), line, fgColor, bgColor);
+        }
+
+        public void MapString(int y, string line, ColorSet colorSet)
+        {
+            MapString(new Vector2Int(0, y), line, colorSet);
+        }
         #endregion
 
         #region ElementFill

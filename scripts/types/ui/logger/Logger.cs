@@ -14,16 +14,20 @@
 
         private readonly List<Log> _logs = new();
 
+        private Color bgColor;
+
         private StackType stackMode = StackType.TopDown;
 
         private DisplayType displayMode = DisplayType.Full;
+
+        private bool fitLinesToLength = false;
 
         private int viewY = 0;
 
         public Logger(string name, int width, int height, Color? bgColor = null)
             : base(name, width, height, bgColor)
         {
-            BgColor = bgColor ?? DEFAULT_BGCOLOR;
+            this.bgColor = bgColor ?? DEFAULT_BGCOLOR;
         }
 
         public Logger(string name, Vector2Int dimensions, Color? bgColor = null)
@@ -41,18 +45,42 @@
         {
         }
 
-        public int Logs { get => _logs.Count; }
+        #region Logs
+        public IList<Log> ILogs { get => _logs.AsReadOnly(); }
 
-        public Color BgColor { get; set; }
+        public int Count { get => _logs.Count; }
+        #endregion
+
+        #region Indexers
+        public Log this[int index]
+        {
+            get => _logs[index];
+            set
+            {
+                _logs[index] = value;
+                RenderAll();
+            }
+        }
+        #endregion
 
         #region Settings
+        public Color BgColor
+        {
+            get => bgColor;
+            set
+            {
+                bgColor = value;
+                RenderAll();
+            }
+        }
+
         public StackType StackMode
         {
             get => stackMode;
             set
             {
                 stackMode = value;
-                RenderLogs();
+                RenderAll();
             }
         }
 
@@ -62,7 +90,17 @@
             set
             {
                 displayMode = value;
-                RenderLogs();
+                RenderAll();
+            }
+        }
+
+        public bool FitToLength
+        {
+            get => fitLinesToLength;
+            set
+            {
+                fitLinesToLength = value;
+                RenderAll();
             }
         }
 
@@ -79,7 +117,7 @@
             if (!AllowNegativeY && y < 0)
                 return;
             viewY = y;
-            RenderLogs();
+            RenderAll();
         }
 
         public void RelativeMove(int y)
@@ -94,17 +132,17 @@
         #endregion
 
         #region Log
-        public void Log(IEnumerable<Log> collection)
+        public void LogRange(IEnumerable<Log> collection)
         {
             foreach (var log in collection)
-                RawLog(log);
-            RenderLogs();
+                LogRaw(log);
+            RenderAll();
         }
 
         public void Log(Log log)
         {
-            RawLog(log);
-            RenderLogs();
+            LogRaw(log);
+            RenderAll();
         }
 
         public void Log(string message, ColorSet? colorSet = null)
@@ -112,67 +150,89 @@
             Log(new Log(message, colorSet));
         }
 
-        private void RawLog(Log log)
+        public void Log(string message, Color fgColor, Color bgColor)
         {
-            _logs.Add(log);
-            if (FollowNewest && (AlwaysFollow || Logs - viewY > Height))
-                viewY++;
+            Log(new Log(message, new ColorSet(fgColor, bgColor)));
         }
 
+        private void LogRaw(Log log)
+        {
+            _logs.Add(log);
+            if (FollowNewest && (AlwaysFollow || Count - viewY > Height))
+                viewY++;
+        }
+        #endregion
+
+        #region Delete
         public bool Delete(Log log)
         {
             if (!_logs.Remove(log))
                 return false;
-            RenderLogs();
+            RenderAll();
             return true;
         }
 
-        public void DeleteAt(int index)
+        public bool DeleteAt(int index)
         {
+            if (index < 0 || index >= _logs.Count)
+                return false;
             _logs.RemoveAt(index);
-            RenderLogs();
+            RenderAll();
+            return true;
+        }
+
+        public bool DeleteFirst()
+        {
+            return DeleteAt(0);
+        }
+
+        public bool DeleteLast()
+        {
+            return DeleteAt(_logs.Count - 1);
         }
 
         public void DeleteRange(int index, int count)
         {
             _logs.RemoveRange(index, count);
-            RenderLogs();
+            RenderAll();
         }
-
-        public void DeleteLast()
-        {
-            if (_logs.Count > 0)
-                _logs.RemoveAt(_logs.Count - 1);
-            RenderLogs();
-        }
+        
         #endregion
 
         #region Render
-        private void RenderLogs()
+        private void RenderLogAt(int gridY)
+        {
+            int mappedY = GridTranslate(gridY + ViewTranslate(viewY));
+            if (mappedY < 0 || mappedY >= _logs.Count)
+                ClearAt(gridY);
+            else
+            {
+                if (!FitToLength)
+                    ClearAt(gridY);
+                MapLog(gridY, _logs[mappedY]);
+            }
+        }
+
+        private void RenderAll()
         {
             for (int gridY = 0; gridY < Height; ++gridY)
-            {
-                int mappedY = GridTranslate(gridY + ViewTranslate(viewY));
-                if (mappedY >= 0 && mappedY < _logs.Count)
-                    MapLog(gridY, _logs[mappedY]);
-                else
-                    ClearAt(gridY);
-            }
+                RenderLogAt(gridY);
         }
 
         private void MapLog(int y, Log log)
         {
-            _dpMap.MapString(new Vector2Int(0, y), GetLogString(log), log.Colors.FgColor, log.Colors.BgColor);
+            _dpMap.MapString(y, GetLogString(log), log.Colors);
         }
 
         private string GetLogString(Log log)
         {
-            return DisplayMode switch
+            string str = DisplayMode switch
             {
                 DisplayType.Full => log.ToString(),
                 DisplayType.MessageOnly => log.Message,
                 _ => throw new NotImplementedException()
             };
+            return FitToLength ? StringUtils.PostFitToLength(str, Width * Pixel.PIXELWIDTH) : str; 
         }
 
         private void ClearAt(int y)
@@ -185,7 +245,22 @@
         public void Clear()
         {
             _logs.Clear();
-            _dpMap.Clear();
+            _dpMap.Fill(new Pixel(BgColor));
+            viewY = 0;
+        }
+        #endregion
+
+        #region Resize
+        public void Resize(int width, int height)
+        {
+            _dpMap.CleanResize(width, height);
+            _dpMap.Fill(new Pixel(BgColor));
+            RenderAll();
+        }
+
+        public void Resize(Vector2Int dimensions)
+        {
+            Resize(dimensions.X, dimensions.Y);
         }
         #endregion
 
