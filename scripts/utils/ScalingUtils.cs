@@ -17,7 +17,7 @@
 
                 T value = startGrid[pos];
 
-                newGrid.FillArea(value, area);
+                newGrid.Data.FillArea(value, area);
             }
             startGrid.GenericCycle(CycleAction);
 

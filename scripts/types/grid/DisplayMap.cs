@@ -5,12 +5,22 @@
     /// </summary>
     public class DisplayMap : Grid2D<Pixel>, IEquatable<DisplayMap>
     {
+        #region VGrid2DActions
+        private static Func<Pixel, string, Pixel> ElementFFunc { get; } = (old, val) => new(val, old.FgColor, old.BgColor);
+        private static Func<Pixel, SCEColor, Pixel> FgColorFFunc { get; } = (old, val) => new(old.Element, val, old.BgColor);
+        private static Func<Pixel, SCEColor, Pixel> BgColorFFunc { get; } = (old, val) => new(old.Element, old.FgColor, val);
+        #endregion
+
         #region Constructors
         public DisplayMap(int width, int height, SCEColor? bgColor = null)
             : base(width, height)
         {
+            Elements = new(this, ElementFFunc);
+            FgColors = new(this, FgColorFFunc);
+            BgColors = new(this, BgColorFFunc);
+
             if (bgColor is SCEColor color)
-                BgColorFill(color);
+                BgColors.Fill(color);
         }
 
         public DisplayMap(Vector2Int dimensions, SCEColor? bgColor = null)
@@ -21,7 +31,18 @@
         public DisplayMap(Grid2D<Pixel> pixelGrid)
             : base(pixelGrid)
         {
+            Elements = new(this, ElementFFunc);
+            FgColors = new(this, FgColorFFunc);
+            BgColors = new(this, BgColorFFunc);
         }
+        #endregion
+
+        #region VGrid2D
+        public VirtualGrid2D<Pixel, string> Elements { get; }
+
+        public VirtualGrid2D<Pixel, SCEColor> FgColors { get; }
+
+        public VirtualGrid2D<Pixel, SCEColor> BgColors { get; }
         #endregion
 
         #region Clone
@@ -90,62 +111,6 @@
         public void MapString(int y, string line, ColorSet colorSet)
         {
             MapString(new Vector2Int(0, y), line, colorSet);
-        }
-        #endregion
-
-        #region ElementFill
-        public void ElementFillArea(string element, Area2DInt area, bool ignoreOverflow = false)
-        {
-            GenericCycleArea((pos) => this[pos] = new(element, this[pos].FgColor, this[pos].BgColor), area, ignoreOverflow);
-        }
-
-        public void ElementFill(string element)
-        {
-            ElementFillArea(element, GridArea);
-        }
-        #endregion
-
-        #region FgColorFill
-        public void FgColorFillArea(SCEColor fgColor, Area2DInt area, bool ignoreOverflow = false)
-        {
-            GenericCycleArea((pos) => this[pos] = new(this[pos].Element, fgColor, this[pos].BgColor), area, ignoreOverflow);
-        }
-
-        public void FgColorFill(SCEColor fgColor)
-        {
-            FgColorFillArea(fgColor, GridArea);
-        }
-        #endregion
-
-        #region BgColorFill
-        public void BgColorFillArea(SCEColor bgColor, Area2DInt area, bool ignoreOverflow = false)
-        {
-            GenericCycleArea((pos) => this[pos] = new(this[pos].Element, this[pos].FgColor, bgColor), area, ignoreOverflow);
-        }
-
-        public void BgColorFill(SCEColor bgColor)
-        {
-            BgColorFillArea(bgColor, GridArea);
-        }
-
-        public void BgColorFillHorizontalArea(SCEColor bgColor, int y, Vector2Int range)
-        {
-            BgColorFillArea(bgColor, new Area2DInt(new Vector2Int(range.X, y), new Vector2Int(range.Y, y + 1)));
-        }
-
-        public void BgColorFillVerticalArea(SCEColor bgColor, int x, Vector2Int range)
-        {
-            BgColorFillArea(bgColor, new Area2DInt(new(x, range.X), new(x + 1, range.Y)));
-        }
-
-        public void BgColorFillHorizontal(SCEColor bgColor, int y)
-        {
-            BgColorFillHorizontalArea(bgColor, y, new(0, Width));
-        }
-
-        public void BgColorFillVertical(SCEColor bgColor, int x)
-        {
-            BgColorFillVerticalArea(bgColor, x, new(0, Height));
         }
         #endregion
 

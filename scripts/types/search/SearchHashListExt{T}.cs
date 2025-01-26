@@ -24,10 +24,10 @@
             _list = new();
         }
 
-        public override void Add(T t)
+        public override bool Add(T t)
         {
             _list.Add(t);
-            base.Add(t);
+            return base.Add(t);
         }
 
         public override bool Remove(T t)

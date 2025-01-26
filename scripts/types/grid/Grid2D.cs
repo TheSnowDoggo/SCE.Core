@@ -18,6 +18,7 @@
             if (width < 0 || height < 0)
                 throw new InvalidDimensionsException();
             data = new T[width, height];
+            Data = new(this);
             UpdateDimensions();
         }
 
@@ -29,6 +30,7 @@
         private Grid2D(T[,] data)
         {
             this.data = data;
+            Data = new(this);
             UpdateDimensions();
         }
 
@@ -36,6 +38,10 @@
             : this(grid.data)
         {
         }
+        #endregion
+
+        #region VGrid
+        public VirtualGrid2D<T> Data { get; }
         #endregion
 
         #region Actions
@@ -191,7 +197,7 @@
             GenericCycle(ToCycleFunc(action));
         }
 
-        private Func<Vector2Int, bool> ToCycleFunc(Action<Vector2Int> action)
+        private static Func<Vector2Int, bool> ToCycleFunc(Action<Vector2Int> action)
         {
             return (pos) =>
             {
@@ -216,38 +222,6 @@
         public bool Contains(T item)
         {
             return Contains(item, out _);
-        }
-        #endregion
-
-        #region Fill
-        public void FillArea(T item, Area2DInt area, bool tryTrimOnOverflow = DEFAULT_TRIM)
-        {
-            GenericCycleArea((Vector2Int pos) => this[pos] = item, area, tryTrimOnOverflow);
-        }
-
-        public void Fill(T item)
-        {
-            GenericCycle((Vector2Int pos) => this[pos] = item);
-        }
-
-        public void FillHorizontalArea(T item, int y, Vector2Int range, bool tryTrimOnOverflow = DEFAULT_TRIM)
-        {
-            FillArea(item, new Area2DInt(new Vector2Int(range.X, y), new Vector2Int(range.Y, y + 1)), tryTrimOnOverflow);
-        }
-
-        public void FillVerticalArea(T item, int x, Vector2Int range, bool tryTrimOnOverflow = DEFAULT_TRIM)
-        {
-            FillArea(item, new Area2DInt(new Vector2Int(x, range.X), new Vector2Int(x + 1, range.Y)), tryTrimOnOverflow);
-        }
-
-        public void FillHorizontal(T item, int y)
-        {
-            FillHorizontalArea(item, y, new Vector2Int(0, Width));
-        }
-
-        public void FillVertical(T item, int x)
-        {
-            FillVerticalArea(item, x, new Vector2Int(0, Height));
         }
         #endregion
 
@@ -312,31 +286,7 @@
         }
         #endregion
 
-        #region DataTransformation
-        public virtual void FlipDataVertical()
-        {
-            for (int y = 0; y < Height / 2; ++y)
-            {
-                for (int x = 0; x < Width; ++x)
-                {
-                    int yFlip = Height - y - 1;
-                    (this[x, y], this[x, yFlip]) = (this[x, yFlip], this[x, y]);
-                }
-            }
-        }
-
-        public virtual void FlipDataHorizontal()
-        {
-            for (int x = 0; x < Width / 2; ++x)
-            {
-                for (int y = 0; y < Height; ++y)
-                {
-                    int xFlip = Width - x - 1;
-                    (this[x, y], this[xFlip, y]) = (this[xFlip, y], this[x, y]);
-                }
-            }
-        }
-
+        #region Rotation
         public virtual void RotateData90Clockwise()
         {
             RotateData90(1);

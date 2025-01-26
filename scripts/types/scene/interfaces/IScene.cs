@@ -1,10 +1,7 @@
 ﻿namespace SCE
 {
-    public interface IScene : ISearcheable
+    public interface IScene : IUpdate
     {
-        bool IsActive { get; set; }
-
         void Start();
-        void Update();
     }
 }

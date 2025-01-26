@@ -24,10 +24,10 @@
             _typeDict = new();
         }
 
-        public override void Add(T t)
+        public override bool Add(T t)
         {
-            base.Add(t);
             AddType(t.GetType());
+            return base.Add(t);
         }
 
         public override bool Remove(T t)
