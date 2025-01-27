@@ -81,7 +81,7 @@
             };
         }
 
-        private enum RotationType : byte
+        private enum RotationType
         {
             /// <summary>
             /// Top-right position relative to the rotation axis.

@@ -120,9 +120,9 @@
         {
             var newBgColor = ColorUtils.GetStackColor(topPixel.BgColor, bottomPixel.BgColor);
 
-            var newFgColor = topPixel.Element == EmptyElement ? bottomPixel.FgColor : ColorUtils.GetStackColor(topPixel.FgColor, bottomPixel.FgColor);
+            var newFgColor = ColorUtils.GetStackColor(topPixel.FgColor, bottomPixel.FgColor);
 
-            string newElement = topPixel.BgColor != SCEColor.Transparent ? topPixel.Element : StringUtils.MergeString(topPixel.Element ?? EmptyElement, bottomPixel.Element ?? EmptyElement);
+            string newElement = topPixel.BgColor != SCEColor.Transparent ? topPixel.Element : StringUtils.MergeString(topPixel.Element, bottomPixel.Element);
 
             return new(newElement, newFgColor, newBgColor);
         }
