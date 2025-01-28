@@ -1,10 +1,8 @@
 {
   "ExpandedNodes": [
     "",
-    "\\scripts",
-    "\\scripts\\types",
-    "\\scripts\\types\\search"
+    "\\scripts"
   ],
-  "SelectedNode": "\\scripts\\types\\search\\SearchHash{T}.cs",
+  "SelectedNode": "\\scripts\\utils",
   "PreviewInSolutionExplorer": false
 }

@@ -6,7 +6,7 @@
     public class DisplayMap : Grid2D<Pixel>, IEquatable<DisplayMap>
     {
         #region VGrid2DActions
-        private static Func<Pixel, string, Pixel> ElementFFunc { get; } = (old, val) => new(val, old.FgColor, old.BgColor);
+        private static Func<Pixel, char, Pixel> ElementFFunc { get; } = (old, val) => new(val, old.FgColor, old.BgColor);
         private static Func<Pixel, SCEColor, Pixel> FgColorFFunc { get; } = (old, val) => new(old.Element, val, old.BgColor);
         private static Func<Pixel, SCEColor, Pixel> BgColorFFunc { get; } = (old, val) => new(old.Element, old.FgColor, val);
         #endregion
@@ -38,7 +38,7 @@
         #endregion
 
         #region VGrid2D
-        public VirtualGrid2D<Pixel, string> Elements { get; }
+        public VirtualGrid2D<Pixel, char> Elements { get; }
 
         public VirtualGrid2D<Pixel, SCEColor> FgColors { get; }
 
@@ -70,31 +70,18 @@
         #endregion
 
         #region MapString
-        public void MapString(Vector2Int position, string line, SCEColor fgColor, SCEColor bgColor)
+        public void MapString(Vector2Int pos, string line, SCEColor fgColor, SCEColor bgColor)
         {
-            if (!PositionValid(position))
-                throw new InvalidPositionException($"Position {position} is not valid.");
+            if (!PositionValid(pos))
+                throw new InvalidPositionException($"Position {pos} is not valid.");
 
-            line = StringUtils.PadAfterToEven(line);
-
-            int pixelLength = Pixel.GetPixelLength(line.Length);
-            int endX = position.X + pixelLength;
-
-            if (endX > Dimensions.X)
+            if (pos.X + line.Length > Dimensions.X)
                 throw new LineOverflowException();
 
-            for (int x = 0; x < pixelLength; ++x)
+            for (int i = 0; i < line.Length; ++i)
             {
-                var chrArr = new char[Pixel.PIXELWIDTH];
-
-                for (int i = 0; i < Pixel.PIXELWIDTH; i++)
-                    chrArr[i] = line[(x * Pixel.PIXELWIDTH) + i];
-
-                Vector2Int mappedPos = position + new Vector2Int(x, 0);
-
-                var newPixel = new Pixel(new(chrArr), fgColor, bgColor);
-
-                this[mappedPos] = Pixel.MergeLayers(newPixel, this[mappedPos]);
+                int mappedX = i + pos.X;
+                this[mappedX, pos.Y] = Pixel.Merge(new Pixel(line[i], fgColor, bgColor), this[mappedX, pos.Y]);
             }
         }
 
@@ -128,7 +115,7 @@
             {
                 Vector2Int mappedPos = position + validSetOffset;
                 if (!tryTrimOnResize || PositionValid(mappedPos))
-                    this[mappedPos] = Pixel.MergeLayers(dataGrid[position], this[mappedPos]);
+                    this[mappedPos] = Pixel.Merge(dataGrid[position], this[mappedPos]);
             }
 
             CustomMapToArea(CycleAction, dataGrid, dataGridArea, validSetOffset, tryTrimOnResize);
@@ -147,7 +134,7 @@
             {
                 Vector2Int mappedPos = pos + validGetOffset;
                 if (!tryTrimOnResize || dataGrid.PositionValid(mappedPos))
-                    this[pos] = Pixel.MergeLayers(dataGrid[mappedPos], this[pos]);
+                    this[pos] = Pixel.Merge(dataGrid[mappedPos], this[pos]);
             }
 
             CustomMapAreaFrom(CycleAction, dataGrid, thisArea, validGetOffset, tryTrimOnResize);

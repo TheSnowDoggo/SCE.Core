@@ -22,9 +22,9 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="scripts\types\searchhash\**" />
-    <EmbeddedResource Remove="scripts\types\searchhash\**" />
-    <None Remove="scripts\types\searchhash\**" />
+    <Compile Remove="scripts\classes\searchhash\**" />
+    <EmbeddedResource Remove="scripts\classes\searchhash\**" />
+    <None Remove="scripts\classes\searchhash\**" />
   </ItemGroup>
 
   <ItemGroup>
