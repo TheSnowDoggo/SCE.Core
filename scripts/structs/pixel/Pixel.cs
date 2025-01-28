@@ -64,8 +64,8 @@
         public static Pixel Merge(Pixel topPixel, Pixel bottomPixel)
         {
             return new(topPixel.Element != '\0' ? topPixel.Element : bottomPixel.Element, 
-                ColorUtils.GetStackColor(topPixel.BgColor, bottomPixel.BgColor), 
-                ColorUtils.GetStackColor(topPixel.FgColor, bottomPixel.FgColor));
+                ColorUtils.GetStackColor(topPixel.FgColor, bottomPixel.FgColor), 
+                ColorUtils.GetStackColor(topPixel.BgColor, bottomPixel.BgColor));
         }
     }
 }

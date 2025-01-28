@@ -13,7 +13,7 @@
             {
                 Vector2Int start = pos * scaleFactor;
 
-                Area2DInt area = new(start, start + scaleFactor);
+                Rect2D area = new(start, start + scaleFactor);
 
                 T value = startGrid[pos];
 

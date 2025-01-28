@@ -107,7 +107,7 @@
             MapToArea(dataGrid, dataGrid.GridArea, positionOffset, tryTrimOnResize);
         }
 
-        public override void MapToArea(Grid2D<Pixel> dataGrid, Area2DInt dataGridArea, Vector2Int? positionOffset = null, bool tryTrimOnResize = false)
+        public override void MapToArea(Grid2D<Pixel> dataGrid, Rect2D dataGridArea, Vector2Int? positionOffset = null, bool tryTrimOnResize = false)
         {
             Vector2Int validSetOffset = positionOffset ?? Vector2Int.Zero;
 
@@ -126,7 +126,7 @@
             MapAreaFrom(dataGrid, GridArea, positionOffset, tryTrimOnResize);
         }
 
-        public override void MapAreaFrom(Grid2D<Pixel> dataGrid, Area2DInt thisArea, Vector2Int? positionOffset = null, bool tryTrimOnResize = false)
+        public override void MapAreaFrom(Grid2D<Pixel> dataGrid, Rect2D thisArea, Vector2Int? positionOffset = null, bool tryTrimOnResize = false)
         {
             Vector2Int validGetOffset = positionOffset ?? Vector2Int.Zero;
 

@@ -57,7 +57,7 @@
 
         public Vector2Int Dimensions { get; private set; }
 
-        public Area2DInt GridArea { get; private set; }
+        public Rect2D GridArea { get; private set; }
 
         public int Size { get => Width * Height; }
         #endregion
@@ -161,9 +161,9 @@
         #endregion
 
         #region Cycle
-        public void GenericCycleArea(Func<Vector2Int, bool> func, Area2DInt area, bool tryTrimOnOverflow = DEFAULT_TRIM)
+        public void GenericCycleArea(Func<Vector2Int, bool> func, Rect2D area, bool tryTrimOnOverflow = DEFAULT_TRIM)
         {
-            if (!Area2DInt.Overlaps(GridArea, area))
+            if (!Rect2D.Overlaps(GridArea, area))
                 throw new InvalidAreaException();
             if (!tryTrimOnOverflow && !GridArea.Contains(area))
                 throw new AreaOutOfBoundsException();
@@ -182,7 +182,7 @@
             }
         }
 
-        public void GenericCycleArea(Action<Vector2Int> action, Area2DInt area, bool tryTrimOnOverflow = DEFAULT_TRIM)
+        public void GenericCycleArea(Action<Vector2Int> action, Rect2D area, bool tryTrimOnOverflow = DEFAULT_TRIM)
         {
             GenericCycleArea(ToCycleFunc(action), area, tryTrimOnOverflow);
         }
@@ -226,9 +226,9 @@
         #endregion
 
         #region Mapping
-        public void CustomMapToArea(Action<Vector2Int> action, Grid2D<T> dataGrid, Area2DInt dataGridArea, Vector2Int positionOffset, bool tryTrimOnOverflow = DEFAULT_TRIM)
+        public void CustomMapToArea(Action<Vector2Int> action, Grid2D<T> dataGrid, Rect2D dataGridArea, Vector2Int positionOffset, bool tryTrimOnOverflow = DEFAULT_TRIM)
         {
-            if (!Area2DInt.Overlaps(dataGrid.GridArea, dataGridArea))
+            if (!Rect2D.Overlaps(dataGrid.GridArea, dataGridArea))
                 throw new InvalidAreaException("Given get area doesn't overlap the get grid.");
 
             if (!tryTrimOnOverflow && !dataGrid.GridArea.Contains(dataGridArea))
@@ -236,15 +236,15 @@
 
             var offsetArea = dataGridArea + positionOffset;
 
-            if (!Area2DInt.Overlaps(GridArea, offsetArea))
+            if (!Rect2D.Overlaps(GridArea, offsetArea))
                 throw new AreaOutOfBoundsException("Offset area doesn't overlap this grid.");
 
-            dataGridArea = GridArea.TrimArea(offsetArea, out bool hasFixed) - positionOffset;
+            dataGridArea = GridArea.TrimArea(offsetArea) - positionOffset;
 
             dataGrid.GenericCycleArea(action, dataGridArea, tryTrimOnOverflow);
         }
 
-        public virtual void MapToArea(Grid2D<T> dataGrid, Area2DInt dataGridArea, Vector2Int? positionOffset = null, bool tryTrimOnOverflow = DEFAULT_TRIM)
+        public virtual void MapToArea(Grid2D<T> dataGrid, Rect2D dataGridArea, Vector2Int? positionOffset = null, bool tryTrimOnOverflow = DEFAULT_TRIM)
         {
             var validThisOffset = positionOffset ?? Vector2Int.Zero;
 
@@ -256,24 +256,24 @@
             MapToArea(dataGrid, dataGrid.GridArea, positionOffset, tryTrimOnOverflow);
         }
 
-        public void CustomMapAreaFrom(Action<Vector2Int> action, Grid2D<T> dataGrid, Area2DInt thisArea, Vector2Int positionOffset, bool tryTrimOnOverflow = DEFAULT_TRIM)
+        public void CustomMapAreaFrom(Action<Vector2Int> action, Grid2D<T> dataGrid, Rect2D thisArea, Vector2Int positionOffset, bool tryTrimOnOverflow = DEFAULT_TRIM)
         {
-            if (!Area2DInt.Overlaps(GridArea, thisArea))
+            if (!Rect2D.Overlaps(GridArea, thisArea))
                 throw new InvalidAreaException("Given set area doesn't overlap with this grid.");
             if (!tryTrimOnOverflow && !GridArea.Contains(thisArea))
                 throw new AreaOutOfBoundsException("Given set area is outside of the bounds of this grid.");
 
             var alignedGetArea = thisArea + positionOffset;
 
-            if (!Area2DInt.Overlaps(dataGrid.GridArea, alignedGetArea))
+            if (!Rect2D.Overlaps(dataGrid.GridArea, alignedGetArea))
                 throw new InvalidAreaException("Offset area doesn't overlap with the get grid.");
 
-            thisArea = dataGrid.GridArea.TrimArea(alignedGetArea, out bool hasFixed) - positionOffset;
+            thisArea = dataGrid.GridArea.TrimArea(alignedGetArea) - positionOffset;
 
             GenericCycleArea(action, thisArea, tryTrimOnOverflow);
         }
 
-        public virtual void MapAreaFrom(Grid2D<T> dataGrid, Area2DInt thisArea, Vector2Int? positionOffset = null, bool tryTrimOnOverflow = DEFAULT_TRIM)
+        public virtual void MapAreaFrom(Grid2D<T> dataGrid, Rect2D thisArea, Vector2Int? positionOffset = null, bool tryTrimOnOverflow = DEFAULT_TRIM)
         {
             var validGetOffset = positionOffset ?? Vector2Int.Zero;
 
@@ -304,7 +304,7 @@
 
             var newData = new T[Width, Height];
 
-            Vector2 rotationAxis = Dimensions.ToVector2().Midpoint;
+            Vector2 rotationAxis = Dimensions.ToVector2().Midpoint();
 
             void CycleAction(Vector2Int position)
             {
@@ -312,7 +312,7 @@
 
                 Vector2 rotatedOffsetPosition = RotationUtils.GetRotatedOffsetPosition(position, direction, rotationAxis);
 
-                Vector2Int newPixelPos = (rotatedOffsetPosition + rotationAxis.Inverse).ToVector2Int();
+                Vector2Int newPixelPos = (rotatedOffsetPosition + rotationAxis.Inverse()).ToVector2Int();
 
                 newData[newPixelPos.X, newPixelPos.Y] = value;
             }
@@ -362,7 +362,7 @@
         private void UpdateDimensions()
         {
             Dimensions = new(Width, Height);
-            GridArea = new(Vector2Int.Zero, Dimensions);
+            GridArea = new(Dimensions);
         }
         #endregion
 
