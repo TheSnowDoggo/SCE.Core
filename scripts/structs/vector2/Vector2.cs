@@ -7,40 +7,32 @@
     {
         private const char VectorStringSplitChar = ',';
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="Vector2"/> struct.
-        /// </summary>
-        /// <param name="x">The x component of the vector.</param>
-        /// <param name="y">The y component of the vector.</param>
+        #region Dimensions
+
+        public float X;
+        public float Y;
+
+        #endregion
+
+        #region Constructors
+
         public Vector2(float x, float y)
         {
             X = x;
             Y = y;
         }
 
-        /// <summary>
-        /// Gets a shorthand for writing Vector2(0.0, 0.0).
-        /// </summary>
+        #endregion
+
+        #region Shorthands
         public static Vector2 Zero { get; } = new(0.0f, 0.0f);
 
-        /// <summary>
-        /// Gets a shorthand for writing Vector2(0.0, 1.0).
-        /// </summary>
         public static Vector2 Up { get; } = new(0.0f, 1.0f);
 
-        /// <summary>
-        /// Gets a shorthand for writing Vector2(0.0, -1.0).
-        /// </summary>
         public static Vector2 Down { get; } = new(0.0f, -1.0f);
 
-        /// <summary>
-        /// Gets a shorthand for writing Vector2(1.0, 0.0).
-        /// </summary>
         public static Vector2 Right { get; } = new(1.0f, 0.0f);
 
-        /// <summary>
-        /// Gets a shorthand for writing Vector2(-1.0, 0.0).
-        /// </summary>
         public static Vector2 Left { get; } = new(-1.0f, 0.0f);
 
         public static Vector2 UpLeft { get; } = new(-1.0f, 1.0f);
@@ -50,65 +42,81 @@
         public static Vector2 DownLeft { get; } = new(-1.0f, -1.0f);
 
         public static Vector2 DownRight { get; } = new(1.0f, -1.0f);
+        #endregion
 
-        /// <summary>
-        /// Gets the X component of this instance.
-        /// </summary>
-        public float X { get; set; }
+        #region Properties
 
-        /// <summary>
-        /// Gets the Y component of this instance.
-        /// </summary>
-        public float Y { get; set; }
+        public Vector2 Inverse() => new(Y, X);
 
-        /// <summary>
-        /// Gets the length of the vector.
-        /// </summary>
-        public float Magnitude { get => MathF.Sqrt((X * X) + (Y * Y)); }
+        public float ScalarProduct() => X * Y;
 
-        /// <summary>
-        /// Gets the inverse vector with swapped x and y components based on the current vector.
-        /// </summary>
-        public Vector2 Inverse { get => new(Y, X); }
+        public Vector2 Midpoint() => new Vector2(X, Y) / 2.0f;
 
-        /// <summary>
-        /// Gets the scalar (dot) product of the vector based on the current vector.
-        /// </summary>
-        public double ScalarProduct { get => X * Y; }
+        public float Magnitude()
+        {
+            return MathF.Sqrt((X * X) + (Y * Y));
+        }
 
-        /// <summary>
-        /// Gets the zero-based vector midpoint based of the current vector.
-        /// </summary>
-        public Vector2 Midpoint { get => (new Vector2(X, Y) - 1) / 2; }
+        public Vector2 Normalize()
+        {
+            var magnitude = Magnitude();
+            if (magnitude == 0)
+                throw new DivideByZeroException("Magnitude cannot be zero.");
+            return new Vector2(X, Y) / magnitude;
+        }
 
-        // Conversion
-        public static explicit operator Vector2Int(Vector2 v) => v.ToVector2Int();
+        #endregion
 
-        // Equality
+        #region Operators
+
+        #region Conversion
+
+        public static implicit operator Vector2Int(Vector2 v) => v.ToVector2Int();
+
+        #endregion
+
+        #region Equality
+
         public static bool operator ==(Vector2 v1, Vector2 v2) => v1.Equals(v2);
 
         public static bool operator !=(Vector2 v1, Vector2 v2) => !(v1 == v2);
 
+        #endregion
+
+        #region Innequality
+
+        // Greater than
+        public static bool operator >(Vector2 v1, Vector2 v2) => v1.X > v2.X && v1.Y > v2.Y;
+
+        public static bool operator >(Vector2 v1, float num) => v1.X > num && v1.Y > num;
+
+        // Less than
+        public static bool operator <(Vector2 v1, Vector2 v2) => v2 > v1;
+
+        public static bool operator <(Vector2 v1, float num) => v1.X < num && v1.Y < num;
+
         // Greater or equal than
-        public static bool operator >=(Vector2 v1, Vector2 v2) => v1.X >= v2.X && v1.Y >= v2.Y;
+        public static bool operator >=(Vector2 v1, Vector2 v2) => !(v1 < v2);
 
-        public static bool operator >=(Vector2 v1, float num) => v1.X >= num && v1.Y >= num;
-
-        public static bool operator >=(Vector2 v1, int num) => v1 >= (float)num;
+        public static bool operator >=(Vector2 v1, float num) => !(v1 < num);
 
         // Less or equal than
-        public static bool operator <=(Vector2 v1, Vector2 v2) => v1.X <= v2.X && v1.Y <= v2.Y;
+        public static bool operator <=(Vector2 v1, Vector2 v2) => !(v1 > v2);
 
-        public static bool operator <=(Vector2 v1, float num) => v1.X <= num && v1.Y <= num;
+        public static bool operator <=(Vector2 v1, float num) => !(v1 > num);
 
-        public static bool operator <=(Vector2 v1, int num) => v1 <= (float)num;
+        #endregion
+
+        #region Addition
 
         // Addition
         public static Vector2 operator +(Vector2 v1, Vector2 v2) => new(v1.X + v2.X, v1.Y + v2.Y);
 
         public static Vector2 operator +(Vector2 v1, float num) => new(v1.X + num, v1.Y + num);
 
-        public static Vector2 operator +(Vector2 v1, int num) => new(v1.X + num, v1.Y + num);
+        #endregion
+
+        #region Subtraction
 
         // Subtraction
         public static Vector2 operator -(Vector2 v1) => new(-v1.X, -v1.Y);
@@ -117,63 +125,64 @@
 
         public static Vector2 operator -(Vector2 v1, float num) => new(v1.X - num, v1.Y - num);
 
-        public static Vector2 operator -(Vector2 v1, int num) => new(v1.X - num, v1.Y - num);
+        #endregion
+
+        #region Multiplication
 
         // Multiplication
         public static Vector2 operator *(Vector2 v1, Vector2 v2) => new(v1.X * v2.X, v1.Y * v2.Y);
 
         public static Vector2 operator *(Vector2 v1, float num) => new(v1.X * num, v1.Y * num);
 
-        public static Vector2 operator *(Vector2 v1, int num) => new(v1.X * num, v1.Y * num);
+        #endregion
+
+        #region Division
 
         // Division
         public static Vector2 operator /(Vector2 v1, Vector2 v2) => new(v1.X / v2.X, v1.Y / v2.Y);
 
         public static Vector2 operator /(Vector2 v1, float num) => new(v1.X / num, v1.Y / num);
 
-        public static Vector2 operator /(Vector2 v1, int num) => new(v1.X / num, v1.Y / num);
+        #endregion
 
-        // Greater than
-        public static bool operator >(Vector2 v1, Vector2 v2) => v1.X > v2.X && v1.Y > v2.Y;
+        #endregion
 
-        public static bool operator >(Vector2 v1, float num) => v1.X > num && v1.Y > num;
+        #region Equality
 
-        public static bool operator >(Vector2 v1, int num) => v1 > (float)num;
-
-        // Less than
-        public static bool operator <(Vector2 v1, Vector2 v2) => v1.X < v2.X && v1.Y < v2.Y;
-
-        public static bool operator <(Vector2 v1, float num) => v1.X < num && v1.Y < num;
-
-        public static bool operator <(Vector2 v1, int num) => v1 < (float)num;
-
-        /// <summary>
-        /// Indicates whether this vector and the specified vector are equal.
-        /// </summary>
-        /// <param name="other">The vector to compare with this vector.</param>
-        /// <returns><see langword="true"/> if this <paramref name="other"/> and this instance represent the same value; otherwise, <see langword="false"/>.</returns>
         public bool Equals(Vector2 other)
         {
             return other.X == X && other.Y == Y;
         }
 
-        /// <inheritdoc/>
         public override bool Equals(object? obj)
         {
-            return obj != null && Equals((Vector2)obj);
+            return obj is Vector2 vector && Equals(vector);
         }
 
-        /// <inheritdoc/>
         public override int GetHashCode()
         {
             return HashCode.Combine(X, Y);
         }
 
-        /// <inheritdoc/>
-        public override string ToString()
+        #endregion
+
+        #region ToString
+
+        public string ToString(string? format)
         {
-            return $"{X},{Y}";
+            return $"{X.ToString(format)},{Y.ToString(format)}";
         }
+
+        public string ToString(string? format, IFormatProvider? provider)
+        {
+            if (provider is not null)
+                throw new NotImplementedException("Providers not implemented.");
+            return ToString(format);
+        }
+
+        #endregion
+
+        #region OrInnequalities
 
         public static bool OrLess(Vector2 v1, Vector2 v2)
         {
@@ -192,8 +201,12 @@
 
         public static bool OrGreaterEqual(Vector2 v1, Vector2 v2)
         {
-            return v1.X >= v2.X || v1.Y >=  v2.Y;
+            return v1.X >= v2.X || v1.Y >= v2.Y;
         }
+
+        #endregion
+
+        #region ReadVectorString
 
         /// <summary>
         /// Returns the vector representation of the given string vector.
@@ -212,7 +225,6 @@
 
             if (splitIndex == -1)
                 throw new ArgumentException("String vector didn't contain a valid split char");
-
             if (lastIndex != splitIndex)
                 throw new ArgumentException("String vector contained multiple split chars");
 
@@ -222,186 +234,98 @@
 
             if (!float.TryParse(xStr, out float x))
                 throw new ArgumentException("Found x was not valid");
-
             if (!float.TryParse(yStr, out float y))
                 throw new ArgumentException("Found y was not valid");
 
             return new(x, y);
         }
 
-        /// <summary>
-        /// Returns the smallest of the two vectors.
-        /// </summary>
-        /// <param name="v1">The first vector.</param>
-        /// <param name="v2">The second vector.</param>
-        /// <returns>The smallest of the two vectors.</returns>
-        public static Vector2 Min(Vector2 v1, Vector2 v2)
-        {
-            return v1 <= v2 ? v1 : v2;
-        }
+        #endregion
 
-        /// <summary>
-        /// Returns the largest of the two vectors.
-        /// </summary>
-        /// <param name="v1">The first vector.</param>
-        /// <param name="v2">The second vector.</param>
-        /// <returns>The largest of the two vectors.</returns>
-        public static Vector2 Max(Vector2 v1, Vector2 v2)
-        {
-            return v1 >= v2 ? v1 : v2;
-        }
+        #region Expose
 
-        /// <inheritdoc cref="double.ToString(string?)"/>
-        public string ToString(string? format)
-        {
-            return $"{X.ToString(format)},{Y.ToString(format)}";
-        }
-
-        public string ToString(string? format, IFormatProvider? provider)
-        {
-            if (provider is not null)
-                throw new NotImplementedException("Providers not implemented.");
-            return ToString(format);
-        }
-
-        /// <summary>
-        /// Exposes the x and y components of the vector.
-        /// </summary>
-        /// <param name="x">The x component of the vector.</param>
-        /// <param name="y">The y component of the vector.</param>
-        public void Expose(out double x, out double y)
+        public void Expose(out float x, out float y)
         {
             x = X;
             y = Y;
         }
 
-        /// <summary>
-        /// Returns the converted <see cref="Vector2Int"/> based on the current vector.
-        /// </summary>
-        /// <returns>The converted <see cref="Vector2Int"/> based on the current vector.</returns>
+        #endregion
+
+        #region Conversion
+
         public Vector2Int ToVector2Int()
         {
             return new((int)X, (int)Y);
         }
 
-        /// <summary>
-        /// Returns the absolute value of the vector.
-        /// </summary>
-        /// <returns>The absolute value of the vector.</returns>
-        public Vector2 Abs()
+        #endregion
+
+        #region Math
+
+        public static Vector2 Min(Vector2 v1, Vector2 v2)
         {
-            return new(Math.Abs(X), Math.Abs(Y));
+            return v1 <= v2 ? v1 : v2;
         }
 
-        /// <summary>
-        /// Returns the ceiled vector.
-        /// </summary>
-        /// <returns>The ceiled vector.</returns>
+        public static Vector2 Max(Vector2 v1, Vector2 v2)
+        {
+            return v1 >= v2 ? v1 : v2;
+        }
+
+        public Vector2 Abs()
+        {
+            return new(MathF.Abs(X), MathF.Abs(Y));
+        }
+
         public Vector2 Ceil()
         {
             return new(MathF.Ceiling(X), MathF.Ceiling(Y));
         }
 
-        /// <summary>
-        /// Returns the floored vector.
-        /// </summary>
-        /// <returns>The floored vector.</returns>
         public Vector2 Floor()
         {
             return new(MathF.Floor(X), MathF.Floor(Y));
         }
 
-        /// <summary>
-        /// Returns the away from zero rounded vector.
-        /// </summary>
-        /// <returns>The away from zero rounded vector.</returns>
         public Vector2 Round()
         {
             return new(MathF.Round(X, 0, MidpointRounding.AwayFromZero), MathF.Round(Y, 0, MidpointRounding.AwayFromZero));
         }
 
-        /// <summary>
-        /// Indicates wheter this vector is within the top exclusive range of the specified minimum and maximum vectors.
-        /// </summary>
-        /// <param name="min">The minimum vector.</param>
-        /// <param name="max">The maximum vector.</param>
-        /// <returns><see langword="true"/> if this vector is within the top exclusive range of the <paramref name="min"/> and <paramref name="max"/> vectors; otherwise, <see langword="false"/>.</returns>
+        #endregion
+
+        #region InRange
+
         public bool InRange(Vector2 min, Vector2 max)
         {
             return this >= min && this < max;
         }
 
-        /// <summary>
-        /// Indicates whether the specified integer is within the top exclusive range of this vector.
-        /// </summary>
-        /// <param name="num">The integer to check.</param>
-        /// <returns><see langword="true"/> if the specified <paramref name="num"/> is within the top exclusive range of this vector; otherwise, <see langword="false"/>.</returns>
-        public bool InRange(int num)
-        {
-            return InRange((double)num);
-        }
-
-        /// <summary>
-        /// Indicates whether the specified double is within the top exclusive range of this vector.
-        /// </summary>
-        /// <param name="num">The double to check.</param>
-        /// <returns><see langword="true"/> if the specified <paramref name="num"/> is within the top exclusive range of this vector; otherwise, <see langword="false"/>.</returns>
-        public bool InRange(double num)
+        public bool InRange(float num)
         {
             return num >= X && num < Y;
         }
 
-        /// <summary>
-        /// Indicates wheter this vector is within the inclusive range of the specified minimum and maximum vectors.
-        /// </summary>
-        /// <param name="min">The minimum vector.</param>
-        /// <param name="max">The maximum vector.</param>
-        /// <returns><see langword="true"/> if this vector is within the inclusive range of the <paramref name="min"/> and <paramref name="max"/> vectors; otherwise, <see langword="false"/>.</returns>
         public bool InFullRange(Vector2 min, Vector2 max)
         {
             return this >= min && this <= max;
         }
 
-        /// <summary>
-        /// Indicates whether the specified integer is within the inclusive range of this vector.
-        /// </summary>
-        /// <param name="num">The integer to check.</param>
-        /// <returns><see langword="true"/> if the specified <paramref name="num"/> is within the inclusive range of this vector; otherwise, <see langword="false"/>.</returns>
-        public bool InFullRange(int num)
-        {
-            return InFullRange((double)num);
-        }
-
-        /// <summary>
-        /// Indicates whether the specified double is within the inclusive range of this vector.
-        /// </summary>
-        /// <param name="num">The double to check.</param>
-        /// <returns><see langword="true"/> if the specified <paramref name="num"/> is within the inclusive range of this vector; otherwise, <see langword="false"/>.</returns>
-        public bool InFullRange(double num)
+        public bool InFullRange(float num)
         {
             return num >= X && num <= Y;
         }
 
-        /// <summary>
-        /// Returns a normalized (unit) vector based on the current vector if the magnitude is not equal to 0.
-        /// </summary>
-        /// <returns>A normalized (unit) vector based on the current vector if the magnitude is not equal to 0.</returns>
-        /// <exception cref="DivideByZeroException">Thrown if the magnitude is 0.</exception>
-        public Vector2 Normalize()
-        {
-            if (Magnitude == 0)
-                throw new DivideByZeroException("Magnitude cannot be zero.");
-            return new Vector2(X, Y) / Magnitude;
-        }
+        #endregion
 
-        /// <summary>
-        /// Returns the distance between this vector and the specified vector.
-        /// </summary>
-        /// <param name="other">The other vector to get the distance from.</param>
-        /// <returns>The distance between this vector and the specified vector.</returns>
+        #region DistanceFrom
+
         public double DistanceFrom(Vector2 other)
         {
-            return (this - other).Abs().Magnitude;
+            return (this - other).Abs().Magnitude();
         }
+
+        #endregion
     }
 }

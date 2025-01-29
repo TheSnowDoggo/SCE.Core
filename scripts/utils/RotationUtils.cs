@@ -31,9 +31,7 @@
         public static Vector2 GetRotatedOffsetPosition(Vector2 position, int direction, Vector2 rotationAxis)
         {
             if (Math.Abs(direction) != 1)
-            {
                 throw new ArgumentException("Direction must be either -1 or 1");
-            }
 
             RotationType rotationType, newRotation;
 
@@ -45,7 +43,7 @@
 
             Vector2 newSign = GetRotationOffsetSign(newRotation);
 
-            return offsetPos.Abs().Inverse * newSign;
+            return offsetPos.Abs().Inverse() * newSign;
         }
 
         public static int GetNewRotation(int rotation, int direction)

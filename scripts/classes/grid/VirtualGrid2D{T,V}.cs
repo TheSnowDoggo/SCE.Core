@@ -15,7 +15,7 @@
         public Func<T, V, T> FillFunc { get; }
 
         #region Fill
-        public void FillArea(V item, Area2DInt area, bool tryTrimOnOverflow = DEFAULT_TRIM)
+        public void FillArea(V item, Rect2D area, bool tryTrimOnOverflow = DEFAULT_TRIM)
         {
             Grid.GenericCycleArea((Vector2Int pos) => Grid[pos] = FillFunc(Grid[pos], item), area, tryTrimOnOverflow);
         }
@@ -27,12 +27,12 @@
 
         public void FillHorizontalArea(V item, int y, Vector2Int range, bool tryTrimOnOverflow = DEFAULT_TRIM)
         {
-            FillArea(item, new Area2DInt(new Vector2Int(range.X, y), new Vector2Int(range.Y, y + 1)), tryTrimOnOverflow);
+            FillArea(item, new Rect2D(new Vector2Int(range.X, y), new Vector2Int(range.Y, y + 1)), tryTrimOnOverflow);
         }
 
         public void FillVerticalArea(V item, int x, Vector2Int range, bool tryTrimOnOverflow = DEFAULT_TRIM)
         {
-            FillArea(item, new Area2DInt(new Vector2Int(x, range.X), new Vector2Int(x + 1, range.Y)), tryTrimOnOverflow);
+            FillArea(item, new Rect2D(new Vector2Int(x, range.X), new Vector2Int(x + 1, range.Y)), tryTrimOnOverflow);
         }
 
         public void FillHorizontal(V item, int y)
