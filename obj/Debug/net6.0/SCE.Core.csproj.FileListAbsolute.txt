@@ -34,3 +34,5 @@ C:\Users\AdamG\Source\Repos\TheSnowDoggo\SCE.Core\bin\Debug\net6.0\SCE.Core.pdb
 C:\Users\AdamG\Source\Repos\TheSnowDoggo\SCE.Core\obj\Debug\net6.0\ref\SCE.Core.dll
 C:\Users\redst\source\repos\TheSnowDoggo\SCE.Core\bin\Debug\net6.0\SCE.Core.runtimeconfig.json
 C:\Users\redst\source\repos\TheSnowDoggo\SCE.Core\obj\Debug\net6.0\SCE.Core.genruntimeconfig.cache
+C:\Users\AdamG\source\repos\TheSnowDoggo\SCE.Core\bin\Debug\net6.0\SCE.Core.runtimeconfig.json
+C:\Users\AdamG\source\repos\TheSnowDoggo\SCE.Core\obj\Debug\net6.0\SCE.Core.genruntimeconfig.cache

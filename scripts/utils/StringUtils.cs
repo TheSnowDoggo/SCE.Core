@@ -4,7 +4,7 @@
 
     public static class StringUtils
     {
-        public static string RLCompress(string str, bool digitSupport = false, char digitSeperator = '\n')
+        public static string RLCompress(string str, bool digitSupport = false, char digitSeperator = '\0')
         {
             if (str.Length == 0)
                 return str;
@@ -12,27 +12,28 @@
             StringBuilder strBuilder = new(str.Length);
             char last = str[0];
             int count = 1;
-            for (int i = 1; i < str.Length; ++i)
+            for (int i = 1; i <= str.Length; ++i)
             {
-                bool same = str[i] == last;
+                char chr = i < str.Length ? str[i] : (char)(str[^1] + 1);
+                bool same = chr == last;
                 if (same)
                     ++count;
-                if (!same || i == str.Length - 1)
+                if (!same)
                 {
-                    if (i == str.Length - 1)
-                        last = str[i];
-                    if (count > 1)
-                        strBuilder.Append(digitSupport ? $"{digitSeperator}{count}{digitSeperator}" : count);
-                    strBuilder.Append(last);
+                    // Digit seperators can actually increase size of string when count is < 4
+                    if ((!digitSupport && count > 2) || (digitSupport && count > 4))
+                        strBuilder.Append(digitSupport ? $"{digitSeperator}{count}{digitSeperator}{last}" : $"{count}{last}");
+                    else
+                        strBuilder.Append(Copy(last, count));
 
-                    last = str[i];
+                    last = chr;
                     count = 1;
                 }
             }
             return strBuilder.ToString();
         }
 
-        public static string RLDecompress(string str, bool digitSupport = false, char digitSeperator = '\n')
+        public static string RLDecompress(string str, bool digitSupport = false, char digitSeperator = '\0')
         {
             StringBuilder strBuilder = new(str.Length);
             StringBuilder digitBuilder = new();
@@ -47,10 +48,9 @@
                         digitBuilder.Append(str[i]);
                     else if(digitBuilder.Length > 0)
                     {                   
-                        int count = Convert.ToInt32(digitBuilder.ToString());
-                        digitBuilder.Clear();
-
+                        int count = Convert.ToInt32(digitBuilder.ToString());                    
                         strBuilder.Append(Copy(str[i], count));
+                        digitBuilder.Clear();
                     }
                     else
                     {
@@ -394,9 +394,8 @@
 
         public static string Copy(char chr, int copies)
         {
-            if (copies < 0)
-                throw new ArgumentException("Copies cannot be less than 0.");
-
+            if (copies == 1)
+                return chr.ToString();
             char[] chrArr = new char[copies];
             for (int i = 0; i < copies; ++i)
                 chrArr[i] = chr;

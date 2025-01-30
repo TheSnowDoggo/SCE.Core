@@ -4,11 +4,13 @@
     {
         internal static void Main()
         {
-            string raw = "MMMMYYABBABBSGGSKKMNKMKNTTTKKTTHEEEEGGGBBBYYZZKKMEMMENNEBGAGGGSGGSUMMKKMMMKKKM";
+            string raw = "hello world uwu asdjaskld thisi s a test        asdjljansjdnsasssssssssss";
 
             string compress = StringUtils.RLCompress(raw);
 
             string decompress = StringUtils.RLDecompress(compress);
+
+            double savings = (1 - (double)compress.Length / raw.Length) * 100.0;
 
             Console.WriteLine(raw);
 
@@ -18,7 +20,7 @@
 
             Console.WriteLine(decompress == raw);
 
-            Console.WriteLine(compress.Length / (double)raw.Length * 100.0);
+            Console.WriteLine($"Savings: {savings:0.00}%");
         }
     }
 }
