@@ -167,18 +167,18 @@
 
         #region Overlaps
 
-        public static bool Overlaps(int start1, int end1, int start2, int end2)
-        {
-            return end1 <= start2 || start1 >= end2;
-        }
-
         public static bool Overlaps(int l1, int b1, int r1, int t1, int l2, int b2, int r2, int t2)
         {
-            if (!Overlaps(l1, r1, l2, r2)) // X sides don't overlap
+            if (r1 <= l2 || l1 >= r2) // X sides don't overlap
                 return false;          
-            if (!Overlaps(b1, t1, b2, t2)) // Y sides don't overlap
+            if (t1 <= b2 || b1 >= t2) // Y sides don't overlap
                 return false;
             return true;
+        }
+
+        public bool Overlaps(int l, int b, int r, int t)
+        {
+            return Overlaps(Left, Bottom, Right, Top, l, b, r, t);
         }
 
         public static bool Overlaps(Vector2Int start1, Vector2Int end1, Vector2Int start2, Vector2Int end2)
@@ -186,9 +186,19 @@
             return Overlaps(start1.X, start1.Y, end1.X, end1.Y, start2.X, start2.Y, end2.X, end2.Y);
         }
 
+        public bool Overlaps(Vector2Int start, Vector2Int end)
+        {
+            return Overlaps(Left, Bottom, Right, Top, start.X, start.Y, end.X, end.Y);
+        }
+
         public static bool Overlaps(Rect2D a1, Rect2D a2)
         {
             return Overlaps(a1.Left, a1.Bottom, a1.Right, a1.Top, a2.Left, a2.Bottom, a2.Right, a2.Top);
+        }
+
+        public bool Overlaps(Rect2D other)
+        {
+            return Overlaps(this, other);
         }
 
         #endregion
@@ -232,8 +242,8 @@
 
             return new(other.Left < Left ? Left : other.Left,
                 other.Bottom < Bottom ? Bottom : other.Bottom,
-                other.Right < Right ? Right : other.Right,
-                other.Top < Top ? Top : other.Top);
+                other.Right > Right ? Right : other.Right,
+                other.Top > Top ? Top : other.Top);
         }
 
         #endregion
