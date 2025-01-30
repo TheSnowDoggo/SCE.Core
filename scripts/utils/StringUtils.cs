@@ -4,6 +4,63 @@
 
     public static class StringUtils
     {
+        public static string RLCompress(string str, bool digitSupport = false, char digitSeperator = '\n')
+        {
+            if (str.Length == 0)
+                return str;
+
+            StringBuilder strBuilder = new(str.Length);
+            char last = str[0];
+            int count = 1;
+            for (int i = 1; i < str.Length; ++i)
+            {
+                bool same = str[i] == last;
+                if (same)
+                    ++count;
+                if (!same || i == str.Length - 1)
+                {
+                    if (i == str.Length - 1)
+                        last = str[i];
+                    if (count > 1)
+                        strBuilder.Append(digitSupport ? $"{digitSeperator}{count}{digitSeperator}" : count);
+                    strBuilder.Append(last);
+
+                    last = str[i];
+                    count = 1;
+                }
+            }
+            return strBuilder.ToString();
+        }
+
+        public static string RLDecompress(string str, bool digitSupport = false, char digitSeperator = '\n')
+        {
+            StringBuilder strBuilder = new(str.Length);
+            StringBuilder digitBuilder = new();
+            bool inDigit = !digitSupport;
+            for (int i = 0; i < str.Length; ++i)
+            {
+                if (digitSupport && str[i] == digitSeperator)
+                    inDigit = !inDigit;
+                else
+                {
+                    if (inDigit && char.IsDigit(str[i]))
+                        digitBuilder.Append(str[i]);
+                    else if(digitBuilder.Length > 0)
+                    {                   
+                        int count = Convert.ToInt32(digitBuilder.ToString());
+                        digitBuilder.Clear();
+
+                        strBuilder.Append(Copy(str[i], count));
+                    }
+                    else
+                    {
+                        strBuilder.Append(str[i]);
+                    }
+                }
+            }
+            return strBuilder.ToString();
+        }
+
         public static bool ContainsLessThan(string str, char of, int amount)
         {
             int count = 0;

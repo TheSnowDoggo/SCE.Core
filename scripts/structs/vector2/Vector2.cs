@@ -71,7 +71,7 @@
 
         #region Conversion
 
-        public static implicit operator Vector2Int(Vector2 v) => v.ToVector2Int();
+        public static explicit operator Vector2Int(Vector2 v) => v.ToVector2Int();
 
         #endregion
 
