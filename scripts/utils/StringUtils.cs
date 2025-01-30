@@ -4,6 +4,38 @@
 
     public static class StringUtils
     {
+        public static string RLCompress(string str)
+        {
+            StringBuilder strBuilder = new(str.Length);
+            char last = '\0';
+            int count = 1;
+            for (int i = 0; i < str.Length; ++i)
+            {
+                bool same = str[i] == last;
+                if (same)
+                    ++count;
+                if (!same || i == str.Length - 1)
+                {
+                    if (count > 1)
+                        strBuilder.Append(count);
+                    strBuilder.Append(last);
+
+                    last = str[i];
+                    count = 1;
+                }
+            }
+            return strBuilder.ToString();
+        }
+
+        public static string RLDecompress(string str, int capacity = -1)
+        {
+            StringBuilder strBuilder = new(capacity == -1 ? str.Length : capacity);
+            for (int i = 0; i < str.Length; ++i)
+            {
+
+            }
+        }
+
         public static bool ContainsLessThan(string str, char of, int amount)
         {
             int count = 0;
