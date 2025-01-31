@@ -4,7 +4,7 @@
     {
         internal static void Main()
         {
-            string raw = "hello world uwu asdjaskld thisi s a test        asdjljansjdnsasssssssssss";
+            string raw = "asdasda     s world uwu      ansjdnsasssssssssss";
 
             string compress = StringUtils.RLCompress(raw);
 

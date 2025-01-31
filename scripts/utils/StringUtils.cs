@@ -4,7 +4,9 @@
 
     public static class StringUtils
     {
-        public static string RLCompress(string str, bool digitSupport = false, char digitSeperator = '\0')
+        #region RunLengthEncoding
+
+        public static string RLCompress(string str, char seperator = '§')
         {
             if (str.Length == 0)
                 return str;
@@ -15,16 +17,13 @@
             for (int i = 1; i <= str.Length; ++i)
             {
                 char chr = i < str.Length ? str[i] : (char)(str[^1] + 1);
-                bool same = chr == last;
-                if (same)
+                if (chr == last)
                     ++count;
-                if (!same)
+                else
                 {
-                    // Digit seperators can actually increase size of string when count is < 4
-                    if ((!digitSupport && count > 2) || (digitSupport && count > 4))
-                        strBuilder.Append(digitSupport ? $"{digitSeperator}{count}{digitSeperator}{last}" : $"{count}{last}");
-                    else
-                        strBuilder.Append(Copy(last, count));
+                    if (count > 1)
+                        strBuilder.Append(count);
+                    strBuilder.Append(char.IsDigit(last) ? $"{seperator}{last}{seperator}" : last.ToString());
 
                     last = chr;
                     count = 1;
@@ -33,33 +32,37 @@
             return strBuilder.ToString();
         }
 
-        public static string RLDecompress(string str, bool digitSupport = false, char digitSeperator = '\0')
+        public static string RLDecompress(string str, char seperator = '§')
         {
             StringBuilder strBuilder = new(str.Length);
             StringBuilder digitBuilder = new();
-            bool inDigit = !digitSupport;
+            bool inDigit = false;
             for (int i = 0; i < str.Length; ++i)
             {
-                if (digitSupport && str[i] == digitSeperator)
+                if (str[i] == seperator)
+                {
                     inDigit = !inDigit;
+                    continue;
+                }
+
+                if (!inDigit && char.IsDigit(str[i]))
+                    digitBuilder.Append(str[i]);
+                else if (digitBuilder.Length > 0)
+                {
+                    strBuilder.Append(Copy(str[i], Convert.ToInt32(digitBuilder.ToString())));
+                    digitBuilder.Clear();
+                }
                 else
                 {
-                    if (inDigit && char.IsDigit(str[i]))
-                        digitBuilder.Append(str[i]);
-                    else if(digitBuilder.Length > 0)
-                    {                   
-                        int count = Convert.ToInt32(digitBuilder.ToString());                    
-                        strBuilder.Append(Copy(str[i], count));
-                        digitBuilder.Clear();
-                    }
-                    else
-                    {
-                        strBuilder.Append(str[i]);
-                    }
+                    strBuilder.Append(str[i]);
                 }
             }
             return strBuilder.ToString();
         }
+
+        #endregion
+
+        #region ContainsLessThan
 
         public static bool ContainsLessThan(string str, char of, int amount)
         {
@@ -71,7 +74,11 @@
             }
             return true;
         }
-        
+
+        #endregion
+
+        #region Substring
+
         public static int LongestSubstringBetween(string str, char seperator)
         {
             int longest = 0;
@@ -91,7 +98,11 @@
             }
             return length > longest ? length : longest;
         }
-        
+
+        #endregion
+
+        #region Matching
+
         public static bool Matches(string entry, string suggestion)
         {
             int matching = MatchingCharacters(entry, suggestion);
@@ -113,6 +124,10 @@
             }
             return matching;
         }
+
+        #endregion
+
+        #region Array
 
         public static void TrimFirst(ref string[] arr)
         {
@@ -141,6 +156,10 @@
             return chrArray;
         }
 
+        #endregion
+
+        #region Merge
+
         public static string MergeString(string mainStr, string underLayedStr, char mergeChr = ' ')
         {
             if (underLayedStr is null)
@@ -154,10 +173,18 @@
             return strBuilder.ToString();
         }
 
+        #endregion
+
+        #region PluralSwitch
+
         public static string PlrSwt(int quantity, string singular = "", string plural = "s")
         {
             return quantity == 1 ? singular : plural;
         }
+
+        #endregion
+
+        #region Reverse
 
         public static string Reverse(string str)
         {
@@ -166,6 +193,10 @@
                 charArr[i] = str[str.Length - i - 1];
             return new(charArr);
         }
+
+        #endregion
+
+        #region Timespan
 
         public static string TimeSpanToString(TimeSpan timeSpan)
         {
@@ -185,6 +216,8 @@
 
             return strBuilder.ToString();
         }
+
+        #endregion
 
         #region PadTo
         public static string PadAfterToEven(string str)
@@ -224,17 +257,30 @@
         }
         #endregion
 
-        #region Bounds
-        public static string TakeBetween(string str, char leftBound, char rightBound)
+        #region TakeBetween
+        public static string TakeBetweenFF(string str, char leftBound, char rightBound)
         {
-            RangeBetween(str, leftBound, rightBound).Expose(out int leftIndex, out int rightIndex);
-            return str[leftIndex..rightIndex];
+            return str[(str.IndexOf(leftBound) + 1)..str.IndexOf(rightBound)];
         }
 
-        public static string TakeBetween(string str, char bound)
+        public static string TakeBetweenFL(string str, char leftBound, char rightBound)
         {
-            return TakeBetween(str, bound, bound);
+            return str[(str.IndexOf(leftBound) + 1)..str.LastIndexOf(rightBound)];
         }
+
+        public static string TakeBetweenLF(string str, char leftBound, char rightBound)
+        {
+            return str[(str.LastIndexOf(leftBound) + 1)..str.IndexOf(rightBound)];
+        }
+
+        public static string TakeBetweenLL(string str, char leftBound, char rightBound)
+        {
+            return str[(str.LastIndexOf(leftBound) + 1)..str.LastIndexOf(rightBound)];
+        }
+
+        #endregion
+
+        #region Bounds
 
         public static string InsertBetween(string str, string insert, char leftBound, char rightBound)
         {
@@ -385,7 +431,8 @@
         {
             if (copies < 0)
                 throw new ArgumentException("Copies cannot be less than 0.");
-
+            if (copies == 1)
+                return str;
             StringBuilder strBuilder = new(str.Length * copies);
             for (int i = 0; i < copies; i++)
                 strBuilder.Append(str);
@@ -394,6 +441,8 @@
 
         public static string Copy(char chr, int copies)
         {
+            if (copies < 0)
+                throw new ArgumentException("Copies cannot be less than 0.");
             if (copies == 1)
                 return chr.ToString();
             char[] chrArr = new char[copies];
