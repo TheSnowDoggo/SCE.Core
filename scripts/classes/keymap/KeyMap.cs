@@ -99,6 +99,20 @@ namespace SCE
             return true;
         }
 
+        public bool RemoveKey1(T key1)
+        {
+            if (!_tDict.ContainsKey(key1))
+                return false;
+            return Remove(key1, _tDict[key1]);
+        }
+
+        public bool RemoveKey2(U key2)
+        {
+            if (!_uDict.ContainsKey(key2))
+                return false;
+            return Remove(_uDict[key2], key2);
+        }
+
         #endregion
 
         #region ContainsKey
@@ -121,6 +135,16 @@ namespace SCE
         public bool ContainsKey2(U key2)
         {
             return ContainsKey2(key2, out _);
+        }
+
+        #endregion
+
+        #region Clear
+
+        public void Clear()
+        {
+            _tDict.Clear();
+            _uDict.Clear();
         }
 
         #endregion
