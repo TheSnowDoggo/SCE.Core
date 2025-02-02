@@ -16,7 +16,6 @@
     </dependencies>
   </metadata>
   <files>
-    <file src="C:\Users\redst\source\repos\TheSnowDoggo\SCE.Core\bin\Debug\net6.0\SCE.Core.runtimeconfig.json" target="lib\net6.0\SCE.Core.runtimeconfig.json" />
     <file src="C:\Users\redst\source\repos\TheSnowDoggo\SCE.Core\bin\Debug\net6.0\SCE.Core.dll" target="lib\net6.0\SCE.Core.dll" />
     <file src="C:\Users\redst\source\repos\TheSnowDoggo\SCE.Core\LICENSE.txt" target="\LICENSE.txt" />
     <file src="C:\Users\redst\source\repos\TheSnowDoggo\SCE.Core\README.md" target="\README.md" />
