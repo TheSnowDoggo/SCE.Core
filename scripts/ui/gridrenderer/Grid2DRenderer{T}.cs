@@ -28,15 +28,19 @@
                 Render();
         }
 
-        protected override void Render()
+        private void Render()
         {
-            if (RenderOnUpdate)
-                return;
-
             if (RenderFunc is null)
                 throw new NullReferenceException("Render function is null.");
 
             _dpMap.GenericCycle((pos) => _dpMap[pos] = RenderFunc.Invoke(pos));
+        }
+
+        public override DisplayMap GetMap()
+        {
+            if (!RenderOnUpdate)
+                Render();
+            return base.GetMap();
         }
     }
 }

@@ -8,6 +8,8 @@
 
         private readonly List<IRenderable> _renderList = new();
 
+        #region Constructors
+
         public Renderer(string name, int width, int height, SCEColor? bgColor = null)
             : base(name, width, height, bgColor)
         {
@@ -29,7 +31,11 @@
         {
         }
 
+        #endregion
+
         public SearchHash<IRenderable> Renderables { get; } = new();
+
+        #region Settings
 
         public SCEColor BgColor { get; set; }
 
@@ -37,13 +43,16 @@
 
         public bool IgnoreOutOfBoundRenderables { get; set; } = true;
 
+        #endregion
+
         private void FillBackground()
         {
             _dpMap.Data.Fill(new Pixel(BgColor));
         }
 
         #region Render
-        protected override void Render()
+
+        protected void Render()
         {
             if (ClearOnRender)
                 FillBackground();
@@ -69,7 +78,7 @@
 
         private void SortRenderList()
         {
-            _renderList.Sort((a, b) => a.Layer - b.Layer);
+            _renderList.Sort((left, right) => left.Layer - right.Layer);
         }
 
         private void MapRenderList()
@@ -77,15 +86,18 @@
             foreach (var renderable in _renderList)
             {
                 var dpMap = renderable.GetMap();
+
                 Vector2Int pos = AnchorUtils.AnchorTo(renderable.Anchor, Dimensions, dpMap.Dimensions) + renderable.Offset;
 
-                if (!IgnoreOutOfBoundRenderables || _dpMap.GridArea.Overlaps(dpMap.GridArea + pos))
+                if (!IgnoreOutOfBoundRenderables || _dpMap.GridArea.Overlaps(pos, dpMap.Dimensions + pos))
                     _dpMap.MapTo(dpMap, pos, true);
             }
         }
+
         #endregion
 
         #region Resize
+
         public void Resize(int width, int height)
         {
             _dpMap.CleanResize(width, height);
@@ -95,6 +107,13 @@
         {
             _dpMap.CleanResize(dimensions);
         }
+
         #endregion
+
+        public override DisplayMap GetMap()
+        {
+            Render();
+            return base.GetMap();
+        }
     }
 }

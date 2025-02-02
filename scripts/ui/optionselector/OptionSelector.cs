@@ -1,30 +1,21 @@
-﻿namespace SCE
-{
-    using System.Collections;
+﻿using System.Collections;
 
+namespace SCE
+{
     public class OptionSelector : UIBase, IEnumerable<Option>
     {
-        private const string DEFAULT_NAME = "option_selector";
+        private const string DEFAULT_NAME = "command_selector";
 
         private readonly LineRenderer lineRenderer;
 
-        private readonly Queue<int> _updateQueue = new();
+        private readonly List<Option> commands = new();
 
-        private readonly List<Option> _optionList = new();
-
-        public event EventHandler<OptionSelectorInvokeEventArgs>? OnInvokeEvent;
-        public event EventHandler<OptionSelectorInvokeEventArgs>? PostInvokeEvent;
-        public event EventHandler? SelectedModifyEvent;
-
-        private ColorSet selectedColorSet = DefaultSelectedColorSet;
-        private ColorSet unselectedColorSet = DefaultUnselectedColorSet;
-
-        private int selected;
+        #region Constructors
 
         public OptionSelector(string name, int width, int height, SCEColor? bgColor = null)
             : base(name)
         {
-            lineRenderer = bgColor is SCEColor color ? new(width, height, color) : new(width, height);
+            lineRenderer = new(width, height, bgColor);
         }
 
         public OptionSelector(string name, Vector2Int dimensions, SCEColor? bgColor = null)
@@ -38,97 +29,117 @@
         }
 
         public OptionSelector(Vector2Int dimensions, SCEColor? bgColor = null)
-            : this(DEFAULT_NAME, dimensions, bgColor)
+            : this(DEFAULT_NAME, dimensions.X, dimensions.Y, bgColor)
         {
         }
 
-        private static ColorSet DefaultSelectedColorSet { get; } = new(SCEColor.Black, SCEColor.White);
+        #endregion
 
-        private static ColorSet DefaultUnselectedColorSet { get; } = new(SCEColor.White, SCEColor.Black);
+        #region Indexers
+
+        public Option this[int y]
+        {
+            get => commands[y];
+            set => SetThis(y, value);
+        }
+
+        private void SetThis(int y, Option value)
+        {
+            commands[y] = value;
+            RenderOptions();
+        }
+
+        #endregion
+
+        #region Settings
+
+        private int selected = 0;
 
         public int Selected
         {
             get => selected;
-            set
-            {
-                if ((value < 0 || value >= Dimensions.Y) && value != -1)
-                    throw new ArgumentOutOfRangeException("Selected is invalid.");
-
-                int previous = selected;
-
-                selected = value;
-
-                if (selected != previous)
-                {
-                    Enqueue(previous);
-                    if (selected != -1)
-                        Enqueue(selected);
-                }
-
-                SelectedModifyEvent?.Invoke(this, EventArgs.Empty);
-            }
+            set => SetSelected(value);
         }
 
-        public bool AnyOptionSelected { get => Selected != -1; }
-
-        public Option SelectedOption { get => AnyOptionSelected ? _optionList[Selected] : throw new Exception("No option selected."); }
-
-        public int Count { get => _optionList.Count; }
-
-        public ColorSet SelectedColorSet
+        private void SetSelected(int value)
         {
-            get => selectedColorSet;
-            set
-            {
-                selectedColorSet = value;
-
-                if (AnyOptionSelected)
-                    Enqueue(Selected);
-            }
+            if (commands.Count == 0 || selected == value)
+                return;
+            selected = MathUtils.Cycle(new Vector2Int(0, commands.Count), value);
+            RenderOptions();
         }
 
-        public ColorSet UnselectedColorSet
+        private int scrollOffset = 2;
+
+        public int ScrollOffset
         {
-            get => unselectedColorSet;
-            set
-            {
-                unselectedColorSet = value;
-
-                for (int i = 0; i < _optionList.Count; ++i)
-                {
-                    if (i != Selected)
-                        Enqueue(i);
-                }
-            }
+            get => scrollOffset;
+            set => SetScrollOffset(value);
         }
 
-        public SCEColor BgColor
+        private void SetScrollOffset(int value)
         {
-            get => lineRenderer.BgColor;
-            set => lineRenderer.BgColor = value;
+            if (value >= Height)
+                return;
+            scrollOffset = value;
+            RenderOptions();
         }
 
-        public Vector2Int Dimensions { get => lineRenderer.Dimensions; }
+        private ColorSet selectedColors = new(SCEColor.Black, SCEColor.White);
+
+        public ColorSet SelectedColors
+        {
+            get => selectedColors;
+            set => SetSelectedColors(value);
+        }
+
+        private void SetSelectedColors(ColorSet value)
+        {
+            selectedColors = value;
+            RenderOptions();
+        }
+
+        public bool FitToLength
+        {
+            get => lineRenderer.FitToLength;
+            set => SetFitToLength(value);
+        }
+
+        private void SetFitToLength(bool value)
+        {
+            lineRenderer.FitToLength = value;
+            RenderOptions();
+        }
+
+        public StackType StackMode
+        {
+            get => lineRenderer.StackMode;
+            set => SetStackMode(value);
+        }
+
+        private void SetStackMode(StackType value)
+        {
+            lineRenderer.StackMode = value;
+            RenderOptions();
+        }
+
+        #endregion
+
+        #region Properties
 
         public int Width { get => lineRenderer.Width; }
 
         public int Height { get => lineRenderer.Height; }
 
-        public int MaxOptions { get => Height; }
+        public Vector2Int Dimensions { get => lineRenderer.Dimensions; }
 
-        public Option this[int index]
-        {
-            get => _optionList[index];
-            set
-            {
-                _optionList[index] = value;
-                Enqueue(index);
-            }
-        }
+        #endregion
+
+        #region IEnumerable
 
         public IEnumerator<Option> GetEnumerator()
         {
-            return _optionList.GetEnumerator();
+            return commands.GetEnumerator();
         }
 
         IEnumerator IEnumerable.GetEnumerator()
@@ -136,112 +147,80 @@
             return GetEnumerator();
         }
 
-        public override DisplayMap GetMap()
+        #endregion
+
+        #region List
+
+        public void Add(Option command)
         {
-            Update();
-            return lineRenderer.GetMap();
+            commands.Add(command);
+            RenderOptions();
         }
 
-        public void Add(Option option)
+        public void AddRange(IEnumerable<Option> collection)
         {
-            if (_optionList.Count == MaxOptions)
-                throw new Exception("Max options reached.");
-
-            _optionList.Add(option);
-            Enqueue(_optionList.Count - 1);
+            commands.AddRange(collection);
+            RenderOptions();
         }
 
-        public void Add(Option[] optionArray)
+        public void AddEvery(params Option[] commandArr)
         {
-            if (optionArray.Length + _optionList.Count > MaxOptions)
-                throw new ArgumentException("Option array will exceed max options.");
-
-            foreach (Option option in optionArray)
-                Add(option);
+            AddRange(commandArr);
         }
 
-        public void Add(List<Option> optionList)
+        public bool Remove(Option command)
         {
-            Add(optionList.ToArray());
-        }
-
-        public bool Remove(Option option)
-        {
-            return RemoveAt(_optionList.IndexOf(option));
-        }
-
-        public bool RemoveAt(int index)
-        {
-            if (index < 0 || index >= _optionList.Count)
+            if (commands.Remove(command))
                 return false;
-
-            _optionList.RemoveAt(index);
-
-            for (int i = index; i <= _optionList.Count; ++i)
-            {
-                Enqueue(i);
-            }
-
-            if (Selected >= index)
-                CycleSelected(-1);
-
+            RenderOptions();
             return true;
+        }
+
+        public void RemoveAt(int index)
+        {
+            commands.RemoveAt(index);
+            RenderOptions();
+        }
+
+        public void RemoveRange(int index, int count)
+        {
+            commands.RemoveRange(index, count);
+            RenderOptions();
         }
 
         public void Clear()
         {
+            commands.Clear();
             lineRenderer.Clear();
-            _updateQueue.Clear();
-            _optionList.Clear();
-
-            Selected = -1;
         }
 
-        public void InvokeSelected()
-        {
-            Option option = SelectedOption;
-            OnInvokeEvent?.Invoke(this, new(option));
-            SelectedOption.Action?.Invoke();
-            PostInvokeEvent?.Invoke(this, new(option));
-        }
+        #endregion
 
-        public bool TryInvokeSelected()
+        public void RenderOptions()
         {
-            if (AnyOptionSelected)
-                InvokeSelected();
-            return AnyOptionSelected;
-        }
-
-        public void CycleSelected(int cycle)
-        {
-            Selected = _optionList.Count > 0 ? MathUtils.Mod((Selected == -1 ? 0 : Selected) + cycle, _optionList.Count) : -1;
-        }
-
-        private void Enqueue(int i)
-        {
-            if (!_updateQueue.Contains(i))
-                _updateQueue.Enqueue(i);
-        }
-
-        private void Update()
-        {
-            foreach (int i in _updateQueue)
+            int dif = selected + ScrollOffset - commands.Count;
+            int scrollOffset = dif < 0 ? ScrollOffset : ScrollOffset - dif - 1;
+            bool mapY = commands.Count > Height && selected >= Height - scrollOffset;
+            for (int y = 0; y < Height; ++y)
             {
-                if (i == -1)
-                    continue;
-
-                Line line;
-                if (i >= _optionList.Count)
-                    line = new("", SCEColor.White, BgColor);
-                else if (i == Selected)
-                    line = new(_optionList[i].Name, SelectedColorSet);
+                int i = mapY ? selected - (Height - scrollOffset) + y + 1 : y;
+                if (i >= 0 && i < commands.Count)
+                    lineRenderer.SetLine(y, new Line(commands[i].Name, i == selected ? SelectedColors : commands[i].Colors) { Anchor = commands[i].Anchor });
                 else
-                    line = new(_optionList[i].Name, UnselectedColorSet);
-
-                lineRenderer.SetLine(i, line);
+                    lineRenderer.ClearLine(y);
             }
+        }
 
-            _updateQueue.Clear();
+        public bool TryRunSelected()
+        {
+            if (commands.Count == 0)
+                return false;
+            return commands[selected].TryRun();
+        }
+
+        public override DisplayMap GetMap()
+        {
+            return lineRenderer.GetMap();
         }
     }
 }

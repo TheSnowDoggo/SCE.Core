@@ -1,0 +1,24 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2012/06/nuspec.xsd">
+  <metadata>
+    <id>SCE.Core</id>
+    <version>1.0.0-RC.5</version>
+    <title>SCE.Core</title>
+    <authors>Adam Giaziri</authors>
+    <requireLicenseAcceptance>true</requireLicenseAcceptance>
+    <license type="file">LICENSE.txt</license>
+    <licenseUrl>https://aka.ms/deprecateLicenseUrl</licenseUrl>
+    <readme>README.md</readme>
+    <description>SCE Utilities and Types required by all SCE assemblies.</description>
+    <copyright>MIT License</copyright>
+    <dependencies>
+      <group targetFramework="net6.0" />
+    </dependencies>
+  </metadata>
+  <files>
+    <file src="C:\Users\redst\source\repos\TheSnowDoggo\SCE.Core\bin\Debug\net6.0\SCE.Core.runtimeconfig.json" target="lib\net6.0\SCE.Core.runtimeconfig.json" />
+    <file src="C:\Users\redst\source\repos\TheSnowDoggo\SCE.Core\bin\Debug\net6.0\SCE.Core.dll" target="lib\net6.0\SCE.Core.dll" />
+    <file src="C:\Users\redst\source\repos\TheSnowDoggo\SCE.Core\LICENSE.txt" target="\LICENSE.txt" />
+    <file src="C:\Users\redst\source\repos\TheSnowDoggo\SCE.Core\README.md" target="\README.md" />
+  </files>
+</package>

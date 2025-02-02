@@ -6,9 +6,11 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
-    <PackageId>SCECore</PackageId>
-    <Title>SCECore</Title>
-    <Version>1.0.0-RC.4</Version>
+    <PackageId>SCE.Core</PackageId>
+    <Title>SCE.Core</Title>
+	<AssemblyName>SCE.Core</AssemblyName>
+    <Version>1.1.0-RC.6</Version>
+	<VersionSuffix>Pre-alpha</VersionSuffix>
     <Authors>Adam Giaziri</Authors>
     <Product>SCECore</Product>
     <Description>SCE Utilities and Types required by all SCE assemblies.</Description>

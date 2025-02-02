@@ -213,7 +213,7 @@
 
         private void FillBackground()
         {
-            BgColors.Fill(BgColor);
+            Data.Fill(new Pixel(BgColor));
         }
 
         private void TextBoxUI_OnResize()

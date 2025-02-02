@@ -4,10 +4,12 @@
     {
         protected readonly DisplayMap _dpMap;
 
+        #region Constructors
+
         public UIBaseExt(string name, int width, int height, SCEColor? bgColor = null)
             : base(name)
         {
-            _dpMap = bgColor is SCEColor color ? new(width, height, color) : new(width, height);
+            _dpMap = new(width, height, bgColor);
         }
 
         public UIBaseExt(string name, Vector2Int dimensions, SCEColor? bgColor = null)
@@ -25,20 +27,21 @@
         {
         }
 
+        #endregion
+
+        #region Properties
+
         public int Width { get => _dpMap.Width; }
 
         public int Height { get => _dpMap.Height; }
 
         public Vector2Int Dimensions { get => _dpMap.Dimensions; }
 
+        #endregion
+
         public override DisplayMap GetMap()
         {
-            Render();
             return _dpMap;
-        }
-
-        protected virtual void Render()
-        {
         }
     }
 }

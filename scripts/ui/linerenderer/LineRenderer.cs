@@ -10,14 +10,6 @@ namespace SCE
 
         private Line?[] lineArr;
 
-        #region BackingFields
-        private SCEColor bgColor;
-
-        private StackType stackMode = StackType.TopDown;
-
-        private bool fitToLength = false;
-        #endregion
-
         #region Constructors
 
         public LineRenderer(string name, int width, int height, SCEColor? bgColor = null)
@@ -44,51 +36,71 @@ namespace SCE
 
         #endregion
 
-        #region Settings
-
-        public SCEColor BgColor
-        {
-            get => bgColor;
-            set
-            {
-                bgColor = value;
-                Update();
-            }
-        }
-
-        public StackType StackMode
-        {
-            get => stackMode;
-            set
-            {
-                stackMode = value;
-                Update();
-            }
-        }
-
-        public bool FitToLength
-        {
-            get => fitToLength;
-            set
-            {
-                fitToLength = value;
-                Update();
-            }
-        }
-
-        #endregion
-
         #region Indexers
 
         public Line? this[int y]
         {
-            get => y >= 0 && y < lineArr.Length ? lineArr[Translate(y)] : 
+            get => GetThis(y);
+            set => SetThis(y, value);
+        }
+
+        private Line? GetThis(int y)
+        {
+            if (y < 0 || y >= lineArr.Length)
                 throw new IndexOutOfRangeException("Specified y is invalid.");
-            set
-            {
-                if (!SetLine(y, value))
-                    throw new IndexOutOfRangeException("Specified y is invalid.");
-            }
+            return lineArr[Translate(y)];
+        }
+
+        private void SetThis(int y, Line? value)
+        {
+            if (!SetLine(y, value))
+                throw new IndexOutOfRangeException("Specified y is invalid.");
+        }
+
+        #endregion
+
+        #region Settings
+
+        private SCEColor bgColor;
+
+        public SCEColor BgColor
+        {
+            get => bgColor;
+            set => SetBgColor(value);
+        }
+
+        private void SetBgColor(SCEColor value)
+        {
+            bgColor = value;
+            RenderLines();
+        }
+
+        private StackType stackMode = StackType.TopDown;
+
+        public StackType StackMode
+        {
+            get => stackMode;
+            set => SetStackMode(value);
+        }
+
+        private void SetStackMode(StackType value)
+        {
+            stackMode = value;
+            RenderLines();
+        }
+
+        private bool fitToLength = false;
+
+        public bool FitToLength
+        {
+            get => fitToLength;
+            set => SetFitToLength(value);
+        }
+
+        private void SetFitToLength(bool value)
+        {
+            fitToLength = value;
+            RenderLines();
         }
 
         #endregion
@@ -128,21 +140,28 @@ namespace SCE
             return SetLine(y, new Line(message, fgColor, bgColor));
         }
 
-        public void MapRange(int y, string[] messageArr, ColorSet? colorSet = null)
+        public void SetRange(int startY, IEnumerable<Line?> collection)
         {
-            for (int i = 0; i < messageArr.Length; ++i)
-                SetLine(y + i, messageArr[i], colorSet);
+            foreach (var line in collection)
+                SetLine(startY++, line);
         }
 
-        public bool RemoveLine(int y)
+        public bool ClearLine(int y)
         {
             return SetLine(y, null);
+        }
+
+        public void ClearRange(int startY, int count)
+        {
+            for (int i = 0; i < count; ++i)
+                ClearLine(startY + i);
         }
 
         #endregion
 
         #region Render
-        public void Update()
+
+        public void RenderLines()
         {
             for (int i = 0; i < Height; ++i)
                 RenderLine(i);
@@ -150,9 +169,8 @@ namespace SCE
 
         private void RenderLine(int y)
         {
-            Line? rawLine = lineArr[y];
-            if (rawLine is not null)
-                MapLine(Translate(y), (Line)rawLine);
+            if (lineArr[y] is Line line)
+                MapLine(Translate(y), line);
             else
                 ClearAt(Translate(y));
         }
@@ -198,35 +216,54 @@ namespace SCE
         {
             _dpMap.Data.FillHorizontal(new Pixel(BgColor), y);
         }
+
         #endregion
 
         #region Clear
+
         public void Clear()
         {
             _dpMap.Data.Fill(new Pixel(BgColor));
             Array.Clear(lineArr);
         }
+
         #endregion
 
         #region Resize
-        public void Resize(int width, int height)
+
+        public void CleanResize(int width, int height)
         {
             _dpMap.CleanResize(width, height);
             _dpMap.Data.Fill(new Pixel(BgColor));
             lineArr = new Line?[height];
         }
 
-        public void Resize(Vector2Int dimensions)
+        public void CleanResize(Vector2Int dimensions)
         {
-            Resize(dimensions.X, dimensions.Y);
+            CleanResize(dimensions.X, dimensions.Y);
         }
+
+        public void MapResize(int width, int height)
+        {
+            _dpMap.CleanResize(width, height);
+            Array.Resize(ref lineArr, height);
+            RenderLines();
+        }
+
+        public void MapResize(Vector2Int dimensions)
+        {
+            MapResize(dimensions.X, dimensions.Y);
+        }
+
         #endregion
 
         #region Translate
+
         private int Translate(int y)
         {
             return StackMode == StackType.BottomUp ? y : Height - y - 1;
         }
+
         #endregion
     }
 }

@@ -1,20 +1,37 @@
-﻿namespace SCE
+﻿using System.Reflection.Metadata.Ecma335;
+
+namespace SCE
 {
-    public readonly struct Option
+    public class Option : ISearcheable
     {
-        public Option(string name, Action? action)
+        private static readonly ColorSet DEFAULT_COLORS = new(SCEColor.Gray, SCEColor.Black);
+
+        public Option(string name, Action? action = null, ColorSet? colorSet = null)
         {
             Name = name;
             Action = action;
+            Colors = colorSet ?? DEFAULT_COLORS;
         }
 
-        public Option(string name)
-            : this(name, null)
+        public Option(string name, ColorSet colorSet)
+            : this(name, null, colorSet)
         {
         }
 
-        public string Name { get; }
+        public string Name { get; set; }
 
-        public Action? Action { get; }
+        public Action? Action { get; set; }
+
+        public ColorSet Colors { get; set; }
+
+        public LineAnchor Anchor { get; set; }
+
+        public bool TryRun()
+        {
+            if (Action is null)
+                return false;
+            Action.Invoke();
+            return true;
+        }
     }
 }
