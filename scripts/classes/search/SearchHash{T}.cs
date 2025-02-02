@@ -13,6 +13,7 @@ namespace SCE
         protected readonly Dictionary<string, int> _nameIdDict;
 
         #region Constructors
+
         public SearchHash(int capacity)
         {
             _hashSet = new(capacity);
@@ -20,16 +21,13 @@ namespace SCE
             _nameIdDict = new(capacity);
         }
 
-        public SearchHash()
+        public SearchHash(IEnumerable<T>? collection = null)
             : this(0)
         {
+            if (collection is not null)
+                AddRange(collection);
         }
 
-        public SearchHash(IEnumerable<T> collection)
-            : this()
-        {
-            AddRange(collection);
-        }
         #endregion
 
         public int Count { get => _hashSet.Count; }
