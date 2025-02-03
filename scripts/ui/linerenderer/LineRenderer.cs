@@ -72,7 +72,7 @@ namespace SCE
         private void SetBgColor(SCEColor value)
         {
             bgColor = value;
-            RenderLines();
+            Update();
         }
 
         private StackType stackMode = StackType.TopDown;
@@ -86,7 +86,7 @@ namespace SCE
         private void SetStackMode(StackType value)
         {
             stackMode = value;
-            RenderLines();
+            Update();
         }
 
         private bool fitToLength = false;
@@ -100,7 +100,7 @@ namespace SCE
         private void SetFitToLength(bool value)
         {
             fitToLength = value;
-            RenderLines();
+            Update();
         }
 
         #endregion
@@ -161,7 +161,7 @@ namespace SCE
 
         #region Render
 
-        public void RenderLines()
+        public void Update()
         {
             for (int i = 0; i < Height; ++i)
                 RenderLine(i);
@@ -221,7 +221,7 @@ namespace SCE
         {
             _dpMap.CleanResize(width, height);
             Array.Resize(ref lineArr, height);
-            RenderLines();
+            Update();
         }
 
         public void MapResize(Vector2Int dimensions)

@@ -12,10 +12,22 @@
 
         private Vector2Int cursorPos = Vector2Int.Zero;
 
-        public LineWriter(string name, Vector2Int dimensions, SCEColor? bgColor = null)
-            : base(name, dimensions, bgColor)
+        #region Constructors
+
+        public LineWriter(string name, int width, int height, SCEColor? bgColor = null)
+            : base(name, width, height, bgColor)
         {
             BgColor = bgColor ?? DEFAULT_BGCOLOR;
+        }
+
+        public LineWriter(string name, Vector2Int dimensions, SCEColor? bgColor = null)
+            : this(name, dimensions.X, dimensions.Y, bgColor)
+        {
+        }
+
+        public LineWriter(int width, int height, SCEColor? bgColor = null)
+            : this(DEFAULT_NAME, width, height, bgColor)
+        {
         }
 
         public LineWriter(Vector2Int dimensions, SCEColor? bgColor = null)
@@ -23,11 +35,17 @@
         {
         }
 
+        #endregion
+
+        #region Settings
+
         public HandleType OverflowHandling { get; set; } = DefaultOverflowHandling;
 
         public SCEColor FgColor { get; set; } = SCEColor.White;
 
         public SCEColor BgColor { get; set; }
+
+        #endregion
 
         public Vector2Int CursorPos
         {
@@ -86,6 +104,7 @@
         }
 
         #region Write
+
         public void Write(string str)
         {
             StringBuilder buffer = new();
@@ -156,6 +175,7 @@
         {
             Write(str + '\n');
         }
+
         #endregion
 
         #region Translation

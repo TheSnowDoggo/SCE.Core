@@ -46,7 +46,7 @@ namespace SCE
         private void SetThis(int y, Option value)
         {
             commands[y] = value;
-            RenderOptions();
+            Update();
         }
 
         #endregion
@@ -66,7 +66,7 @@ namespace SCE
             if (commands.Count == 0 || selected == value)
                 return;
             selected = MathUtils.Cycle(new Vector2Int(0, commands.Count), value);
-            RenderOptions();
+            Update();
         }
 
         private int scrollOffset = 2;
@@ -82,7 +82,7 @@ namespace SCE
             if (value >= Height)
                 return;
             scrollOffset = value;
-            RenderOptions();
+            Update();
         }
 
         private ColorSet selectedColors = new(SCEColor.Black, SCEColor.White);
@@ -96,7 +96,7 @@ namespace SCE
         private void SetSelectedColors(ColorSet value)
         {
             selectedColors = value;
-            RenderOptions();
+            Update();
         }
 
         public bool FitToLength
@@ -108,7 +108,7 @@ namespace SCE
         private void SetFitToLength(bool value)
         {
             lineRenderer.FitToLength = value;
-            RenderOptions();
+            Update();
         }
 
         public StackType StackMode
@@ -120,7 +120,7 @@ namespace SCE
         private void SetStackMode(StackType value)
         {
             lineRenderer.StackMode = value;
-            RenderOptions();
+            Update();
         }
 
         #endregion
@@ -154,13 +154,13 @@ namespace SCE
         public void Add(Option command)
         {
             commands.Add(command);
-            RenderOptions();
+            Update();
         }
 
         public void AddRange(IEnumerable<Option> collection)
         {
             commands.AddRange(collection);
-            RenderOptions();
+            Update();
         }
 
         public void AddEvery(params Option[] commandArr)
@@ -172,20 +172,20 @@ namespace SCE
         {
             if (commands.Remove(command))
                 return false;
-            RenderOptions();
+            Update();
             return true;
         }
 
         public void RemoveAt(int index)
         {
             commands.RemoveAt(index);
-            RenderOptions();
+            Update();
         }
 
         public void RemoveRange(int index, int count)
         {
             commands.RemoveRange(index, count);
-            RenderOptions();
+            Update();
         }
 
         public void Clear()
@@ -196,7 +196,7 @@ namespace SCE
 
         #endregion
 
-        public void RenderOptions()
+        public void Update()
         {
             int dif = selected + ScrollOffset - commands.Count;
             int scrollOffset = dif < 0 ? ScrollOffset : ScrollOffset - dif - 1;

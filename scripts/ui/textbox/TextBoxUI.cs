@@ -44,7 +44,7 @@
         private void SetBgColor(SCEColor value)
         {
             bgColor = value;
-            Render();
+            Update();
         }
 
         #endregion
@@ -62,7 +62,7 @@
         private void SetText(string value)
         {
             text = value;
-            Render();
+            Update();
         }
 
         private SCEColor textFgColor = SCEColor.Gray;
@@ -76,7 +76,7 @@
         private void SetTextFgColor(SCEColor value)
         {
             textFgColor = value;
-            Render();
+            Update();
         }
 
         private SCEColor textBgColor = SCEColor.Transparent;
@@ -90,7 +90,7 @@
         private void SetTextBgColor(SCEColor value)
         {
             textBgColor = value;
-            Render();
+            Update();
         }
 
         private HorizontalAnchor horizontalAnchor = HorizontalAnchor.Left;
@@ -104,7 +104,7 @@
         private void SetHorizontalAnchor(HorizontalAnchor value)
         {
             horizontalAnchor = value;
-            Render();
+            Update();
         }
 
         private VerticalAnchor verticalAnchor = VerticalAnchor.Top;
@@ -118,14 +118,14 @@
         private void SetVerticalAnchor(VerticalAnchor value)
         {
             verticalAnchor = value;
-            Render();
+            Update();
         }
 
         #endregion
 
         #region Render
 
-        public void Render()
+        public void Update()
         {
             _dpMap.Data.Fill(new Pixel(BgColor));
 
@@ -146,7 +146,7 @@
         public void Resize(int width, int height)
         {
             _dpMap.CleanResize(width, height);
-            Render();
+            Update();
         }
 
         public void Resize(Vector2Int dimensions)
