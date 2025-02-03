@@ -24,7 +24,7 @@ namespace SCE
 
         public ColorSet Colors { get; set; }
 
-        public LineAnchor Anchor { get; set; }
+        public HorizontalAnchor Anchor { get; set; }
 
         public bool TryRun()
         {

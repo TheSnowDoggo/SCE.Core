@@ -382,6 +382,7 @@
         #endregion
 
         #region LineSplitting
+
         public static string[] BasicSplitLineArray(string str, int maxLines)
         {
             string[] lineArray = str.Split('\n');
@@ -392,38 +393,22 @@
 
         public static string[] SmartSplitLineArray(string str, int maxLineLength, int maxLines)
         {
-            if (maxLineLength < 0)
-                throw new ArgumentException("Max line length cannot be less than 0.");
-            if (maxLines < 0)
-                throw new ArgumentException("Max lines cannot be less than 0.");
-
             List<string> lineList = new();
-
-            StringBuilder strBuilder = new();
-
-            int i = 0;
-            do
+            StringBuilder sb = new();
+            for (int i = 0; i < str.Length && lineList.Count < maxLines; ++i)
             {
-                bool last = i == str.Length - 1;
-
-                char chr = str[i];
-
-                if (chr != '\n')
-                    strBuilder.Append(chr);
-
-                if (chr == '\n' || last || (strBuilder.Length == maxLineLength && str[i + 1] != '\n'))
+                bool newLine = str[i] == '\n';
+                if (!newLine)
+                    sb.Append(str[i]);
+                if (newLine || i == str.Length - 1 || (sb.Length == maxLineLength && str[i + 1] != '\n'))
                 {
-                    lineList.Add(strBuilder.ToString());
-
-                    strBuilder.Clear();
+                    lineList.Add(sb.ToString());
+                    sb.Clear();
                 }
-
-                i++;
             }
-            while (i < str.Length && lineList.Count < maxLines);
-
             return lineList.ToArray();
         }
+
         #endregion
 
         #region Copy

@@ -178,38 +178,12 @@ namespace SCE
         private void MapLine(int mappedY, Line line)
         {
             if (fitToLength)
-                _dpMap.MapString(mappedY, GetAnchoredMessage(line), line.Colors);
+                _dpMap.MapString(mappedY, AnchorUtils.GetHorizontalAnchoredMessage(line.Anchor, line.Message, Width), line.Colors);
             else
             {
                 ClearAt(mappedY);
-                _dpMap.MapString(new Vector2Int(GetAnchoredX(line.Anchor, line.Message.Length), mappedY), line.Message, line.Colors);
+                _dpMap.MapString(new Vector2Int(AnchorUtils.HorizontalAnchoredStart(line.Anchor, line.Message.Length, Width), mappedY), line.Message, line.Colors);
             }
-        }
-
-        private string GetAnchoredMessage(Line line)
-        {
-            return line.Anchor switch
-            {
-                LineAnchor.Left => StringUtils.PostFitToLength(line.Message, Width),
-                LineAnchor.Right => StringUtils.PreFitToLength(line.Message, Width),
-                LineAnchor.CenterLB => StringUtils.Copy(' ', GetAnchoredX(LineAnchor.CenterLB, line.Message.Length))
-                + line.Message + StringUtils.Copy(' ', GetAnchoredX(LineAnchor.CenterRB, line.Message.Length)),
-                LineAnchor.CenterRB => StringUtils.Copy(' ', GetAnchoredX(LineAnchor.CenterRB, line.Message.Length))
-                + line.Message + StringUtils.Copy(' ', GetAnchoredX(LineAnchor.CenterLB, line.Message.Length)),
-                _ => throw new NotImplementedException()
-            };
-        }
-
-        private int GetAnchoredX(LineAnchor anchor, int msgLength)
-        {
-            return anchor switch
-            {
-                LineAnchor.Left => 0,
-                LineAnchor.Right => Width - msgLength,
-                LineAnchor.CenterLB => (Width - msgLength) / 2,
-                LineAnchor.CenterRB => (int)Math.Ceiling((Width - msgLength) / 2.0),                            
-                _ => throw new NotImplementedException()
-            };
         }
 
         private void ClearAt(int y)
