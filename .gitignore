@@ -10,3 +10,4 @@
 /.vs/SCE.Core/DesignTimeBuild/.dtbcache.v2
 /.vs/SCE.Core/v17/.suo
 /obj/Debug/net6.0/SCE.Core.assets.cache
+/nuget.config
