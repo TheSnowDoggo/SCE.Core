@@ -40,4 +40,10 @@
     </None>
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="scripts\gamehandler\" />
+    <Folder Include="scripts\display\" />
+    <Folder Include="scripts\unifiedinput\" />
+  </ItemGroup>
+
 </Project>
