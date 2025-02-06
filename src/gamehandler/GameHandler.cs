@@ -75,6 +75,7 @@
         }
 
         #region Call
+
         public static void CallStart()
         {
             _sceneGroup.Start();
@@ -93,6 +94,7 @@
                 _sceneGroup.Update();
             }
         }
+
         #endregion
 
         #region Update
@@ -125,15 +127,18 @@
             isRunning = true;
             _updateThread.Start();
         }
+
         #endregion
 
         #region FrameCap
+
         private static void TryCapFPS()
         {
             while (FrameCapped && deltaStopwatch.Elapsed.TotalSeconds < targetDeltaTime)
             {
             }
         }
+
         #endregion
 
         #region Statistics

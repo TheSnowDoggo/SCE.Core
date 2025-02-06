@@ -72,12 +72,14 @@ namespace SCE
 
         #region Scene
 
+        /// <inheritdoc/>
         public override void Start()
         {
             Console.CursorVisible = false;
             TryResize();
         }
 
+        /// <inheritdoc/>
         public override void Update()
         {
             if (!UpdateLimiter?.OnUpdate() ?? false)
@@ -135,7 +137,7 @@ namespace SCE
 
         #region CCSRender
 
-        public static void CCSRender(DisplayMap dpMap)
+        private static void CCSRender(DisplayMap dpMap)
         {
             var writeInfoArr = CCSGetRenderInfo(dpMap);
             var buildArray = CCSBuildAll(dpMap, writeInfoArr);
@@ -248,7 +250,7 @@ namespace SCE
 
         #region CompatibiliyRender
 
-        public static void CompatibilityRender(DisplayMap dpMap)
+        private static void CompatibilityRender(DisplayMap dpMap)
         {
             Console.SetCursorPosition(0, 0);
             StringBuilder sb = new();

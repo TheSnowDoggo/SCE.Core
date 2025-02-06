@@ -27,9 +27,9 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="src\classes\searchhash\**" />
-    <EmbeddedResource Remove="src\classes\searchhash\**" />
-    <None Remove="src\classes\searchhash\**" />
+    <Compile Remove="src\core\searchhash\**" />
+    <EmbeddedResource Remove="src\core\searchhash\**" />
+    <None Remove="src\core\searchhash\**" />
   </ItemGroup>
 
   <ItemGroup>
