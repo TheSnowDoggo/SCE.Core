@@ -15,7 +15,7 @@
     "version": "2.1.0",
     "restore": {
       "projectUniqueName": "C:\\Users\\redst\\source\\repos\\TheSnowDoggo\\SCE.Core\\SCE.Core.csproj",
-      "projectName": "SCE.Core",
+      "projectName": "SCECore",
       "projectPath": "C:\\Users\\redst\\source\\repos\\TheSnowDoggo\\SCE.Core\\SCE.Core.csproj",
       "packagesPath": "C:\\Users\\redst\\.nuget\\packages\\",
       "outputPath": "C:\\Users\\redst\\source\\repos\\TheSnowDoggo\\SCE.Core\\obj\\",
@@ -24,6 +24,7 @@
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
       ],
       "configFilePaths": [
+        "C:\\Users\\redst\\source\\repos\\TheSnowDoggo\\SCE.Core\\NuGet.Config",
         "C:\\Users\\redst\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
@@ -32,9 +33,8 @@
         "net6.0"
       ],
       "sources": {
-        "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
         "C:\\Program Files\\dotnet\\library-packs": {},
-        "https://api.nuget.org/v3/index.json": {}
+        "https://nuget.pkg.github.com/NAMESPACE/index.json": {}
       },
       "frameworks": {
         "net6.0": {

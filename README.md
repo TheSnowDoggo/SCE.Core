@@ -1,1 +1,1 @@
-A package containing core functionality used by LunaSCE.
+The Core of SCE required by all SCE assemblies.
