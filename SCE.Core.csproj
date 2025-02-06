@@ -12,7 +12,7 @@
     <Version>2.1.0</Version>
 	<VersionSuffix>Release</VersionSuffix>
     <Authors>Adam Giaziri</Authors>
-    <Product>SCECore</Product>
+    <Product>SCE.Core</Product>
     <Description>The Core of SCE required by all SCE assemblies.</Description>
     <Copyright>MIT License</Copyright>
     <PackageLicenseFile>LICENSE.txt</PackageLicenseFile>

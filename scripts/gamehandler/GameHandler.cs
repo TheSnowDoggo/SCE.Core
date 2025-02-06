@@ -1,6 +1,7 @@
 ﻿namespace SCE
 {
     using System.Diagnostics;
+
     public static class GameHandler
     {
         public enum PriorityType

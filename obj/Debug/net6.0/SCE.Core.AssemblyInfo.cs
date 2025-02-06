@@ -17,7 +17,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyDescriptionAttribute("The Core of SCE required by all SCE assemblies.")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("2.1.0.0")]
 [assembly: System.Reflection.AssemblyInformationalVersionAttribute("2.1.0")]
-[assembly: System.Reflection.AssemblyProductAttribute("SCECore")]
+[assembly: System.Reflection.AssemblyProductAttribute("SCE.Core")]
 [assembly: System.Reflection.AssemblyTitleAttribute("SCE.Core")]
 [assembly: System.Reflection.AssemblyVersionAttribute("2.1.0.0")]
 [assembly: System.Resources.NeutralResourcesLanguageAttribute("en")]
