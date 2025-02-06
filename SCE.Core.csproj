@@ -27,9 +27,9 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="scripts\classes\searchhash\**" />
-    <EmbeddedResource Remove="scripts\classes\searchhash\**" />
-    <None Remove="scripts\classes\searchhash\**" />
+    <Compile Remove="src\classes\searchhash\**" />
+    <EmbeddedResource Remove="src\classes\searchhash\**" />
+    <None Remove="src\classes\searchhash\**" />
   </ItemGroup>
 
   <ItemGroup>
@@ -41,12 +41,6 @@
       <Pack>True</Pack>
       <PackagePath>\</PackagePath>
     </None>
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="scripts\gamehandler\" />
-    <Folder Include="scripts\display\" />
-    <Folder Include="scripts\unifiedinput\" />
   </ItemGroup>
 
 </Project>
