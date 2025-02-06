@@ -1,75 +1,111 @@
 ﻿namespace SCE
 {
+    /// <summary>
+    /// An extension class of <see cref="SearchHash{T}"/> allowing for quick determination of whether this contains an element of a specified type.
+    /// </summary>
     public class SearchHashTypeExt<T> : SearchHash<T>
         where T : ISearcheable
     {
-        protected readonly Dictionary<Type, int> _typeDict = new();
+        /// <summary>
+        /// Contains each type and the count of each type. 
+        /// </summary>
+        protected readonly Dictionary<Type, int> typeDict;
 
-        public SearchHashTypeExt(IEnumerable<T> collection)
+        #region Constructors
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="SearchHashTypeExt{T}"/> class.
+        /// </summary>
+        /// <param name="collection">The collection whose elements are copied to the <see cref="SearchHashTypeExt{T}"/>.</param>
+        public SearchHashTypeExt(IEnumerable<T>? collection = null)
             : base()
         {
-            _typeDict = new();
-            AddRange(collection);
+            typeDict = new();
+            if (collection is not null)
+                AddRange(collection);
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="SearchHashTypeExt{T}"/> class.
+        /// </summary>
+        /// <param name="capacity">The initial size of the <see cref="SearchHashTypeExt{T}"/>.</param>
         public SearchHashTypeExt(int capacity)
             : base(capacity)
         {
-            _typeDict = new(capacity);
+            typeDict = new(capacity);
         }
 
-        public SearchHashTypeExt()
-            : base()
+        #endregion
+
+        /// <inheritdoc/>
+        public override bool Add(T item)
         {
-            _typeDict = new();
+            AddType(item.GetType());
+            return base.Add(item);
         }
 
-        public override bool Add(T t)
+        /// <inheritdoc/>
+        public override bool Remove(T item)
         {
-            AddType(t.GetType());
-            return base.Add(t);
+            RemoveType(item.GetType());
+            return base.Remove(item);
         }
 
-        public override bool Remove(T t)
-        {
-            RemoveType(t.GetType());
-            return base.Remove(t);
-        }
-
+        /// <inheritdoc/>
         public override void Clear()
         {
             base.Clear();
-            _typeDict.Clear();
+            typeDict.Clear();
         }
 
+        /// <summary>
+        /// Adds a type to the type dict.
+        /// </summary>
+        /// <param name="type">The type to add.</param>
         protected void AddType(Type type)
         {
-            if (_typeDict.ContainsKey(type))
-                ++_typeDict[type];
+            if (typeDict.ContainsKey(type))
+                ++typeDict[type];
             else
-                _typeDict.Add(type, 1);
+                typeDict.Add(type, 1);
         }
 
+        /// <summary>
+        /// Removes a type from the type dict.
+        /// </summary>
+        /// <param name="type">The type to remove.</param>
         protected void RemoveType(Type type)
         {
-            if (!_typeDict.TryGetValue(type, out int value))
+            if (!typeDict.TryGetValue(type, out int value))
                 return;
             if (value <= 1)
-                _typeDict.Remove(type);
+                typeDict.Remove(type);
             else
-                --_typeDict[type];
+                --typeDict[type];
         }
 
         #region Search
+
+        /// <summary>
+        /// Determines whether the search hash contains a specified type.
+        /// </summary>
+        /// <typeparam name="U">The type to search for.</typeparam>
+        /// <returns><see langword="true"/> if the type is found; otherwise, <see langword="false"/>.</returns>
         public bool Contains<U>()
         {
             return Contains(typeof(U));
         }
 
+        /// <summary>
+        /// Determines whether the search hash contains a specified type.
+        /// </summary>
+        /// <param name="type">The type to search for.</param>
+        /// <returns><see langword="true"/> if the type is found; otherwise, <see langword="false"/>.</returns>
         public bool Contains(Type type)
         {
-            return _typeDict.TryGetValue(type, out int value) && value > 0;
+            return typeDict.TryGetValue(type, out int value) && value > 0;
         }
+
         #endregion
     }
 }

@@ -6,7 +6,7 @@
   "compilationOptions": {},
   "targets": {
     ".NETCoreApp,Version=v6.0": {
-      "SCE.Core/1.1.0-RC.6": {
+      "SCE.Core/2.1.0": {
         "runtime": {
           "SCE.Core.dll": {}
         }
@@ -14,7 +14,7 @@
     }
   },
   "libraries": {
-    "SCE.Core/1.1.0-RC.6": {
+    "SCE.Core/2.1.0": {
       "type": "project",
       "serviceable": false,
       "sha512": ""

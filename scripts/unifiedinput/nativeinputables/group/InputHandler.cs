@@ -65,7 +65,7 @@
 
         private void SortLayers()
         {
-            _list.Sort();
+            list.Sort();
         }
 
         private void RunQueue()
@@ -79,7 +79,7 @@
                 quitKey = false;
                 var uisKeyInfo = uisKeyInfoQueue.Dequeue();
 
-                foreach (var layer in _list)
+                foreach (var layer in list)
                 {
                     if (layer.IsActive)
                         layer.LoadKeyInfo(uisKeyInfo);

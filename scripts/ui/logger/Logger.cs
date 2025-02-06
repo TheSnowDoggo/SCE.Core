@@ -241,7 +241,7 @@
 
         private void MapLog(int y, Log log)
         {
-            _dpMap.MapString(y, GetLogString(log), log.Colors);
+            _dpMap.MapString(GetLogString(log), y, log.Colors);
         }
 
         private string GetLogString(Log log)

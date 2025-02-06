@@ -1,17 +1,28 @@
 ﻿namespace SCE
 {
     /// <summary>
-    /// A extension class of <see cref="Pixel"/> <see cref="Grid2D{T}"/> with additional filling and mapping features.
+    /// A extension class of <see cref="Pixel"/> <see cref="Grid2D{T}"/>.
     /// </summary>
     public class DisplayMap : Grid2D<Pixel>
     {
         #region VGrid2DActions
+
         private static Func<Pixel, char, Pixel> ElementFFunc { get; } = (old, val) => new(val, old.FgColor, old.BgColor);
+
         private static Func<Pixel, SCEColor, Pixel> FgColorFFunc { get; } = (old, val) => new(old.Element, val, old.BgColor);
+
         private static Func<Pixel, SCEColor, Pixel> BgColorFFunc { get; } = (old, val) => new(old.Element, old.FgColor, val);
+
         #endregion
 
         #region Constructors
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="DisplayMap"/> class.
+        /// </summary>
+        /// <param name="width">The width of the display map.</param>
+        /// <param name="height">The height of the display map.</param>
+        /// <param name="bgColor">The default background color to fill with.</param>
         public DisplayMap(int width, int height, SCEColor? bgColor = null)
             : base(width, height)
         {
@@ -23,11 +34,20 @@
                 Data.Fill(new Pixel(color));
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="DisplayMap"/> class.
+        /// </summary>
+        /// <param name="dimensions">The dimensions of the display map.</param>
+        /// <param name="bgColor">The default background color to fill with.</param>
         public DisplayMap(Vector2Int dimensions, SCEColor? bgColor = null)
             : this(dimensions.X, dimensions.Y, bgColor)
         {
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="DisplayMap"/> class.
+        /// </summary>
+        /// <param name="pixelGrid">The default data.</param>
         public DisplayMap(Grid2D<Pixel> pixelGrid)
             : base(pixelGrid)
         {
@@ -35,18 +55,34 @@
             FgColors = new(this, FgColorFFunc);
             BgColors = new(this, BgColorFFunc);
         }
+
         #endregion
 
         #region VGrid2D
+
+        /// <summary>
+        /// Gets the elements vgrid.
+        /// </summary>
         public VirtualGrid2D<Pixel, char> Elements { get; }
 
+        /// <summary>
+        /// Gets the foreground color vgrid.
+        /// </summary>
         public VirtualGrid2D<Pixel, SCEColor> FgColors { get; }
 
+        /// <summary>
+        /// Gets the background color vgrid.
+        /// </summary>
         public VirtualGrid2D<Pixel, SCEColor> BgColors { get; }
+
         #endregion
 
         #region Clone
 
+        /// <summary>
+        /// Creates a shallow copy of the <see cref="DisplayMap"/>.
+        /// </summary>
+        /// <returns>A shallow copy of the <see cref="DisplayMap"/>.</returns>
         public override DisplayMap Clone()
         {
             return new(base.Clone());
@@ -54,9 +90,16 @@
 
         #endregion
 
-        #region MapString
+        #region LineMapping
 
-        public void MapString(Vector2Int pos, string line, SCEColor fgColor, SCEColor? bgColor = null)
+        /// <summary>
+        /// Maps a string line at a specified start position.
+        /// </summary>
+        /// <param name="line">The line to map.</param>
+        /// <param name="pos">The starting zero-based position of the line.</param>
+        /// <param name="fgColor">The foreground color to map with.</param>
+        /// <param name="bgColor">The background color to map with (by default transparent).</param>
+        public void MapLine(string line, Vector2Int pos, SCEColor fgColor, SCEColor? bgColor = null)
         {
             if (!InRange(pos))
                 throw new ArgumentException($"Position {pos} is not valid.");
@@ -71,25 +114,45 @@
             }
         }
 
-        public void MapString(Vector2Int position, string line, ColorSet colorSet)
+        /// <summary>
+        /// Maps a string line at a specified start position.
+        /// </summary>
+        /// <param name="line">The line to map.</param>
+        /// <param name="pos">The starting zero-based position of the line.</param>
+        /// <param name="colors">The colors to map with.</param>
+        public void MapString(string line, Vector2Int pos, ColorSet colors)
         {
-            MapString(position, line, colorSet.FgColor, colorSet.BgColor);
+            MapLine(line, pos, colors.FgColor, colors.BgColor);
         }
 
-        public void MapString(int y, string line, SCEColor fgColor, SCEColor? bgColor = null)
+        /// <summary>
+        /// Maps a string line at a specified y position. 
+        /// </summary>
+        /// <param name="line">The line to map.</param>
+        /// <param name="y">The starting zero-based y position of the line.</param>
+        /// <param name="fgColor">The foreground color to map with.</param>
+        /// <param name="bgColor">The background color to map with (by default transparent).</param>
+        public void MapString(string line, int y, SCEColor fgColor, SCEColor? bgColor = null)
         {
-            MapString(new Vector2Int(0, y), line, fgColor, bgColor);
+            MapLine(line, new Vector2Int(0, y), fgColor, bgColor);
         }
 
-        public void MapString(int y, string line, ColorSet colorSet)
+        /// <summary>
+        /// Maps a string line at a specified y position. 
+        /// </summary>
+        /// <param name="line">The line to map.</param>
+        /// <param name="y">The starting zero-based y position of the line.</param>
+        /// <param name="colors">The colors to map with.</param>
+        public void MapString(string line, int y, ColorSet colors)
         {
-            MapString(new Vector2Int(0, y), line, colorSet);
+            MapString(line, new Vector2Int(0, y), colors);
         }
 
         #endregion
 
         #region Mapping
 
+        /// <inheritdoc/>
         public override void MapToArea(Grid2D<Pixel> dataGrid, Rect2D dataGridArea, Vector2Int? positionOffset = null, bool tryTrimOnResize = false)
         {
             var validSetOffset = positionOffset ?? Vector2Int.Zero;
@@ -104,11 +167,13 @@
             CustomMapToArea(CycleAction, dataGrid, dataGridArea, validSetOffset, tryTrimOnResize);
         }
 
+        /// <inheritdoc/>
         public override void MapTo(Grid2D<Pixel> dataGrid, Vector2Int? positionOffset = null, bool tryTrimOnResize = false)
         {
             MapToArea(dataGrid, dataGrid.GridArea, positionOffset, tryTrimOnResize);
         }
 
+        /// <inheritdoc/>
         public override void MapAreaFrom(Grid2D<Pixel> dataGrid, Rect2D thisArea, Vector2Int? positionOffset = null, bool tryTrimOnResize = false)
         {
             var validGetOffset = positionOffset ?? Vector2Int.Zero;
@@ -123,6 +188,7 @@
             CustomMapAreaFrom(CycleAction, dataGrid, thisArea, validGetOffset, tryTrimOnResize);
         }
 
+        /// <inheritdoc/>
         public override void MapFrom(Grid2D<Pixel> dataGrid, Vector2Int? positionOffset = null, bool tryTrimOnResize = false)
         {
             MapAreaFrom(dataGrid, GridArea, positionOffset, tryTrimOnResize);

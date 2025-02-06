@@ -3,6 +3,11 @@ using System.Diagnostics.CodeAnalysis;
 
 namespace SCE
 {
+    /// <summary>
+    /// A 2-way dictionary.
+    /// </summary>
+    /// <typeparam name="T">The type of key1.</typeparam>
+    /// <typeparam name="U">The type of key2.</typeparam>
     public class KeyMap<T,U> : IEnumerable<(T,U)>
         where T : notnull
         where U : notnull

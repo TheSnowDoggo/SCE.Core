@@ -1,45 +1,61 @@
 ﻿namespace SCE
 {
+    /// <summary>
+    /// An extension class of <see cref="SearchHash{T}"/> with a list.
+    /// </summary>
     public class SearchHashListExt<T> : SearchHash<T>
         where T : ISearcheable
     {
-        protected readonly List<T> _list;
+        /// <summary>
+        /// The list.
+        /// </summary>
+        protected readonly List<T> list;
 
-        public SearchHashListExt(IEnumerable<T> collection)
+        #region Constructors
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="SearchHashListExt{T}"/> class.
+        /// </summary>
+        /// <param name="collection">The collection whose elements are copied to the <see cref="SearchHashListExt{T}"/>.</param>
+        public SearchHashListExt(IEnumerable<T>? collection = null)
             : base()
         {
-            _list = new();
-            AddRange(collection);
+            list = new();
+            if (collection is not null)
+                AddRange(collection);
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="SearchHashListExt{T}"/> class.
+        /// </summary>
+        /// <param name="capacity">The initial size of the <see cref="SearchHashListExt{T}"/>.</param>
         public SearchHashListExt(int capacity)
             : base(capacity)
         {
-            _list = new(capacity);
+            list = new(capacity);
         }
 
-        public SearchHashListExt()
-            : base()
-        {
-            _list = new();
-        }
+        #endregion
 
+        /// <inheritdoc/>
         public override bool Add(T t)
         {
-            _list.Add(t);
+            list.Add(t);
             return base.Add(t);
         }
 
+        /// <inheritdoc/>
         public override bool Remove(T t)
         {
-            _list.Remove(t);
+            list.Remove(t);
             return base.Remove(t);
         }
 
+        /// <inheritdoc/>
         public override void Clear()
         {
             base.Clear();
-            _list.Clear();
+            list.Clear();
         }
     }
 }

@@ -9,11 +9,11 @@
     <PackageId>SCE.Core</PackageId>
     <Title>SCE.Core</Title>
 	<AssemblyName>SCE.Core</AssemblyName>
-    <Version>1.1.0-RC.6</Version>
-	<VersionSuffix>Pre-alpha</VersionSuffix>
+    <Version>2.1.0</Version>
+	<VersionSuffix>Release</VersionSuffix>
     <Authors>Adam Giaziri</Authors>
     <Product>SCECore</Product>
-    <Description>SCE Utilities and Types required by all SCE assemblies.</Description>
+    <Description>The Core of SCE required by all SCE assemblies.</Description>
     <Copyright>MIT License</Copyright>
     <PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
     <PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>
@@ -21,6 +21,8 @@
     <PackageReadmeFile>README.md</PackageReadmeFile>
     <SignAssembly>True</SignAssembly>
     <AssemblyOriginatorKeyFile>sgKey.snk</AssemblyOriginatorKeyFile>
+    <OutputType>Exe</OutputType>
+    <GenerateDocumentationFile>True</GenerateDocumentationFile>
   </PropertyGroup>
 
   <ItemGroup>

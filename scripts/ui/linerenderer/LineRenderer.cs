@@ -178,11 +178,11 @@ namespace SCE
         private void MapLine(int mappedY, Line line)
         {
             if (fitToLength)
-                _dpMap.MapString(mappedY, AnchorUtils.GetHorizontalAnchoredMessage(line.Anchor, line.Message, Width), line.Colors);
+                _dpMap.MapString(AnchorUtils.GetHorizontalAnchoredMessage(line.Anchor, line.Message, Width), mappedY, line.Colors);
             else
             {
                 ClearAt(mappedY);
-                _dpMap.MapString(new Vector2Int(AnchorUtils.HorizontalAnchoredStart(line.Anchor, line.Message.Length, Width), mappedY), line.Message, line.Colors);
+                _dpMap.MapString(line.Message, new Vector2Int(AnchorUtils.HorizontalAnchoredStart(line.Anchor, line.Message.Length, Width), mappedY), line.Colors);
             }
         }
 

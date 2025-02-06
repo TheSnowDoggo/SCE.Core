@@ -135,7 +135,7 @@
             for (int i = 0; i < stringArr.Length; ++i)
             {
                 int x = AnchorUtils.HorizontalAnchoredStart(HorizontalAnchor, stringArr[i].Length, Width);
-                _dpMap.MapString(new Vector2Int(x, startY - i), stringArr[i], TextFgColor, TextBgColor);
+                _dpMap.MapLine(stringArr[i], new Vector2Int(x, startY - i), TextFgColor, TextBgColor);
             }
         }
 
