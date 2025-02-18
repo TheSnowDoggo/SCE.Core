@@ -4,6 +4,28 @@
 
     public static class StringUtils
     {
+        #region Grid
+
+        public static string Grid2DToString<T>(Grid2D<T> grid, Func<Vector2Int, string> appendFunc, StackType stackMode = StackType.TopDown)
+        {
+            StringBuilder sb = new();
+
+            int iteratorY = stackMode == StackType.BottomUp ? 1 : -1;
+            int startY = stackMode == StackType.BottomUp ? 0 : grid.Height - 1;
+            Func<int, bool> endY = stackMode == StackType.BottomUp ? (y) => y < grid.Height : (y) => y >= 0;
+
+            for (int y = startY; endY(y); y+=iteratorY)
+            {
+                for (int x = 0; x < grid.Width; ++x)
+                    sb.Append(appendFunc(new Vector2Int(x, y)));
+                if (y != 0)
+                    sb.AppendLine();
+            }
+            return sb.ToString();
+        }
+
+        #endregion
+
         #region RunLengthEncoding
 
         public static string RunLengthCompress(string str, char seperator = '§')
@@ -220,6 +242,7 @@
         #endregion
 
         #region PadTo
+
         public static string PadAfterToEven(string str)
         {
             return str.Length % 2 == 0 ? str : $"{str} ";
@@ -229,9 +252,11 @@
         {
             return str.Length % 2 == 0 ? str : $" {str}";
         }
+
         #endregion
 
         #region FitToLength
+
         private static string FitToLength(bool postFit, string str, int length, char fill = ' ')
         {
             if (length < 0)
@@ -255,9 +280,11 @@
         {
             return FitToLength(false, str, length, fill);
         }
+
         #endregion
 
         #region TakeBetween
+
         public static string TakeBetweenFF(string str, char leftBound, char rightBound)
         {
             return str[(str.IndexOf(leftBound) + 1)..str.IndexOf(rightBound)];
@@ -358,12 +385,13 @@
         #endregion
 
         #region StringCharManipulation
-        public static int CountOf(string str, char countChr)
+
+        public static int CountOf(string str, char chr)
         {
             int total = 0;
             for (int i = 0; i < str.Length; i++)
             {
-                if (str[i] == countChr)
+                if (str[i] == chr)
                     total++;
             }
             return total;
@@ -371,14 +399,15 @@
 
         public static string RemoveInstancesOf(string str, char chr)
         {
-            StringBuilder strBuilder = new(str.Length);
+            StringBuilder sb = new(str.Length);
             for (int i = 0; i < str.Length; i++)
             {
                 if (str[i] != chr)
-                    strBuilder.Append(str[i]);
+                    sb.Append(str[i]);
             }
-            return strBuilder.ToString();
+            return sb.ToString();
         }
+
         #endregion
 
         #region LineSplitting
