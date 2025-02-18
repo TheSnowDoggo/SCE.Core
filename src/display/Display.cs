@@ -12,7 +12,9 @@ namespace SCE
             Debug,
         }
 
-        private const string DEFAULT_NAME = "display";  
+        private const string DEFAULT_NAME = "display";
+
+        private const int DEFAULT_BUFFER_SIZE = 7;
 
         private Display(string name)
             : base(name)
@@ -66,7 +68,7 @@ namespace SCE
 
         public bool CheckForResize { get; set; } = true;
 
-        public int DisplayBuffer { get; set; } = 4;
+        public int DisplayBuffer { get; set; } = DEFAULT_BUFFER_SIZE;
 
         #endregion
 

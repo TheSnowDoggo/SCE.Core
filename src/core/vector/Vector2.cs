@@ -65,6 +65,11 @@
             return new Vector2(X, Y) / magnitude;
         }
 
+        public bool IsNormalized()
+        {
+            return Magnitude() == 1;
+        }
+
         #endregion
 
         #region Operators

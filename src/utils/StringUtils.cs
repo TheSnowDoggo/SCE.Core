@@ -6,7 +6,7 @@
     {
         #region RunLengthEncoding
 
-        public static string RLCompress(string str, char seperator = '§')
+        public static string RunLengthCompress(string str, char seperator = '§')
         {
             if (str.Length == 0)
                 return str;
@@ -32,7 +32,7 @@
             return strBuilder.ToString();
         }
 
-        public static string RLDecompress(string str, char seperator = '§')
+        public static string RunLengthDecompress(string str, char seperator = '§')
         {
             StringBuilder strBuilder = new(str.Length);
             StringBuilder digitBuilder = new();
@@ -412,12 +412,11 @@
         #endregion
 
         #region Copy
+
         public static string Copy(string str, int copies)
         {
             if (copies < 0)
                 throw new ArgumentException("Copies cannot be less than 0.");
-            if (copies == 1)
-                return str;
             StringBuilder strBuilder = new(str.Length * copies);
             for (int i = 0; i < copies; i++)
                 strBuilder.Append(str);
@@ -426,15 +425,9 @@
 
         public static string Copy(char chr, int copies)
         {
-            if (copies < 0)
-                throw new ArgumentException("Copies cannot be less than 0.");
-            if (copies == 1)
-                return chr.ToString();
-            char[] chrArr = new char[copies];
-            for (int i = 0; i < copies; ++i)
-                chrArr[i] = chr;
-            return new(chrArr);
+            return new string(ArrayUtils.Copy(chr, copies));
         }
+
         #endregion
     }
 }

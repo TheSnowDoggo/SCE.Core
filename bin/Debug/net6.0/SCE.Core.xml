@@ -4,6 +4,25 @@
         <name>SCE.Core</name>
     </assembly>
     <members>
+        <member name="T:SCE.ColorSet">
+            <summary>
+            A struct storing a foreground and background color.
+            </summary>
+        </member>
+        <member name="M:SCE.ColorSet.#ctor(SCE.SCEColor,SCE.SCEColor)">
+            <summary>
+            Initializes a new instance of the <see cref="T:SCE.ColorSet"/> struct.
+            </summary>
+            <param name="fgColor">The foreground <see cref="T:System.Byte"/> color.</param>
+            <param name="bgColor">The background <see cref="T:System.Byte"/> color.</param>
+        </member>
+        <member name="M:SCE.ColorSet.Expose(SCE.SCEColor@,SCE.SCEColor@)">
+            <summary>
+            Exposes the foreground and background color properties in this instance.
+            </summary>
+            <param name="fgColor">The foregrorund <see cref="T:System.Byte"/> color.</param>
+            <param name="bgColor">The backgrround <see cref="T:System.Byte"/> color.</param>
+        </member>
         <member name="T:SCE.DisplayMap">
             <summary>
             A extension class of <see cref="T:SCE.Pixel"/> <see cref="T:SCE.Grid2D`1"/>.
@@ -425,6 +444,37 @@
             <typeparam name="T">The type of key1.</typeparam>
             <typeparam name="U">The type of key2.</typeparam>
         </member>
+        <member name="T:SCE.Pixel">
+            <summary>
+            A struct storing a <see cref="P:SCE.Pixel.Element"/>, and a <see cref="P:SCE.Pixel.FgColor"/> and <see cref="P:SCE.Pixel.BgColor"/> <see cref="T:System.Byte"/> color.
+            Used in <see cref="T:SCE.DisplayMap"/> and derived classes to render to the <see cref="T:SCE.Display"/>.
+            </summary>
+        </member>
+        <member name="M:SCE.Pixel.#ctor(SCE.SCEColor)">
+            <summary>
+            Initializes a new instance of the <see cref="T:SCE.Pixel"/> struct given the background color.
+            </summary>
+            <param name="bgColor">The background color of the new instance.</param>
+        </member>
+        <member name="T:SCE.Rect2D">
+            <summary>
+            A struct representing a 2D rectangular area defined by start and end corner.
+            </summary>
+        </member>
+        <member name="M:SCE.Rect2D.TrimArea(SCE.Rect2D)">
+            <summary>
+            Returns the given <paramref name="area"/> trimmed from this instance.
+            </summary>
+            <param name="area">The area to trim.</param>
+            <returns>The given <paramref name="area"/> trimmed from this instance.</returns>
+        </member>
+        <member name="M:SCE.Rect2D.Bound(SCE.Rect2D)">
+            <summary>
+            Returns the specified area realigned to be bound inside this area.
+            </summary>
+            <param name="area">The area to bound inside this area.</param>
+            <returns>The specified area realigned to be bound inside this area.</returns>
+        </member>
         <member name="T:SCE.IScene">
             <summary>
             An interface for classes which receive a start and update calls.
@@ -618,11 +668,6 @@
             Contains the names and associated elements.
             </summary>
         </member>
-        <member name="F:SCE.SearchHash`1.nameIdDict">
-            <summary>
-            Contains the unique ids for each name for handling duplicate names.
-            </summary>
-        </member>
         <member name="M:SCE.SearchHash`1.#ctor(System.Int32)">
             <summary>
             Initializes a new instance of the <see cref="T:SCE.SearchHash`1"/> class.
@@ -638,11 +683,6 @@
         <member name="P:SCE.SearchHash`1.Count">
             <summary>
             Gets the number of elements that are contained in the search hash.
-            </summary>
-        </member>
-        <member name="P:SCE.SearchHash`1.AssignUniqueName">
-            <summary>
-            Gets or sets a value indicating whether added values with duplicate names should be assigned new unique identifiers.
             </summary>
         </member>
         <member name="P:SCE.SearchHash`1.Item(System.String)">
@@ -752,81 +792,6 @@
             <typeparam name="U">The type to cast the found element to.</typeparam>
             <returns>The element with the specified name</returns>
         </member>
-        <member name="M:SCE.StartupText.DisplayLicense">
-            <summary>
-            Displays the software license.
-            </summary>
-            <remarks>
-            This may be removed.
-            Note: The original license file must not be removed.
-            </remarks>
-        </member>
-        <member name="M:SCE.StartupText.DisplayPhotosensitivityWarning">
-            <summary>
-            Displays the photosensitivity warning.
-            </summary>
-            <remarks>
-            This may be removed, but is not recommended.
-            </remarks>
-        </member>
-        <member name="M:SCE.StartupText.DisplayPlatformCompatibilityNotice">
-            <summary>
-            Displays the platform compatibility notice.
-            </summary>
-            <remarks>
-            This may be removed.
-            </remarks>
-        </member>
-        <member name="T:SCE.ColorSet">
-            <summary>
-            A struct storing a foreground and background color.
-            </summary>
-        </member>
-        <member name="M:SCE.ColorSet.#ctor(SCE.SCEColor,SCE.SCEColor)">
-            <summary>
-            Initializes a new instance of the <see cref="T:SCE.ColorSet"/> struct.
-            </summary>
-            <param name="fgColor">The foreground <see cref="T:System.Byte"/> color.</param>
-            <param name="bgColor">The background <see cref="T:System.Byte"/> color.</param>
-        </member>
-        <member name="M:SCE.ColorSet.Expose(SCE.SCEColor@,SCE.SCEColor@)">
-            <summary>
-            Exposes the foreground and background color properties in this instance.
-            </summary>
-            <param name="fgColor">The foregrorund <see cref="T:System.Byte"/> color.</param>
-            <param name="bgColor">The backgrround <see cref="T:System.Byte"/> color.</param>
-        </member>
-        <member name="T:SCE.Pixel">
-            <summary>
-            A struct storing a <see cref="P:SCE.Pixel.Element"/>, and a <see cref="P:SCE.Pixel.FgColor"/> and <see cref="P:SCE.Pixel.BgColor"/> <see cref="T:System.Byte"/> color.
-            Used in <see cref="T:SCE.DisplayMap"/> and derived classes to render to the <see cref="T:SCE.Display"/>.
-            </summary>
-        </member>
-        <member name="M:SCE.Pixel.#ctor(SCE.SCEColor)">
-            <summary>
-            Initializes a new instance of the <see cref="T:SCE.Pixel"/> struct given the background color.
-            </summary>
-            <param name="bgColor">The background color of the new instance.</param>
-        </member>
-        <member name="T:SCE.Rect2D">
-            <summary>
-            A struct representing a 2D rectangular area defined by start and end corner.
-            </summary>
-        </member>
-        <member name="M:SCE.Rect2D.TrimArea(SCE.Rect2D)">
-            <summary>
-            Returns the given <paramref name="area"/> trimmed from this instance.
-            </summary>
-            <param name="area">The area to trim.</param>
-            <returns>The given <paramref name="area"/> trimmed from this instance.</returns>
-        </member>
-        <member name="M:SCE.Rect2D.Bound(SCE.Rect2D)">
-            <summary>
-            Returns the specified area realigned to be bound inside this area.
-            </summary>
-            <param name="area">The area to bound inside this area.</param>
-            <returns>The specified area realigned to be bound inside this area.</returns>
-        </member>
         <member name="T:SCE.Vector2">
             <summary>
             Representation of floating point 2D vectors.
@@ -875,6 +840,124 @@
             </summary>
             <param name="maxRange">The maximum x value.</param>
             <returns>A random vector from the specified max-range.</returns>
+        </member>
+        <member name="M:SCE.Display.Start">
+            <inheritdoc/>
+        </member>
+        <member name="M:SCE.Display.Update">
+            <inheritdoc/>
+        </member>
+        <member name="M:SCE.StartupText.DisplayLicense">
+            <summary>
+            Displays the software license.
+            </summary>
+            <remarks>
+            This may be removed.
+            Note: The original license file must not be removed.
+            </remarks>
+        </member>
+        <member name="M:SCE.StartupText.DisplayPhotosensitivityWarning">
+            <summary>
+            Displays the photosensitivity warning.
+            </summary>
+            <remarks>
+            This may be removed, but is not recommended.
+            </remarks>
+        </member>
+        <member name="M:SCE.StartupText.DisplayPlatformCompatibilityNotice">
+            <summary>
+            Displays the platform compatibility notice.
+            </summary>
+            <remarks>
+            This may be removed.
+            </remarks>
+        </member>
+        <member name="M:SCE.Translate2DRenderer.#ctor(System.String,System.Int32,System.Int32,System.Func{SCE.Vector2Int,SCE.Grid2D{SCE.Pixel}},System.Nullable{SCE.Vector2Int})">
+            <summary>
+            Initializes a new instance of the <see cref="T:SCE.Translate2DRenderer"/> class.
+            </summary>
+        </member>
+        <member name="M:SCE.Translate2DRenderer.#ctor(System.Int32,System.Int32,System.Func{SCE.Vector2Int,SCE.Grid2D{SCE.Pixel}},System.Nullable{SCE.Vector2Int})">
+            <summary>
+            Initializes a new instance of the <see cref="T:SCE.Translate2DRenderer"/> class.
+            </summary>
+        </member>
+        <member name="M:SCE.Translate2DRenderer.#ctor(System.String,SCE.Vector2Int,System.Func{SCE.Vector2Int,SCE.Grid2D{SCE.Pixel}},System.Nullable{SCE.Vector2Int})">
+            <summary>
+            Initializes a new instance of the <see cref="T:SCE.Translate2DRenderer"/> class.
+            </summary>
+        </member>
+        <member name="M:SCE.Translate2DRenderer.#ctor(SCE.Vector2Int,System.Func{SCE.Vector2Int,SCE.Grid2D{SCE.Pixel}},System.Nullable{SCE.Vector2Int})">
+            <summary>
+            Initializes a new instance of the <see cref="T:SCE.Translate2DRenderer"/> class.
+            </summary>
+        </member>
+        <member name="P:SCE.Translate2DRenderer.RenderFunc">
+            <summary>
+            Gets or sets the translation function.
+            </summary>
+            <remarks>
+            The position represents the translated position given the render width.
+            </remarks>
+        </member>
+        <member name="P:SCE.Translate2DRenderer.RenderDimensions">
+            <summary>
+            Gets or sets the expected number of pixels per translation.
+            </summary>
+        </member>
+        <member name="P:SCE.Translate2DRenderer.RenderOnUpdate">
+            <summary>
+            Gets or sets a value indicating whether rendering should be called automatically by the renderer.
+            </summary>
+        </member>
+        <member name="M:SCE.Translate2DRenderer.Render">
+            <summary>
+            Renders the translate renderer.
+            </summary>
+        </member>
+        <member name="M:SCE.Translate2DRenderer.GetMap">
+            <inheritdoc/>
+        </member>
+        <member name="M:SCE.TranslateLineRenderer.#ctor(System.String,System.Int32,System.Int32,System.Func{SCE.Vector2Int,SCE.Pixel[]},System.Int32)">
+            <summary>
+            Initializes a new instance of the <see cref="T:SCE.TranslateLineRenderer"/> class.
+            </summary>
+        </member>
+        <member name="M:SCE.TranslateLineRenderer.#ctor(System.Int32,System.Int32,System.Func{SCE.Vector2Int,SCE.Pixel[]},System.Int32)">
+            <summary>
+            Initializes a new instance of the <see cref="T:SCE.TranslateLineRenderer"/> class.
+            </summary>
+        </member>
+        <member name="M:SCE.TranslateLineRenderer.#ctor(System.String,SCE.Vector2Int,System.Func{SCE.Vector2Int,SCE.Pixel[]},System.Int32)">
+            <summary>
+            Initializes a new instance of the <see cref="T:SCE.TranslateLineRenderer"/> class.
+            </summary>
+        </member>
+        <member name="M:SCE.TranslateLineRenderer.#ctor(SCE.Vector2Int,System.Func{SCE.Vector2Int,SCE.Pixel[]},System.Int32)">
+            <summary>
+            Initializes a new instance of the <see cref="T:SCE.TranslateLineRenderer"/> class.
+            </summary>
+        </member>
+        <member name="P:SCE.TranslateLineRenderer.RenderFunc">
+            <summary>
+            Gets or sets the translation function.
+            </summary>
+            <remarks>
+            The position represents the translated position given the render width.
+            </remarks>
+        </member>
+        <member name="P:SCE.TranslateLineRenderer.RenderWidth">
+            <summary>
+            Gets or sets the expected number of pixels per translation.
+            </summary>
+        </member>
+        <member name="M:SCE.TranslateLineRenderer.Render">
+            <summary>
+            Renders the translate renderer.
+            </summary>
+        </member>
+        <member name="M:SCE.TranslateLineRenderer.GetMap">
+            <inheritdoc/>
         </member>
         <member name="T:SCE.InputHandler">
             <summary>

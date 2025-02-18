@@ -1,22 +1,24 @@
-﻿namespace SCE
+﻿using System;
+
+namespace SCE
 {
     public class MathUtils
     {
+        public static int ClosestHigherMultiple(int x, int m)
+        {
+            int r = x % m;
+            return r == 0 ? x : m - r + x;
+        }
+
+        public static int Mod(int x, int m)
+        {
+            return x >= 0 ? x % m : (((x % m) + m) % m);
+        }
+
         private const float RADIAN_EULAR_CONVERSION_FACTOR = 180 / MathF.PI;
 
-        public static int ClosestHigherMultiple(int num, int multiplier)
-        {
-            int modulus = num % multiplier;
-            return modulus == 0 ? num : multiplier - modulus + num;
-        }
-
-        public static int Mod(int a, int b)
-        {
-            int mod = a % b;
-            return mod < 0 ? mod + b : mod;
-        }
-
         #region Angles
+
         public static Vector2 AngleToVector(float angle)
         {
             return new Vector2(MathF.Cos(angle), MathF.Sin(angle)).Normalize();
@@ -24,7 +26,9 @@
 
         public static float VectorToRadians(Vector2 vector)
         {
-            return MathF.Tan(vector.Y / vector.X);
+            vector = vector.Normalize();
+            var angle = MathF.Atan(vector.Y / vector.X);
+            return vector.X > 0 ? angle : angle + MathF.PI;
         }
 
         public static float VectorToDegrees(Vector2 vector)
@@ -41,9 +45,11 @@
         {
             return degrees / RADIAN_EULAR_CONVERSION_FACTOR;
         }
+
         #endregion
 
         #region Cycle
+
         public static int Cycle(Vector2Int range, int newValue)
         {
             if (range.Y <= range.X)
@@ -59,6 +65,7 @@
 
             return range.InRange(result) ? result : (result >= max ? min : max - 1);
         }
+
         #endregion
     }
 }

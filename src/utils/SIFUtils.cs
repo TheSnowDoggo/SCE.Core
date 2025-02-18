@@ -46,9 +46,9 @@
                 }
             }
 
-            string elementCompressed = StringUtils.RLCompress(new(elementArr));
-            string fgCompressed = StringUtils.RLCompress(new(fgArr));
-            string bgCompressed = StringUtils.RLCompress(new(bgArr));
+            string elementCompressed = StringUtils.RunLengthCompress(new(elementArr));
+            string fgCompressed = StringUtils.RunLengthCompress(new(fgArr));
+            string bgCompressed = StringUtils.RunLengthCompress(new(bgArr));
 
             return Format(grid.Width, grid.Height, fgCompressed, bgCompressed, elementCompressed);
         }
@@ -61,9 +61,9 @@
 
             DeformatData(sif, out string fgColors, out string bgColors, out string elements);
 
-            string fgDecompressed = StringUtils.RLDecompress(fgColors);
-            string bgDecompressed = StringUtils.RLDecompress(bgColors);
-            string elementDecompressed = StringUtils.RLDecompress(elements);
+            string fgDecompressed = StringUtils.RunLengthDecompress(fgColors);
+            string bgDecompressed = StringUtils.RunLengthDecompress(bgColors);
+            string elementDecompressed = StringUtils.RunLengthDecompress(elements);
 
             int i = 0;
             for (int y = height - 1; y >= 0; --y)

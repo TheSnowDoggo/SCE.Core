@@ -20,11 +20,6 @@ namespace SCE
         /// </summary>
         protected readonly Dictionary<string, T> nameDict;
 
-        /// <summary>
-        /// Contains the unique ids for each name for handling duplicate names.
-        /// </summary>
-        protected readonly Dictionary<string, int> nameIdDict;
-
         #region Constructors
 
         /// <summary>
@@ -35,7 +30,6 @@ namespace SCE
         {
             hashSet = new(capacity);
             nameDict = new(capacity);
-            nameIdDict = new(capacity);
         }
 
         /// <summary>
@@ -55,11 +49,6 @@ namespace SCE
         /// Gets the number of elements that are contained in the search hash.
         /// </summary>
         public int Count { get => hashSet.Count; }
-
-        /// <summary>
-        /// Gets or sets a value indicating whether added values with duplicate names should be assigned new unique identifiers.
-        /// </summary>
-        public bool AssignUniqueName { get; set; } = true;
 
         #region Indexers
 
@@ -119,15 +108,9 @@ namespace SCE
         /// <returns><see langword="true"/> if the element was added sucessfully; otherwise, <see langword="false"/>.</returns>
         public virtual bool Add(T item)
         {
-            if (hashSet.Contains(item))
+            if (hashSet.Contains(item) || nameDict.ContainsKey(item.Name))
                 return false;
-            if (nameIdDict.ContainsKey(item.Name))
-            {
-                item.Name = AssignUniqueName ? $"{item.Name}_{++nameIdDict[item.Name]}"
-                    : throw new DuplicateNameException("Duplicate names not allowed.");
-            }
             nameDict.Add(item.Name, item);
-            nameIdDict.Add(item.Name, 0);
             hashSet.Add(item);
             return true;
         }
@@ -170,10 +153,40 @@ namespace SCE
         {
             if (!hashSet.Remove(item))
                 return false;
-            nameDict.Remove(item.Name);
-            if (--nameIdDict[item.Name] <= 0)
-                nameIdDict.Remove(item.Name);
+            if (!nameDict.TryGetValue(item.Name, out T? val) || !item.Equals(val))
+            {
+                if (!TryResolveName(item, out string? realName))
+                    throw new Exception("Failed to resolve true name of item.");
+                nameDict.Remove(realName);
+            }
             return true;
+        }
+
+        public bool UpdateNameRecord(T item, string oldName)
+        {
+            if (item.Name == oldName || !hashSet.Contains(item) || !nameDict.TryGetValue(oldName, out T? val) || !item.Equals(val))
+                return false;
+            if (nameDict.ContainsKey(item.Name))
+                throw new Exception("Item has a duplicate name.");
+            nameDict.Remove(oldName);
+            nameDict.Add(item.Name, item);
+            return true;
+        }
+
+        private string? ResolveName(T item)
+        {
+            foreach (var t in this)
+            {
+                if (t.Equals(item))
+                    return t.Name;
+            }
+            return null;
+        }
+
+        private bool TryResolveName(T item, [NotNullWhen(true)] out string? val)
+        {
+            val = ResolveName(item);
+            return val != null;
         }
 
         /// <summary>
@@ -205,7 +218,6 @@ namespace SCE
         {
             hashSet.Clear();
             nameDict.Clear();
-            nameIdDict.Clear();
         }
 
         #endregion
