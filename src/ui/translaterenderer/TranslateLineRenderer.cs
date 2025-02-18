@@ -1,6 +1,6 @@
 ﻿namespace SCE
 {
-    public class TranslateLineRenderer : UIBaseExt
+    public class TranslateLineRenderer : UIBaseExtR
     {
         private const string DEFAULT_NAME = "translate_renderer";
 

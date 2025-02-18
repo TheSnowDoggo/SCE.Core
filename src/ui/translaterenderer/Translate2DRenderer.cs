@@ -1,6 +1,6 @@
 ﻿namespace SCE
 {
-    public class Translate2DRenderer : UIBaseExt
+    public class Translate2DRenderer : UIBaseExtR
     {
         private const string DEFAULT_NAME = "translate2d_renderer";
 

@@ -2,6 +2,8 @@
 {
     public class UIBaseExt : UIBase
     {
+        private const string DEFAULT_NAME = "uibase_ext";
+
         protected readonly DisplayMap _dpMap;
 
         #region Constructors
@@ -18,12 +20,12 @@
         }
 
         public UIBaseExt(int width, int height, SCEColor? bgColor = null)
-            : this(string.Empty, width, height, bgColor)
+            : this(DEFAULT_NAME, width, height, bgColor)
         {
         }
 
         public UIBaseExt(Vector2Int dimensions, SCEColor? bgColor = null)
-            : this(string.Empty, dimensions, bgColor)
+            : this(DEFAULT_NAME, dimensions, bgColor)
         {
         }
 
