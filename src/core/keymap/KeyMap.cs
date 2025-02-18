@@ -17,7 +17,7 @@ namespace SCE
 
         #region Constructors
 
-        public KeyMap(int capacity)
+        public KeyMap(int capacity = 0)
         {
             _tDict = new(capacity);
             _uDict = new(capacity);
@@ -27,11 +27,6 @@ namespace SCE
             : this()
         {
             AddRange(collection);
-        }
-
-        public KeyMap()
-            : this(0)
-        {
         }
 
         #endregion
@@ -122,24 +117,28 @@ namespace SCE
 
         #region ContainsKey
 
-        public bool ContainsKey1(T key1, [MaybeNull] out U value)
-        {
-            return _tDict.TryGetValue(key1, out value);
-        }
-
         public bool ContainsKey1(T key1)
         {
-            return ContainsKey1(key1, out _);
-        }
-
-        public bool ContainsKey2(U key2, [MaybeNull] out T value)
-        {
-            return _uDict.TryGetValue(key2, out value);
+            return _tDict.ContainsKey(key1);
         }
 
         public bool ContainsKey2(U key2)
         {
-            return ContainsKey2(key2, out _);
+            return _uDict.ContainsKey(key2);
+        }
+
+        #endregion
+
+        #region TryGet
+
+        public bool TryGetKey1(T key1, [NotNullWhen(true)] out U? value)
+        {
+            return _tDict.TryGetValue(key1, out value);
+        }
+
+        public bool TryGetKey2(U key2, [NotNullWhen(true)] out T? value)
+        {
+            return _uDict.TryGetValue(key2, out value);
         }
 
         #endregion

@@ -444,6 +444,18 @@
             <typeparam name="T">The type of key1.</typeparam>
             <typeparam name="U">The type of key2.</typeparam>
         </member>
+        <member name="T:SCE.PathFinder">
+            <summary>
+            A class for grid-based pathfinding using A* algorithm.
+            </summary>
+        </member>
+        <member name="M:SCE.PathFinder.#ctor(SCE.Rect2D,System.Func{SCE.Vector2Int,System.Boolean})">
+            <summary>
+            Initializes a new instance of the <see cref="T:SCE.PathFinder"/> class.
+            </summary>
+            <param name="area">The allowed area to path through.</param>
+            <param name="collisionFunc">The function determining whether a given position is occupied or not.</param>
+        </member>
         <member name="T:SCE.Pixel">
             <summary>
             A struct storing a <see cref="P:SCE.Pixel.Element"/>, and a <see cref="P:SCE.Pixel.FgColor"/> and <see cref="P:SCE.Pixel.BgColor"/> <see cref="T:System.Byte"/> color.
