@@ -33,14 +33,24 @@
 
         #region Properties
 
+        /// <summary>
+        /// Gets the width.
+        /// </summary>
         public int Width { get => _dpMap.Width; }
 
+        /// <summary>
+        /// Gets the height.
+        /// </summary>
         public int Height { get => _dpMap.Height; }
 
+        /// <summary>
+        /// Gets the dimensions.
+        /// </summary>
         public Vector2Int Dimensions { get => _dpMap.Dimensions; }
 
         #endregion
 
+        /// <inheritdoc/>
         public override DisplayMap GetMap()
         {
             return _dpMap;

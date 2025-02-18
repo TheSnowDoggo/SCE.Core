@@ -76,6 +76,7 @@
 
         #endregion
 
+        /// <inheritdoc/>
         public virtual DisplayMap GetMap()
         {
             OnRender?.Invoke();

@@ -2,7 +2,7 @@
 {
     public static class StartupText
     {
-        private const string TextHeader = "- LunaSCE -\r\n\r\n";
+        private const string TextHeader = "- SCE -\n\n";
 
         /// <summary>
         /// Displays the software license.

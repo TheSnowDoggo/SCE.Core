@@ -31,19 +31,19 @@ namespace SCE
 
         #region Renderables
 
-        private readonly Renderer _renderer = new(Console.WindowWidth, Console.WindowHeight);
+        private readonly Viewport viewport = new(Console.WindowWidth, Console.WindowHeight);
 
-        public SearchHash<IRenderable> Renderables { get => _renderer.Renderables; }
+        public SearchHash<IRenderable> Renderables { get => viewport.Renderables; }
 
         #endregion
 
         #region Properties
 
-        public Vector2Int Dimensions { get => _renderer.Dimensions; }
+        public Vector2Int Dimensions { get => viewport.Dimensions; }
 
-        public int Width { get => _renderer.Width; }
+        public int Width { get => viewport.Width; }
 
-        public int Height { get => _renderer.Height; }
+        public int Height { get => viewport.Height; }
 
         public Action? OnDisplayResize { get; set; }
 
@@ -89,7 +89,7 @@ namespace SCE
             if (CheckForResize && TryResize())
                 return;
 
-            var dpMap = _renderer.GetMap();
+            var dpMap = viewport.GetMap();
             switch (RenderMode)
             {
                 case RenderType.CCS:
@@ -115,7 +115,7 @@ namespace SCE
                 return false;
             Console.ResetColor();
             Console.Clear();
-            _renderer.Resize(winDimensions);
+            viewport.Resize(winDimensions);
             OnDisplayResize?.Invoke();
             return true;
         }

@@ -21,6 +21,7 @@
 
         public HorizontalAnchor Anchor { get; set; } = HorizontalAnchor.Left;
 
+        /// <inheritdoc/>
         public override string ToString()
         {
             return Message;

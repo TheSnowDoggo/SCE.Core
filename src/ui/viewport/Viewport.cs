@@ -1,6 +1,6 @@
 ﻿namespace SCE
 {
-    public class Renderer : UIBaseExt
+    public class Viewport : UIBaseExt
     {
         private const string DEFAULT_NAME = "renderer";
 
@@ -10,23 +10,23 @@
 
         #region Constructors
 
-        public Renderer(string name, int width, int height, SCEColor? bgColor = null)
+        public Viewport(string name, int width, int height, SCEColor? bgColor = null)
             : base(name, width, height, bgColor)
         {
             BgColor = bgColor ?? DEFAULT_BGCOLOR;
         }
 
-        public Renderer(string name, Vector2Int dimensions, SCEColor? bgColor = null)
+        public Viewport(string name, Vector2Int dimensions, SCEColor? bgColor = null)
             : this(name, dimensions.X, dimensions.Y, bgColor)
         {
         }
 
-        public Renderer(int width, int height, SCEColor? bgColor = null)
+        public Viewport(int width, int height, SCEColor? bgColor = null)
             : this(DEFAULT_NAME, width, height, bgColor)
         {
         }
 
-        public Renderer(Vector2Int dimensions, SCEColor? bgColor = null)
+        public Viewport(Vector2Int dimensions, SCEColor? bgColor = null)
             : this(DEFAULT_NAME, dimensions, bgColor)
         {
         }
@@ -45,17 +45,12 @@
 
         #endregion
 
-        private void FillBackground()
-        {
-            _dpMap.Data.Fill(new Pixel(BgColor));
-        }
-
         #region Render
 
         protected void Render()
         {
             if (ClearOnRender)
-                FillBackground();
+                _dpMap.Data.Fill(new Pixel(BgColor));
             UpdateRenderList();
         }
 
@@ -110,6 +105,7 @@
 
         #endregion
 
+        /// <inheritdoc/>
         public override DisplayMap GetMap()
         {
             Render();

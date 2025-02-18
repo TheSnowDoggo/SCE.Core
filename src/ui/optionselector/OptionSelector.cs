@@ -218,6 +218,7 @@ namespace SCE
             return commands[selected].TryRun();
         }
 
+        /// <inheritdoc/>
         public override DisplayMap GetMap()
         {
             return lineRenderer.GetMap();

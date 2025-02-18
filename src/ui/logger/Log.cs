@@ -22,6 +22,7 @@
 
         public DateTime LogTime { get; set; }
 
+        /// <inheritdoc/>
         public override string ToString()
         {
             return $"[{LogTime:T}] {Message}";

@@ -859,6 +859,77 @@
         <member name="M:SCE.Display.Update">
             <inheritdoc/>
         </member>
+        <member name="F:SCE.GameHandler.PriorityType.PrioritizeScenes">
+            <summary>
+            <see cref="T:SCE.IScene"/> updates first.
+            </summary>
+        </member>
+        <member name="F:SCE.GameHandler.PriorityType.PrioritizeUpdates">
+            <summary>
+            <see cref="T:SCE.IUpdate"/> updates first.
+            </summary>
+        </member>
+        <member name="P:SCE.GameHandler.FPS">
+            <summary>
+            Gets the average number of frames updated per second. 
+            </summary>
+            <remarks>
+            Update frequency is determined by <see cref="P:SCE.GameHandler.FPSUpdateRate"/>.
+            </remarks>
+        </member>
+        <member name="P:SCE.GameHandler.FPSUpdateRate">
+            <summary>
+            Gets or sets the update frequency in seconds of the FPS.
+            </summary>
+        </member>
+        <member name="P:SCE.GameHandler.DeltaTime">
+            <summary>
+            Gets the time in seconds since the last update.
+            </summary>
+        </member>
+        <member name="P:SCE.GameHandler.RealDeltaTime">
+            <summary>
+            Gets the actual time taken to update the last frame ignoring frame cap waiting time.
+            </summary>
+        </member>
+        <member name="P:SCE.GameHandler.FrameCap">
+            <summary>
+            Gets or sets the update rate cap in frames per second. 
+            </summary>
+            <remarks>
+            Set to -1 for uncapped update rate.
+            </remarks>
+        </member>
+        <member name="P:SCE.GameHandler.FrameCapped">
+            <summary>
+            Gets a value indicating whether the update rate has been capped.
+            </summary>
+        </member>
+        <member name="P:SCE.GameHandler.IsActive">
+            <summary>
+            Gets or sets a value indicating whether gamehandler should update.
+            </summary>
+        </member>
+        <member name="P:SCE.GameHandler.PriorityMode">
+            <summary>
+            Gets or sets a value indicating whether <see cref="T:SCE.IScene"/> or <see cref="T:SCE.IUpdate"/> should receive updates first.
+            </summary>
+        </member>
+        <member name="M:SCE.GameHandler.Start">
+            <summary>
+            Calls start before starting up gamehandler thread.
+            </summary>
+        </member>
+        <member name="M:SCE.GameHandler.CallStart">
+            <summary>
+            Calls start.
+            </summary>
+        </member>
+        <member name="M:SCE.GameHandler.CallUpdate">
+            <summary>
+            Calls update.
+            </summary>
+        </member>
         <member name="M:SCE.StartupText.DisplayLicense">
             <summary>
             Displays the software license.
@@ -883,6 +954,86 @@
             <remarks>
             This may be removed.
             </remarks>
+        </member>
+        <member name="M:SCE.UIBase.#ctor(System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:SCE.UIBase"/> class.
+            </summary>
+            <param name="name">The initial name.</param>
+        </member>
+        <member name="P:SCE.UIBase.Name">
+            <inheritdoc/>
+        </member>
+        <member name="P:SCE.UIBase.IsActive">
+            <inheritdoc/>
+        </member>
+        <member name="P:SCE.UIBase.Offset">
+            <inheritdoc/>
+        </member>
+        <member name="P:SCE.UIBase.Layer">
+            <inheritdoc/>
+        </member>
+        <member name="P:SCE.UIBase.Anchor">
+            <inheritdoc/>
+        </member>
+        <member name="M:SCE.UIBase.GetMap">
+            <inheritdoc/>
+        </member>
+        <member name="P:SCE.UIBaseExt.Width">
+            <summary>
+            Gets the width.
+            </summary>
+        </member>
+        <member name="P:SCE.UIBaseExt.Height">
+            <summary>
+            Gets the height.
+            </summary>
+        </member>
+        <member name="P:SCE.UIBaseExt.Dimensions">
+            <summary>
+            Gets the dimensions.
+            </summary>
+        </member>
+        <member name="M:SCE.UIBaseExt.GetMap">
+            <inheritdoc/>
+        </member>
+        <member name="M:SCE.Image.GetMap">
+            <inheritdoc/>
+        </member>
+        <member name="P:SCE.IRenderable.IsActive">
+            <summary>
+            Gets the active state of the renderable.
+            </summary>
+        </member>
+        <member name="P:SCE.IRenderable.Offset">
+            <summary>
+            Gets the positional offset of the renderable.
+            </summary>
+        </member>
+        <member name="P:SCE.IRenderable.Layer">
+            <summary>
+            Gets the render layer of the renderable.
+            </summary>
+        </member>
+        <member name="P:SCE.IRenderable.Anchor">
+            <summary>
+            Gets the render anchor of the renderable.
+            </summary>
+        </member>
+        <member name="M:SCE.IRenderable.GetMap">
+            <summary>
+            Gets the displaymap to render.
+            </summary>
+            <returns>The displaymap to render.</returns>
+        </member>
+        <member name="M:SCE.Line.ToString">
+            <inheritdoc/>
+        </member>
+        <member name="M:SCE.Log.ToString">
+            <inheritdoc/>
+        </member>
+        <member name="M:SCE.OptionSelector.GetMap">
+            <inheritdoc/>
         </member>
         <member name="M:SCE.Translate2DRenderer.#ctor(System.String,System.Int32,System.Int32,System.Func{SCE.Vector2Int,SCE.Grid2D{SCE.Pixel}},System.Nullable{SCE.Vector2Int})">
             <summary>
@@ -969,6 +1120,9 @@
             </summary>
         </member>
         <member name="M:SCE.TranslateLineRenderer.GetMap">
+            <inheritdoc/>
+        </member>
+        <member name="M:SCE.Viewport.GetMap">
             <inheritdoc/>
         </member>
         <member name="T:SCE.InputHandler">
