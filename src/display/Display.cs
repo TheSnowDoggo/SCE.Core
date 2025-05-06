@@ -311,7 +311,7 @@ namespace SCE
         private static char DebugGetChar(Pixel pixel)
         {
             if ((pixel.Element is ' ' or '\0') && pixel.BgColor != SCEColor.Black)
-                return SIFUtils.sifMap.GetKey1(pixel.BgColor);
+                return SIFUtils.sifMap.GetT(pixel.BgColor);
             return pixel.Element;
         }
 

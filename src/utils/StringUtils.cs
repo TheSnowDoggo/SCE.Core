@@ -283,6 +283,25 @@
 
         #endregion
 
+        #region Copy
+
+        public static string Copy(string str, int copies)
+        {
+            if (copies < 0)
+                throw new ArgumentException("Copies cannot be less than 0.");
+            StringBuilder strBuilder = new(str.Length * copies);
+            for (int i = 0; i < copies; i++)
+                strBuilder.Append(str);
+            return strBuilder.ToString();
+        }
+
+        public static string Copy(char chr, int copies)
+        {
+            return new string(ArrayUtils.Copy(chr, copies));
+        }
+
+        #endregion
+
         #region TakeBetween
 
         public static string TakeBetweenFF(string str, char leftBound, char rightBound)
@@ -436,25 +455,6 @@
                 }
             }
             return lineList.ToArray();
-        }
-
-        #endregion
-
-        #region Copy
-
-        public static string Copy(string str, int copies)
-        {
-            if (copies < 0)
-                throw new ArgumentException("Copies cannot be less than 0.");
-            StringBuilder strBuilder = new(str.Length * copies);
-            for (int i = 0; i < copies; i++)
-                strBuilder.Append(str);
-            return strBuilder.ToString();
-        }
-
-        public static string Copy(char chr, int copies)
-        {
-            return new string(ArrayUtils.Copy(chr, copies));
         }
 
         #endregion

@@ -18,12 +18,22 @@
             BgColor = bgColor;
         }
 
+        public Pixel(char element, ColorSet colors)
+            : this(element, colors.FgColor, colors.BgColor)
+        {
+        }
+
         /// <summary>
         /// Initializes a new instance of the <see cref="Pixel"/> struct given the background color.
         /// </summary>
         /// <param name="bgColor">The background color of the new instance.</param>
         public Pixel(SCEColor bgColor)
             : this(' ', DEFAULT_FGCOLOR, bgColor)
+        {
+        }
+
+        public Pixel(ColorSet colors)
+            : this(' ', colors.FgColor, colors.BgColor)
         {
         }
 

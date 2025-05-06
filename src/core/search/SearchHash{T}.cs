@@ -93,14 +93,6 @@ namespace SCE
 
         #region Modification
 
-        public virtual bool SetIf(T item, bool condition)
-        {
-            if (condition)
-                return Add(item);
-            Remove(item);
-            return false;
-        }
-
         /// <summary>
         /// Adds the specified element to the search hash.
         /// </summary>
@@ -164,10 +156,10 @@ namespace SCE
 
         public bool UpdateNameRecord(T item, string oldName)
         {
-            if (item.Name == oldName || !hashSet.Contains(item) || !nameDict.TryGetValue(oldName, out T? val) || !item.Equals(val))
-                return false;
             if (nameDict.ContainsKey(item.Name))
                 throw new Exception("Item has a duplicate name.");
+            if (item.Name == oldName || !hashSet.Contains(item) || !nameDict.TryGetValue(oldName, out T? val) || !item.Equals(val))
+                return false;           
             nameDict.Remove(oldName);
             nameDict.Add(item.Name, item);
             return true;

@@ -3,6 +3,7 @@
     public abstract class InputMap
     {
         #region UsefulMaps
+
         public static Dictionary<ConsoleKey, Vector2Int> WASDMap()
         {
             return new() {
@@ -22,6 +23,7 @@
                 { ConsoleKey.RightArrow, Vector2Int.Right },
             };
         }
+
         #endregion
     }
 }

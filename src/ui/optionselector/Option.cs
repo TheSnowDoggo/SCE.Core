@@ -1,6 +1,4 @@
-﻿using System.Reflection.Metadata.Ecma335;
-
-namespace SCE
+﻿namespace SCE
 {
     public class Option : ISearcheable
     {

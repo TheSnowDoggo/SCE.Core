@@ -20,7 +20,9 @@
 
         public Func<Vector2Int, bool> CollisionFunc { get; set; }
 
-        public Func<Vector2Int, Vector2Int, int> DistanceFunc { get; set; } = TaxicabDistance;
+        public Func<Vector2Int, Vector2Int, int> DistanceSystem { get; set; } = TaxicabDistance;
+
+        public Func<Vector2Int, Vector2Int, int> HeuristicSystem { get; set; } = TaxicabDistance;
 
         public static Vector2Int[] Axis8Moves { get; } = new Vector2Int[]
         {
@@ -50,7 +52,7 @@
                 return null;
 
             PriorityQueue<Vector2Int, int> frontier = new();
-            frontier.Enqueue(start, DistanceFunc(start, goal));
+            frontier.Enqueue(start, HeuristicSystem(start, goal));
 
             Dictionary<Vector2Int, Vector2Int> cameFrom = new();
 
@@ -66,14 +68,14 @@
                     var neighbor = current + move;
                     if (Area.Contains(neighbor) && !CollisionFunc(neighbor))
                     {
-                        int tentativeGScore = gScore[current] + DistanceFunc(current, neighbor);
+                        int tentativeGScore = gScore[current] + DistanceSystem(current, neighbor);
                         bool contains = gScore.TryGetValue(neighbor, out int neighborGScore);
                         if (!contains || tentativeGScore < neighborGScore)
                         {
                             cameFrom[neighbor] = current;
                             gScore[neighbor] = tentativeGScore;
                             if (!contains)
-                                frontier.Enqueue(neighbor, tentativeGScore + DistanceFunc(neighbor, goal));
+                                frontier.Enqueue(neighbor, tentativeGScore + HeuristicSystem(neighbor, goal));
                         }
                     }
                 }

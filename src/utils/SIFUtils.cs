@@ -141,12 +141,12 @@
 
         public static char ToSIFCode(SCEColor color)
         {
-            return sifMap.GetKey1(color);
+            return sifMap.GetT(color);
         }
 
         public static SCEColor ToSCEColor(char sifCode)
         {
-            return sifMap.GetKey2(sifCode);
+            return sifMap.GetU(sifCode);
         }
 
         #endregion

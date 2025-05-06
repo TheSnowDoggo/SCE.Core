@@ -3,7 +3,7 @@
     /// <summary>
     /// An abstract base class for scenes.
     /// </summary>
-    public abstract class SceneBase : IScene
+    public class SceneBase : IScene
     {
         #region Constructors
 
@@ -33,9 +33,13 @@
         public bool IsActive { get; set; } = true;
 
         /// <inheritdoc/>
-        public abstract void Start();
+        public virtual void Start()
+        {
+        }
 
         /// <inheritdoc/>
-        public abstract void Update();
+        public virtual void Update()
+        {
+        }
     }
 }

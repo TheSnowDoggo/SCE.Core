@@ -52,16 +52,6 @@ namespace SCE
 
         #endregion
 
-        #region Indexer
-
-        public U this[T key1]
-        {
-            get => _tDict[key1];
-            set => _tDict[key1] = value;
-        }
-
-        #endregion
-
         #region Add
 
         public void Add(T t, U u)
@@ -99,14 +89,14 @@ namespace SCE
             return true;
         }
 
-        public bool RemoveKey1(T key1)
+        public bool RemoveKeyT(T key1)
         {
             if (!_tDict.ContainsKey(key1))
                 return false;
             return Remove(key1, _tDict[key1]);
         }
 
-        public bool RemoveKey2(U key2)
+        public bool RemoveKeyU(U key2)
         {
             if (!_uDict.ContainsKey(key2))
                 return false;
@@ -117,12 +107,12 @@ namespace SCE
 
         #region ContainsKey
 
-        public bool ContainsKey1(T key1)
+        public bool ContainsKeyT(T key1)
         {
             return _tDict.ContainsKey(key1);
         }
 
-        public bool ContainsKey2(U key2)
+        public bool ContainsKeyU(U key2)
         {
             return _uDict.ContainsKey(key2);
         }
@@ -131,12 +121,12 @@ namespace SCE
 
         #region TryGet
 
-        public bool TryGetKey1(T key1, [NotNullWhen(true)] out U? value)
+        public bool TryGetU(T key1, [NotNullWhen(true)] out U? value)
         {
             return _tDict.TryGetValue(key1, out value);
         }
 
-        public bool TryGetKey2(U key2, [NotNullWhen(true)] out T? value)
+        public bool TryGetT(U key2, [NotNullWhen(true)] out T? value)
         {
             return _uDict.TryGetValue(key2, out value);
         }
@@ -155,12 +145,12 @@ namespace SCE
 
         #region Get
 
-        public U GetKey2(T key1)
+        public U GetU(T key1)
         {
             return _tDict[key1];
         }
 
-        public T GetKey1(U key2)
+        public T GetT(U key2)
         {
             return _uDict[key2];
         }
