@@ -207,9 +207,6 @@
             </summary>
             <returns>A shallow copy of the <see cref="T:SCE.Grid2D`1"/>.</returns>
         </member>
-        <member name="M:SCE.Grid2D`1.ToString">
-            <inheritdoc/>
-        </member>
         <member name="M:SCE.Grid2D`1.InRange(System.Int32,System.Int32)">
             <summary>
             Determines whether the specified zero-based coordinates lie within this grid.
@@ -1060,16 +1057,6 @@
         <member name="M:SCE.Translate2DRenderer.GetMap">
             <inheritdoc/>
         </member>
-        <member name="M:SCE.TranslateLineRenderer.#ctor(System.Int32,System.Int32,System.Func{SCE.Vector2Int,SCE.Pixel[]},System.Int32)">
-            <summary>
-            Initializes a new instance of the <see cref="T:SCE.TranslateLineRenderer"/> class.
-            </summary>
-        </member>
-        <member name="M:SCE.TranslateLineRenderer.#ctor(SCE.Vector2Int,System.Func{SCE.Vector2Int,SCE.Pixel[]},System.Int32)">
-            <summary>
-            Initializes a new instance of the <see cref="T:SCE.TranslateLineRenderer"/> class.
-            </summary>
-        </member>
         <member name="P:SCE.TranslateLineRenderer.RenderFunc">
             <summary>
             Gets or sets the translation function.
@@ -1172,11 +1159,6 @@
         <member name="F:SCE.RotationUtils.RotationType.TopLeft">
             <summary>
             Top-left position relative to the rotation axis.
-            </summary>
-        </member>
-        <member name="T:SCE.ScalingUtils">
-            <summary>
-            Legacy <see cref="T:SCE.Grid2D`1"/> scaling class.
             </summary>
         </member>
     </members>

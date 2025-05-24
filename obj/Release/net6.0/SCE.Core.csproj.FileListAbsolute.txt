@@ -15,3 +15,5 @@ C:\Users\redst\source\repos\TheSnowDoggo\SCE.Core\obj\Release\net6.0\ref\SCE.Cor
 C:\Users\redst\source\repos\TheSnowDoggo\SCE.Core\bin\Release\net6.0\SCE.Core.exe
 C:\Users\redst\source\repos\TheSnowDoggo\SCE.Core\bin\Release\net6.0\SCE.Core.runtimeconfig.json
 C:\Users\redst\source\repos\TheSnowDoggo\SCE.Core\obj\Release\net6.0\SCE.Core.genruntimeconfig.cache
+C:\Users\redst\source\repos\TheSnowDoggo\SCE.Core\bin\Release\net6.0\CSUtils.dll
+C:\Users\redst\source\repos\TheSnowDoggo\SCE.Core\obj\Release\net6.0\SCE.Core.csproj.CopyComplete

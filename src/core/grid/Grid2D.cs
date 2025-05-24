@@ -1,5 +1,6 @@
 ﻿namespace SCE
 {
+    using CSUtils;
     using System;
 
     /// <summary>
@@ -135,16 +136,6 @@
         object ICloneable.Clone()
         {
             return Clone();
-        }
-
-        #endregion
-
-        #region String
-
-        /// <inheritdoc/>
-        public override string ToString()
-        {
-            return $"Grid2D<{typeof(T)}>({Dimensions})";
         }
 
         #endregion
@@ -410,6 +401,29 @@
 
         #endregion
 
+        #region Scaling
+
+        public Grid2D<T> Scale(int scaleFactor)
+        {
+            var startGrid = Clone();
+            Grid2D<T> newGrid = new(startGrid.Dimensions * scaleFactor);
+
+            startGrid.GenericCycle(pos =>
+            {
+                Vector2Int start = pos * scaleFactor;
+
+                Rect2D area = new(start, start + scaleFactor);
+
+                T value = startGrid[pos];
+
+                newGrid.Data.FillArea(value, area);
+            });
+
+            return newGrid;
+        }
+
+        #endregion
+
         #region Resizing
 
         /// <summary>
@@ -472,6 +486,25 @@
         {
             Array.Clear(data);
             OnClear?.Invoke();
+        }
+
+        #endregion
+
+        #region Build
+
+        public string BuildFlat()
+        {
+            return Utils.BuildGridFlat(data, false);
+        }
+
+        public string Build2D()
+        {
+            return Utils.BuildGrid2D(data, false);
+        }
+
+        public override string ToString()
+        {
+            return BuildFlat();
         }
 
         #endregion

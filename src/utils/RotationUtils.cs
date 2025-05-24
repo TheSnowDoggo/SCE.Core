@@ -6,6 +6,29 @@ namespace SCE
     /// </summary>
     public static class RotationUtils
     {
+        private enum RotationType
+        {
+            /// <summary>
+            /// Top-right position relative to the rotation axis.
+            /// </summary>
+            TopRight,
+
+            /// <summary>
+            /// Bottom-right position relative to the rotation axis.
+            /// </summary>
+            BottomRight,
+
+            /// <summary>
+            /// Bottom-left position relative to the rotation axis.
+            /// </summary>
+            BottomLeft,
+
+            /// <summary>
+            /// Top-left position relative to the rotation axis.
+            /// </summary>
+            TopLeft,
+        }
+
         public static Vector2Int RotationRange { get => new(0, 4); }
 
         public static Vector2 RotatePositionBy(Vector2 position, int rotationFactor, Vector2 rotationAxis)
@@ -61,10 +84,10 @@ namespace SCE
         {
             return (offsetPosition.X >= 0, offsetPosition.Y >= 0) switch
             {
-                (true, true) => RotationType.TopRight,
-                (true, false) => RotationType.BottomRight,
+                (true, true)   => RotationType.TopRight,
+                (true, false)  => RotationType.BottomRight,
                 (false, false) => RotationType.BottomLeft,
-                (false, true) => RotationType.TopLeft,
+                (false, true)  => RotationType.TopLeft,
             };
         }
 
@@ -72,35 +95,12 @@ namespace SCE
         {
             return rotation switch
             {
-                RotationType.TopRight => new(1, 1),
+                RotationType.TopRight    => new(1, 1),
                 RotationType.BottomRight => new(1, -1),
-                RotationType.BottomLeft => new(-1, -1),
-                RotationType.TopLeft => new(-1, 1),
+                RotationType.BottomLeft  => new(-1, -1),
+                RotationType.TopLeft     => new(-1, 1),
                 _ => throw new NotImplementedException(),
             };
-        }
-
-        private enum RotationType
-        {
-            /// <summary>
-            /// Top-right position relative to the rotation axis.
-            /// </summary>
-            TopRight,
-
-            /// <summary>
-            /// Bottom-right position relative to the rotation axis.
-            /// </summary>
-            BottomRight,
-
-            /// <summary>
-            /// Bottom-left position relative to the rotation axis.
-            /// </summary>
-            BottomLeft,
-
-            /// <summary>
-            /// Top-left position relative to the rotation axis.
-            /// </summary>
-            TopLeft,
         }
     }
 }

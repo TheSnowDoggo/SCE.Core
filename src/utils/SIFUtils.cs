@@ -5,7 +5,7 @@ namespace SCE
 {
     public static class SIFUtils
     {
-        public static readonly KeyMap<char, SCEColor> sifMap = new()
+        public static readonly KeyMap<char, SCEColor> _sifMap = new()
         {
             { 'K', SCEColor.Black },
             { 'B', SCEColor.DarkBlue },
@@ -141,12 +141,12 @@ namespace SCE
 
         public static char ToSIFCode(SCEColor color)
         {
-            return sifMap.GetT(color);
+            return _sifMap.GetT(color);
         }
 
         public static SCEColor ToSCEColor(char sifCode)
         {
-            return sifMap.GetU(sifCode);
+            return _sifMap.GetU(sifCode);
         }
 
         #endregion

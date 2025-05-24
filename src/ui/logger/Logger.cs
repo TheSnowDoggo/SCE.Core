@@ -266,12 +266,12 @@ namespace SCE
 
         private int GridTranslate(int y)
         {
-            return StackMode == StackType.BottomUp ? y : Height - y - 1;
+            return StackMode == StackType.TopDown ? y : Height - y - 1;
         }
 
         private int ViewTranslate(int y)
         {
-            return StackMode == StackType.BottomUp ? y : -y;
+            return StackMode == StackType.TopDown ? y : -y;
         }
 
         #endregion

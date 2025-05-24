@@ -86,8 +86,8 @@ namespace SCE
         {
             if (!UpdateLimiter?.OnUpdate() ?? false)
                 return;
-            if (CheckForResize && TryResize())
-                return;
+            if (CheckForResize)
+                TryResize();
 
             var dpMap = viewport.GetMap();
             switch (RenderMode)
@@ -170,7 +170,9 @@ namespace SCE
                 {
                     var pixel = dpMap[x, y];
                     if (!pixelSet.Contains(pixel))
+                    {
                         colorsSet.Add(new ColorSet(pixel.FgColor, pixel.BgColor));
+                    }
                 }
             }
             return colorsSet.ToArray();
@@ -300,7 +302,7 @@ namespace SCE
         private static char DebugGetChar(Pixel pixel)
         {
             if ((pixel.Element is ' ' or '\0') && pixel.BgColor != SCEColor.Black)
-                return SIFUtils.sifMap.GetT(pixel.BgColor);
+                return SIFUtils._sifMap.GetT(pixel.BgColor);
             return pixel.Element;
         }
 

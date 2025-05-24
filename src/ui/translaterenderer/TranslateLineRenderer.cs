@@ -2,21 +2,25 @@
 {
     public class TranslateLineRenderer : UIBaseExtR
     {
-        /// <summary>
-        /// Initializes a new instance of the <see cref="TranslateLineRenderer"/> class.
-        /// </summary>
-        public TranslateLineRenderer(int width, int height, Func<Vector2Int, Pixel[]> renderFunc, int renderWidth = 1)
+        public TranslateLineRenderer(int width, int height, Func<Vector2Int, Pixel[]> renderFunc)
             : base(width, height)
         {
             RenderFunc = renderFunc;
+        }
+
+        public TranslateLineRenderer(Vector2Int dimensions, Func<Vector2Int, Pixel[]> renderFunc)
+            : this(dimensions.X, dimensions.Y, renderFunc)
+        {
+        }
+
+        public TranslateLineRenderer(int width, int height, int renderWidth, Func<Vector2Int, Pixel[]> renderFunc)
+            : this(width, height, renderFunc)
+        {
             RenderWidth = renderWidth;
         }
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="TranslateLineRenderer"/> class.
-        /// </summary>
-        public TranslateLineRenderer(Vector2Int dimensions, Func<Vector2Int, Pixel[]> renderFunc, int renderWidth = 1)
-            : this(dimensions.X, dimensions.Y, renderFunc, renderWidth)
+        public TranslateLineRenderer(Vector2Int dimensions, int renderWidth, Func<Vector2Int, Pixel[]> renderFunc)
+            : this(dimensions.X, dimensions.Y, renderWidth, renderFunc)
         {
         }
 
