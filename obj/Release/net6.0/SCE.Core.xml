@@ -621,6 +621,11 @@
             A class for storing <see cref="T:SCE.IUpdate"/>.
             </summary>
         </member>
+        <member name="M:SCE.UpdateGroup.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:SCE.UpdateGroup"/> class.
+            </summary>
+        </member>
         <member name="M:SCE.UpdateGroup.#ctor(System.Collections.Generic.IEnumerable{SCE.IUpdate})">
             <summary>
             Initializes a new instance of the <see cref="T:SCE.UpdateGroup"/> class.

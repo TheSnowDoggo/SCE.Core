@@ -4,7 +4,7 @@ namespace SCE
 {
     public class AliasHash<T> : IEnumerable<T>
     {
-        private readonly HashSet<T> _set;
+        private readonly Dictionary<T, HashSet<string>> _set;
 
         private readonly Dictionary<string, T> _aliases = new();
 
@@ -27,7 +27,7 @@ namespace SCE
 
         public IEnumerator<T> GetEnumerator()
         {
-            return _set.GetEnumerator();
+            return _set.Keys.GetEnumerator();
         }
 
         IEnumerator IEnumerable.GetEnumerator()
@@ -43,7 +43,10 @@ namespace SCE
 
         public virtual bool Add(T item)
         {
-            return _set.Add(item);
+            if (_set.ContainsKey(item))
+                return false;
+            _set[item] = new();
+            return true;
         }
 
         public virtual bool Add(T item, string alias)
@@ -52,6 +55,7 @@ namespace SCE
                 return false;
             if (_aliases.ContainsKey(alias))
                 throw new ArgumentException($"Alias {alias} already exists.");
+            _set[item].Add(alias);
             _aliases[alias] = item;
             return true;
         }
@@ -62,19 +66,28 @@ namespace SCE
                 Add(item);
         }
 
-        public void AddEvery(params T[] items)
-        {
-            AddRange(items);
-        }
-
-        public virtual void AddRange(IEnumerable<(T, string)> items)
+        public void AddRange(IEnumerable<(T, string)> items)
         {
             foreach ((var item, string alias) in items)
                 Add(item, alias);
         }
 
+        public void AddEvery(params T[] items)
+        {
+            AddRange(items);
+        }
+
+        public void AddEvery(params (T, string)[] items)
+        {
+            AddRange(items);
+        }
+
         public virtual bool Remove(T item)
         {
+            if (!_set.TryGetValue(item, out var aliases))
+                return false;
+            foreach (var alias in aliases)
+                _aliases.Remove(alias);
             return _set.Remove(item);
         }
 
@@ -82,9 +95,14 @@ namespace SCE
         {
             if (!_aliases.TryGetValue(alias, out var item))
                 return false;
-            _aliases.Remove(alias);
-            _set.Remove(item);
+            Remove(item);
             return true;
+        }
+
+        public virtual void RemoveRange(IEnumerable<T> items)
+        {
+            foreach (var item in items)
+                Remove(item);
         }
 
         public virtual T Get(string alias)
@@ -109,11 +127,16 @@ namespace SCE
             if (_aliases.ContainsKey(newAlias))
                 throw new ArgumentException($"Alias {newAlias} already exists.");
             _aliases[newAlias] = item;
+            _set[item].Add(newAlias);
             _aliases.Remove(oldAlias);
+            _set[item].Remove(oldAlias);
         }
 
         public virtual bool RemoveAlias(string alias)
         {
+            if (!_aliases.TryGetValue(alias, out var item))
+                return false;
+            _set[item].Remove(alias);
             return _aliases.Remove(alias);
         }
 
