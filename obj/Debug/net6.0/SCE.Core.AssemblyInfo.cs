@@ -11,7 +11,7 @@
 using System;
 using System.Reflection;
 
-[assembly: System.Reflection.AssemblyCompanyAttribute("Adam Giaziri")]
+[assembly: System.Reflection.AssemblyCompanyAttribute("SCE")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyCopyrightAttribute("MIT License")]
 [assembly: System.Reflection.AssemblyDescriptionAttribute("The Core of SCE required by all SCE assemblies.")]

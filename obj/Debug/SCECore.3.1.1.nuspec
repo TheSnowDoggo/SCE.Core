@@ -4,16 +4,19 @@
     <id>SCECore</id>
     <version>3.1.1</version>
     <title>SCE.Core</title>
-    <authors>Adam Giaziri</authors>
+    <authors>Luna Sparkle</authors>
     <requireLicenseAcceptance>true</requireLicenseAcceptance>
     <license type="file">LICENSE.txt</license>
     <licenseUrl>https://aka.ms/deprecateLicenseUrl</licenseUrl>
     <readme>README.md</readme>
+    <projectUrl>https://github.com/TheSnowDoggo/SCE.Core</projectUrl>
     <description>The Core of SCE required by all SCE assemblies.</description>
     <copyright>MIT License</copyright>
     <repository url="https://github.com/TheSnowDoggo/SCE.Core" />
     <dependencies>
-      <group targetFramework="net6.0" />
+      <group targetFramework="net6.0">
+        <dependency id="SCECSUtils" version="1.2.1" exclude="Build,Analyzers" />
+      </group>
     </dependencies>
   </metadata>
   <files>

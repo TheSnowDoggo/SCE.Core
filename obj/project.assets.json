@@ -61,7 +61,8 @@
       ],
       "sources": {
         "C:\\Program Files\\dotnet\\library-packs": {},
-        "https://api.nuget.org/v3/index.json": {}
+        "https://api.nuget.org/v3/index.json": {},
+        "https://nuget.pkg.github.com/TheSnowDoggo/index.json": {}
       },
       "frameworks": {
         "net6.0": {
