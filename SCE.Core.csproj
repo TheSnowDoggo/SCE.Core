@@ -11,7 +11,7 @@
 	<AssemblyName>SCE.Core</AssemblyName>
     <Version>3.1.1</Version>
 	<VersionSuffix>Release</VersionSuffix>
-    <Authors>Adam Giaziri</Authors>
+    <Authors>Luna Sparkle</Authors>
     <Product>SCE.Core</Product>
     <Description>The Core of SCE required by all SCE assemblies.</Description>
     <Copyright>MIT License</Copyright>
@@ -24,6 +24,8 @@
     <GenerateDocumentationFile>True</GenerateDocumentationFile>
     <PackageOutputPath></PackageOutputPath>
     <RepositoryUrl>https://github.com/TheSnowDoggo/SCE.Core</RepositoryUrl>
+    <Company>SCE</Company>
+    <PackageProjectUrl>https://github.com/TheSnowDoggo/SCE.Core</PackageProjectUrl>
   </PropertyGroup>
 
   <ItemGroup>
