@@ -19,8 +19,9 @@ namespace SCE
         }
 
         public AliasHash(IEnumerable<T> collection)
+            : this()
         {
-            _set = new(collection);
+            AddRange(collection);
         }
 
         public int Count { get => _set.Count; }
