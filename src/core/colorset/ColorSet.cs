@@ -20,10 +20,8 @@
 
         public SCEColor BgColor { get; }
 
-        // Conversion operators
         public static implicit operator ColorSet(Pixel pixel) => new(pixel.FgColor, pixel.BgColor);
 
-        // Equality operators
         public static bool operator ==(ColorSet left, ColorSet right) => left.Equals(right);
 
         public static bool operator !=(ColorSet left, ColorSet right) => !(left == right);
@@ -56,7 +54,7 @@
 
         public override string ToString()
         {
-            return $"ColorSet({FgColor},{BgColor})";
+            return $"ColorSet({FgColor}, {BgColor})";
         }
     }
 }

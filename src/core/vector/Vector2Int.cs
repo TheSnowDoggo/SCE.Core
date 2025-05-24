@@ -9,22 +9,15 @@
 
         private static readonly Random rand = new();
 
-        #region Dimensions
-
         public int X;
+
         public int Y;
-
-        #endregion
-
-        #region Constructors
 
         public Vector2Int(int x, int y)
         {
             X = x;
             Y = y;
         }
-
-        #endregion
 
         #region Shorthands
         public static Vector2Int Zero { get; } = new(0, 0);

@@ -9,8 +9,6 @@
     {
         private const bool DEFAULT_TRIM = false;
 
-        #region Constructors
-
         /// <summary>
         /// Initializes a new instance of the <see cref="VirtualGrid2D{T, V}"/> class.
         /// </summary>
@@ -22,10 +20,6 @@
             FillFunc = fillFunc;
         }
 
-        #endregion
-
-        #region Properties
-
         /// <summary>
         /// Gets the grid of this.
         /// </summary>
@@ -35,10 +29,6 @@
         /// Gets the filling func of this.
         /// </summary>
         public Func<T, V, T> FillFunc { get; }
-
-        #endregion
-
-        #region Fill
 
         /// <summary>
         /// Fills the grid over a specified area <paramref name="area"/>.
@@ -57,7 +47,7 @@
         /// <param name="item">The item to fill with.</param>
         public void Fill(V item)
         {
-            FillArea(item, Grid.GridArea);
+            FillArea(item, Grid.GridArea());
         }
 
         /// <summary>
@@ -103,7 +93,5 @@
         {
             FillVerticalArea(item, x, new Vector2Int(0, Grid.Height));
         }
-
-        #endregion
     }
 }

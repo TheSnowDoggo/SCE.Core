@@ -2,15 +2,11 @@
 {
     public class Translate2DRenderer : UIBaseExtR
     {
-        private const string DEFAULT_NAME = "translate2d_renderer";
-
-        #region Constructors
-
         /// <summary>
         /// Initializes a new instance of the <see cref="Translate2DRenderer"/> class.
         /// </summary>
-        public Translate2DRenderer(string name, int width, int height, Func<Vector2Int, Grid2D<Pixel>> renderFunc, Vector2Int? renderDimensions = null)
-            : base(name, width, height)
+        public Translate2DRenderer(int width, int height, Func<Vector2Int, Grid2D<Pixel>> renderFunc, Vector2Int? renderDimensions = null)
+            : base(width, height)
         {
             RenderFunc = renderFunc;
             if (renderDimensions is Vector2Int vec)
@@ -20,28 +16,10 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="Translate2DRenderer"/> class.
         /// </summary>
-        public Translate2DRenderer(int width, int height, Func<Vector2Int, Grid2D<Pixel>> renderFunc, Vector2Int? renderDimensions = null)
-            : this(DEFAULT_NAME, width, height, renderFunc, renderDimensions)
-        {
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="Translate2DRenderer"/> class.
-        /// </summary>
-        public Translate2DRenderer(string name, Vector2Int dimensions, Func<Vector2Int, Grid2D<Pixel>> renderFunc, Vector2Int? renderDimensions = null)
-            : this(name, dimensions.X, dimensions.Y, renderFunc, renderDimensions)
-        {
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="Translate2DRenderer"/> class.
-        /// </summary>
         public Translate2DRenderer(Vector2Int dimensions, Func<Vector2Int, Grid2D<Pixel>> renderFunc, Vector2Int? renderDimensions = null)
-            : this(DEFAULT_NAME, dimensions.X, dimensions.Y, renderFunc, renderDimensions)
+            : this(dimensions.X, dimensions.Y, renderFunc, renderDimensions)
         {
         }
-
-        #endregion
 
         /// <summary>
         /// Gets or sets the translation function.
@@ -53,22 +31,20 @@
 
         #region Settings
 
+        private Vector2Int renderDimensions = new(1, 1);
+
         /// <summary>
         /// Gets or sets the expected number of pixels per translation.
         /// </summary>
         public Vector2Int RenderDimensions
         {
             get => renderDimensions;
-            set => SetRenderDimensions(value);
-        }
-
-        private Vector2Int renderDimensions = new(1,1);
-
-        private void SetRenderDimensions(Vector2Int value)
-        {
-            if (value.X <= 0 || value.Y <= 0)
-                throw new ArgumentException("Render dimensions must be greater than 0.");
-            renderDimensions = value;
+            set
+            {
+                if (value.X <= 0 || value.Y <= 0)
+                    throw new ArgumentException("Render dimensions must be greater than 0.");
+                renderDimensions = value;
+            }
         }
 
         /// <summary>
@@ -89,7 +65,7 @@
                 for (int y = 0; y < Height / RenderDimensions.Y; ++y)
                 {
                     var rPos = new Vector2Int(x, y);
-                    _dpMap.MapTo(rFunc(rPos), rPos * RenderDimensions);
+                    _dpMap.PMapTo(rFunc.Invoke(rPos), rPos * RenderDimensions);
                 }
             }
         }

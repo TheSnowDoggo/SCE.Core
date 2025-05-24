@@ -15,8 +15,6 @@ namespace SCE
         private readonly Dictionary<T, U> _tDict;
         private readonly Dictionary<U, T> _uDict;
 
-        #region Constructors
-
         public KeyMap(int capacity = 0)
         {
             _tDict = new(capacity);
@@ -29,17 +27,9 @@ namespace SCE
             AddRange(collection);
         }
 
-        #endregion
+        #region IEnumerable
 
-        #region Properties
-
-        public int Count { get => _tDict.Count; }
-
-        #endregion
-
-        #region Enumerator
-
-        public IEnumerator<(T,U)> GetEnumerator()
+        public IEnumerator<(T, U)> GetEnumerator()
         {
             foreach (var pair in _tDict)
                 yield return (pair.Key, pair.Value);
@@ -51,6 +41,8 @@ namespace SCE
         }
 
         #endregion
+
+        public int Count { get => _tDict.Count; }
 
         #region Add
 
@@ -119,7 +111,17 @@ namespace SCE
 
         #endregion
 
-        #region TryGet
+        #region Get
+
+        public U GetU(T key1)
+        {
+            return _tDict[key1];
+        }
+
+        public T GetT(U key2)
+        {
+            return _uDict[key2];
+        }
 
         public bool TryGetU(T key1, [NotNullWhen(true)] out U? value)
         {
@@ -139,20 +141,6 @@ namespace SCE
         {
             _tDict.Clear();
             _uDict.Clear();
-        }
-
-        #endregion
-
-        #region Get
-
-        public U GetU(T key1)
-        {
-            return _tDict[key1];
-        }
-
-        public T GetT(U key2)
-        {
-            return _uDict[key2];
         }
 
         #endregion

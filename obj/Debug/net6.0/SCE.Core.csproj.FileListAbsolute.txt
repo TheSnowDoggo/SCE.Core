@@ -36,3 +36,8 @@ C:\Users\AdamG\source\repos\TheSnowDoggo\SCE.Core\bin\Debug\net6.0\SCE.Core.runt
 C:\Users\AdamG\source\repos\TheSnowDoggo\SCE.Core\obj\Debug\net6.0\SCE.Core.genruntimeconfig.cache
 C:\Users\redst\source\repos\TheSnowDoggo\SCE.Core\bin\Debug\net6.0\SCE.Core.xml
 C:\Users\redst\source\repos\TheSnowDoggo\SCE.Core\obj\Debug\net6.0\SCE.Core.xml
+C:\Users\redst\source\repos\TheSnowDoggo\SCE.Core\bin\Debug\net6.0\SCE.Core.exe
+C:\Users\redst\source\repos\TheSnowDoggo\SCE.Core\bin\Debug\net6.0\SCE.Core.runtimeconfig.json
+C:\Users\redst\source\repos\TheSnowDoggo\SCE.Core\obj\Debug\net6.0\SCE.Core.genruntimeconfig.cache
+C:\Users\redst\source\repos\TheSnowDoggo\SCE.Core\bin\Debug\net6.0\CSUtils.dll
+C:\Users\redst\source\repos\TheSnowDoggo\SCE.Core\obj\Debug\net6.0\SCE.Core.csproj.CopyComplete

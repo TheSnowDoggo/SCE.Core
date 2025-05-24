@@ -12,7 +12,23 @@
 
         private T[,] data;
 
-        #region Constructors
+        /// <summary>
+        /// Gets the width of the grid.
+        /// </summary>
+        public int Width { get => data.GetLength(0); }
+
+        /// <summary>
+        /// Gets the height of the grid.
+        /// </summary>
+        public int Height { get => data.GetLength(1); }
+
+        /// <summary>
+        /// Gets the dimensions of the grid as a <see cref="Vector2Int"/>.
+        /// </summary>
+        /// <remarks>
+        /// Dimensions stored as (x:Width, y:Height)
+        /// </remarks>
+        public Vector2Int Dimensions { get => new(Width, Height); }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Grid2D{T}"/> class.
@@ -23,9 +39,8 @@
         {
             data = new T[width, height];
             Data = new(this, (pos, val) => val);
-            UpdateDimensions();
         }
-        
+
         /// <summary>
         /// Initializes a new instance of the <see cref="Grid2D{T}"/> class.
         /// </summary>
@@ -43,7 +58,6 @@
         {
             this.data = data;
             Data = new(this, (pos, val) => val);
-            UpdateDimensions();
         }
 
         /// <summary>
@@ -55,65 +69,7 @@
         {
         }
 
-        #endregion
-
-        #region Indexers
-
-        /// <summary>
-        /// Gets or sets the element at the specified zero-based coordinates.
-        /// </summary>
-        /// <param name="x">The zero-based x coordinate.</param>
-        /// <param name="y">The zero-based y coordinate.</param>
-        /// <returns>The element at the specified zero-based coordinates.</returns>
-        public T this[int x, int y]
-        {
-            get => Get(x, y);
-            set => Set(x, y, value);
-        }
-
-        private T Get(int x, int y)
-        {
-            return data[x, y];
-        }
-
-        private T Set(int x, int y, T value)
-        {
-            return data[x, y] = value;
-        }
-
-        /// <summary>
-        /// Gets or sets the element at the specified zero-based coordinates.
-        /// </summary>
-        /// <param name="pos">The zero-based <see cref="Vector2Int"/> coordinates.</param>
-        /// <returns>The element at the specified zero-based coordinates.</returns>
-        public T this[Vector2Int pos]
-        {
-            get => Get(pos);
-            set => Set(pos, value);
-        }
-
-        private T Get(Vector2Int pos)
-        {
-            return Get(pos.X, pos.Y);
-        }
-
-        private T Set(Vector2Int pos, T value)
-        {
-            return Set(pos.X, pos.Y, value);
-        }
-
-        #endregion
-
-        #region VGrid
-
-        /// <summary>
-        /// Gets the virtual grid of this grid containing filling functions.
-        /// </summary>
-        public VirtualGrid2D<T,T> Data { get; }
-
-        #endregion
-
-        #region Actions
+        public VirtualGrid2D<T, T> Data { get; }
 
         /// <summary>
         /// Invoked when the size of the grid is changed.
@@ -125,32 +81,36 @@
         /// </summary>
         public Action? OnClear;
 
-        #endregion
-
-        #region Properties
+        /// <summary>
+        /// Gets or sets the element at the specified zero-based coordinates.
+        /// </summary>
+        /// <param name="x">The zero-based x coordinate.</param>
+        /// <param name="y">The zero-based y coordinate.</param>
+        /// <returns>The element at the specified zero-based coordinates.</returns>
+        public T this[int x, int y]
+        {
+            get => data[x, y];
+            set => data[x, y] = value;
+        }
 
         /// <summary>
-        /// Gets the width of the grid.
+        /// Gets or sets the element at the specified zero-based coordinates.
         /// </summary>
-        public int Width { get => data.GetLength(0); }
-
-        /// <summary>
-        /// Gets the height of the grid.
-        /// </summary>
-        public int Height { get => data.GetLength(1); }
-
-        /// <summary>
-        /// Gets the dimensions of the grid as a <see cref="Vector2Int"/>.
-        /// </summary>
-        /// <remarks>
-        /// Dimensions stored as (x:Width, y:Height)
-        /// </remarks>
-        public Vector2Int Dimensions { get; private set; }
+        /// <param name="pos">The zero-based <see cref="Vector2Int"/> coordinates.</param>
+        /// <returns>The element at the specified zero-based coordinates.</returns>
+        public T this[Vector2Int pos]
+        {
+            get => this[pos.X, pos.Y];
+            set => this[pos.X, pos.Y] = value;
+        }
 
         /// <summary>
         /// Gets the zero-based area of the grid as a <see cref="Rect2D"/>.
         /// </summary>
-        public Rect2D GridArea { get; private set; }
+        public Rect2D GridArea()
+        {
+            return new(Width, Height);
+        }
 
         /// <summary>
         /// Return the size of the grid (width * height).
@@ -160,8 +120,6 @@
         {
             return Width * Height;
         }
-
-        #endregion
 
         #region Clone
 
@@ -229,12 +187,13 @@
         /// <param name="trimOnOverflow">If <see langword="true"/>, try to trim the area to fit within the bounds of this grid.</param>
         public void GenericCycleArea(Func<Vector2Int, bool> func, Rect2D area, bool trimOnOverflow = DEFAULT_TRIM)
         {
-            if (!Rect2D.Overlaps(GridArea, area))
+            var thisArea = GridArea(); 
+            if (!Rect2D.Overlaps(thisArea, area))
                 throw new InvalidAreaException();
-            if (!trimOnOverflow && !GridArea.Contains(area))
+            if (!trimOnOverflow && !thisArea.Contains(area))
                 throw new AreaOutOfBoundsException();
 
-            var newArea = GridArea.TrimArea(area);
+            var newArea = thisArea.TrimArea(area);
             for (int y = newArea.Bottom; y < newArea.Top; ++y)
             {
                 for (int x = newArea.Left; x < newArea.Right; ++x)
@@ -265,7 +224,7 @@
         /// <param name="func">The func to invoke at every position.</param>
         public void GenericCycle(Func<Vector2Int, bool> func)
         {
-            GenericCycleArea(func, GridArea);
+            GenericCycleArea(func, GridArea());
         }
 
         /// <summary>
@@ -301,18 +260,21 @@
         /// <param name="dataGridArea">The area on the <paramref name="dataGrid"/> to get elements from.</param>
         /// <param name="thisOffset">The offset position on this grid.</param>
         /// <param name="trimOnOverflow">If <see langword="true"/>, try to trim the area to fit within the bounds of this grid.</param>
-        protected void CustomMapToArea(Action<Vector2Int> action, Grid2D<T> dataGrid, Rect2D dataGridArea, Vector2Int thisOffset, bool trimOnOverflow = DEFAULT_TRIM)
+        public void CustomMapToArea(Action<Vector2Int> action, Grid2D<T> dataGrid, Rect2D dataGridArea, Vector2Int thisOffset, bool trimOnOverflow = DEFAULT_TRIM)
         {
-            if (!Rect2D.Overlaps(dataGrid.GridArea, dataGridArea))
+            var dataArea = dataGrid.GridArea();
+            if (!Rect2D.Overlaps(dataArea, dataGridArea))
                 throw new InvalidAreaException("Given get area doesn't overlap the get grid.");
-            if (!trimOnOverflow && !dataGrid.GridArea.Contains(dataGridArea))
+            if (!trimOnOverflow && !dataArea.Contains(dataGridArea))
                 throw new AreaOutOfBoundsException("Given get area is outside of the bounds of the get grid.");
 
+            var thisArea = GridArea();
+
             var offsetArea = dataGridArea + thisOffset;
-            if (!Rect2D.Overlaps(GridArea, offsetArea))
+            if (!Rect2D.Overlaps(thisArea, offsetArea))
                 throw new AreaOutOfBoundsException("Offset area doesn't overlap this grid.");
 
-            dataGridArea = GridArea.TrimArea(offsetArea) - thisOffset;
+            dataGridArea = thisArea.TrimArea(offsetArea) - thisOffset;
 
             dataGrid.GenericCycleArea(action, dataGridArea, trimOnOverflow);
         }
@@ -327,7 +289,7 @@
         /// <param name="dataGridArea">The area on the <paramref name="dataGrid"/> to get elements from.</param>
         /// <param name="thisOffset">The offset position on this grid.</param>
         /// <param name="trimOnOverflow">If <see langword="true"/>, try to trim the area to fit within the bounds of this grid.</param>
-        public virtual void MapToArea(Grid2D<T> dataGrid, Rect2D dataGridArea, Vector2Int? thisOffset = null, bool trimOnOverflow = DEFAULT_TRIM)
+        public void MapToArea(Grid2D<T> dataGrid, Rect2D dataGridArea, Vector2Int? thisOffset = null, bool trimOnOverflow = DEFAULT_TRIM)
         {
             var validThisOffset = thisOffset ?? Vector2Int.Zero;
             CustomMapToArea((Vector2Int pos) => this[pos + validThisOffset] = dataGrid[pos], dataGrid, dataGridArea, validThisOffset, trimOnOverflow);
@@ -342,36 +304,39 @@
         /// <param name="dataGrid">The grid to get elements from.</param>
         /// <param name="thisOffset">The offset position on this grid.</param>
         /// <param name="trimOnOverflow">If <see langword="true"/>, try to trim the area to fit within the bounds of this grid.</param>
-        public virtual void MapTo(Grid2D<T> dataGrid, Vector2Int? thisOffset = null, bool trimOnOverflow = DEFAULT_TRIM)
+        public void MapTo(Grid2D<T> dataGrid, Vector2Int? thisOffset = null, bool trimOnOverflow = DEFAULT_TRIM)
         {
-            MapToArea(dataGrid, dataGrid.GridArea, thisOffset, trimOnOverflow);
+            MapToArea(dataGrid, dataGrid.GridArea(), thisOffset, trimOnOverflow);
         }
 
         /// <summary>
-        /// Custom maps by populating the specified area <paramref name="thisArea"/> on this grid from the specified <paramref name="dataGrid"/> with offset <paramref name="dataOffset"/>
+        /// Custom maps by populating the specified area <paramref name="mapArea"/> on this grid from the specified <paramref name="dataGrid"/> with offset <paramref name="dataOffset"/>
         /// </summary>
         /// <remarks>
         /// Often used for mapping a large grid (<paramref name="dataGrid"/>) onto a small grid (this grid).
         /// </remarks>
         /// <param name="action">The map action to invoke.</param>
         /// <param name="dataGrid">The grid to get elements from.</param>
-        /// <param name="thisArea">The area on this grid to populate.</param>
+        /// <param name="mapArea">The area on this grid to populate.</param>
         /// <param name="dataOffset">The offset position on the <paramref name="dataGrid"/>.</param>
         /// <param name="trimOnOverflow">If <see langword="true"/>, try to trim the area to fit within the bounds of this grid.</param>
-        public void CustomMapAreaFrom(Action<Vector2Int> action, Grid2D<T> dataGrid, Rect2D thisArea, Vector2Int dataOffset, bool trimOnOverflow = DEFAULT_TRIM)
+        public void CustomMapAreaFrom(Action<Vector2Int> action, Grid2D<T> dataGrid, Rect2D mapArea, Vector2Int dataOffset, bool trimOnOverflow = DEFAULT_TRIM)
         {
-            if (!Rect2D.Overlaps(GridArea, thisArea))
+            var thisArea = GridArea();
+            if (!Rect2D.Overlaps(thisArea, mapArea))
                 throw new InvalidAreaException("Given set area doesn't overlap with this grid.");
-            if (!trimOnOverflow && !GridArea.Contains(thisArea))
+            if (!trimOnOverflow && !thisArea.Contains(mapArea))
                 throw new AreaOutOfBoundsException("Given set area is outside of the bounds of this grid.");
 
-            var alignedGetArea = thisArea + dataOffset;
-            if (!Rect2D.Overlaps(dataGrid.GridArea, alignedGetArea))
+            var dataArea = dataGrid.GridArea();
+
+            var alignedGetArea = mapArea + dataOffset;
+            if (!Rect2D.Overlaps(dataArea, alignedGetArea))
                 throw new InvalidAreaException("Offset area doesn't overlap with the get grid.");
 
-            thisArea = dataGrid.GridArea.TrimArea(alignedGetArea) - dataOffset;
+            mapArea = dataArea.TrimArea(alignedGetArea) - dataOffset;
 
-            GenericCycleArea(action, thisArea, trimOnOverflow);
+            GenericCycleArea(action, mapArea, trimOnOverflow);
         }
 
         /// <summary>
@@ -384,7 +349,7 @@
         /// <param name="thisArea">The area on this grid to populate.</param>
         /// <param name="dataOffset">The offset position on the <paramref name="dataGrid"/>.</param>
         /// <param name="trimOnOverflow">If <see langword="true"/>, try to trim the area to fit within the bounds of this grid.</param>
-        public virtual void MapAreaFrom(Grid2D<T> dataGrid, Rect2D thisArea, Vector2Int? dataOffset = null, bool trimOnOverflow = DEFAULT_TRIM)
+        public void MapAreaFrom(Grid2D<T> dataGrid, Rect2D thisArea, Vector2Int? dataOffset = null, bool trimOnOverflow = DEFAULT_TRIM)
         {
             var validGetOffset = dataOffset ?? Vector2Int.Zero;
             CustomMapAreaFrom((Vector2Int pos) => this[pos] = dataGrid[pos + validGetOffset], dataGrid, thisArea, validGetOffset, trimOnOverflow);
@@ -399,9 +364,9 @@
         /// <param name="dataGrid">The grid to get elements from.</param>
         /// <param name="dataOffset">The offset position on the <paramref name="dataGrid"/>.</param>
         /// <param name="trimOnOverflow">If <see langword="true"/>, try to trim the area to fit within the bounds of this grid.</param>
-        public virtual void MapFrom(Grid2D<T> dataGrid, Vector2Int? dataOffset = null, bool trimOnOverflow = DEFAULT_TRIM)
+        public void MapFrom(Grid2D<T> dataGrid, Vector2Int? dataOffset = null, bool trimOnOverflow = DEFAULT_TRIM)
         {
-            MapAreaFrom(dataGrid, GridArea, dataOffset, trimOnOverflow);
+            MapAreaFrom(dataGrid, GridArea(), dataOffset, trimOnOverflow);
         }
 
         #endregion
@@ -455,7 +420,6 @@
         public void CleanResize(int width, int height)
         {
             data = new T[width, height];
-            UpdateDimensions();
             OnResize?.Invoke();
         }
 
@@ -477,12 +441,14 @@
         {
             var transferGrid = new Grid2D<T>(width, height);
 
-            var mapArea = transferGrid.GridArea > GridArea ? GridArea : transferGrid.GridArea;
+            var thisArea = GridArea();
+            var newArea = transferGrid.GridArea();
+
+            var mapArea = newArea > thisArea ? thisArea : newArea;
 
             transferGrid.MapAreaFrom(this, mapArea);
 
             data = transferGrid.data;
-            UpdateDimensions();
             OnResize?.Invoke();
         }
 
@@ -493,12 +459,6 @@
         public void MapResize(Vector2Int dimensions)
         {
             MapResize(dimensions.X, dimensions.Y);
-        }
-
-        private void UpdateDimensions()
-        {
-            Dimensions = new(Width, Height);
-            GridArea = new(Dimensions);
         }
 
         #endregion

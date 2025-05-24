@@ -12,3 +12,6 @@ C:\Users\redst\source\repos\TheSnowDoggo\SCE.Core\obj\Release\net6.0\refint\SCE.
 C:\Users\redst\source\repos\TheSnowDoggo\SCE.Core\obj\Release\net6.0\SCE.Core.xml
 C:\Users\redst\source\repos\TheSnowDoggo\SCE.Core\obj\Release\net6.0\SCE.Core.pdb
 C:\Users\redst\source\repos\TheSnowDoggo\SCE.Core\obj\Release\net6.0\ref\SCE.Core.dll
+C:\Users\redst\source\repos\TheSnowDoggo\SCE.Core\bin\Release\net6.0\SCE.Core.exe
+C:\Users\redst\source\repos\TheSnowDoggo\SCE.Core\bin\Release\net6.0\SCE.Core.runtimeconfig.json
+C:\Users\redst\source\repos\TheSnowDoggo\SCE.Core\obj\Release\net6.0\SCE.Core.genruntimeconfig.cache

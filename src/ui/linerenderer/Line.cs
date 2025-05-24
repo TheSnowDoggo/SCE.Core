@@ -19,7 +19,7 @@
 
         public ColorSet Colors { get; set; }
 
-        public HorizontalAnchor Anchor { get; set; } = HorizontalAnchor.Left;
+        public Anchor Anchor { get; set; } = Anchor.Left;
 
         /// <inheritdoc/>
         public override string ToString()

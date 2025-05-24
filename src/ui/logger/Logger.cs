@@ -1,4 +1,5 @@
-﻿namespace SCE
+﻿using CSUtils;
+namespace SCE
 {
     public class Logger : UIBaseExt
     {
@@ -8,60 +9,26 @@
             MessageOnly,
         }
 
-        private const string DEFAULT_NAME = "logger";
-
         private const SCEColor DEFAULT_BGCOLOR = SCEColor.Black;
 
         private readonly List<Log> _logs = new();
 
         private int viewY = 0;
 
-        #region BackingFields
-
-        private SCEColor bgColor;
-
-        private StackType stackMode = StackType.TopDown;
-
-        private DisplayType displayMode = DisplayType.Full;
-
-        private bool fitLinesToLength = false;
-
-        #endregion
-
-        #region Constructors
-
-        public Logger(string name, int width, int height, SCEColor? bgColor = null)
-            : base(name, width, height, bgColor)
+        public Logger(int width, int height, SCEColor? bgColor = null)
+            : base(width, height, bgColor)
         {
             this.bgColor = bgColor ?? DEFAULT_BGCOLOR;
         }
 
-        public Logger(string name, Vector2Int dimensions, SCEColor? bgColor = null)
-            : this(name, dimensions.X, dimensions.Y, bgColor)
-        {
-        }
-
-        public Logger(int width, int height, SCEColor? bgColor = null)
-            : this(DEFAULT_NAME, width, height, bgColor)
-        {
-        }
-
         public Logger(Vector2Int dimensions, SCEColor? bgColor = null)
-            : this(DEFAULT_NAME, dimensions, bgColor)
+            : this(dimensions.X, dimensions.Y, bgColor)
         {
         }
-
-        #endregion
-
-        #region Logs
-
-        public IList<Log> ILogs { get => _logs.AsReadOnly(); }
 
         public int Count { get => _logs.Count; }
 
-        #endregion
-
-        #region Indexers
+        public IList<Log> ILogs { get => _logs.AsReadOnly(); }
 
         public Log this[int index]
         {
@@ -73,9 +40,9 @@
             }
         }
 
-        #endregion
-
         #region Settings
+
+        private SCEColor bgColor;
 
         public SCEColor BgColor
         {
@@ -87,6 +54,8 @@
             }
         }
 
+        private StackType stackMode = StackType.TopDown;
+
         public StackType StackMode
         {
             get => stackMode;
@@ -97,6 +66,8 @@
             }
         }
 
+        private DisplayType displayMode = DisplayType.Full;
+
         public DisplayType DisplayMode
         {
             get => displayMode;
@@ -106,6 +77,8 @@
                 RenderAll();
             }
         }
+
+        private bool fitLinesToLength = false;
 
         public bool FitToLength
         {
@@ -252,7 +225,7 @@
                 DisplayType.MessageOnly => log.Message,
                 _ => throw new NotImplementedException()
             };
-            return FitToLength ? StringUtils.PostFitToLength(str, Width) : str; 
+            return FitToLength ? Utils.FTL(str, Width) : str; 
         }
 
         private void ClearAt(int y)

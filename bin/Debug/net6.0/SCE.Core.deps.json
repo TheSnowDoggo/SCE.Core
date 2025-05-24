@@ -7,8 +7,19 @@
   "targets": {
     ".NETCoreApp,Version=v6.0": {
       "SCE.Core/2.1.1": {
+        "dependencies": {
+          "CSUtils": "0.2.1.0"
+        },
         "runtime": {
           "SCE.Core.dll": {}
+        }
+      },
+      "CSUtils/0.2.1.0": {
+        "runtime": {
+          "CSUtils.dll": {
+            "assemblyVersion": "0.2.1.0",
+            "fileVersion": "0.2.1.0"
+          }
         }
       }
     }
@@ -16,6 +27,11 @@
   "libraries": {
     "SCE.Core/2.1.1": {
       "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "CSUtils/0.2.1.0": {
+      "type": "reference",
       "serviceable": false,
       "sha512": ""
     }

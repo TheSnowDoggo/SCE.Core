@@ -1,0 +1,81 @@
+﻿namespace SCE
+{
+    internal class FlowTable : UIBaseExtR
+    {
+        private const SCEColor DEFAULT_BGCOLOR = SCEColor.Black;
+
+        public FlowTable(int width, int height, SCEColor? bgColor = null)
+            : base(width, height, bgColor)
+        {
+            BgColor = bgColor ?? DEFAULT_BGCOLOR;
+        }
+
+        public FlowTable(Vector2Int dimensions, SCEColor? bgColor = null)
+            : this(dimensions.X, dimensions.Y, bgColor)
+        {
+        }
+
+        public SCEColor BgColor { get; set; }
+
+        public bool ClearOnRender { get; set; } = true;
+
+        public bool CropOutOfBounds { get; set; } = true;
+
+        public FlowType FlowMode { get; set; } = FlowType.TopDown;
+
+        public List<IRenderable> Renderables { get; } = new();
+
+        protected virtual void Render()
+        {
+            if (ClearOnRender)
+                _dpMap.Data.Fill(new Pixel(BgColor));
+
+            int i = 0;
+            foreach (var r in Renderables)
+            {
+                if (!r.IsActive)
+                    continue;
+
+                var dpMap = r.GetMap();
+
+                Vector2Int off = FlowMode switch
+                {
+                    FlowType.TopDown => new(0, i),
+                    FlowType.BottomUp => new(0, Height - i - dpMap.Height),
+                    FlowType.LeftRight => new(i, 0),
+                    FlowType.RightLeft => new(Width - i - dpMap.Width, 0),
+                    _ => throw new NotImplementedException()
+                };
+
+                Vector2Int aRange = FlowMode is FlowType.TopDown or FlowType.BottomUp ? new(Width, dpMap.Height) :
+                    new(dpMap.Width, Height);
+
+                var pos = AnchorUtils.AnchorTo(r.Anchor, aRange, dpMap.Dimensions) + r.Offset + off;
+
+                if (!CropOutOfBounds || _dpMap.GridArea().Overlaps(pos, dpMap.Dimensions + pos))
+                {
+                    _dpMap.PMapTo(dpMap, pos, true);
+                    int nextI = FlowMode switch
+                    {
+                        FlowType.TopDown => pos.Y + dpMap.Height,
+                        FlowType.BottomUp => Height - pos.Y,
+                        FlowType.LeftRight => pos.X + dpMap.Width,
+                        FlowType.RightLeft => Width - pos.X,
+                        _ => throw new NotImplementedException()
+                    };
+                    if (nextI > i)
+                    {
+                        i = nextI;
+                    }
+                }
+            }
+        }
+
+        /// <inheritdoc/>
+        public override DisplayMap GetMap()
+        {
+            Render();
+            return base.GetMap();
+        }
+    }
+}

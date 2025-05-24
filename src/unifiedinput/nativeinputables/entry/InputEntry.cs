@@ -18,7 +18,6 @@ namespace SCE
 
         private readonly HashSet<Intercept> _priorityIntercepters;
 
-        #region Constructors
         public InputEntry(string name)
             : base(name)
         {
@@ -30,13 +29,13 @@ namespace SCE
             : this(DEFAULT_NAME)
         {
         }
-        #endregion
 
         public delegate bool Intercept(ConsoleKeyInfo keyInfo, StringBuilder strBuilder);
 
         public string Input { get => _strBuilder.ToString(); }
 
         #region Actions
+
         public Action? OnEntry { get; set; }
 
         public Action? OnExit { get; set; }
@@ -44,9 +43,11 @@ namespace SCE
         public Action? OnOpen { get; set; }
 
         public Action? OnKey { get; set; }
+
         #endregion
 
         #region Settings
+
         public bool CheckForEntry { get; set; } = true;
 
         public bool CheckForExit { get; set; } = true;
@@ -232,7 +233,7 @@ namespace SCE
 
         public static Func<string, bool> MaxLines(int maxLines)
         {
-            return (str) => StringUtils.ContainsLessThan(str, '\n', maxLines);
+            return str => StringUtils.ContainsLessThan(str, '\n', maxLines);
         }
 
         public static Func<string, bool> MaxLineLength(int maxLineLength)

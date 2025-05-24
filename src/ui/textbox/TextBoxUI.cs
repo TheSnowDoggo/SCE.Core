@@ -1,35 +1,22 @@
-﻿namespace SCE
+﻿using CSUtils;
+using System.Text;
+
+namespace SCE
 {
     public class TextBoxUI : UIBaseExt
     {
-        private const string DEFAULT_NAME = "textbox";
-
         private const SCEColor DEFAULT_BGCOLOR = SCEColor.Black;
 
-        #region Constructors
-
-        public TextBoxUI(string name, int width, int height, SCEColor? bgColor = null)
-            : base(name, width, height, bgColor)
+        public TextBoxUI(int width, int height, SCEColor? bgColor = null)
+            : base(width, height, bgColor)
         {
             this.bgColor = bgColor ?? DEFAULT_BGCOLOR;
         }
 
-        public TextBoxUI(string name, Vector2Int dimensions, SCEColor? bgColor = null)
-            : this(name, dimensions.X, dimensions.Y, bgColor)
-        {
-        }
-
-        public TextBoxUI(int width, int height, SCEColor? bgColor = null)
-            : this(DEFAULT_NAME, width, height, bgColor)
-        {
-        }
-
         public TextBoxUI(Vector2Int dimensions, SCEColor? bgColor = null)
-            : this(DEFAULT_NAME, dimensions, bgColor)
+            : this(dimensions.X, dimensions.Y, bgColor)
         {
         }
-
-        #endregion
 
         #region Settings
 
@@ -38,31 +25,23 @@
         public SCEColor BgColor
         {
             get => bgColor;
-            set => SetBgColor(value);
+            set
+            {
+                bgColor = value;
+                Update();
+            }
         }
-
-        private void SetBgColor(SCEColor value)
-        {
-            bgColor = value;
-            Update();
-        }
-
-        #endregion
-
-        #region TextSettings
 
         private string text = string.Empty;
 
         public string Text
         {
             get => text;
-            set => SetText(value);
-        }
-
-        private void SetText(string value)
-        {
-            text = value;
-            Update();
+            set
+            {
+                text = value;
+                Update();
+            }
         }
 
         private SCEColor textFgColor = SCEColor.Gray;
@@ -70,13 +49,11 @@
         public SCEColor TextFgColor
         {
             get => textFgColor;
-            set => SetTextFgColor(value);
-        }
-
-        private void SetTextFgColor(SCEColor value)
-        {
-            textFgColor = value;
-            Update();
+            set
+            {
+                textFgColor = value;
+                Update();
+            }
         }
 
         private SCEColor textBgColor = SCEColor.Transparent;
@@ -84,64 +61,82 @@
         public SCEColor TextBgColor
         {
             get => textBgColor;
-            set => SetTextBgColor(value);
+            set
+            {
+                textBgColor = value;
+                Update();
+            }
         }
 
-        private void SetTextBgColor(SCEColor value)
+        private Anchor textAnchor;
+
+        public Anchor TextAnchor
         {
-            textBgColor = value;
-            Update();
+            get => textAnchor;
+            set
+            {
+                textAnchor = value;
+                Update();
+            }
         }
 
-        private HorizontalAnchor horizontalAnchor = HorizontalAnchor.Left;
-
-        public HorizontalAnchor HorizontalAnchor
-        {
-            get => horizontalAnchor;
-            set => SetHorizontalAnchor(value);
-        }
-
-        private void SetHorizontalAnchor(HorizontalAnchor value)
-        {
-            horizontalAnchor = value;
-            Update();
-        }
-
-        private VerticalAnchor verticalAnchor = VerticalAnchor.Top;
-
-        public VerticalAnchor VerticalAnchor
-        {
-            get => verticalAnchor;
-            set => SetVerticalAnchor(value);
-        }
-
-        private void SetVerticalAnchor(VerticalAnchor value)
-        {
-            verticalAnchor = value;
-            Update();
-        }
+        public bool NewlineOverflow { get; set; } = false;
 
         #endregion
 
-        #region Render
+        private static string[] OverflowSplitLines(string str, int maxLength, int maxLines)
+        {
+            List<string> lineList = new();
+            StringBuilder sb = new();
+            for (int i = 0; i < str.Length && lineList.Count < maxLines; ++i)
+            {
+                bool newLine = str[i] == '\n';
+                if (!newLine)
+                    sb.Append(str[i]);
+                if (newLine || i == str.Length - 1 || (sb.Length == maxLength && str[i + 1] != '\n'))
+                {
+                    lineList.Add(sb.ToString());
+                    sb.Clear();
+                }
+            }
+            return lineList.ToArray();
+        }
+
+        private static string[] SplitLines(string str, int maxLength, int maxLines)
+        {
+            List<string> lines = new(maxLines);
+            StringBuilder sb = new();
+            foreach (char c in str)
+            {
+                if (c == '\n')
+                {
+                    lines.Add(Utils.Shorten(sb.ToString(), maxLength));
+                    sb.Clear();
+                }
+                else
+                {
+                    sb.Append(c);
+                }
+            }
+            if (sb.Length > 0 && lines.Count < maxLines)
+                lines.Add(Utils.Shorten(sb.ToString(), maxLength));
+            return lines.ToArray();
+        }
 
         public void Update()
         {
             _dpMap.Data.Fill(new Pixel(BgColor));
 
-            var stringArr = StringUtils.SmartSplitLineArray(Text, Width, Height);
+            var lineArr = NewlineOverflow ? OverflowSplitLines(Text, Width, Height) :
+                SplitLines(Text, Width, Height);
 
-            int startY = AnchorUtils.VerticalAnchoredStart(VerticalAnchor, stringArr.Length, Height) - 1;
-            for (int i = 0; i < stringArr.Length; ++i)
+            int startY = AnchorUtils.VerticalFix(Anchor, Height - lineArr.Length);
+            for (int i = 0; i < lineArr.Length; ++i)
             {
-                int x = AnchorUtils.HorizontalAnchoredStart(HorizontalAnchor, stringArr[i].Length, Width);
-                _dpMap.MapLine(stringArr[i], new Vector2Int(x, startY - i), TextFgColor, TextBgColor);
+                int x = AnchorUtils.HorizontalFix(TextAnchor, Width - lineArr[i].Length);
+                _dpMap.MapLine(lineArr[i], new Vector2Int(x, startY + i), TextFgColor, TextBgColor);
             }
         }
-
-        #endregion
-
-        #region Resize
 
         public void Resize(int width, int height)
         {
@@ -153,7 +148,5 @@
         {
             Resize(dimensions.X, dimensions.Y);
         }
-
-        #endregion
     }
 }

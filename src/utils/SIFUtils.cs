@@ -1,8 +1,8 @@
-﻿namespace SCE
+﻿using CSUtils;
+using System.Diagnostics.CodeAnalysis;
+using System.Text;
+namespace SCE
 {
-    using System.Diagnostics.CodeAnalysis;
-    using System.Text;
-
     public static class SIFUtils
     {
         public static readonly KeyMap<char, SCEColor> sifMap = new()
@@ -46,11 +46,11 @@
                 }
             }
 
-            string elementCompressed = StringUtils.RunLengthCompress(new(elementArr));
-            string fgCompressed = StringUtils.RunLengthCompress(new(fgArr));
-            string bgCompressed = StringUtils.RunLengthCompress(new(bgArr));
+            string elementComp = Utils.RLCompress(new(elementArr));
+            string fgComp = Utils.RLCompress(new(fgArr));
+            string bgComp = Utils.RLCompress(new(bgArr));
 
-            return Format(grid.Width, grid.Height, fgCompressed, bgCompressed, elementCompressed);
+            return Format(grid.Width, grid.Height, fgComp, bgComp, elementComp);
         }
 
         public static Grid2D<Pixel> ToGrid2D(string sif)
@@ -61,16 +61,16 @@
 
             DeformatData(sif, out string fgColors, out string bgColors, out string elements);
 
-            string fgDecompressed = StringUtils.RunLengthDecompress(fgColors);
-            string bgDecompressed = StringUtils.RunLengthDecompress(bgColors);
-            string elementDecompressed = StringUtils.RunLengthDecompress(elements);
+            string fgDecomp = Utils.RLDecompress(fgColors);
+            string bgDecomp = Utils.RLDecompress(bgColors);
+            string elementDecomp = Utils.RLDecompress(elements);
 
             int i = 0;
             for (int y = height - 1; y >= 0; --y)
             {
                 for (int x = 0; x < width; ++x)
                 {
-                    grid[x, y] = new Pixel(elementDecompressed[i], ToSCEColor(fgDecompressed[i]), ToSCEColor(bgDecompressed[i]));
+                    grid[x, y] = new Pixel(elementDecomp[i], ToSCEColor(fgDecomp[i]), ToSCEColor(bgDecomp[i]));
                     ++i;
                 }
             }

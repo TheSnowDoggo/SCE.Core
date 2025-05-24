@@ -4,142 +4,25 @@ namespace SCE
 {
     public class OptionSelector : UIBase, IEnumerable<Option>
     {
-        private const string DEFAULT_NAME = "command_selector";
+        private readonly LineRenderer _lineRenderer;
 
-        private readonly LineRenderer lineRenderer;
-
-        private readonly List<Option> commands = new();
-
-        #region Constructors
-
-        public OptionSelector(string name, int width, int height, SCEColor? bgColor = null)
-            : base(name)
-        {
-            lineRenderer = new(width, height, bgColor);
-        }
-
-        public OptionSelector(string name, Vector2Int dimensions, SCEColor? bgColor = null)
-            : this(name, dimensions.X, dimensions.Y, bgColor)
-        {
-        }
+        private readonly List<Option> _commands = new();
 
         public OptionSelector(int width, int height, SCEColor? bgColor = null)
-            : this(DEFAULT_NAME, width, height, bgColor)
         {
+            _lineRenderer = new(width, height, bgColor);
         }
 
         public OptionSelector(Vector2Int dimensions, SCEColor? bgColor = null)
-            : this(DEFAULT_NAME, dimensions.X, dimensions.Y, bgColor)
+            : this(dimensions.X, dimensions.Y, bgColor)
         {
         }
-
-        #endregion
-
-        #region Indexers
-
-        public Option this[int y]
-        {
-            get => commands[y];
-            set => SetThis(y, value);
-        }
-
-        private void SetThis(int y, Option value)
-        {
-            commands[y] = value;
-            Update();
-        }
-
-        #endregion
-
-        #region Settings
-
-        private int selected = 0;
-
-        public int Selected
-        {
-            get => selected;
-            set => SetSelected(value);
-        }
-
-        private void SetSelected(int value)
-        {
-            if (commands.Count == 0 || selected == value)
-                return;
-            selected = MathUtils.Cycle(new Vector2Int(0, commands.Count), value);
-            Update();
-        }
-
-        private int scrollOffset = 2;
-
-        public int ScrollOffset
-        {
-            get => scrollOffset;
-            set => SetScrollOffset(value);
-        }
-
-        private void SetScrollOffset(int value)
-        {
-            if (value >= Height)
-                return;
-            scrollOffset = value;
-            Update();
-        }
-
-        private ColorSet selectedColors = new(SCEColor.Black, SCEColor.White);
-
-        public ColorSet SelectedColors
-        {
-            get => selectedColors;
-            set => SetSelectedColors(value);
-        }
-
-        private void SetSelectedColors(ColorSet value)
-        {
-            selectedColors = value;
-            Update();
-        }
-
-        public bool FitToLength
-        {
-            get => lineRenderer.FitToLength;
-            set => SetFitToLength(value);
-        }
-
-        private void SetFitToLength(bool value)
-        {
-            lineRenderer.FitToLength = value;
-            Update();
-        }
-
-        public StackType StackMode
-        {
-            get => lineRenderer.StackMode;
-            set => SetStackMode(value);
-        }
-
-        private void SetStackMode(StackType value)
-        {
-            lineRenderer.StackMode = value;
-            Update();
-        }
-
-        #endregion
-
-        #region Properties
-
-        public int Width { get => lineRenderer.Width; }
-
-        public int Height { get => lineRenderer.Height; }
-
-        public Vector2Int Dimensions { get => lineRenderer.Dimensions; }
-
-        #endregion
 
         #region IEnumerable
 
         public IEnumerator<Option> GetEnumerator()
         {
-            return commands.GetEnumerator();
+            return _commands.GetEnumerator();
         }
 
         IEnumerator IEnumerable.GetEnumerator()
@@ -149,17 +32,95 @@ namespace SCE
 
         #endregion
 
-        #region List
+        public Option this[int y]
+        {
+            get => _commands[y];
+            set
+            {
+                _commands[y] = value;
+                Update();
+            }
+        }
+
+        public int Width { get => _lineRenderer.Width; }
+
+        public int Height { get => _lineRenderer.Height; }
+
+        public Vector2Int Dimensions { get => _lineRenderer.Dimensions; }
+
+        #region Settings
+
+        private int selected = 0;
+
+        public int Selected
+        {
+            get => selected;
+            set
+            {
+                if (_commands.Count == 0 || selected == value)
+                    return;
+                selected = MathUtils.Cycle(new Vector2Int(0, _commands.Count), value);
+                Update();
+            }
+        }
+
+        private int scrollOffset = 2;
+
+        public int ScrollOffset
+        {
+            get => scrollOffset;
+            set
+            {
+                if (value >= Height)
+                    return;
+                scrollOffset = value;
+                Update();
+            }
+        }
+
+        private ColorSet selectedColors = new(SCEColor.Black, SCEColor.White);
+
+        public ColorSet SelectedColors
+        {
+            get => selectedColors;
+            set
+            {
+                selectedColors = value;
+                Update();
+            }
+        }
+
+        public bool FitToLength
+        {
+            get => _lineRenderer.FitToLength;
+            set
+            {
+                _lineRenderer.FitToLength = value;
+                Update();
+            }
+        }
+
+        public StackType StackMode
+        {
+            get => _lineRenderer.StackMode;
+            set
+            {
+                _lineRenderer.StackMode = value;
+                Update();
+            }
+        }
+
+        #endregion
 
         public void Add(Option command)
         {
-            commands.Add(command);
+            _commands.Add(command);
             Update();
         }
 
         public void AddRange(IEnumerable<Option> collection)
         {
-            commands.AddRange(collection);
+            _commands.AddRange(collection);
             Update();
         }
 
@@ -170,7 +131,7 @@ namespace SCE
 
         public bool Remove(Option command)
         {
-            if (commands.Remove(command))
+            if (_commands.Remove(command))
                 return false;
             Update();
             return true;
@@ -178,50 +139,48 @@ namespace SCE
 
         public void RemoveAt(int index)
         {
-            commands.RemoveAt(index);
+            _commands.RemoveAt(index);
             Update();
         }
 
         public void RemoveRange(int index, int count)
         {
-            commands.RemoveRange(index, count);
+            _commands.RemoveRange(index, count);
             Update();
         }
 
         public void Clear()
         {
-            commands.Clear();
-            lineRenderer.Clear();
+            _commands.Clear();
+            _lineRenderer.Clear();
         }
-
-        #endregion
 
         public void Update()
         {
-            int dif = selected + ScrollOffset - commands.Count;
+            int dif = selected + ScrollOffset - _commands.Count;
             int scrollOffset = dif < 0 ? ScrollOffset : ScrollOffset - dif - 1;
-            bool mapY = commands.Count > Height && selected >= Height - scrollOffset;
+            bool mapY = _commands.Count > Height && selected >= Height - scrollOffset;
             for (int y = 0; y < Height; ++y)
             {
                 int i = mapY ? selected - (Height - scrollOffset) + y + 1 : y;
-                if (i >= 0 && i < commands.Count)
-                    lineRenderer.SetLine(y, new Line(commands[i].Name, i == selected ? SelectedColors : commands[i].Colors) { Anchor = commands[i].Anchor });
+                if (i >= 0 && i < _commands.Count)
+                    _lineRenderer.SetLine(y, new Line(_commands[i].Name, i == selected ? SelectedColors : _commands[i].Colors) { Anchor = _commands[i].Anchor });
                 else
-                    lineRenderer.ClearLine(y);
+                    _lineRenderer.ClearLine(y);
             }
         }
 
         public bool TryRunSelected()
         {
-            if (commands.Count == 0)
+            if (_commands.Count == 0)
                 return false;
-            return commands[selected].TryRun();
+            return _commands[selected].TryRun();
         }
 
         /// <inheritdoc/>
         public override DisplayMap GetMap()
         {
-            return lineRenderer.GetMap();
+            return _lineRenderer.GetMap();
         }
     }
 }

@@ -7,22 +7,15 @@
     {
         private const char VectorStringSplitChar = ',';
 
-        #region Dimensions
-
         public float X;
+
         public float Y;
-
-        #endregion
-
-        #region Constructors
 
         public Vector2(float x, float y)
         {
             X = x;
             Y = y;
         }
-
-        #endregion
 
         #region Shorthands
         public static Vector2 Zero { get; } = new(0.0f, 0.0f);

@@ -1,9 +1,10 @@
-﻿namespace SCE
+﻿using CSUtils;
+namespace SCE
 {
     internal class CopyCache : Memoizer<int, string>
     {
         public CopyCache(char chr)
-            : base((n) => StringUtils.Copy(chr, n))
+            : base((n) => Utils.Copy(chr, n))
         {
             Character = chr;
         }

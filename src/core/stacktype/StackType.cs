@@ -2,7 +2,7 @@
 {
     public enum StackType
     {
-        BottomUp,
         TopDown,
+        BottomUp,
     }
 }

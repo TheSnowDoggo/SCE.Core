@@ -153,7 +153,7 @@
         #region Mapping
 
         /// <inheritdoc/>
-        public override void MapToArea(Grid2D<Pixel> dataGrid, Rect2D dataGridArea, Vector2Int? positionOffset = null, bool tryTrimOnResize = false)
+        public void PMapToArea(Grid2D<Pixel> dataGrid, Rect2D dataGridArea, Vector2Int? positionOffset = null, bool tryTrimOnResize = false)
         {
             var validSetOffset = positionOffset ?? Vector2Int.Zero;
 
@@ -168,13 +168,13 @@
         }
 
         /// <inheritdoc/>
-        public override void MapTo(Grid2D<Pixel> dataGrid, Vector2Int? positionOffset = null, bool tryTrimOnResize = false)
+        public void PMapTo(Grid2D<Pixel> dataGrid, Vector2Int? positionOffset = null, bool tryTrimOnResize = false)
         {
-            MapToArea(dataGrid, dataGrid.GridArea, positionOffset, tryTrimOnResize);
+            PMapToArea(dataGrid, dataGrid.GridArea(), positionOffset, tryTrimOnResize);
         }
 
         /// <inheritdoc/>
-        public override void MapAreaFrom(Grid2D<Pixel> dataGrid, Rect2D thisArea, Vector2Int? positionOffset = null, bool tryTrimOnResize = false)
+        public void PMapAreaFrom(Grid2D<Pixel> dataGrid, Rect2D thisArea, Vector2Int? positionOffset = null, bool tryTrimOnResize = false)
         {
             var validGetOffset = positionOffset ?? Vector2Int.Zero;
 
@@ -189,9 +189,9 @@
         }
 
         /// <inheritdoc/>
-        public override void MapFrom(Grid2D<Pixel> dataGrid, Vector2Int? positionOffset = null, bool tryTrimOnResize = false)
+        public void PMapFrom(Grid2D<Pixel> dataGrid, Vector2Int? positionOffset = null, bool tryTrimOnResize = false)
         {
-            MapAreaFrom(dataGrid, GridArea, positionOffset, tryTrimOnResize);
+            PMapAreaFrom(dataGrid, GridArea(), positionOffset, tryTrimOnResize);
         }
 
         #endregion

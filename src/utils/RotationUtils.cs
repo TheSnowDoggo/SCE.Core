@@ -1,4 +1,5 @@
-﻿namespace SCE
+﻿using CSUtils;
+namespace SCE
 {
     /// <summary>
     /// A class containing functions useful for grid rotation.
@@ -9,7 +10,7 @@
 
         public static Vector2 RotatePositionBy(Vector2 position, int rotationFactor, Vector2 rotationAxis)
         {
-            rotationFactor = MathUtils.Mod(rotationFactor, RotationRange.Y);
+            rotationFactor = Utils.Mod(rotationFactor, RotationRange.Y);
 
             int direction = 1;
 

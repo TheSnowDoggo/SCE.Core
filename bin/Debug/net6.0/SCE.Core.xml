@@ -104,16 +104,16 @@
             <param name="y">The starting zero-based y position of the line.</param>
             <param name="colors">The colors to map with.</param>
         </member>
-        <member name="M:SCE.DisplayMap.MapToArea(SCE.Grid2D{SCE.Pixel},SCE.Rect2D,System.Nullable{SCE.Vector2Int},System.Boolean)">
+        <member name="M:SCE.DisplayMap.PMapToArea(SCE.Grid2D{SCE.Pixel},SCE.Rect2D,System.Nullable{SCE.Vector2Int},System.Boolean)">
             <inheritdoc/>
         </member>
-        <member name="M:SCE.DisplayMap.MapTo(SCE.Grid2D{SCE.Pixel},System.Nullable{SCE.Vector2Int},System.Boolean)">
+        <member name="M:SCE.DisplayMap.PMapTo(SCE.Grid2D{SCE.Pixel},System.Nullable{SCE.Vector2Int},System.Boolean)">
             <inheritdoc/>
         </member>
-        <member name="M:SCE.DisplayMap.MapAreaFrom(SCE.Grid2D{SCE.Pixel},SCE.Rect2D,System.Nullable{SCE.Vector2Int},System.Boolean)">
+        <member name="M:SCE.DisplayMap.PMapAreaFrom(SCE.Grid2D{SCE.Pixel},SCE.Rect2D,System.Nullable{SCE.Vector2Int},System.Boolean)">
             <inheritdoc/>
         </member>
-        <member name="M:SCE.DisplayMap.MapFrom(SCE.Grid2D{SCE.Pixel},System.Nullable{SCE.Vector2Int},System.Boolean)">
+        <member name="M:SCE.DisplayMap.PMapFrom(SCE.Grid2D{SCE.Pixel},System.Nullable{SCE.Vector2Int},System.Boolean)">
             <inheritdoc/>
         </member>
         <member name="T:SCE.Grid2D`1">
@@ -121,6 +121,24 @@
             A wrapper class of a 2D-array representing a grid with useful functions.
             </summary>
             <typeparam name="T">The type of the elements in the grid.</typeparam>
+        </member>
+        <member name="P:SCE.Grid2D`1.Width">
+            <summary>
+            Gets the width of the grid.
+            </summary>
+        </member>
+        <member name="P:SCE.Grid2D`1.Height">
+            <summary>
+            Gets the height of the grid.
+            </summary>
+        </member>
+        <member name="P:SCE.Grid2D`1.Dimensions">
+            <summary>
+            Gets the dimensions of the grid as a <see cref="T:SCE.Vector2Int"/>.
+            </summary>
+            <remarks>
+            Dimensions stored as (x:Width, y:Height)
+            </remarks>
         </member>
         <member name="M:SCE.Grid2D`1.#ctor(System.Int32,System.Int32)">
             <summary>
@@ -147,6 +165,16 @@
             </summary>
             <param name="grid">The default data for the grid.</param>
         </member>
+        <member name="F:SCE.Grid2D`1.OnResize">
+            <summary>
+            Invoked when the size of the grid is changed.
+            </summary>
+        </member>
+        <member name="F:SCE.Grid2D`1.OnClear">
+            <summary>
+            Invoked when the grid is cleared.
+            </summary>
+        </member>
         <member name="P:SCE.Grid2D`1.Item(System.Int32,System.Int32)">
             <summary>
             Gets or sets the element at the specified zero-based coordinates.
@@ -162,40 +190,7 @@
             <param name="pos">The zero-based <see cref="T:SCE.Vector2Int"/> coordinates.</param>
             <returns>The element at the specified zero-based coordinates.</returns>
         </member>
-        <member name="P:SCE.Grid2D`1.Data">
-            <summary>
-            Gets the virtual grid of this grid containing filling functions.
-            </summary>
-        </member>
-        <member name="F:SCE.Grid2D`1.OnResize">
-            <summary>
-            Invoked when the size of the grid is changed.
-            </summary>
-        </member>
-        <member name="F:SCE.Grid2D`1.OnClear">
-            <summary>
-            Invoked when the grid is cleared.
-            </summary>
-        </member>
-        <member name="P:SCE.Grid2D`1.Width">
-            <summary>
-            Gets the width of the grid.
-            </summary>
-        </member>
-        <member name="P:SCE.Grid2D`1.Height">
-            <summary>
-            Gets the height of the grid.
-            </summary>
-        </member>
-        <member name="P:SCE.Grid2D`1.Dimensions">
-            <summary>
-            Gets the dimensions of the grid as a <see cref="T:SCE.Vector2Int"/>.
-            </summary>
-            <remarks>
-            Dimensions stored as (x:Width, y:Height)
-            </remarks>
-        </member>
-        <member name="P:SCE.Grid2D`1.GridArea">
+        <member name="M:SCE.Grid2D`1.GridArea">
             <summary>
             Gets the zero-based area of the grid as a <see cref="T:SCE.Rect2D"/>.
             </summary>
@@ -302,14 +297,14 @@
         </member>
         <member name="M:SCE.Grid2D`1.CustomMapAreaFrom(System.Action{SCE.Vector2Int},SCE.Grid2D{`0},SCE.Rect2D,SCE.Vector2Int,System.Boolean)">
             <summary>
-            Custom maps by populating the specified area <paramref name="thisArea"/> on this grid from the specified <paramref name="dataGrid"/> with offset <paramref name="dataOffset"/>
+            Custom maps by populating the specified area <paramref name="mapArea"/> on this grid from the specified <paramref name="dataGrid"/> with offset <paramref name="dataOffset"/>
             </summary>
             <remarks>
             Often used for mapping a large grid (<paramref name="dataGrid"/>) onto a small grid (this grid).
             </remarks>
             <param name="action">The map action to invoke.</param>
             <param name="dataGrid">The grid to get elements from.</param>
-            <param name="thisArea">The area on this grid to populate.</param>
+            <param name="mapArea">The area on this grid to populate.</param>
             <param name="dataOffset">The offset position on the <paramref name="dataGrid"/>.</param>
             <param name="trimOnOverflow">If <see langword="true"/>, try to trim the area to fit within the bounds of this grid.</param>
         </member>
@@ -955,15 +950,6 @@
             This may be removed.
             </remarks>
         </member>
-        <member name="M:SCE.UIBase.#ctor(System.String)">
-            <summary>
-            Initializes a new instance of the <see cref="T:SCE.UIBase"/> class.
-            </summary>
-            <param name="name">The initial name.</param>
-        </member>
-        <member name="P:SCE.UIBase.Name">
-            <inheritdoc/>
-        </member>
         <member name="P:SCE.UIBase.IsActive">
             <inheritdoc/>
         </member>
@@ -995,6 +981,9 @@
             </summary>
         </member>
         <member name="M:SCE.UIBaseExt.GetMap">
+            <inheritdoc/>
+        </member>
+        <member name="M:SCE.FlowTable.GetMap">
             <inheritdoc/>
         </member>
         <member name="M:SCE.Image.GetMap">
@@ -1035,17 +1024,7 @@
         <member name="M:SCE.OptionSelector.GetMap">
             <inheritdoc/>
         </member>
-        <member name="M:SCE.Translate2DRenderer.#ctor(System.String,System.Int32,System.Int32,System.Func{SCE.Vector2Int,SCE.Grid2D{SCE.Pixel}},System.Nullable{SCE.Vector2Int})">
-            <summary>
-            Initializes a new instance of the <see cref="T:SCE.Translate2DRenderer"/> class.
-            </summary>
-        </member>
         <member name="M:SCE.Translate2DRenderer.#ctor(System.Int32,System.Int32,System.Func{SCE.Vector2Int,SCE.Grid2D{SCE.Pixel}},System.Nullable{SCE.Vector2Int})">
-            <summary>
-            Initializes a new instance of the <see cref="T:SCE.Translate2DRenderer"/> class.
-            </summary>
-        </member>
-        <member name="M:SCE.Translate2DRenderer.#ctor(System.String,SCE.Vector2Int,System.Func{SCE.Vector2Int,SCE.Grid2D{SCE.Pixel}},System.Nullable{SCE.Vector2Int})">
             <summary>
             Initializes a new instance of the <see cref="T:SCE.Translate2DRenderer"/> class.
             </summary>
@@ -1081,17 +1060,7 @@
         <member name="M:SCE.Translate2DRenderer.GetMap">
             <inheritdoc/>
         </member>
-        <member name="M:SCE.TranslateLineRenderer.#ctor(System.String,System.Int32,System.Int32,System.Func{SCE.Vector2Int,SCE.Pixel[]},System.Int32)">
-            <summary>
-            Initializes a new instance of the <see cref="T:SCE.TranslateLineRenderer"/> class.
-            </summary>
-        </member>
         <member name="M:SCE.TranslateLineRenderer.#ctor(System.Int32,System.Int32,System.Func{SCE.Vector2Int,SCE.Pixel[]},System.Int32)">
-            <summary>
-            Initializes a new instance of the <see cref="T:SCE.TranslateLineRenderer"/> class.
-            </summary>
-        </member>
-        <member name="M:SCE.TranslateLineRenderer.#ctor(System.String,SCE.Vector2Int,System.Func{SCE.Vector2Int,SCE.Pixel[]},System.Int32)">
             <summary>
             Initializes a new instance of the <see cref="T:SCE.TranslateLineRenderer"/> class.
             </summary>

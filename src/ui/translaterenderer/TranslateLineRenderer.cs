@@ -2,15 +2,11 @@
 {
     public class TranslateLineRenderer : UIBaseExtR
     {
-        private const string DEFAULT_NAME = "translate_renderer";
-
-        #region Constructors
-
         /// <summary>
         /// Initializes a new instance of the <see cref="TranslateLineRenderer"/> class.
         /// </summary>
-        public TranslateLineRenderer(string name, int width, int height, Func<Vector2Int, Pixel[]> renderFunc, int renderWidth = 1)
-            : base(name, width, height)
+        public TranslateLineRenderer(int width, int height, Func<Vector2Int, Pixel[]> renderFunc, int renderWidth = 1)
+            : base(width, height)
         {
             RenderFunc = renderFunc;
             RenderWidth = renderWidth;
@@ -19,28 +15,10 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="TranslateLineRenderer"/> class.
         /// </summary>
-        public TranslateLineRenderer(int width, int height, Func<Vector2Int, Pixel[]> renderFunc, int renderWidth = 1)
-            : this(DEFAULT_NAME, width, height, renderFunc, renderWidth)
-        {
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="TranslateLineRenderer"/> class.
-        /// </summary>
-        public TranslateLineRenderer(string name, Vector2Int dimensions, Func<Vector2Int, Pixel[]> renderFunc, int renderWidth = 1)
-            : this(name, dimensions.X, dimensions.Y, renderFunc, renderWidth)
-        {
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="TranslateLineRenderer"/> class.
-        /// </summary>
         public TranslateLineRenderer(Vector2Int dimensions, Func<Vector2Int, Pixel[]> renderFunc, int renderWidth = 1)
-            : this(DEFAULT_NAME, dimensions.X, dimensions.Y, renderFunc, renderWidth)
+            : this(dimensions.X, dimensions.Y, renderFunc, renderWidth)
         {
         }
-
-        #endregion
 
         /// <summary>
         /// Gets or sets the translation function.
@@ -52,22 +30,20 @@
 
         #region Settings
 
+        private int renderWidth = 1;
+
         /// <summary>
         /// Gets or sets the expected number of pixels per translation.
         /// </summary>
         public int RenderWidth
         {
             get => renderWidth;
-            set => SetRenderWidth(value);
-        }
-
-        private int renderWidth = 1;
-
-        private void SetRenderWidth(int value)
-        {
-            if (value <= 0)
-                throw new ArgumentException("Render width must be greater than 0.");
-            renderWidth = value;
+            set
+            {
+                if (value <= 0)
+                    throw new ArgumentException("Render width must be greater than 0.");
+                renderWidth = value;
+            }
         }
 
         public bool RenderOnUpdate { get; set; } = true;

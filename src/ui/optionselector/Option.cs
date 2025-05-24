@@ -22,7 +22,7 @@
 
         public ColorSet Colors { get; set; }
 
-        public HorizontalAnchor Anchor { get; set; }
+        public Anchor Anchor { get; set; }
 
         public bool TryRun()
         {

@@ -2,33 +2,15 @@
 {
     public class UIBaseExtR : UIBaseExt
     {
-        private const string DEFAULT_NAME = "uibase_extr";
-
-        #region Constructors
-
-        public UIBaseExtR(string name, int width, int height, SCEColor? bgColor = null)
-            : base(name, width, height, bgColor)
-        {
-        }
-
-        public UIBaseExtR(string name, Vector2Int dimensions, SCEColor? bgColor = null)
-            : this(name, dimensions.X, dimensions.Y, bgColor)
-        {
-        }
-
         public UIBaseExtR(int width, int height, SCEColor? bgColor = null)
-            : this(DEFAULT_NAME, width, height, bgColor)
+            : base(width, height, bgColor)
         {
         }
 
         public UIBaseExtR(Vector2Int dimensions, SCEColor? bgColor = null)
-            : this(DEFAULT_NAME, dimensions, bgColor)
+            : base(dimensions.X, dimensions.Y, bgColor)
         {
         }
-
-        #endregion
-
-        #region Resize
 
         public virtual bool CleanResize(int width, int height)
         {
@@ -55,7 +37,5 @@
         {
             return MapResize(dimensions.X, dimensions.Y);
         }
-
-        #endregion
     }
 }

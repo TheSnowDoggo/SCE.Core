@@ -1,6 +1,6 @@
 ﻿namespace SCE
 {
-    public interface IRenderable : ISearcheable
+    public interface IRenderable
     {
         /// <summary>
         /// Gets the active state of the renderable.

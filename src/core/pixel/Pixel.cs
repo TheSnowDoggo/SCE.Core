@@ -37,7 +37,7 @@
         {
         }
 
-        public static Pixel Empty { get; } = new Pixel();
+        public static Pixel Empty { get; } = new();
 
         public char Element { get; }
 

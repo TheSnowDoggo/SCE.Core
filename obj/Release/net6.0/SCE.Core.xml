@@ -444,6 +444,18 @@
             <typeparam name="T">The type of key1.</typeparam>
             <typeparam name="U">The type of key2.</typeparam>
         </member>
+        <member name="T:SCE.PathFinder">
+            <summary>
+            A class for grid-based pathfinding using A* algorithm.
+            </summary>
+        </member>
+        <member name="M:SCE.PathFinder.#ctor(SCE.Rect2D,System.Func{SCE.Vector2Int,System.Boolean})">
+            <summary>
+            Initializes a new instance of the <see cref="T:SCE.PathFinder"/> class.
+            </summary>
+            <param name="area">The allowed area to path through.</param>
+            <param name="collisionFunc">The function determining whether a given position is occupied or not.</param>
+        </member>
         <member name="T:SCE.Pixel">
             <summary>
             A struct storing a <see cref="P:SCE.Pixel.Element"/>, and a <see cref="P:SCE.Pixel.FgColor"/> and <see cref="P:SCE.Pixel.BgColor"/> <see cref="T:System.Byte"/> color.
@@ -668,11 +680,6 @@
             Contains the names and associated elements.
             </summary>
         </member>
-        <member name="F:SCE.SearchHash`1.nameIdDict">
-            <summary>
-            Contains the unique ids for each name for handling duplicate names.
-            </summary>
-        </member>
         <member name="M:SCE.SearchHash`1.#ctor(System.Int32)">
             <summary>
             Initializes a new instance of the <see cref="T:SCE.SearchHash`1"/> class.
@@ -688,11 +695,6 @@
         <member name="P:SCE.SearchHash`1.Count">
             <summary>
             Gets the number of elements that are contained in the search hash.
-            </summary>
-        </member>
-        <member name="P:SCE.SearchHash`1.AssignUniqueName">
-            <summary>
-            Gets or sets a value indicating whether added values with duplicate names should be assigned new unique identifiers.
             </summary>
         </member>
         <member name="P:SCE.SearchHash`1.Item(System.String)">
@@ -857,6 +859,77 @@
         <member name="M:SCE.Display.Update">
             <inheritdoc/>
         </member>
+        <member name="F:SCE.GameHandler.PriorityType.PrioritizeScenes">
+            <summary>
+            <see cref="T:SCE.IScene"/> updates first.
+            </summary>
+        </member>
+        <member name="F:SCE.GameHandler.PriorityType.PrioritizeUpdates">
+            <summary>
+            <see cref="T:SCE.IUpdate"/> updates first.
+            </summary>
+        </member>
+        <member name="P:SCE.GameHandler.FPS">
+            <summary>
+            Gets the average number of frames updated per second. 
+            </summary>
+            <remarks>
+            Update frequency is determined by <see cref="P:SCE.GameHandler.FPSUpdateRate"/>.
+            </remarks>
+        </member>
+        <member name="P:SCE.GameHandler.FPSUpdateRate">
+            <summary>
+            Gets or sets the update frequency in seconds of the FPS.
+            </summary>
+        </member>
+        <member name="P:SCE.GameHandler.DeltaTime">
+            <summary>
+            Gets the time in seconds since the last update.
+            </summary>
+        </member>
+        <member name="P:SCE.GameHandler.RealDeltaTime">
+            <summary>
+            Gets the actual time taken to update the last frame ignoring frame cap waiting time.
+            </summary>
+        </member>
+        <member name="P:SCE.GameHandler.FrameCap">
+            <summary>
+            Gets or sets the update rate cap in frames per second. 
+            </summary>
+            <remarks>
+            Set to -1 for uncapped update rate.
+            </remarks>
+        </member>
+        <member name="P:SCE.GameHandler.FrameCapped">
+            <summary>
+            Gets a value indicating whether the update rate has been capped.
+            </summary>
+        </member>
+        <member name="P:SCE.GameHandler.IsActive">
+            <summary>
+            Gets or sets a value indicating whether gamehandler should update.
+            </summary>
+        </member>
+        <member name="P:SCE.GameHandler.PriorityMode">
+            <summary>
+            Gets or sets a value indicating whether <see cref="T:SCE.IScene"/> or <see cref="T:SCE.IUpdate"/> should receive updates first.
+            </summary>
+        </member>
+        <member name="M:SCE.GameHandler.Start">
+            <summary>
+            Calls start before starting up gamehandler thread.
+            </summary>
+        </member>
+        <member name="M:SCE.GameHandler.CallStart">
+            <summary>
+            Calls start.
+            </summary>
+        </member>
+        <member name="M:SCE.GameHandler.CallUpdate">
+            <summary>
+            Calls update.
+            </summary>
+        </member>
         <member name="M:SCE.StartupText.DisplayLicense">
             <summary>
             Displays the software license.
@@ -881,6 +954,176 @@
             <remarks>
             This may be removed.
             </remarks>
+        </member>
+        <member name="M:SCE.UIBase.#ctor(System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:SCE.UIBase"/> class.
+            </summary>
+            <param name="name">The initial name.</param>
+        </member>
+        <member name="P:SCE.UIBase.Name">
+            <inheritdoc/>
+        </member>
+        <member name="P:SCE.UIBase.IsActive">
+            <inheritdoc/>
+        </member>
+        <member name="P:SCE.UIBase.Offset">
+            <inheritdoc/>
+        </member>
+        <member name="P:SCE.UIBase.Layer">
+            <inheritdoc/>
+        </member>
+        <member name="P:SCE.UIBase.Anchor">
+            <inheritdoc/>
+        </member>
+        <member name="M:SCE.UIBase.GetMap">
+            <inheritdoc/>
+        </member>
+        <member name="P:SCE.UIBaseExt.Width">
+            <summary>
+            Gets the width.
+            </summary>
+        </member>
+        <member name="P:SCE.UIBaseExt.Height">
+            <summary>
+            Gets the height.
+            </summary>
+        </member>
+        <member name="P:SCE.UIBaseExt.Dimensions">
+            <summary>
+            Gets the dimensions.
+            </summary>
+        </member>
+        <member name="M:SCE.UIBaseExt.GetMap">
+            <inheritdoc/>
+        </member>
+        <member name="M:SCE.Image.GetMap">
+            <inheritdoc/>
+        </member>
+        <member name="P:SCE.IRenderable.IsActive">
+            <summary>
+            Gets the active state of the renderable.
+            </summary>
+        </member>
+        <member name="P:SCE.IRenderable.Offset">
+            <summary>
+            Gets the positional offset of the renderable.
+            </summary>
+        </member>
+        <member name="P:SCE.IRenderable.Layer">
+            <summary>
+            Gets the render layer of the renderable.
+            </summary>
+        </member>
+        <member name="P:SCE.IRenderable.Anchor">
+            <summary>
+            Gets the render anchor of the renderable.
+            </summary>
+        </member>
+        <member name="M:SCE.IRenderable.GetMap">
+            <summary>
+            Gets the displaymap to render.
+            </summary>
+            <returns>The displaymap to render.</returns>
+        </member>
+        <member name="M:SCE.Line.ToString">
+            <inheritdoc/>
+        </member>
+        <member name="M:SCE.Log.ToString">
+            <inheritdoc/>
+        </member>
+        <member name="M:SCE.OptionSelector.GetMap">
+            <inheritdoc/>
+        </member>
+        <member name="M:SCE.Translate2DRenderer.#ctor(System.String,System.Int32,System.Int32,System.Func{SCE.Vector2Int,SCE.Grid2D{SCE.Pixel}},System.Nullable{SCE.Vector2Int})">
+            <summary>
+            Initializes a new instance of the <see cref="T:SCE.Translate2DRenderer"/> class.
+            </summary>
+        </member>
+        <member name="M:SCE.Translate2DRenderer.#ctor(System.Int32,System.Int32,System.Func{SCE.Vector2Int,SCE.Grid2D{SCE.Pixel}},System.Nullable{SCE.Vector2Int})">
+            <summary>
+            Initializes a new instance of the <see cref="T:SCE.Translate2DRenderer"/> class.
+            </summary>
+        </member>
+        <member name="M:SCE.Translate2DRenderer.#ctor(System.String,SCE.Vector2Int,System.Func{SCE.Vector2Int,SCE.Grid2D{SCE.Pixel}},System.Nullable{SCE.Vector2Int})">
+            <summary>
+            Initializes a new instance of the <see cref="T:SCE.Translate2DRenderer"/> class.
+            </summary>
+        </member>
+        <member name="M:SCE.Translate2DRenderer.#ctor(SCE.Vector2Int,System.Func{SCE.Vector2Int,SCE.Grid2D{SCE.Pixel}},System.Nullable{SCE.Vector2Int})">
+            <summary>
+            Initializes a new instance of the <see cref="T:SCE.Translate2DRenderer"/> class.
+            </summary>
+        </member>
+        <member name="P:SCE.Translate2DRenderer.RenderFunc">
+            <summary>
+            Gets or sets the translation function.
+            </summary>
+            <remarks>
+            The position represents the translated position given the render width.
+            </remarks>
+        </member>
+        <member name="P:SCE.Translate2DRenderer.RenderDimensions">
+            <summary>
+            Gets or sets the expected number of pixels per translation.
+            </summary>
+        </member>
+        <member name="P:SCE.Translate2DRenderer.RenderOnUpdate">
+            <summary>
+            Gets or sets a value indicating whether rendering should be called automatically by the renderer.
+            </summary>
+        </member>
+        <member name="M:SCE.Translate2DRenderer.Render">
+            <summary>
+            Renders the translate renderer.
+            </summary>
+        </member>
+        <member name="M:SCE.Translate2DRenderer.GetMap">
+            <inheritdoc/>
+        </member>
+        <member name="M:SCE.TranslateLineRenderer.#ctor(System.String,System.Int32,System.Int32,System.Func{SCE.Vector2Int,SCE.Pixel[]},System.Int32)">
+            <summary>
+            Initializes a new instance of the <see cref="T:SCE.TranslateLineRenderer"/> class.
+            </summary>
+        </member>
+        <member name="M:SCE.TranslateLineRenderer.#ctor(System.Int32,System.Int32,System.Func{SCE.Vector2Int,SCE.Pixel[]},System.Int32)">
+            <summary>
+            Initializes a new instance of the <see cref="T:SCE.TranslateLineRenderer"/> class.
+            </summary>
+        </member>
+        <member name="M:SCE.TranslateLineRenderer.#ctor(System.String,SCE.Vector2Int,System.Func{SCE.Vector2Int,SCE.Pixel[]},System.Int32)">
+            <summary>
+            Initializes a new instance of the <see cref="T:SCE.TranslateLineRenderer"/> class.
+            </summary>
+        </member>
+        <member name="M:SCE.TranslateLineRenderer.#ctor(SCE.Vector2Int,System.Func{SCE.Vector2Int,SCE.Pixel[]},System.Int32)">
+            <summary>
+            Initializes a new instance of the <see cref="T:SCE.TranslateLineRenderer"/> class.
+            </summary>
+        </member>
+        <member name="P:SCE.TranslateLineRenderer.RenderFunc">
+            <summary>
+            Gets or sets the translation function.
+            </summary>
+            <remarks>
+            The position represents the translated position given the render width.
+            </remarks>
+        </member>
+        <member name="P:SCE.TranslateLineRenderer.RenderWidth">
+            <summary>
+            Gets or sets the expected number of pixels per translation.
+            </summary>
+        </member>
+        <member name="M:SCE.TranslateLineRenderer.Render">
+            <summary>
+            Renders the translate renderer.
+            </summary>
+        </member>
+        <member name="M:SCE.TranslateLineRenderer.GetMap">
+            <inheritdoc/>
+        </member>
+        <member name="M:SCE.Viewport.GetMap">
+            <inheritdoc/>
         </member>
         <member name="T:SCE.InputHandler">
             <summary>

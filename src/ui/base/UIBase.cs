@@ -2,18 +2,6 @@
 {
     public abstract class UIBase : IRenderable
     {
-        /// <summary>
-        /// Initializes a new instance of the <see cref="UIBase"/> class.
-        /// </summary>
-        /// <param name="name">The initial name.</param>
-        public UIBase(string name = "")
-        {
-            Name = name;
-        }
-
-        /// <inheritdoc/>
-        public string Name { get; set; }
-
         /// <inheritdoc/>
         public bool IsActive { get; set; } = true;
 

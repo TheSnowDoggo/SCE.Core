@@ -1,109 +1,24 @@
 ﻿using System.Collections;
-
+using CSUtils;
 namespace SCE
 {
     public class LineRenderer : UIBaseExt, IEnumerable<Line?>
     {
-        private const string DEFAULT_NAME = "line_renderer";
-
         private const SCEColor DEFAULT_BGCOLOR = SCEColor.Black;
 
         private Line?[] lineArr;
 
-        #region Constructors
-
-        public LineRenderer(string name, int width, int height, SCEColor? bgColor = null)
-            : base(name, width, height, bgColor)
+        public LineRenderer(int width, int height, SCEColor? bgColor = null)
+            : base(width, height, bgColor)
         {
             lineArr = new Line?[Height];
             this.bgColor = bgColor ?? DEFAULT_BGCOLOR;
         }
 
-        public LineRenderer(string name, Vector2Int dimensions, SCEColor? bgColor = null)
-            : this(name, dimensions.X, dimensions.Y, bgColor)
-        {
-        }
-
-        public LineRenderer(int width, int height, SCEColor? bgColor = null)
-            : this(DEFAULT_NAME, width, height, bgColor)
-        {
-        }
-
         public LineRenderer(Vector2Int dimensions, SCEColor? bgColor = null)
-            : this(DEFAULT_NAME, dimensions, bgColor)
+            : this(dimensions.X, dimensions.Y, bgColor)
         {
         }
-
-        #endregion
-
-        #region Indexers
-
-        public Line? this[int y]
-        {
-            get => GetThis(y);
-            set => SetThis(y, value);
-        }
-
-        private Line? GetThis(int y)
-        {
-            if (y < 0 || y >= lineArr.Length)
-                throw new IndexOutOfRangeException("Specified y is invalid.");
-            return lineArr[Translate(y)];
-        }
-
-        private void SetThis(int y, Line? value)
-        {
-            if (!SetLine(y, value))
-                throw new IndexOutOfRangeException("Specified y is invalid.");
-        }
-
-        #endregion
-
-        #region Settings
-
-        private SCEColor bgColor;
-
-        public SCEColor BgColor
-        {
-            get => bgColor;
-            set => SetBgColor(value);
-        }
-
-        private void SetBgColor(SCEColor value)
-        {
-            bgColor = value;
-            Update();
-        }
-
-        private StackType stackMode = StackType.TopDown;
-
-        public StackType StackMode
-        {
-            get => stackMode;
-            set => SetStackMode(value);
-        }
-
-        private void SetStackMode(StackType value)
-        {
-            stackMode = value;
-            Update();
-        }
-
-        private bool fitToLength = false;
-
-        public bool FitToLength
-        {
-            get => fitToLength;
-            set => SetFitToLength(value);
-        }
-
-        private void SetFitToLength(bool value)
-        {
-            fitToLength = value;
-            Update();
-        }
-
-        #endregion
 
         #region IEnumerable
 
@@ -115,6 +30,61 @@ namespace SCE
         IEnumerator IEnumerable.GetEnumerator()
         {
             return GetEnumerator();
+        }
+
+        #endregion
+
+        public Line? this[int y]
+        {
+            get
+            {
+                if (y < 0 || y >= lineArr.Length)
+                    throw new IndexOutOfRangeException("Specified y is invalid.");
+                return lineArr[Translate(y)];
+            }
+            set
+            {
+                if (!SetLine(y, value))
+                    throw new IndexOutOfRangeException("Specified y is invalid.");
+            }
+        }
+
+        #region Settings
+
+        private SCEColor bgColor;
+
+        public SCEColor BgColor
+        {
+            get => bgColor;
+            set
+            {
+                bgColor = value;
+                Update();
+            }
+        }
+
+        private StackType stackMode = StackType.TopDown;
+
+        public StackType StackMode
+        {
+            get => stackMode;
+            set
+            {
+                stackMode = value;
+                Update();
+            }
+        }
+
+        private bool fitToLength = false;
+
+        public bool FitToLength
+        {
+            get => fitToLength;
+            set
+            {
+                fitToLength = value;
+                Update();
+            }
         }
 
         #endregion
@@ -177,12 +147,14 @@ namespace SCE
 
         private void MapLine(int mappedY, Line line)
         {
-            if (fitToLength)
-                _dpMap.MapString(AnchorUtils.GetHorizontalAnchoredMessage(line.Anchor, line.Message, Width), mappedY, line.Colors);
+            if (FitToLength)
+            {
+                _dpMap.MapString(Utils.FTL(line.Message, line.Message.Length, ' ', (Utils.FMode)(Anchor | AnchorUtils.H_MASK)), mappedY, line.Colors);
+            }
             else
             {
                 ClearAt(mappedY);
-                _dpMap.MapString(line.Message, new Vector2Int(AnchorUtils.HorizontalAnchoredStart(line.Anchor, line.Message.Length, Width), mappedY), line.Colors);
+                _dpMap.MapString(line.Message, new Vector2Int(AnchorUtils.HorizontalFix(line.Anchor, Width - line.Message.Length), mappedY), line.Colors);
             }
         }
 

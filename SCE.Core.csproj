@@ -1,8 +1,8 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
-	<TargetType>library</TargetType>
+	<OutputType>Exe</OutputType>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
@@ -24,12 +24,19 @@
     <GenerateDocumentationFile>True</GenerateDocumentationFile>
     <PackageOutputPath></PackageOutputPath>
     <RepositoryUrl>https://github.com/TheSnowDoggo/SCE.Core</RepositoryUrl>
+    <OutputType>Exe</OutputType>
   </PropertyGroup>
 
   <ItemGroup>
     <Compile Remove="src\core\searchhash\**" />
     <EmbeddedResource Remove="src\core\searchhash\**" />
     <None Remove="src\core\searchhash\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="CSUtils">
+      <HintPath>lib\CSUtils.dll</HintPath>
+    </Reference>
   </ItemGroup>
 
   <ItemGroup>
