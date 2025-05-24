@@ -12,18 +12,11 @@ namespace SCE
             Debug,
         }
 
-        private const string DEFAULT_NAME = "display";
-
         private const int DEFAULT_BUFFER_SIZE = 7;
-
-        private Display(string name)
-            : base(name)
-        {
-        }
 
         #region Singleton
 
-        private static readonly Lazy<Display> _lazy = new(() => new(DEFAULT_NAME));
+        private static readonly Lazy<Display> _lazy = new(() => new());
 
         public static Display Instance { get => _lazy.Value; }
 

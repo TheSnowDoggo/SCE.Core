@@ -2,17 +2,9 @@
 {
     public abstract class InputBaseExt : InputBase
     {
-        private const string DEFAULT_NAME = "input_base_ext";
-
-        public InputBaseExt(string name, HashSet<InputType>? acceptedInputModes = null)
-            : base(name)
+        public InputBaseExt(HashSet<InputType>? acceptedInputModes = null)
         {
             AcceptedInputModes = acceptedInputModes ?? new();
-        }
-
-        public InputBaseExt(HashSet<InputType>? acceptedInputModes = null)
-            : this(DEFAULT_NAME, acceptedInputModes)
-        {
         }
 
         public HashSet<InputType> AcceptedInputModes { get; set; }

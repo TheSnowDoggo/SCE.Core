@@ -3,7 +3,7 @@
     /// <summary>
     /// An interface for classes which receive update calls.
     /// </summary>
-    public interface IUpdate : ISearcheable
+    public interface IUpdate
     {
         /// <summary>
         /// Gets or sets a value indicating whether this should receive updates.

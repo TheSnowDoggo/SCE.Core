@@ -1,41 +1,43 @@
 ﻿namespace SCE
 {
     /// <summary>
-    /// An extension class of <see cref="SearchHash{T}"/> allowing for quick determination of whether this contains an element of a specified type.
+    /// An extension class of <see cref="AliasHash{T}"/> allowing for quick determination of whether this contains an element of a specified type.
     /// </summary>
-    public class SearchHashTypeExt<T> : SearchHash<T>
-        where T : ISearcheable
+    public class AliasHashTExt<T> : AliasHash<T>
     {
         /// <summary>
         /// Contains each type and the count of each type. 
         /// </summary>
-        protected readonly Dictionary<Type, int> typeDict;
-
-        #region Constructors
+        protected readonly Dictionary<Type, int> _types;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="SearchHashTypeExt{T}"/> class.
+        /// Initializes a new instance of the <see cref="AliasHashTExt{T}"/> class.
         /// </summary>
-        /// <param name="collection">The collection whose elements are copied to the <see cref="SearchHashTypeExt{T}"/>.</param>
-        public SearchHashTypeExt(IEnumerable<T>? collection = null)
+        public AliasHashTExt()
             : base()
         {
-            typeDict = new();
-            if (collection is not null)
-                AddRange(collection);
+            _types = new();
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="SearchHashTypeExt{T}"/> class.
+        /// Initializes a new instance of the <see cref="AliasHashTExt{T}"/> class.
         /// </summary>
-        /// <param name="capacity">The initial size of the <see cref="SearchHashTypeExt{T}"/>.</param>
-        public SearchHashTypeExt(int capacity)
+        /// <param name="capacity">The initial size.</param>
+        public AliasHashTExt(int capacity)
             : base(capacity)
         {
-            typeDict = new(capacity);
+            _types = new(capacity);
         }
 
-        #endregion
+        /// <summary>
+        /// Initializes a new instance of the <see cref="AliasHashTExt{T}"/> class.
+        /// </summary>
+        /// <param name="collection">The collection of initial elements.</param>
+        public AliasHashTExt(IEnumerable<T> collection)
+            : base(collection)
+        {
+            _types = new();
+        }
 
         /// <inheritdoc/>
         public override bool Add(T item)
@@ -55,7 +57,7 @@
         public override void Clear()
         {
             base.Clear();
-            typeDict.Clear();
+            _types.Clear();
         }
 
         /// <summary>
@@ -64,10 +66,14 @@
         /// <param name="type">The type to add.</param>
         protected void AddType(Type type)
         {
-            if (typeDict.ContainsKey(type))
-                ++typeDict[type];
+            if (_types.ContainsKey(type))
+            {
+                ++_types[type];
+            }
             else
-                typeDict.Add(type, 1);
+            {
+                _types.Add(type, 1);
+            }
         }
 
         /// <summary>
@@ -76,15 +82,17 @@
         /// <param name="type">The type to remove.</param>
         protected void RemoveType(Type type)
         {
-            if (!typeDict.TryGetValue(type, out int value))
+            if (!_types.TryGetValue(type, out int value))
                 return;
             if (value <= 1)
-                typeDict.Remove(type);
+            {
+                _types.Remove(type);
+            }
             else
-                --typeDict[type];
+            {
+                --_types[type];
+            }
         }
-
-        #region Search
 
         /// <summary>
         /// Determines whether the search hash contains a specified type.
@@ -103,9 +111,7 @@
         /// <returns><see langword="true"/> if the type is found; otherwise, <see langword="false"/>.</returns>
         public bool Contains(Type type)
         {
-            return typeDict.TryGetValue(type, out int value) && value > 0;
+            return _types.TryGetValue(type, out int value) && value > 0;
         }
-
-        #endregion
     }
 }

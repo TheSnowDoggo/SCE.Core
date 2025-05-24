@@ -9,7 +9,7 @@
     <PackageId>SCECore</PackageId>
     <Title>SCE.Core</Title>
 	<AssemblyName>SCE.Core</AssemblyName>
-    <Version>2.1.1</Version>
+    <Version>3.1.1</Version>
 	<VersionSuffix>Release</VersionSuffix>
     <Authors>Adam Giaziri</Authors>
     <Product>SCE.Core</Product>
@@ -24,14 +24,7 @@
     <GenerateDocumentationFile>True</GenerateDocumentationFile>
     <PackageOutputPath></PackageOutputPath>
     <RepositoryUrl>https://github.com/TheSnowDoggo/SCE.Core</RepositoryUrl>
-    <OutputType>Exe</OutputType>
   </PropertyGroup>
-
-  <ItemGroup>
-    <Compile Remove="src\core\searchhash\**" />
-    <EmbeddedResource Remove="src\core\searchhash\**" />
-    <None Remove="src\core\searchhash\**" />
-  </ItemGroup>
 
   <ItemGroup>
     <Reference Include="CSUtils">

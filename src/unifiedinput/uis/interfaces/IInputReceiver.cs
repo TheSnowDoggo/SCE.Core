@@ -1,6 +1,6 @@
 ﻿namespace SCE
 {
-    public interface IInputReceiver : ISearcheable
+    public interface IInputReceiver
     {
         bool IsActive { get; set; }
 

@@ -4,8 +4,6 @@ namespace SCE
 {
     public class InputEntry : InputBase
     {
-        private const string DEFAULT_NAME = "input_entry";
-
         private const ConsoleKey DEFAULT_ENTRYKEY = ConsoleKey.Enter;
 
         private const ConsoleKey DEFAULT_EXITKEY = ConsoleKey.Escape;
@@ -18,16 +16,10 @@ namespace SCE
 
         private readonly HashSet<Intercept> _priorityIntercepters;
 
-        public InputEntry(string name)
-            : base(name)
+        public InputEntry()
         {
             _inbuiltIntecepters = new() { Backspace() };
             _priorityIntercepters = new() { OpenIntercepter, EntryIntercepter, ExitIntercepter };
-        }
-
-        public InputEntry()
-            : this(DEFAULT_NAME)
-        {
         }
 
         public delegate bool Intercept(ConsoleKeyInfo keyInfo, StringBuilder strBuilder);

@@ -56,10 +56,15 @@ namespace SCE
             return true;
         }
 
-        public virtual void AddRange(IEnumerable<T> items)
+        public void AddRange(IEnumerable<T> items)
         {
             foreach (var item in items)
                 Add(item);
+        }
+
+        public void AddEvery(params T[] items)
+        {
+            AddRange(items);
         }
 
         public virtual void AddRange(IEnumerable<(T, string)> items)
@@ -105,6 +110,17 @@ namespace SCE
                 throw new ArgumentException($"Alias {newAlias} already exists.");
             _aliases[newAlias] = item;
             _aliases.Remove(oldAlias);
+        }
+
+        public virtual bool RemoveAlias(string alias)
+        {
+            return _aliases.Remove(alias);
+        }
+
+        public virtual void Clear()
+        {
+            _set.Clear();
+            _aliases.Clear();
         }
     }
 }

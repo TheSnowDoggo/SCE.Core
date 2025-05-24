@@ -1,6 +1,6 @@
 ﻿namespace SCE
 {
-    public class Option : ISearcheable
+    public class Option
     {
         private static readonly ColorSet DEFAULT_COLORS = new(SCEColor.Gray, SCEColor.Black);
 

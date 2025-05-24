@@ -1,5 +1,4 @@
-﻿using CSUtils;
-namespace SCE
+﻿namespace SCE
 {
     public static class AnchorUtils
     {

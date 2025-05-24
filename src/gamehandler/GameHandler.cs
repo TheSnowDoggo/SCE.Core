@@ -1,7 +1,6 @@
-﻿namespace SCE
+﻿using System.Diagnostics;
+namespace SCE
 {
-    using System.Diagnostics;
-
     public static class GameHandler
     {
         public enum PriorityType
@@ -20,32 +19,28 @@
 
         private const double DEFAULT_FPS_UPDATERATE = 0.5;
 
-        #region Thread
-
         private static readonly Thread _updateThread = new(UpdateLoop);
-
-        private static bool isRunning;
-
-        #endregion
-
-        #region Scenes
 
         private static readonly SceneGroup _sceneGroup = new();
 
         private static readonly UpdateGroup _updateGroup = new();
 
-        public static SearchHashTypeExt<IScene> Scenes { get => _sceneGroup; }
+        private static bool isRunning;
 
-        public static SearchHashTypeExt<IUpdate> Updates { get => _updateGroup; }
+        public static Grid2D<int> grid = new(10, 10);
 
-        #endregion
+        public static AliasHashTExt<IScene> Scenes { get => _sceneGroup; }
+
+        public static AliasHashTExt<IUpdate> Updates { get => _updateGroup; }
 
         #region StatisticVariables
 
         private static readonly Stopwatch deltaStopwatch = new();
+
         private static readonly Stopwatch realDeltaStopwatch = new();
 
         private static double fpsTimer = 0.0;
+
         private static int frameCount = 0;
 
         /// <summary>
@@ -76,6 +71,7 @@
         #region FrameCapVariables
 
         private static double targetDeltaTime = 0.0;
+
         private static double frameCap = FRAMECAP_UNCAPPED;     
 
         /// <summary>
@@ -199,6 +195,7 @@
         #endregion
 
         #region Statistics
+
         private static void UpdateDTime()
         {
             DeltaTime = deltaStopwatch.Elapsed.TotalSeconds;
@@ -234,6 +231,7 @@
             UpdateDTime();
             UpdateFPS();
         }
+
         #endregion
     }
 }
