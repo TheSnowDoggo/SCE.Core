@@ -1,11 +1,38 @@
 {
   "version": 3,
   "targets": {
-    "net6.0": {}
+    "net6.0": {
+      "SCECSUtils/1.2.1": {
+        "type": "package",
+        "compile": {
+          "lib/net6.0/CSUtils.dll": {}
+        },
+        "runtime": {
+          "lib/net6.0/CSUtils.dll": {}
+        }
+      }
+    }
   },
-  "libraries": {},
+  "libraries": {
+    "SCECSUtils/1.2.1": {
+      "sha512": "jPUyxX3Pxz18IM03HoqwJsUYdY70xGd+hNONOcHa1vhxTv+bVRG4rVBqIg724Dbuk1z0yihqEyxLbZVpoXmqrA==",
+      "type": "package",
+      "path": "scecsutils/1.2.1",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "LICENSE.txt",
+        "README.md",
+        "lib/net6.0/CSUtils.dll",
+        "scecsutils.1.2.1.nupkg.sha512",
+        "scecsutils.nuspec"
+      ]
+    }
+  },
   "projectFileDependencyGroups": {
-    "net6.0": []
+    "net6.0": [
+      "SCECSUtils >= 1.2.1"
+    ]
   },
   "packageFolders": {
     "C:\\Users\\redst\\.nuget\\packages\\": {},
@@ -34,7 +61,7 @@
       ],
       "sources": {
         "C:\\Program Files\\dotnet\\library-packs": {},
-        "https://nuget.pkg.github.com/TheSnowDoggo/index.json": {}
+        "https://api.nuget.org/v3/index.json": {}
       },
       "frameworks": {
         "net6.0": {
@@ -51,6 +78,12 @@
     "frameworks": {
       "net6.0": {
         "targetAlias": "net6.0",
+        "dependencies": {
+          "SCECSUtils": {
+            "target": "Package",
+            "version": "[1.2.1, )"
+          }
+        },
         "imports": [
           "net461",
           "net462",

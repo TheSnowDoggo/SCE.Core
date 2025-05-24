@@ -1,5 +1,4 @@
 ﻿using CSUtils;
-
 namespace SCE
 {
     internal static class Launcher
