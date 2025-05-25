@@ -21,6 +21,8 @@
 
         public bool CropOutOfBounds { get; set; } = true;
 
+        public bool Transparency { get; set; } = true;
+
         public FlowType FlowMode { get; set; } = FlowType.TopDown;
 
         public List<IRenderable> Renderables { get; } = new();
@@ -54,7 +56,15 @@
 
                 if (!CropOutOfBounds || _dpMap.GridArea().Overlaps(pos, dpMap.Dimensions + pos))
                 {
-                    _dpMap.PMapTo(dpMap, pos, true);
+                    if (Transparency)
+                    {
+                        _dpMap.PMapTo(dpMap, pos, true);
+                    }
+                    else
+                    {
+                        _dpMap.MapTo(dpMap, pos, true);
+                    }
+
                     int nextI = FlowMode switch
                     {
                         FlowType.TopDown => pos.Y + dpMap.Height,

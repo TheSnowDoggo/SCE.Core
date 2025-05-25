@@ -13,6 +13,8 @@
 
         public IRenderable? Map { get; set; }
 
+        public bool Transparency { get; set; } = true;
+
         public override DisplayMap GetMap()
         {
             var dpMap = Renderable.GetMap();
@@ -25,7 +27,14 @@
 
                 if (dpMap.GridArea().Overlaps(pos, overMap.Dimensions + pos))
                 {
-                    dpMap.PMapTo(overMap, pos, true);
+                    if (Transparency)
+                    {
+                        dpMap.PMapTo(overMap, pos, true);
+                    }
+                    else
+                    {
+                        dpMap.MapTo(overMap, pos, true);
+                    }
                 }
             }
 

@@ -21,6 +21,8 @@
 
         public bool CropOutOfBounds { get; set; } = true;
 
+        public bool Transparency { get; set; } = true;
+
         public AliasHash<IRenderable> Renderables { get; } = new();
 
         protected virtual void Render()
@@ -43,7 +45,16 @@
                 var pos = AnchorUtils.AnchorTo(r.Anchor, Dimensions, dpMap.Dimensions) + r.Offset;
 
                 if (!CropOutOfBounds || _dpMap.GridArea().Overlaps(pos, dpMap.Dimensions + pos))
-                    _dpMap.PMapTo(dpMap, pos, true);
+                {
+                    if (Transparency)
+                    {
+                        _dpMap.PMapTo(dpMap, pos, true);
+                    }
+                    else
+                    {
+                        _dpMap.MapTo(dpMap, pos, true);
+                    }
+                }
             }
         }
 
