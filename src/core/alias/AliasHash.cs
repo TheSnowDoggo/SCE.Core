@@ -111,14 +111,31 @@ namespace SCE
             return _aliases[alias];
         }
 
-        public virtual void Set(string alias, T item)
+        public virtual U Get<U>(string alias)
         {
-            _aliases[alias] = item;
+            var res = (U?)Convert.ChangeType(Get(alias), typeof(U));
+            return res ?? throw new NullReferenceException("Conversion result is null.");
         }
 
         public virtual bool TryGet(string alias, [MaybeNullWhen(false)] out T? item)
         {
             return _aliases.TryGetValue(alias, out item);
+        }
+
+        public virtual bool TryGet<U>(string alias, [MaybeNullWhen(false)] out U? item)
+        {
+            if (!_aliases.TryGetValue(alias, out var val))
+            {
+                item = default;
+                return false;
+            }
+            item = (U?)Convert.ChangeType(val, typeof(U));
+            return item != null;
+        }
+
+        public virtual void Set(string alias, T item)
+        {
+            _aliases[alias] = item;
         }
 
         public virtual void Rename(string oldAlias, string newAlias)

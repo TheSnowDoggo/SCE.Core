@@ -95,12 +95,18 @@ namespace SCE
 
             var key = uisKeyInfo.KeyInfo.Key;
 
-            if ((IgnoreInbuiltIntercepters || !IsInputIntercepted(uisKeyInfo.KeyInfo, _inbuiltIntecepters)) && (!Intercepting || !IsInputIntercepted(uisKeyInfo.KeyInfo, InputIntercepters)))
+            if ((IgnoreInbuiltIntercepters || !IsInputIntercepted(uisKeyInfo.KeyInfo, _inbuiltIntecepters)) 
+                && (!Intercepting || !IsInputIntercepted(uisKeyInfo.KeyInfo, InputIntercepters)))
             {
                 if (!CharacterMap.TryGetValue(key, out char chr))
+                {
                     chr = uisKeyInfo.KeyInfo.KeyChar;
-                if ((AllowNullTerminator || chr != '\0') && (!CheckDisallowedChars || !IsCharacterDisallowed(chr)) && (!CheckAllowedChars || IsCharacterAllowed(chr) && (!CheckAllowedInputs || IsInputAllowed(chr))))
+                }
+                if ((AllowNullTerminator || chr != '\0') && (!CheckDisallowedChars || !IsCharacterDisallowed(chr)) 
+                    && (!CheckAllowedChars || IsCharacterAllowed(chr) && (!CheckAllowedInputs || IsInputAllowed(chr))))
+                {
                     _strBuilder.Append(chr);
+                }    
             }
 
             OnKey?.Invoke();
@@ -211,6 +217,7 @@ namespace SCE
         #endregion
 
         #region AllowedFunc
+
         public static Func<string, bool> MaxLength(int maxLength)
         {
             return (str) => str.Length <= maxLength;
@@ -247,6 +254,7 @@ namespace SCE
         {
             return (chr) => checkSet.Contains(chr);
         }
+
         #endregion
 
         #region CheckAllowance
@@ -256,20 +264,16 @@ namespace SCE
             if (AllowedChars.Count == 0)
                 return true;
             foreach (var func in AllowedChars)
-            {
                 if (func.Invoke(keyChar))
                     return true;
-            }
             return false;
         }
 
         private bool IsCharacterDisallowed(char keyChar)
         {
             foreach (var func in DisallowedChars)
-            {
                 if (!func.Invoke(keyChar))
                     return false;
-            }
             return true;
         }
 
@@ -289,10 +293,8 @@ namespace SCE
         private bool IsInputIntercepted(ConsoleKeyInfo keyInfo, IEnumerable<Intercept> intercepts)
         {
             foreach (var func in intercepts)
-            {
                 if (func.Invoke(keyInfo, _strBuilder))
                     return true;
-            }
             return false;
         }
     }

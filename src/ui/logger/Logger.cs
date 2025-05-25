@@ -78,7 +78,7 @@ namespace SCE
             }
         }
 
-        private bool fitLinesToLength = false;
+        private bool fitLinesToLength = true;
 
         public bool FitToLength
         {

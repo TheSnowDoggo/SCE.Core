@@ -46,6 +46,7 @@
         public SCEColor BgColor { get; }
 
         #region Equality
+
         public static bool operator ==(Pixel p1, Pixel p2) => Equals(p1, p2);
 
         public static bool operator !=(Pixel p1, Pixel p2) => !(p1 == p2);
@@ -64,6 +65,7 @@
         {
             return HashCode.Combine(Element, FgColor, BgColor);
         }
+
         #endregion
 
         public override string ToString()

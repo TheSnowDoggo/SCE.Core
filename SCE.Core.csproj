@@ -1,7 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net6.0</TargetFramework>
 	<OutputType>Exe</OutputType>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
@@ -9,7 +8,7 @@
     <PackageId>SCECore</PackageId>
     <Title>SCE.Core</Title>
 	<AssemblyName>SCE.Core</AssemblyName>
-    <Version>3.1.1</Version>
+    <Version>3.2.1</Version>
 	<VersionSuffix>Release</VersionSuffix>
     <Authors>Luna Sparkle</Authors>
     <Product>SCE.Core</Product>
@@ -26,10 +25,14 @@
     <RepositoryUrl>https://github.com/TheSnowDoggo/SCE.Core</RepositoryUrl>
     <Company>SCE</Company>
     <PackageProjectUrl>https://github.com/TheSnowDoggo/SCE.Core</PackageProjectUrl>
+    <PackageReleaseNotes>Added flow tables, overlays and InputEntryV2.
+
+Also check out the useful Demo file in the source code!</PackageReleaseNotes>
+    <TargetFramework>net6.0</TargetFramework>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="SCECSUtils" Version="1.2.1" />
+    <PackageReference Include="SCECSUtils" Version="1.2.2" />
   </ItemGroup>
 
   <ItemGroup>

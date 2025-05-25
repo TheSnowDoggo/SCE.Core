@@ -1,6 +1,9 @@
 ﻿using System.Diagnostics;
 namespace SCE
 {
+    /// <summary>
+    /// Primary update manager for SCE.
+    /// </summary>
     public static class GameHandler
     {
         public enum PriorityType
@@ -26,8 +29,6 @@ namespace SCE
         private static readonly UpdateGroup _updateGroup = new();
 
         private static bool isRunning;
-
-        public static Grid2D<int> grid = new(10, 10);
 
         public static AliasHashTExt<IScene> Scenes { get => _sceneGroup; }
 

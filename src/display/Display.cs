@@ -5,10 +5,31 @@ namespace SCE
 {
     public sealed class Display : SceneBase
     {
+        /// <summary>
+        /// Represents the different rendering modes.
+        /// </summary>
         public enum RenderType
         {
+            /// <summary>
+            /// Highly efficient colored rendering.
+            /// </summary>
+            /// <remarks>
+            /// Note: Requires a small buffer (at least 7 characters) on the right side of the screen to avoid jittering.
+            /// </remarks>
             CCS,
+            /// <summary>
+            /// Slower coloured rendering that is more basic and doesn't require a buffer.
+            /// </summary>
+            /// <remarks>
+            /// Note: Screen tearing can be visible when moving, especially when there are many colors.
+            /// </remarks>
             Compatibility,
+            /// <summary>
+            /// Super efficient non-colored rendering.
+            /// </summary>
+            /// <remarks>
+            /// Note: Background colors without text are represented by characters.
+            /// </remarks>
             Debug,
         }
 
@@ -37,6 +58,24 @@ namespace SCE
         public int Width { get => viewport.Width; }
 
         public int Height { get => viewport.Height; }
+
+        public SCEColor BgColor
+        {
+            get => viewport.BgColor;
+            set => viewport.BgColor = value;
+        }
+
+        public bool ClearOnRender
+        {
+            get => viewport.ClearOnRender;
+            set => viewport.ClearOnRender = value;
+        }
+
+        public bool CropOutOfBounds
+        {
+            get => viewport.CropOutOfBounds;
+            set => viewport.CropOutOfBounds = value;
+        }
 
         public Action? OnDisplayResize { get; set; }
 

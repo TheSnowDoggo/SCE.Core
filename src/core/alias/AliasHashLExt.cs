@@ -16,6 +16,7 @@
         public AliasHashLExt()
             : base()
         {
+            _list = new();
         }
 
         /// <summary>
