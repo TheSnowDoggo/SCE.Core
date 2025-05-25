@@ -534,6 +534,11 @@
             <typeparam name="T">The type of key1.</typeparam>
             <typeparam name="U">The type of key2.</typeparam>
         </member>
+        <member name="T:SCE.MatrixGeneric`1">
+            <summary>
+            Base class for custom matries. Not to be used on its own.
+            </summary>
+        </member>
         <member name="T:SCE.PathFinder">
             <summary>
             A class for grid-based pathfinding using A* algorithm.
@@ -687,11 +692,45 @@
             <param name="maxRange">The maximum x value.</param>
             <returns>A random vector from the specified max-range.</returns>
         </member>
+        <member name="T:SCE.Display.RenderType">
+            <summary>
+            Represents the different rendering modes.
+            </summary>
+        </member>
+        <member name="F:SCE.Display.RenderType.CCS">
+            <summary>
+            Highly efficient colored rendering.
+            </summary>
+            <remarks>
+            Note: Requires a small buffer (at least 7 characters) on the right side of the screen to avoid jittering.
+            </remarks>
+        </member>
+        <member name="F:SCE.Display.RenderType.Compatibility">
+            <summary>
+            Slower coloured rendering that is more basic and doesn't require a buffer.
+            </summary>
+            <remarks>
+            Note: Screen tearing can be visible when moving, especially when there are many colors.
+            </remarks>
+        </member>
+        <member name="F:SCE.Display.RenderType.Debug">
+            <summary>
+            Super efficient non-colored rendering.
+            </summary>
+            <remarks>
+            Note: Background colors without text are represented by characters.
+            </remarks>
+        </member>
         <member name="M:SCE.Display.Start">
             <inheritdoc/>
         </member>
         <member name="M:SCE.Display.Update">
             <inheritdoc/>
+        </member>
+        <member name="T:SCE.GameHandler">
+            <summary>
+            Primary update manager for SCE.
+            </summary>
         </member>
         <member name="F:SCE.GameHandler.PriorityType.PrioritizeScenes">
             <summary>
@@ -1002,6 +1041,9 @@
             <summary>
             Top-left position relative to the rotation axis.
             </summary>
+        </member>
+        <member name="M:InputSystem.InputEntryV2.LoadKeyInfo(SCE.UISKeyInfo)">
+            <inheritdoc/>
         </member>
     </members>
 </doc>

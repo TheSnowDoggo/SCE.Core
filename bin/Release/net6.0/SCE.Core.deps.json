@@ -6,36 +6,36 @@
   "compilationOptions": {},
   "targets": {
     ".NETCoreApp,Version=v6.0": {
-      "SCE.Core/3.1.1": {
+      "SCE.Core/3.2.1": {
         "dependencies": {
-          "SCECSUtils": "1.2.1"
+          "SCECSUtils": "1.2.2"
         },
         "runtime": {
           "SCE.Core.dll": {}
         }
       },
-      "SCECSUtils/1.2.1": {
+      "SCECSUtils/1.2.2": {
         "runtime": {
           "lib/net6.0/CSUtils.dll": {
-            "assemblyVersion": "1.2.1.0",
-            "fileVersion": "1.2.1.0"
+            "assemblyVersion": "1.2.2.0",
+            "fileVersion": "1.2.2.0"
           }
         }
       }
     }
   },
   "libraries": {
-    "SCE.Core/3.1.1": {
+    "SCE.Core/3.2.1": {
       "type": "project",
       "serviceable": false,
       "sha512": ""
     },
-    "SCECSUtils/1.2.1": {
+    "SCECSUtils/1.2.2": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-jPUyxX3Pxz18IM03HoqwJsUYdY70xGd+hNONOcHa1vhxTv+bVRG4rVBqIg724Dbuk1z0yihqEyxLbZVpoXmqrA==",
-      "path": "scecsutils/1.2.1",
-      "hashPath": "scecsutils.1.2.1.nupkg.sha512"
+      "sha512": "sha512-EHDX74mo0S4HtYka9F7H6cbozaZL+J4d8Dgnb8HwSxnrux1WouSRL+F5piSFfJp1l3+WiTeXvjYmCgXAjxhRog==",
+      "path": "scecsutils/1.2.2",
+      "hashPath": "scecsutils.1.2.2.nupkg.sha512"
     }
   }
 }

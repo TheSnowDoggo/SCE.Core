@@ -25,7 +25,7 @@
 
                 if (dpMap.GridArea().Overlaps(pos, overMap.Dimensions + pos))
                 {
-                    dpMap.MapTo(overMap, pos, true);
+                    dpMap.PMapTo(overMap, pos, true);
                 }
             }
 
