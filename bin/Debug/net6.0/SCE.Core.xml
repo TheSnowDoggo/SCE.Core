@@ -76,18 +76,6 @@
         <member name="M:SCE.AliasHashTExt`1.Clear">
             <inheritdoc/>
         </member>
-        <member name="M:SCE.AliasHashTExt`1.AddType(System.Type)">
-            <summary>
-            Adds a type to the type dict.
-            </summary>
-            <param name="type">The type to add.</param>
-        </member>
-        <member name="M:SCE.AliasHashTExt`1.RemoveType(System.Type)">
-            <summary>
-            Removes a type from the type dict.
-            </summary>
-            <param name="type">The type to remove.</param>
-        </member>
         <member name="M:SCE.AliasHashTExt`1.Contains``1">
             <summary>
             Determines whether the search hash contains a specified type.
@@ -534,9 +522,14 @@
             <typeparam name="T">The type of key1.</typeparam>
             <typeparam name="U">The type of key2.</typeparam>
         </member>
-        <member name="T:SCE.MatrixGeneric`1">
+        <member name="P:SCE.MatrixF.RotateCW90">
             <summary>
-            Base class for custom matries. Not to be used on its own.
+            Clockwise 90 rotation (when Y value increases downwards)
+            </summary>
+        </member>
+        <member name="P:SCE.MatrixF.RotateACW90">
+            <summary>
+            Anti-clockwise 90 rotation (when Y value increases downwards)
             </summary>
         </member>
         <member name="T:SCE.PathFinder">

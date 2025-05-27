@@ -50,10 +50,18 @@ namespace SCE
 
         private readonly Image _cur;
 
+        private readonly Image _img;
+
         private int selectIndex;
+
+        private double timer;
 
         public Mane()
         {
+            _img = new(10, 5, SCEColor.DarkBlue);
+
+            _img.Data.FillHorizontal(new Pixel(SCEColor.Magenta), 2);
+
             // One limitation of the logger is each log can only occupy one line
             // This may be updated in the future.
             _logger = new(60, 10, SCEColor.DarkGray)
@@ -150,6 +158,15 @@ namespace SCE
         {
             // You can also use GameHandler.DeltaTime to get the time elapsed between each frame.
             _fps.Text = $"FPS: {GameHandler.FPS}";
+
+            if (timer > 0)
+            {
+                timer -= GameHandler.DeltaTime;
+            }
+            else
+            {
+                timer = 0.5;
+            }
         }
 
         private void SetupDisplay()
@@ -157,7 +174,7 @@ namespace SCE
             Display.Instance.RenderMode = Display.RenderType.CCS;
 
             // Adds the IRenderables to the display to render.
-            Display.Instance.Renderables.AddRange(new IRenderable[] { _fps, _fl, _loggerFl });
+            Display.Instance.Renderables.AddRange(new IRenderable[] { _fps, _fl, _loggerFl, _img });
 
             Display.Instance.BgColor = SCEColor.DarkCyan;
         }

@@ -30,12 +30,13 @@ namespace SCE
 
         public static string ToSIF(Grid2D<Pixel> grid)
         {
-            var elementArr = new char[grid.Size()];
-            var fgArr = new char[grid.Size()];
-            var bgArr = new char[grid.Size()];
+            var size = grid.Size();
+            var elementArr = new char[size];
+            var fgArr = new char[size];
+            var bgArr = new char[size];
 
             int i = 0;
-            for (int y = grid.Height - 1; y >= 0; --y)
+            for (int y = 0; y < grid.Height; ++y)
             {
                 for (int x = 0; x < grid.Width; ++x)
                 {
@@ -46,9 +47,9 @@ namespace SCE
                 }
             }
 
-            string elementComp = Utils.RLCompress(new(elementArr));
-            string fgComp = Utils.RLCompress(new(fgArr));
-            string bgComp = Utils.RLCompress(new(bgArr));
+            var elementComp = Utils.RLCompress(new(elementArr));
+            var fgComp = Utils.RLCompress(new(fgArr));
+            var bgComp = Utils.RLCompress(new(bgArr));
 
             return Format(grid.Width, grid.Height, fgComp, bgComp, elementComp);
         }
@@ -59,18 +60,18 @@ namespace SCE
 
             Grid2D<Pixel> grid = new(width, height);
 
-            DeformatData(sif, out string fgColors, out string bgColors, out string elements);
+            DeformatData(sif, out var fgColors, out var bgColors, out var elements);
 
-            string fgDecomp = Utils.RLDecompress(fgColors);
-            string bgDecomp = Utils.RLDecompress(bgColors);
-            string elementDecomp = Utils.RLDecompress(elements);
+            var fgDecomp = Utils.RLDecompress(fgColors);
+            var bgDecomp = Utils.RLDecompress(bgColors);
+            var elementDecomp = Utils.RLDecompress(elements);
 
             int i = 0;
-            for (int y = height - 1; y >= 0; --y)
+            for (int y = 0; y < height; ++y)
             {
                 for (int x = 0; x < width; ++x)
                 {
-                    grid[x, y] = new Pixel(elementDecomp[i], ToSCEColor(fgDecomp[i]), ToSCEColor(bgDecomp[i]));
+                    grid[x, y] = new(elementDecomp[i], ToSCEColor(fgDecomp[i]), ToSCEColor(bgDecomp[i]));
                     ++i;
                 }
             }

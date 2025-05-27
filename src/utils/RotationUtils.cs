@@ -6,6 +6,36 @@ namespace SCE
     /// </summary>
     public static class RotationUtils
     {
+        public static Vector2 Rotate90CW(Vector2 pos)
+        {
+            return new(pos.Y * -1.0f, pos.X);
+        }
+
+        public static Vector2 Rotate90ACW(Vector2 pos)
+        {
+            return new(pos.Y, pos.X * -1.0f);
+        }
+
+        public static Vector2 Rotate180(Vector2 pos)
+        {
+            return pos * -1.0f;
+        }
+
+        public static Vector2 Rotate90CW(Vector2 pos, Vector2 axis)
+        {
+            return Rotate90CW(pos - axis) + axis;
+        }
+
+        public static Vector2 Rotate90ACW(Vector2 pos, Vector2 axis)
+        {
+            return Rotate90ACW(pos - axis) + axis;
+        }
+
+        public static Vector2 Rotate180(Vector2 pos, Vector2 axis)
+        {
+            return Rotate180(pos - axis) + axis;
+        }
+
         private enum RotationType
         {
             /// <summary>

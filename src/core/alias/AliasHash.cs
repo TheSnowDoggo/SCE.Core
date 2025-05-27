@@ -3,6 +3,7 @@ using System.Diagnostics.CodeAnalysis;
 namespace SCE
 {
     public class AliasHash<T> : IEnumerable<T>
+        where T : notnull
     {
         private readonly Dictionary<T, HashSet<string>> _set;
 
@@ -24,23 +25,17 @@ namespace SCE
             AddRange(collection);
         }
 
-        public int Count { get => _set.Count; }
-
-        public IEnumerator<T> GetEnumerator()
-        {
-            return _set.Keys.GetEnumerator();
-        }
-
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            return GetEnumerator();
-        }
-
         public T this[string alias]
         {
             get => Get(alias);
             set => Set(alias, value);
         }
+
+        public int Count { get => _set.Count; }
+
+        public int AliasCount { get => _aliases.Count; }
+
+        #region Modify
 
         public virtual bool Add(T item)
         {
@@ -106,6 +101,16 @@ namespace SCE
                 Remove(item);
         }
 
+        public virtual void Clear()
+        {
+            _set.Clear();
+            _aliases.Clear();
+        }
+
+        #endregion
+
+        #region Accessors
+
         public virtual T Get(string alias)
         {
             return _aliases[alias];
@@ -138,6 +143,24 @@ namespace SCE
             _aliases[alias] = item;
         }
 
+        #endregion
+
+        #region Contains
+
+        public virtual bool Contains(T item)
+        {
+            return _set.ContainsKey(item);
+        }
+
+        public virtual bool Contains(string alias)
+        {
+            return _aliases.ContainsKey(alias);
+        }
+
+        #endregion
+
+        #region Aliases
+
         public virtual void Rename(string oldAlias, string newAlias)
         {
             if (!_aliases.TryGetValue(oldAlias, out var item))
@@ -158,10 +181,20 @@ namespace SCE
             return _aliases.Remove(alias);
         }
 
-        public virtual void Clear()
+        #endregion
+
+        #region IEnumerable
+
+        public IEnumerator<T> GetEnumerator()
         {
-            _set.Clear();
-            _aliases.Clear();
+            return _set.Keys.GetEnumerator();
         }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return GetEnumerator();
+        }
+
+        #endregion
     }
 }

@@ -18,23 +18,25 @@
         }
 
         #region Shorthands
-        public static Vector2 Zero { get; } = new(0.0f, 0.0f);
 
-        public static Vector2 Up { get; } = new(0.0f, 1.0f);
+        public static Vector2 Zero { get; } = new(+0.0f, +0.0f);
 
-        public static Vector2 Down { get; } = new(0.0f, -1.0f);
+        public static Vector2 Up { get; } = new(+0.0f, -1.0f);
 
-        public static Vector2 Right { get; } = new(1.0f, 0.0f);
+        public static Vector2 Down { get; } = new(+0.0f, +1.0f);
 
-        public static Vector2 Left { get; } = new(-1.0f, 0.0f);
+        public static Vector2 Right { get; } = new(+1.0f, +0.0f);
 
-        public static Vector2 UpLeft { get; } = new(-1.0f, 1.0f);
+        public static Vector2 Left { get; } = new(-1.0f, +0.0f);
 
-        public static Vector2 UpRight { get; } = new(1.0f, 1.0f);
+        public static Vector2 UpLeft { get; } = new(-1.0f, -1.0f);
 
-        public static Vector2 DownLeft { get; } = new(-1.0f, -1.0f);
+        public static Vector2 UpRight { get; } = new(+1.0f, -1.0f);
 
-        public static Vector2 DownRight { get; } = new(1.0f, -1.0f);
+        public static Vector2 DownLeft { get; } = new(-1.0f, +1.0f);
+
+        public static Vector2 DownRight { get; } = new(+1.0f, +1.0f);
+
         #endregion
 
         #region Properties
@@ -166,6 +168,11 @@
 
         #region ToString
 
+        public override string ToString()
+        {
+            return $"{X},{Y}";
+        }
+
         public string ToString(string? format)
         {
             return $"{X.ToString(format)},{Y.ToString(format)}";
@@ -173,8 +180,6 @@
 
         public string ToString(string? format, IFormatProvider? provider)
         {
-            if (provider is not null)
-                throw new NotImplementedException("Providers not implemented.");
             return ToString(format);
         }
 

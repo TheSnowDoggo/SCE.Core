@@ -20,23 +20,25 @@
         }
 
         #region Shorthands
-        public static Vector2Int Zero { get; } = new(0, 0);
 
-        public static Vector2Int Up { get; } = new(0, 1);
+        public static Vector2Int Zero { get; } = new(+0, +0);
 
-        public static Vector2Int Down { get; } = new(0, -1);
+        public static Vector2Int Up { get; } = new(+0, -1);
 
-        public static Vector2Int Right { get; } = new(1, 0);
+        public static Vector2Int Down { get; } = new(+0, +1);
 
-        public static Vector2Int Left { get; } = new(-1, 0);
+        public static Vector2Int Right { get; } = new(+1, +0);
 
-        public static Vector2Int UpLeft { get; } = new(-1, 1);
+        public static Vector2Int Left { get; } = new(-1, +0);
 
-        public static Vector2Int UpRight { get; } = new(1, 1);
+        public static Vector2Int UpLeft { get; } = new(-1, -1);
 
-        public static Vector2Int DownLeft { get; } = new(-1, -1);
+        public static Vector2Int UpRight { get; } = new(+1, -1);
 
-        public static Vector2Int DownRight { get; } = new(1, -1);
+        public static Vector2Int DownLeft { get; } = new(-1, +1);
+
+        public static Vector2Int DownRight { get; } = new(+1, +1);
+
         #endregion
 
         #region Properties

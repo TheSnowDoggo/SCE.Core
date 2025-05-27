@@ -4,11 +4,9 @@
     /// An extension class of <see cref="AliasHash{T}"/> allowing for quick determination of whether this contains an element of a specified type.
     /// </summary>
     public class AliasHashTExt<T> : AliasHash<T>
+        where T : notnull
     {
-        /// <summary>
-        /// Contains each type and the count of each type. 
-        /// </summary>
-        protected readonly Dictionary<Type, int> _types;
+        private readonly Dictionary<Type, HashSet<T>> _types = new();
 
         /// <summary>
         /// Initializes a new instance of the <see cref="AliasHashTExt{T}"/> class.
@@ -16,7 +14,6 @@
         public AliasHashTExt()
             : base()
         {
-            _types = new();
         }
 
         /// <summary>
@@ -36,21 +33,27 @@
         public AliasHashTExt(IEnumerable<T> collection)
             : base(collection)
         {
-            _types = new();
         }
+
+        #region Modify
 
         /// <inheritdoc/>
         public override bool Add(T item)
         {
-            AddType(item.GetType());
-            return base.Add(item);
+            var res = base.Add(item);
+            if (res)
+                AddType(item, item.GetType());
+            return res;
         }
 
         /// <inheritdoc/>
         public override bool Remove(T item)
         {
-            RemoveType(item.GetType());
-            return base.Remove(item);
+            var res = base.Remove(item);
+            if (res)
+                foreach (var pair in _types)
+                    RemoveType(item, pair.Key);
+            return res;
         }
 
         /// <inheritdoc/>
@@ -60,39 +63,9 @@
             _types.Clear();
         }
 
-        /// <summary>
-        /// Adds a type to the type dict.
-        /// </summary>
-        /// <param name="type">The type to add.</param>
-        protected void AddType(Type type)
-        {
-            if (_types.ContainsKey(type))
-            {
-                ++_types[type];
-            }
-            else
-            {
-                _types.Add(type, 1);
-            }
-        }
+        #endregion
 
-        /// <summary>
-        /// Removes a type from the type dict.
-        /// </summary>
-        /// <param name="type">The type to remove.</param>
-        protected void RemoveType(Type type)
-        {
-            if (!_types.TryGetValue(type, out int value))
-                return;
-            if (value <= 1)
-            {
-                _types.Remove(type);
-            }
-            else
-            {
-                --_types[type];
-            }
-        }
+        #region Contains
 
         /// <summary>
         /// Determines whether the search hash contains a specified type.
@@ -111,7 +84,54 @@
         /// <returns><see langword="true"/> if the type is found; otherwise, <see langword="false"/>.</returns>
         public bool Contains(Type type)
         {
-            return _types.TryGetValue(type, out int value) && value > 0;
+            return type == typeof(T) || (_types.TryGetValue(type, out var set) && set.Count > 0);
         }
+
+        #endregion
+
+        #region Types
+
+        public IEnumerable<U> EnumerateType<U>()
+        {
+            if (_types.TryGetValue(typeof(U), out var set))
+                foreach (var item in set)
+                    yield return (U)Convert.ChangeType(item, typeof(U));
+        }
+
+        public bool AddType(T item, Type type)
+        {
+            if (!Contains(item) || type == typeof(T) || !type.IsAssignableFrom(item.GetType()))
+                return false;
+            if (_types.TryGetValue(type, out var set))
+            {
+                return set.Add(item);
+            }
+            else
+            {
+                _types[type] = new(new[] { item });
+                return true;
+            }
+        }
+
+        public bool RemoveType(T item, Type type)
+        {
+            if (!Contains(item) || type == typeof(T) || !type.IsAssignableFrom(item.GetType()))
+                return false;
+            if (_types.TryGetValue(type, out var set) && set.Remove(item))
+            {
+                if (set.Count == 0)
+                    _types.Remove(type);
+                return true;
+            }
+            return false;
+        }
+
+        public void RemoveTypes(T item)
+        {
+            foreach (var type in _types.Keys)
+                RemoveType(item, type);
+        }
+
+        #endregion
     }
 }

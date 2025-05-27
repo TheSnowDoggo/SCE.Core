@@ -6,17 +6,11 @@
     public class AliasHashLExt<T> : AliasHash<T>
     {
         /// <summary>
-        /// The list of items.
-        /// </summary>
-        protected readonly List<T> _list;
-
-        /// <summary>
         /// Initializes a new instance of the <see cref="AliasHashLExt{T}"/> class.
         /// </summary>
         public AliasHashLExt()
             : base()
         {
-            _list = new();
         }
 
         /// <summary>
@@ -26,7 +20,7 @@
         public AliasHashLExt(int capacity)
             : base(capacity)
         {
-            _list = new(capacity);
+            List = new(capacity);
         }
 
         /// <summary>
@@ -36,20 +30,23 @@
         public AliasHashLExt(IEnumerable<T> collection)
             : base(collection)
         {
-            _list = new();
         }
+
+        protected List<T> List { get; } = new();
+
+        #region Modify
 
         /// <inheritdoc/>
         public override bool Add(T t)
         {
-            _list.Add(t);
+            List.Add(t);
             return base.Add(t);
         }
 
         /// <inheritdoc/>
         public override bool Remove(T t)
         {
-            _list.Remove(t);
+            List.Remove(t);
             return base.Remove(t);
         }
 
@@ -57,7 +54,9 @@
         public override void Clear()
         {
             base.Clear();
-            _list.Clear();
+            List.Clear();
         }
+
+        #endregion
     }
 }

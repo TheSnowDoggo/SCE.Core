@@ -19,14 +19,20 @@ namespace SCE
             for (int i = 0; i < str.Length; ++i)
             {
                 if (str[i] != seperator)
+                {
                     ++length;
+                }
                 else
                 {
                     if (length > longest)
+                    {
                         longest = length;
+                    }
                     length = 0;
                     if (str.Length - i < longest)
+                    {
                         break;
+                    }
                 }
             }
             return length > longest ? length : longest;
@@ -36,10 +42,8 @@ namespace SCE
         {
             StringBuilder sb = new(str.Length);
             for (int i = 0; i < str.Length; i++)
-            {
                 if (str[i] != chr)
                     sb.Append(str[i]);
-            }
             return sb.ToString();
         }
 
@@ -115,12 +119,18 @@ namespace SCE
                 char chr = str[i];
 
                 if (leftBoundArray.Contains(chr))
+                {
                     boundLayer++;
+                }
                 else if (boundLayer > 0 && rightBoundArray.Contains(chr))
+                {
                     boundLayer--;
+                }
 
                 if (boundLayer > 0 || chr != split)
+                {
                     strBuilder.Append(chr);
+                }
 
                 if (last || (boundLayer == 0 && chr == split))
                 {
@@ -142,6 +152,7 @@ namespace SCE
         {
             return SplitExcludingBounds(str, split, new[] { leftBound }, new[] { rightBound });
         }
+
         #endregion
     }
 }
