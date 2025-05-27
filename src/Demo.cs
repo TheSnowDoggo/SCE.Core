@@ -179,32 +179,6 @@ namespace SCE
             Display.Instance.BasePixel = new(SCEColor.DarkCyan);
         }
 
-        private void ChangeWindow(Vector2Int change)
-        {
-            try
-            {
-                Console.SetWindowSize(Console.WindowWidth + change.X, Console.WindowHeight + change.Y);
-                _logger.Log($"Window set to {Display.ConsoleWindowDimensions()}");
-            }
-            catch
-            {
-
-            }
-        }
-
-        private void ChangeBuffer(Vector2Int change)
-        {
-            try
-            {
-                Console.SetBufferSize(Console.BufferWidth + change.X, Console.BufferHeight + change.Y);
-                _logger.Log($"Buffer set to {Console.BufferWidth},{Console.BufferHeight}");
-            }
-            catch
-            {
-
-            }
-        }
-
         private void SetupInput()
         {
             InputAction enter = new(ConsoleKey.Enter, EntryEnter);
@@ -215,23 +189,7 @@ namespace SCE
                 { ConsoleKey.DownArrow, +1 },
             };
 
-            InputMap<Vector2Int> changeWindow = new(ChangeWindow)
-            {
-                { ConsoleKey.UpArrow, Vector2Int.Up },
-                { ConsoleKey.DownArrow, Vector2Int.Down },
-                { ConsoleKey.LeftArrow, Vector2Int.Left },
-                { ConsoleKey.RightArrow, Vector2Int.Right },
-            };
-
-            InputMap<Vector2Int> changeBuffer = new(ChangeBuffer)
-            {
-                { ConsoleKey.W, Vector2Int.Up },
-                { ConsoleKey.S, Vector2Int.Down },
-                { ConsoleKey.A, Vector2Int.Left },
-                { ConsoleKey.D, Vector2Int.Right },
-            };
-
-            InputLayer mane = new(0) { enter, slider, changeBuffer, changeWindow };
+            InputLayer mane = new(0) { enter, slider };
 
             InputLayer entry = new(-1) { _ie };
             entry.IsActive = false;

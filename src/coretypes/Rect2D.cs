@@ -133,14 +133,14 @@
 
         public override string ToString()
         {
-            return $"Area2DInt({Left},{Bottom},{Right},{Top})";
+            return $"{Left},{Bottom},{Right},{Top}";
         }
 
         #endregion
 
-        #region Expose
+        #region Deconstruct
 
-        public void Expose(out int left, out int bottom, out int right, out int top)
+        public void Deconstruct(out int left, out int bottom, out int right, out int top)
         {
             left = Left;
             bottom = Bottom;
@@ -148,7 +148,7 @@
             top = Top;
         }
 
-        public void Expose(out Vector2Int start, out Vector2Int end)
+        public void Deconstruct(out Vector2Int start, out Vector2Int end)
         {
             start = Start();
             end = End();

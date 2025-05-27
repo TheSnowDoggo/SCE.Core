@@ -23,7 +23,7 @@ namespace SCE
         {
             if ((pixel.Element is ' ' or '\0') && pixel.BgColor != SCEColor.Black)
             {
-                return SIFUtils._sifMap.GetT(pixel.BgColor);
+                return SIFUtils.ToSIFCode(pixel.BgColor);
             }
             return pixel.Element;
         }

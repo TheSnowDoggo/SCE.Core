@@ -122,7 +122,9 @@
                 return;
             }
 
-            RenderEngine?.Render(viewport.GetMap());
+            var dpMap = viewport.GetMap();
+
+            RenderEngine?.Render(dpMap);
 
             TryResize();
         }

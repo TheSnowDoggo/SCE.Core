@@ -198,7 +198,7 @@ namespace SCE
 
         public IEnumerator<Vector2Int> GetEnumerator()
         {
-            return (IEnumerator<Vector2Int>)EnumerateGrid();
+            return EnumerateGrid().GetEnumerator();
         }
 
         IEnumerator IEnumerable.GetEnumerator()
@@ -412,36 +412,27 @@ namespace SCE
 
         #region Rotation
 
-        public virtual void RotateData90Clockwise()
+        public void Rotate90()
         {
-            RotateData90(1);
-        }
-
-        public virtual void RotateData90Anticlockwise()
-        {
-            RotateData90(-1);
-        }
-
-        public virtual void RotateData90(int direction)
-        {
-            if (Math.Abs(direction) != 1)
-            {
-                throw new ArgumentException("Rotation factor must be either -1 or 1");
-            }
-
-            var newData = new T[Width, Height];
-
-            Vector2 rotationAxis = Dimensions.ToVector2().Midpoint();
+            var newData = new T[Height, Width];
 
             foreach (var pos in this)
             {
-                T value = this[pos];
 
-                Vector2 rotatedOffsetPosition = RotationUtils.GetRotatedOffsetPosition(pos, direction, rotationAxis);
+            }
+        }
 
-                Vector2Int newPixelPos = (rotatedOffsetPosition + rotationAxis.Inverse()).ToVector2Int();
+        public void Rotate180()
+        {
+            var newData = new T[Width, Height];
 
-                newData[newPixelPos.X, newPixelPos.Y] = value;
+            var mid = (Dimensions - 1).ToVector2().Midpoint();
+
+            foreach (var pos in this)
+            {
+                var next = (Vector2Int)RotationUtils.Rotate180(pos, mid);
+
+                newData[next.X, next.Y] = this[pos];
             }
 
             data = newData;

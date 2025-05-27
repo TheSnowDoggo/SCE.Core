@@ -3,7 +3,7 @@
     /// <summary>
     /// A legacy class for getting and handling inputs stored in <see cref="InputLayer"/>.
     /// </summary>
-    public class InputHandler : AliasHashLExt<InputLayer>, IScene
+    public class InputHandler : AliasHash<InputLayer>, IScene
     {
         private readonly Queue<UISKeyInfo> uisKeyInfoQueue = new();
 
@@ -45,18 +45,18 @@
         public void Update()
         {
             if (!IsActive)
+            {
                 return;
-            SortLayers();
-            RunQueue();
-        }
+            }
 
-        private void SortLayers()
-        {
-            List.Sort();
-        }
+            List<InputLayer> list = new(Count);
+            foreach (var layer in this)
+            {
+                list.Add(layer);
+            }
 
-        private void RunQueue()
-        {
+            list.Sort();
+
             int queueCount = uisKeyInfoQueue.Count;
 
             flushKey = false;
@@ -66,7 +66,7 @@
                 quitKey = false;
                 var uisKeyInfo = uisKeyInfoQueue.Dequeue();
 
-                foreach (var layer in List)
+                foreach (var layer in list)
                 {
                     if (layer.IsActive)
                     {

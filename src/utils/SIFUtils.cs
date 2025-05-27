@@ -5,7 +5,7 @@ namespace SCE
 {
     public static class SIFUtils
     {
-        public static readonly KeyMap<char, SCEColor> _sifMap = new()
+        private static readonly KeyMap<char, SCEColor> _sifMap = new()
         {
             { 'K', SCEColor.Black },
             { 'B', SCEColor.DarkBlue },

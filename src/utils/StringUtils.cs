@@ -75,7 +75,7 @@ namespace SCE
 
         public static string InsertBetween(string str, string insert, char leftBound, char rightBound)
         {
-            RangeBetween(str, leftBound, rightBound).Expose(out int leftIndex, out int rightIndex);
+            RangeBetween(str, leftBound, rightBound).Deconstruct(out int leftIndex, out int rightIndex);
             return str.Remove(leftIndex, rightIndex - leftIndex).Insert(leftIndex, insert);
         }
 

@@ -1,11 +1,42 @@
-﻿using CSUtils;
-namespace SCE
+﻿namespace SCE
 {
-    /// <summary>
-    /// A class containing functions useful for grid rotation.
-    /// </summary>
     public static class RotationUtils
     {
+        public const float RADIAN_EULAR_CONVERSION_FACTOR = 180 / MathF.PI;
+
+        #region Conversion
+
+        public static Vector2 AngleToVector(float angle)
+        {
+            return new Vector2(MathF.Cos(angle), MathF.Sin(angle)).Normalize();
+        }
+
+        public static float VectorToRadians(Vector2 vector)
+        {
+            vector = vector.Normalize();
+            var angle = MathF.Atan(vector.Y / vector.X);
+            return vector.X > 0 ? angle : angle + MathF.PI;
+        }
+
+        public static float VectorToDegrees(Vector2 vector)
+        {
+            return RadiansToDegrees(VectorToRadians(vector));
+        }
+
+        public static float RadiansToDegrees(float radians)
+        {
+            return radians * RADIAN_EULAR_CONVERSION_FACTOR;
+        }
+
+        public static float DegreesToRadians(float degrees)
+        {
+            return degrees / RADIAN_EULAR_CONVERSION_FACTOR;
+        }
+
+        #endregion
+
+        #region Rotation
+
         public static Vector2 Rotate90CW(Vector2 pos)
         {
             return new(pos.Y * -1.0f, pos.X);
@@ -36,101 +67,6 @@ namespace SCE
             return Rotate180(pos - axis) + axis;
         }
 
-        private enum RotationType
-        {
-            /// <summary>
-            /// Top-right position relative to the rotation axis.
-            /// </summary>
-            TopRight,
-
-            /// <summary>
-            /// Bottom-right position relative to the rotation axis.
-            /// </summary>
-            BottomRight,
-
-            /// <summary>
-            /// Bottom-left position relative to the rotation axis.
-            /// </summary>
-            BottomLeft,
-
-            /// <summary>
-            /// Top-left position relative to the rotation axis.
-            /// </summary>
-            TopLeft,
-        }
-
-        public static Vector2Int RotationRange { get => new(0, 4); }
-
-        public static Vector2 RotatePositionBy(Vector2 position, int rotationFactor, Vector2 rotationAxis)
-        {
-            rotationFactor = Utils.Mod(rotationFactor, RotationRange.Y);
-
-            int direction = 1;
-
-            if (rotationFactor > 3)
-            {
-                rotationFactor = 1;
-                direction = -1;
-            }
-
-            Vector2 newPos = position;
-            for (int i = 0; i < rotationFactor; i++)
-            {
-                newPos = GetRotatedOffsetPosition(newPos, direction, rotationAxis);
-            }
-
-            return newPos;
-        }
-
-        public static Vector2 GetRotatedOffsetPosition(Vector2 position, int direction, Vector2 rotationAxis)
-        {
-            if (Math.Abs(direction) != 1)
-                throw new ArgumentException("Direction must be either -1 or 1");
-
-            RotationType rotationType, newRotation;
-
-            Vector2 offsetPos = position - rotationAxis;
-
-            rotationType = GetOffsetRotation(offsetPos);
-
-            newRotation = GetNewRotation(rotationType, direction);
-
-            Vector2 newSign = GetRotationOffsetSign(newRotation);
-
-            return offsetPos.Abs().Inverse() * newSign;
-        }
-
-        public static int GetNewRotation(int rotation, int direction)
-        {
-            return Utils.Mod(rotation + direction, RotationRange.Y);
-        }
-
-        private static RotationType GetNewRotation(RotationType rotation, int rotationFactor)
-        {
-            return (RotationType)GetNewRotation((int)rotation, rotationFactor);
-        }
-
-        private static RotationType GetOffsetRotation(Vector2 offsetPosition)
-        {
-            return (offsetPosition.X >= 0, offsetPosition.Y >= 0) switch
-            {
-                (true, true)   => RotationType.TopRight,
-                (true, false)  => RotationType.BottomRight,
-                (false, false) => RotationType.BottomLeft,
-                (false, true)  => RotationType.TopLeft,
-            };
-        }
-
-        private static Vector2 GetRotationOffsetSign(RotationType rotation)
-        {
-            return rotation switch
-            {
-                RotationType.TopRight    => new(1, 1),
-                RotationType.BottomRight => new(1, -1),
-                RotationType.BottomLeft  => new(-1, -1),
-                RotationType.TopLeft     => new(-1, 1),
-                _ => throw new NotImplementedException(),
-            };
-        }
+        #endregion
     }
 }

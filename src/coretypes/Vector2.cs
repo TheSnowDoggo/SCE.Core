@@ -242,9 +242,9 @@
 
         #endregion
 
-        #region Expose
+        #region Doconstruct
 
-        public void Expose(out float x, out float y)
+        public void Deconstruct(out float x, out float y)
         {
             x = X;
             y = Y;

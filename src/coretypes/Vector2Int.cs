@@ -252,9 +252,9 @@
 
         #endregion
 
-        #region Expose
+        #region Deconstruct
 
-        public void Expose(out int x, out int y)
+        public void Deconstruct(out int x, out int y)
         {
             x = X;
             y = Y;

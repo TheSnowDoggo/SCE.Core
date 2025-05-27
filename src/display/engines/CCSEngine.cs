@@ -71,9 +71,15 @@ namespace SCE
             Console.ResetColor();
         }
 
+        private static int ClosestHigherMultiple(int a, int b)
+        {
+            int m = a % b;
+            return m == 0 ? a : b - m + a;
+        }
+
         private string SpaceFill(int x)
         {
-            int tabLength = MathUtils.ClosestHigherMultiple(x, 8);
+            int tabLength = ClosestHigherMultiple(x, 8);
             return string.Join("", "\r", tabCache.Invoke(tabLength / 8), backspaceCache.Invoke(tabLength - x));
         }
 

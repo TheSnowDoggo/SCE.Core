@@ -4,37 +4,6 @@
         <name>SCE.Core</name>
     </assembly>
     <members>
-        <member name="T:SCE.AliasHashLExt`1">
-            <summary>
-            An extension class of <see cref="!:SearchHash&lt;T&gt;"/> with a list.
-            </summary>
-        </member>
-        <member name="M:SCE.AliasHashLExt`1.#ctor">
-            <summary>
-            Initializes a new instance of the <see cref="T:SCE.AliasHashLExt`1"/> class.
-            </summary>
-        </member>
-        <member name="M:SCE.AliasHashLExt`1.#ctor(System.Int32)">
-            <summary>
-            Initializes a new instance of the <see cref="T:SCE.AliasHashLExt`1"/> class.
-            </summary>
-            <param name="capacity">The initial size.</param>
-        </member>
-        <member name="M:SCE.AliasHashLExt`1.#ctor(System.Collections.Generic.IEnumerable{`0})">
-            <summary>
-            Initializes a new instance of the <see cref="T:SCE.AliasHashLExt`1"/> class.
-            </summary>
-            <param name="collection">The collection of initial elements.</param>
-        </member>
-        <member name="M:SCE.AliasHashLExt`1.Add(`0)">
-            <inheritdoc/>
-        </member>
-        <member name="M:SCE.AliasHashLExt`1.Remove(`0)">
-            <inheritdoc/>
-        </member>
-        <member name="M:SCE.AliasHashLExt`1.Clear">
-            <inheritdoc/>
-        </member>
         <member name="T:SCE.AliasHashTExt`1">
             <summary>
             An extension class of <see cref="T:SCE.AliasHash`1"/> allowing for quick determination of whether this contains an element of a specified type.
@@ -1003,31 +972,6 @@
         <member name="M:SCE.ColorUtils.SetConsoleColor(SCE.ColorSet)">
             <summary>
             Sets the Console Foreground and Background color.
-            </summary>
-        </member>
-        <member name="T:SCE.RotationUtils">
-            <summary>
-            A class containing functions useful for grid rotation.
-            </summary>
-        </member>
-        <member name="F:SCE.RotationUtils.RotationType.TopRight">
-            <summary>
-            Top-right position relative to the rotation axis.
-            </summary>
-        </member>
-        <member name="F:SCE.RotationUtils.RotationType.BottomRight">
-            <summary>
-            Bottom-right position relative to the rotation axis.
-            </summary>
-        </member>
-        <member name="F:SCE.RotationUtils.RotationType.BottomLeft">
-            <summary>
-            Bottom-left position relative to the rotation axis.
-            </summary>
-        </member>
-        <member name="F:SCE.RotationUtils.RotationType.TopLeft">
-            <summary>
-            Top-left position relative to the rotation axis.
             </summary>
         </member>
         <member name="M:InputSystem.InputEntryV2.LoadKeyInfo(SCE.UISKeyInfo)">
