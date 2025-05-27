@@ -146,7 +146,7 @@
             </summary>
             <param name="line">The line to map.</param>
             <param name="pos">The starting zero-based position of the line.</param>
-            <param name="colors">The colors to map with.</param>
+            <param name="colorSet">The colors to map with.</param>
         </member>
         <member name="M:SCE.DisplayMap.MapString(System.String,System.Int32,SCE.SCEColor,SCE.SCEColor)">
             <summary>
@@ -550,11 +550,8 @@
         </member>
         <member name="M:SCE.Vector2.ReadVectorString(System.String)">
             <summary>
-            Returns the vector representation of the given string vector.
+            Bad, do not use.
             </summary>
-            <param name="vectorStr">The vector string to read.</param>
-            <returns>The vector representation of the given string vector.</returns>
-            <exception cref="T:System.ArgumentException">Thrown if the given string vector is invalid.</exception>
         </member>
         <member name="T:SCE.Vector2Int">
             <summary>
@@ -563,11 +560,8 @@
         </member>
         <member name="M:SCE.Vector2Int.ReadVectorString(System.String)">
             <summary>
-            Returns the vector representation of the given string vector.
+            Bad, do not use
             </summary>
-            <param name="vectorStr">The vector string to read.</param>
-            <returns>The vector representation of the given string vector.</returns>
-            <exception cref="T:System.ArgumentException">Thrown if the given string vector is invalid.</exception>
         </member>
         <member name="M:SCE.Vector2Int.Rand(SCE.Vector2Int,SCE.Vector2Int)">
             <summary>
@@ -591,43 +585,6 @@
             </summary>
             <param name="maxRange">The maximum x value.</param>
             <returns>A random vector from the specified max-range.</returns>
-        </member>
-        <member name="F:SCE.CCSEngine.DEFAULT_BUFFER_SIZE">
-            <summary>
-            Represents the default buffer size.
-            </summary>
-        </member>
-        <member name="P:SCE.CCSEngine.Instance">
-            <summary>
-            Gets the singleton instance of this class.
-            </summary>
-        </member>
-        <member name="P:SCE.CCSEngine.DisplayBuffer">
-            <summary>
-            Gets or sets the side buffer required to prevent side jittering.
-            </summary>
-        </member>
-        <member name="M:SCE.CCSEngine.Render(SCE.DisplayMap)">
-            <inheritdoc/>
-        </member>
-        <member name="M:SCE.CCSEngine.GetViewportDimensions">
-            <inheritdoc/>
-        </member>
-        <member name="P:SCE.CompatibilityEngine.Instance">
-            <summary>
-            Gets the singleton instance of this class.
-            </summary>
-        </member>
-        <member name="M:SCE.CompatibilityEngine.Render(SCE.DisplayMap)">
-            <inheritdoc/>
-        </member>
-        <member name="P:SCE.DebugEngine.Instance">
-            <summary>
-            Gets the singleton instance of this class.
-            </summary>
-        </member>
-        <member name="M:SCE.DebugEngine.Render(SCE.DisplayMap)">
-            <inheritdoc/>
         </member>
         <member name="T:SCE.Display.ResizeType">
             <summary>
@@ -698,6 +655,43 @@
             <inheritdoc/>
         </member>
         <member name="M:SCE.Display.Update">
+            <inheritdoc/>
+        </member>
+        <member name="F:SCE.CCSEngine.DEFAULT_BUFFER_SIZE">
+            <summary>
+            Represents the default buffer size.
+            </summary>
+        </member>
+        <member name="P:SCE.CCSEngine.Instance">
+            <summary>
+            Gets the singleton instance of this class.
+            </summary>
+        </member>
+        <member name="P:SCE.CCSEngine.DisplayBuffer">
+            <summary>
+            Gets or sets the side buffer required to prevent side jittering.
+            </summary>
+        </member>
+        <member name="M:SCE.CCSEngine.Render(SCE.DisplayMap)">
+            <inheritdoc/>
+        </member>
+        <member name="M:SCE.CCSEngine.GetViewportDimensions">
+            <inheritdoc/>
+        </member>
+        <member name="P:SCE.CompatibilityEngine.Instance">
+            <summary>
+            Gets the singleton instance of this class.
+            </summary>
+        </member>
+        <member name="M:SCE.CompatibilityEngine.Render(SCE.DisplayMap)">
+            <inheritdoc/>
+        </member>
+        <member name="P:SCE.DebugEngine.Instance">
+            <summary>
+            Gets the singleton instance of this class.
+            </summary>
+        </member>
+        <member name="M:SCE.DebugEngine.Render(SCE.DisplayMap)">
             <inheritdoc/>
         </member>
         <member name="T:SCE.RenderEngine">
@@ -816,6 +810,32 @@
             This may be removed.
             </remarks>
         </member>
+        <member name="P:SCE.IRenderable.IsActive">
+            <summary>
+            Gets the active state of the renderable.
+            </summary>
+        </member>
+        <member name="P:SCE.IRenderable.Offset">
+            <summary>
+            Gets the positional offset of the renderable.
+            </summary>
+        </member>
+        <member name="P:SCE.IRenderable.Layer">
+            <summary>
+            Gets the render layer of the renderable.
+            </summary>
+        </member>
+        <member name="P:SCE.IRenderable.Anchor">
+            <summary>
+            Gets the render anchor of the renderable.
+            </summary>
+        </member>
+        <member name="M:SCE.IRenderable.GetMap">
+            <summary>
+            Gets the displaymap to render.
+            </summary>
+            <returns>The displaymap to render.</returns>
+        </member>
         <member name="P:SCE.UIBase.IsActive">
             <inheritdoc/>
         </member>
@@ -854,32 +874,6 @@
         </member>
         <member name="M:SCE.Image.GetMap">
             <inheritdoc/>
-        </member>
-        <member name="P:SCE.IRenderable.IsActive">
-            <summary>
-            Gets the active state of the renderable.
-            </summary>
-        </member>
-        <member name="P:SCE.IRenderable.Offset">
-            <summary>
-            Gets the positional offset of the renderable.
-            </summary>
-        </member>
-        <member name="P:SCE.IRenderable.Layer">
-            <summary>
-            Gets the render layer of the renderable.
-            </summary>
-        </member>
-        <member name="P:SCE.IRenderable.Anchor">
-            <summary>
-            Gets the render anchor of the renderable.
-            </summary>
-        </member>
-        <member name="M:SCE.IRenderable.GetMap">
-            <summary>
-            Gets the displaymap to render.
-            </summary>
-            <returns>The displaymap to render.</returns>
         </member>
         <member name="M:SCE.Line.ToString">
             <inheritdoc/>
@@ -991,19 +985,10 @@
             <param name="bottomColor">The color of the lower layer.</param>
             <returns><paramref name="topColor"/> if it isn't transparent; otherwise, <paramref name="bottomColor"/>.</returns>
         </member>
-        <member name="M:SCE.ColorUtils.GetName(SCE.SCEColor)">
-            <summary>
-            Gets the corresponding name for the given <see cref="T:System.Byte"/> <paramref name="color"/>.
-            </summary>
-            <param name="color">The <see cref="T:System.Byte"/> color to get the name of.</param>
-            <returns>A string of the name corresponding to given <paramref name="color"/> if it's a valid color code; otherwise, returns <value>"None"</value>.</returns>
-        </member>
         <member name="M:SCE.ColorUtils.IsRealColor(SCE.SCEColor)">
             <summary>
-            Indicates whether the given <see cref="T:System.Byte"/> <paramref name="color"/> is a valid <see cref="T:System.ConsoleColor"/>.
+            Indicates whether a given color is mappable to a <see cref="T:System.ConsoleColor"/>.
             </summary>
-            <param name="color">The <see cref="T:System.Byte"/> color to check.</param>
-            <returns><see langword="true"/> if <paramref name="color"/> is a valid <see cref="T:System.ConsoleColor"/>; otherwise, <see langword="false"/>.</returns>
         </member>
         <member name="M:SCE.ColorUtils.ToConsoleColor(SCE.SCEColor)">
             <summary>

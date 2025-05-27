@@ -97,10 +97,10 @@
         /// </summary>
         /// <param name="line">The line to map.</param>
         /// <param name="pos">The starting zero-based position of the line.</param>
-        /// <param name="colors">The colors to map with.</param>
-        public void MapString(string line, Vector2Int pos, ColorSet colors)
+        /// <param name="colorSet">The colors to map with.</param>
+        public void MapString(string line, Vector2Int pos, ColorSet colorSet)
         {
-            MapString(line, pos, colors.FgColor, colors.BgColor);
+            MapString(line, pos, colorSet.FgColor, colorSet.BgColor);
         }
 
         /// <summary>

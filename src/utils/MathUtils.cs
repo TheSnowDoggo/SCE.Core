@@ -3,13 +3,13 @@ namespace SCE
 {
     public class MathUtils
     {
+        public const float RADIAN_EULAR_CONVERSION_FACTOR = 180 / MathF.PI;
+
         public static int ClosestHigherMultiple(int x, int m)
         {
             int r = x % m;
             return r == 0 ? x : m - r + x;
         }
-
-        private const float RADIAN_EULAR_CONVERSION_FACTOR = 180 / MathF.PI;
 
         #region Angles
 
@@ -38,26 +38,6 @@ namespace SCE
         public static float DegreesToRadians(float degrees)
         {
             return degrees / RADIAN_EULAR_CONVERSION_FACTOR;
-        }
-
-        #endregion
-
-        #region Cycle
-
-        public static int Cycle(Vector2Int range, int newValue)
-        {
-            if (range.Y <= range.X)
-                throw new ArgumentException("Range is invalid.");
-            return range.X + Utils.Mod(newValue, range.Y - range.X);
-        }
-
-        public static int CutShift(Vector2Int range, int current, int shift)
-        {
-            range.Expose(out int min, out int max);
-
-            int result = current + shift;
-
-            return range.InRange(result) ? result : (result >= max ? min : max - 1);
         }
 
         #endregion

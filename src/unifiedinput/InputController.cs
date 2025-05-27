@@ -1,6 +1,4 @@
-﻿using SCE;
-
-namespace SCE.UIS
+﻿namespace SCE.UIS
 {
     public static class InputController
     {
@@ -10,11 +8,16 @@ namespace SCE.UIS
 
         public static Action<UISKeyInfo>? OnKeyEvent { get; set; }
 
-        public static void Start()
+        public static bool Start()
         {
             if (_thread.IsAlive)
-                return;
+            {
+                return false;
+            }
+
             _thread.Start();
+
+            return true;
         }
 
         public static void Stop()

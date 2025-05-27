@@ -186,11 +186,8 @@
         #region ReadVectorString
 
         /// <summary>
-        /// Returns the vector representation of the given string vector.
+        /// Bad, do not use
         /// </summary>
-        /// <param name="vectorStr">The vector string to read.</param>
-        /// <returns>The vector representation of the given string vector.</returns>
-        /// <exception cref="ArgumentException">Thrown if the given string vector is invalid.</exception>
         public static Vector2Int ReadVectorString(string vectorStr)
         {
             if (vectorStr.Length < 3)

@@ -16,7 +16,9 @@
         public Rect2D(int left, int bottom, int right, int top)
         {
             if (left >= right || bottom >= top)
-                throw new InvalidAreaException();
+            {
+                throw new ArgumentException("Dimensions were invalid.");
+            }
             Left = left;
             Bottom = bottom;
             Right = right;

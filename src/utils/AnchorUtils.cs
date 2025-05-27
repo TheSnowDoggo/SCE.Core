@@ -2,8 +2,8 @@
 {
     public static class AnchorUtils
     {
-        public const Anchor H_MASK = Anchor.Left | Anchor.Right | Anchor.Center;
-        public const Anchor V_MASK = Anchor.Top | Anchor.Bottom | Anchor.Middle;
+        public const Anchor H_MASK = Anchor.Left | Anchor.Right  | Anchor.Center;
+        public const Anchor V_MASK = Anchor.Top  | Anchor.Bottom | Anchor.Middle;
 
         public static int VerticalFix(Anchor anchor, int offset, int top = 0)
         {

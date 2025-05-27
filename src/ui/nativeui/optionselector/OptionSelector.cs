@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using CSUtils;
+using System.Collections;
 
 namespace SCE
 {
@@ -58,8 +59,10 @@ namespace SCE
             set
             {
                 if (_commands.Count == 0 || selected == value)
+                {
                     return;
-                selected = MathUtils.Cycle(new Vector2Int(0, _commands.Count), value);
+                }
+                selected = Utils.Mod(value, _commands.Count);
                 Update();
             }
         }

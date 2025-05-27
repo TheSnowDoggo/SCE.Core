@@ -212,11 +212,8 @@
         #region ReadVectorString
 
         /// <summary>
-        /// Returns the vector representation of the given string vector.
+        /// Bad, do not use.
         /// </summary>
-        /// <param name="vectorStr">The vector string to read.</param>
-        /// <returns>The vector representation of the given string vector.</returns>
-        /// <exception cref="ArgumentException">Thrown if the given string vector is invalid.</exception>
         public static Vector2 ReadVectorString(string vectorStr)
         {
             if (vectorStr.Length < 3)
@@ -296,6 +293,11 @@
             return new(MathF.Round(X, 0, MidpointRounding.AwayFromZero), MathF.Round(Y, 0, MidpointRounding.AwayFromZero));
         }
 
+        public double DistanceFrom(Vector2 other)
+        {
+            return (this - other).Abs().Magnitude();
+        }
+
         #endregion
 
         #region InRange
@@ -318,15 +320,6 @@
         public bool InFullRange(float num)
         {
             return num >= X && num <= Y;
-        }
-
-        #endregion
-
-        #region DistanceFrom
-
-        public double DistanceFrom(Vector2 other)
-        {
-            return (this - other).Abs().Magnitude();
         }
 
         #endregion

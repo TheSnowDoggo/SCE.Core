@@ -17,7 +17,9 @@
         {
             bool update = ++count >= FramesPerUpdate;
             if (update)
+            {
                 count = 0;
+            }
             return update;
         }
     }
