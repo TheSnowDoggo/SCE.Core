@@ -34,15 +34,12 @@ namespace SCE
         /// </summary>
         public int DisplayBuffer { get; set; } = DEFAULT_BUFFER_SIZE;
 
-        private static ColorSet[] GetRenderInfo(DisplayMap dpMap)
+        private static ColorSet[] GetRenderInfo(DisplayMapView dpMap)
         {
             HashSet<ColorSet> set = new();
-            for (int y = 0; y < dpMap.Height; ++y)
+            foreach (var pos in dpMap)
             {
-                for (int x = 0; x < dpMap.Width; ++x)
-                {
-                    set.Add(dpMap[x, y].ColorSet());
-                }
+                set.Add(dpMap[pos].ColorSet());
             }
             return set.ToArray();
         }
@@ -71,19 +68,13 @@ namespace SCE
             Console.ResetColor();
         }
 
-        private static int ClosestHigherMultiple(int a, int b)
-        {
-            int m = a % b;
-            return m == 0 ? a : b - m + a;
-        }
-
         private string SpaceFill(int x)
         {
-            int tabLength = ClosestHigherMultiple(x, 8);
+            int tabLength = Utils.ClosestHigherMultiple(x, 8);
             return string.Join("", "\r", tabCache.Invoke(tabLength / 8), backspaceCache.Invoke(tabLength - x));
         }
 
-        private string Build(DisplayMap dpMap, ColorSet rInfo)
+        private string Build(DisplayMapView dpMap, ColorSet rInfo)
         {
             StringBuilder sb = new();
 
@@ -117,7 +108,7 @@ namespace SCE
             return sb.ToString();
         }
 
-        private string[] BuildAll(DisplayMap dpMap, ColorSet[] renderInfoArr)
+        private string[] BuildAll(DisplayMapView dpMap, ColorSet[] renderInfoArr)
         {
             var bInfoArr = new string[renderInfoArr.Length];
             for (int i = 0; i < renderInfoArr.Length; ++i)
@@ -128,7 +119,7 @@ namespace SCE
         }
 
         /// <inheritdoc/>
-        public override void Render(DisplayMap dpMap)
+        public override void Render(DisplayMapView dpMap)
         {
             var rInfoArr = GetRenderInfo(dpMap);
             var strArr = BuildAll(dpMap, rInfoArr);

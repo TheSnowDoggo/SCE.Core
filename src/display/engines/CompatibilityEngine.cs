@@ -16,7 +16,7 @@ namespace SCE
         public static CompatibilityEngine Instance { get => _lazy.Value; }
 
         /// <inheritdoc/>
-        public override void Render(DisplayMap dpMap)
+        public override void Render(DisplayMapView dpMap)
         {
             Console.SetCursorPosition(0, 0);
 

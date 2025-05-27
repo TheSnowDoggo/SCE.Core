@@ -44,10 +44,10 @@
         }
 
         /// <inheritdoc/>
-        public virtual DisplayMap GetMap()
+        public virtual DisplayMapView GetMapView()
         {
             OnRender?.Invoke();
-            return this;
+            return ToView();
         }
     }
 }

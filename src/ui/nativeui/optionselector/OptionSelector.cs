@@ -181,9 +181,9 @@ namespace SCE
         }
 
         /// <inheritdoc/>
-        public override DisplayMap GetMap()
+        public override DisplayMapView GetMapView()
         {
-            return _lineRenderer.GetMap();
+            return _lineRenderer.GetMapView();
         }
     }
 }

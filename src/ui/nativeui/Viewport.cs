@@ -25,7 +25,8 @@
 
         public AliasHash<IRenderable> Renderables { get; } = new();
 
-        protected virtual void Render()
+        /// <inheritdoc/>
+        public override DisplayMapView GetMapView()
         {
             if (ClearOnRender)
             {
@@ -46,7 +47,7 @@
 
             foreach (var r in list)
             {
-                var dpMap = r.GetMap();
+                var dpMap = r.GetMapView();
 
                 var pos = AnchorUtils.AnchorTo(r.Anchor, Dimensions, dpMap.Dimensions) + r.Offset;
 
@@ -62,13 +63,8 @@
                     }
                 }
             }
-        }
 
-        /// <inheritdoc/>
-        public override DisplayMap GetMap()
-        {
-            Render();
-            return base.GetMap();
+            return _dpMap;
         }
     }
 }

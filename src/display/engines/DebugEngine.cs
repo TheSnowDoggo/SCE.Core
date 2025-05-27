@@ -28,7 +28,7 @@ namespace SCE
             return pixel.Element;
         }
 
-        private static string DebugBuild(DisplayMap dpMap)
+        private static string DebugBuild(DisplayMapView dpMap)
         {
             StringBuilder sb = new(dpMap.Size() + dpMap.Height);
             for (int y = 0; y < dpMap.Height; ++y)
@@ -46,7 +46,7 @@ namespace SCE
         }
 
         /// <inheritdoc/>
-        public override void Render(DisplayMap dpMap)
+        public override void Render(DisplayMapView dpMap)
         {
             ColorUtils.SetConsoleColor(FgColor, BgColor);
             Console.SetCursorPosition(0, 0);

@@ -48,6 +48,13 @@
             return new(base.Clone());
         }
 
+        public static implicit operator DisplayMapView(DisplayMap dpMap) => dpMap.ToView();
+
+        public DisplayMapView ToView()
+        {
+            return new(this);
+        }
+
         #region Fill
 
         public Func<Vector2Int, Pixel> FgFill(SCEColor color)
@@ -130,8 +137,8 @@
 
         #region Mapping
 
-        /// <inheritdoc cref="Grid2D{Pixel}.MapTo(Grid2D{Pixel}, Rect2D, Vector2Int)"/>
-        public void PMapTo(Grid2D<Pixel> dataGrid, Rect2D dataGridArea, Vector2Int positionOffset)
+        /// <inheritdoc cref="Grid2D{Pixel}.MapTo(Grid2DView{Pixel}, Rect2D, Vector2Int)"/>
+        public void PMapTo(Grid2DView<Pixel> dataGrid, Rect2D dataGridArea, Vector2Int positionOffset)
         {
             foreach (var pos in EnumerateMapTo(dataGrid, dataGridArea, positionOffset))
             {
@@ -140,26 +147,26 @@
             }
         }
 
-        /// <inheritdoc cref="Grid2D{Pixel}.MapTo(Grid2D{Pixel}, Rect2D)"/>
-        public void PMapTo(Grid2D<Pixel> dataGrid, Rect2D dataGridArea)
+        /// <inheritdoc cref="Grid2D{Pixel}.MapTo(Grid2DView{Pixel}, Rect2D)"/>
+        public void PMapTo(Grid2DView<Pixel> dataGrid, Rect2D dataGridArea)
         {
             PMapTo(dataGrid, dataGridArea, Vector2Int.Zero);
         }
 
-        /// <inheritdoc cref="Grid2D{Pixel}.MapTo(Grid2D{Pixel}, Vector2Int)"/>
-        public void PMapTo(Grid2D<Pixel> dataGrid, Vector2Int positionOffset)
+        /// <inheritdoc cref="Grid2D{Pixel}.MapTo(Grid2DView{Pixel}, Vector2Int)"/>
+        public void PMapTo(Grid2DView<Pixel> dataGrid, Vector2Int positionOffset)
         {
             PMapTo(dataGrid, dataGrid.GridArea(), positionOffset);
         }
 
-        /// <inheritdoc cref="Grid2D{Pixel}.MapTo(Grid2D{Pixel})"/>
-        public void PMapTo(Grid2D<Pixel> dataGrid)
+        /// <inheritdoc cref="Grid2D{Pixel}.MapTo(Grid2DView{Pixel})"/>
+        public void PMapTo(Grid2DView<Pixel> dataGrid)
         {
             PMapTo(dataGrid, dataGrid.GridArea(), Vector2Int.Zero);
         }
 
-        /// <inheritdoc cref="Grid2D{Pixel}.MapFrom(Grid2D{Pixel}, Rect2D, Vector2Int)"/>
-        public void PMapFrom(Grid2D<Pixel> dataGrid, Rect2D thisArea, Vector2Int positionOffset)
+        /// <inheritdoc cref="Grid2D{Pixel}.MapFrom(Grid2DView{Pixel}, Rect2D, Vector2Int)"/>
+        public void PMapFrom(Grid2DView<Pixel> dataGrid, Rect2D thisArea, Vector2Int positionOffset)
         {
             foreach (var pos in EnumerateMapFrom(dataGrid, thisArea, positionOffset))
             {
@@ -168,20 +175,20 @@
             }
         }
 
-        /// <inheritdoc cref="Grid2D{Pixel}.MapFrom(Grid2D{Pixel}, Rect2D)"/>
-        public void PMapFrom(Grid2D<Pixel> dataGrid, Rect2D thisArea)
+        /// <inheritdoc cref="Grid2D{Pixel}.MapFrom(Grid2DView{Pixel}, Rect2D)"/>
+        public void PMapFrom(Grid2DView<Pixel> dataGrid, Rect2D thisArea)
         {
             PMapFrom(dataGrid, thisArea, Vector2Int.Zero);
         }
 
-        /// <inheritdoc cref="Grid2D{Pixel}.MapFrom(Grid2D{Pixel}, Vector2Int)"/>
-        public void PMapFrom(Grid2D<Pixel> dataGrid, Vector2Int positionOffset)
+        /// <inheritdoc cref="Grid2D{Pixel}.MapFrom(Grid2DView{Pixel}, Vector2Int)"/>
+        public void PMapFrom(Grid2DView<Pixel> dataGrid, Vector2Int positionOffset)
         {
             PMapFrom(dataGrid, GridArea(), positionOffset);
         }
 
-        /// <inheritdoc cref="Grid2D{Pixel}.MapFrom(Grid2D{Pixel})"/>
-        public void PMapFrom(Grid2D<Pixel> dataGrid)
+        /// <inheritdoc cref="Grid2D{Pixel}.MapFrom(Grid2DView{Pixel})"/>
+        public void PMapFrom(Grid2DView<Pixel> dataGrid)
         {
             PMapFrom(dataGrid, GridArea(), Vector2Int.Zero);
         }

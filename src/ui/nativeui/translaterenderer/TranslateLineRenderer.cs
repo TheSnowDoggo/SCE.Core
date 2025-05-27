@@ -82,11 +82,11 @@
         }
 
         /// <inheritdoc/>
-        public override DisplayMap GetMap()
+        public override DisplayMapView GetMapView()
         {
             if (RenderOnUpdate)
                 Render();
-            return base.GetMap();
+            return _dpMap;
         }
     }
 }

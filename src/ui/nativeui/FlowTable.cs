@@ -29,6 +29,12 @@
 
         protected virtual void Render()
         {
+            
+        }
+
+        /// <inheritdoc/>
+        public override DisplayMapView GetMapView()
+        {
             if (ClearOnRender)
             {
                 _dpMap.Fill(BasePixel);
@@ -42,7 +48,7 @@
                     continue;
                 }
 
-                var dpMap = r.GetMap();
+                var dpMap = r.GetMapView();
 
                 Vector2Int off = FlowMode switch
                 {
@@ -83,13 +89,8 @@
                     }
                 }
             }
-        }
 
-        /// <inheritdoc/>
-        public override DisplayMap GetMap()
-        {
-            Render();
-            return base.GetMap();
+            return _dpMap;
         }
     }
 }

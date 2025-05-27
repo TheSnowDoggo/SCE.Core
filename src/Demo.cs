@@ -52,15 +52,21 @@ namespace SCE
 
         private readonly Image _img;
 
+        private readonly Scaler<Image> _scl;
+
         private int selectIndex;
 
         private double timer;
 
         public Mane()
         {
-            _img = new(10, 5, SCEColor.DarkBlue);
+            _img = new(5, 5, SCEColor.DarkBlue);
 
-            _img.Fill(new Pixel(SCEColor.Magenta), Rect2D.Horizontal(2, _img.Width));
+            _img.Fill(new Pixel(SCEColor.Magenta), Rect2D.Vertical(2, _img.Height));
+
+            _img.Fill(new Pixel(SCEColor.Cyan), Rect2D.Horizontal(1, _img.Width));
+
+            _scl = new(_img);
 
             // One limitation of the logger is each log can only occupy one line
             // This may be updated in the future.
@@ -166,6 +172,7 @@ namespace SCE
             else
             {
                 timer = 0.5;
+                _img.Rotate90(true);
             }
         }
 
@@ -174,7 +181,7 @@ namespace SCE
             Display.Instance.RenderEngine = CCSEngine.Instance;
 
             // Adds the IRenderables to the display to render.
-            Display.Instance.Renderables.AddRange(new IRenderable[] { _fps, _fl, _loggerFl, _img });
+            Display.Instance.Renderables.AddRange(new IRenderable[] { _fps, _fl, _loggerFl, _scl });
 
             Display.Instance.BasePixel = new(SCEColor.DarkCyan);
         }

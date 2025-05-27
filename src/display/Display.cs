@@ -122,7 +122,7 @@
                 return;
             }
 
-            var dpMap = viewport.GetMap();
+            var dpMap = viewport.GetMapView();
 
             RenderEngine?.Render(dpMap);
 

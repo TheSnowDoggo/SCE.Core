@@ -115,6 +115,13 @@ namespace SCE
             return Width * Height;
         }
 
+        public static implicit operator Grid2DView<T>(Grid2D<T> grid) => grid.ToView();
+
+        public Grid2DView<T> ToView()
+        {
+            return new(this);
+        }
+
         #region Clone
 
         /// <summary>
@@ -170,23 +177,16 @@ namespace SCE
 
             area = thisArea.TrimArea(area);
 
-            int s1 = rowMajor ? area.Bottom : area.Left;
-            int s2 = rowMajor ? area.Left : area.Bottom;
-            int e1 = rowMajor ? area.Top : area.Right;
-            int e2 = rowMajor ? area.Right : area.Top;
-            for (int i = s1; i < e1; ++i)
+            foreach (var pos in area.Enumerate(rowMajor))
             {
-                for (int j = s2; j < e2; ++j)
-                {
-                    yield return rowMajor ? new(j, i) : new(i, j);
-                }
+                yield return pos;
             }
         }
 
         public IEnumerable<Vector2Int> EnumerateGrid(bool rowMajor = true)
         {
             int e1 = rowMajor ? Height : Width;
-            int e2 = rowMajor ? Width : Height;
+            int e2 = rowMajor ? Width  : Height;
             for (int i = 0; i < e1; ++i)
             {
                 for (int j = 0; j < e2; ++j)
@@ -267,7 +267,7 @@ namespace SCE
         /// <param name="dataGrid">The grid to get elements from.</param>
         /// <param name="dataGridArea">The area on the <paramref name="dataGrid"/> to get elements from.</param>
         /// <param name="thisOffset">The offset position on this grid.</param>
-        public IEnumerable<Vector2Int> EnumerateMapTo(Grid2D<T> dataGrid, Rect2D dataGridArea, Vector2Int thisOffset)
+        public IEnumerable<Vector2Int> EnumerateMapTo(Grid2DView<T> dataGrid, Rect2D dataGridArea, Vector2Int thisOffset)
         {
             var dataArea = dataGrid.GridArea();
             if (!Rect2D.Overlaps(dataArea, dataGridArea))
@@ -300,7 +300,7 @@ namespace SCE
         /// <param name="dataGrid">The grid to get elements from.</param>
         /// <param name="dataGridArea">The area on the <paramref name="dataGrid"/> to get elements from.</param>
         /// <param name="thisOffset">The offset position on this grid.</param>
-        public void MapTo(Grid2D<T> dataGrid, Rect2D dataGridArea, Vector2Int thisOffset)
+        public void MapTo(Grid2DView<T> dataGrid, Rect2D dataGridArea, Vector2Int thisOffset)
         {
             foreach (var pos in EnumerateMapTo(dataGrid, dataGridArea, thisOffset))
             {
@@ -308,8 +308,8 @@ namespace SCE
             }
         }
 
-        /// <inheritdoc cref="MapTo(Grid2D{T}, Rect2D, Vector2Int)"/>
-        public void MapTo(Grid2D<T> dataGrid, Rect2D dataGridArea)
+        /// <inheritdoc cref="MapTo(Grid2DView{T}, Rect2D, Vector2Int)"/>
+        public void MapTo(Grid2DView<T> dataGrid, Rect2D dataGridArea)
         {
             MapTo(dataGrid, dataGridArea, Vector2Int.Zero);
         }
@@ -322,13 +322,13 @@ namespace SCE
         /// </remarks>
         /// <param name="dataGrid">The grid to get elements from.</param>
         /// <param name="thisOffset">The offset position on this grid.</param>
-        public void MapTo(Grid2D<T> dataGrid, Vector2Int thisOffset)
+        public void MapTo(Grid2DView<T> dataGrid, Vector2Int thisOffset)
         {
             MapTo(dataGrid, dataGrid.GridArea(), thisOffset);
         }
 
-        /// <inheritdoc cref="MapTo(Grid2D{T}, Vector2Int)"/>
-        public void MapTo(Grid2D<T> dataGrid)
+        /// <inheritdoc cref="MapTo(Grid2DView{T}, Vector2Int)"/>
+        public void MapTo(Grid2DView<T> dataGrid)
         {
             MapTo(dataGrid, dataGrid.GridArea(), Vector2Int.Zero);
         }
@@ -342,7 +342,7 @@ namespace SCE
         /// <param name="dataGrid">The grid to get elements from.</param>
         /// <param name="mapArea">The area on this grid to populate.</param>
         /// <param name="dataOffset">The offset position on the <paramref name="dataGrid"/>.</param>
-        public IEnumerable<Vector2Int> EnumerateMapFrom(Grid2D<T> dataGrid, Rect2D mapArea, Vector2Int dataOffset)
+        public IEnumerable<Vector2Int> EnumerateMapFrom(Grid2DView<T> dataGrid, Rect2D mapArea, Vector2Int dataOffset)
         {
             var thisArea = GridArea();
             if (!Rect2D.Overlaps(thisArea, mapArea))
@@ -375,7 +375,7 @@ namespace SCE
         /// <param name="dataGrid">The grid to get elements from.</param>
         /// <param name="thisArea">The area on this grid to populate.</param>
         /// <param name="dataOffset">The offset position on the <paramref name="dataGrid"/>.</param>
-        public void MapFrom(Grid2D<T> dataGrid, Rect2D thisArea, Vector2Int dataOffset)
+        public void MapFrom(Grid2DView<T> dataGrid, Rect2D thisArea, Vector2Int dataOffset)
         {
             foreach (var pos in EnumerateMapFrom(dataGrid, thisArea, dataOffset))
             {
@@ -383,8 +383,8 @@ namespace SCE
             }
         }
 
-        /// <inheritdoc cref="MapFrom(Grid2D{T}, Rect2D, Vector2Int)"/>
-        public void MapFrom(Grid2D<T> dataGrid, Rect2D thisArea)
+        /// <inheritdoc cref="MapFrom(Grid2DView{T}, Rect2D, Vector2Int)"/>
+        public void MapFrom(Grid2DView<T> dataGrid, Rect2D thisArea)
         {
             MapFrom(dataGrid, thisArea, Vector2Int.Zero);
         }
@@ -397,13 +397,13 @@ namespace SCE
         /// </remarks>
         /// <param name="dataGrid">The grid to get elements from.</param>
         /// <param name="dataOffset">The offset position on the <paramref name="dataGrid"/>.</param>
-        public void MapFrom(Grid2D<T> dataGrid, Vector2Int dataOffset)
+        public void MapFrom(Grid2DView<T> dataGrid, Vector2Int dataOffset)
         {
             MapFrom(dataGrid, GridArea(), dataOffset);
         }
 
-        /// <inheritdoc cref="MapFrom(Grid2D{T}, Vector2Int)"/>
-        public void MapFrom(Grid2D<T> dataGrid)
+        /// <inheritdoc cref="MapFrom(Grid2DView{T}, Vector2Int)"/>
+        public void MapFrom(Grid2DView<T> dataGrid)
         {
             MapFrom(dataGrid, GridArea(), Vector2Int.Zero);
         }
@@ -412,14 +412,45 @@ namespace SCE
 
         #region Rotation
 
-        public void Rotate90()
+        public void Rotate90(bool clockwise = true)
         {
             var newData = new T[Height, Width];
 
+            float val = (Math.Max(Width, Height) - 1) / 2.0f;
+
+            Vector2 axis = new(val, val);
+
+            var fix = Vector2.Zero;
+            if (Width > Height)
+            {
+                fix = new(0, (Width - Height) / 2.0f);
+            }
+            else if (Width < Height)
+            {
+                fix = new((Height - Width) / 2.0f, 0);
+            }
+
             foreach (var pos in this)
             {
+                var rot = clockwise ? Rotate.Rotate90CW(pos + fix, axis) :
+                    Rotate.Rotate90ACW(pos + fix, axis);
 
+                var next = (Vector2Int)(rot - fix.Inverse());
+
+                newData[next.X, next.Y] = this[pos];
             }
+
+            data = newData;
+        }
+
+        public void Rotate90CW()
+        {
+            Rotate90(true);
+        }
+
+        public void Rotate90ACW()
+        {
+            Rotate90(false);
         }
 
         public void Rotate180()
@@ -430,7 +461,7 @@ namespace SCE
 
             foreach (var pos in this)
             {
-                var next = (Vector2Int)RotationUtils.Rotate180(pos, mid);
+                var next = (Vector2Int)Rotate.Rotate180(pos, mid);
 
                 newData[next.X, next.Y] = this[pos];
             }
@@ -440,25 +471,58 @@ namespace SCE
 
         #endregion
 
+        #region Flipping
+
+        public void FlipHorizontal()
+        {
+            for (int x = 0; x < Width / 2; ++x)
+            {
+                for (int y = 0; y < Height; ++y)
+                {
+                    Utils.Swap(ref data[x, y], ref data[Width - x - 1, y]);
+                }
+            }
+        }
+
+        public void FlipVertical()
+        {
+            for (int y = 0; y < Height / 2; ++y)
+            {
+                for (int x = 0; x < Width; ++x)
+                {
+                    Utils.Swap(ref data[x, y], ref data[x, Height - y - 1]);
+                }
+            }
+        }
+
+        #endregion
+
         #region Scaling
 
-        public Grid2D<T> Scale(int scaleFactor)
+        public void Upscale(Vector2Int scaleFactor)
         {
-            var startGrid = Clone();
-            Grid2D<T> newGrid = new(startGrid.Dimensions * scaleFactor);
+            if (scaleFactor <= Vector2.Zero)
+            {
+                throw new ArgumentException("Scale factor must be greater than 0,0.");
+            }
 
-            foreach (var pos in startGrid)
+            Grid2D<T> newGrid = new(Dimensions * scaleFactor);
+
+            foreach (var pos in this)
             {
                 Vector2Int start = pos * scaleFactor;
 
                 Rect2D area = new(start, start + scaleFactor);
 
-                T value = startGrid[pos];
-
-                newGrid.Fill(value, area);
+                newGrid.Fill(this[pos], area);
             }
 
-            return newGrid;
+            data = newGrid.data;
+        }
+
+        public void Upscale(int scaleFactor)
+        {
+            Upscale(new Vector2Int(scaleFactor, scaleFactor));
         }
 
         #endregion

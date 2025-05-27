@@ -26,6 +26,6 @@
         /// Gets the displaymap to render.
         /// </summary>
         /// <returns>The displaymap to render.</returns>
-        DisplayMap GetMap();
+        DisplayMapView GetMapView();
     }
 }

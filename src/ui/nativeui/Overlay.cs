@@ -15,13 +15,13 @@
 
         public bool Transparency { get; set; } = true;
 
-        public override DisplayMap GetMap()
+        public override DisplayMapView GetMapView()
         {
-            var dpMap = Renderable.GetMap();
+            var dpMap = Renderable.GetMapView().ToDisplayMap();
 
             if (Map != null)
             {
-                var overMap = Map.GetMap();
+                var overMap = Map.GetMapView();
 
                 var pos = AnchorUtils.AnchorTo(Map.Anchor, dpMap.Dimensions, overMap.Dimensions) + Map.Offset;
 

@@ -30,7 +30,7 @@
         public Vector2Int Dimensions { get => _dpMap.Dimensions; }
 
         /// <inheritdoc/>
-        public override DisplayMap GetMap()
+        public override DisplayMapView GetMapView()
         {
             return _dpMap;
         }

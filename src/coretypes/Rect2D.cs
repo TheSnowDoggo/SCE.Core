@@ -304,6 +304,21 @@
 
         #endregion
 
+        public IEnumerable<Vector2Int> Enumerate(bool rowMajor = true)
+        {
+            int s1 = rowMajor ? Bottom : Left;
+            int s2 = rowMajor ? Left   : Bottom;
+            int e1 = rowMajor ? Top    : Right;
+            int e2 = rowMajor ? Right  : Top;
+            for (int i = s1; i < e1; ++i)
+            {
+                for (int j = s2; j < e2; ++j)
+                {
+                    yield return rowMajor ? new(j, i) : new(i, j);
+                }
+            }
+        }
+
         #endregion
     }
 }
