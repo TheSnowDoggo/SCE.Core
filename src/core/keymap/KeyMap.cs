@@ -32,7 +32,9 @@ namespace SCE
         public IEnumerator<(T, U)> GetEnumerator()
         {
             foreach (var pair in _tDict)
+            {
                 yield return (pair.Key, pair.Value);
+            }
         }
 
         IEnumerator IEnumerable.GetEnumerator()

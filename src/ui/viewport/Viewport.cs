@@ -7,7 +7,7 @@
         public Viewport(int width, int height, SCEColor? bgColor = null)
             : base(width, height, bgColor)
         {
-            BgColor = bgColor ?? DEFAULT_BGCOLOR;
+            BasePixel = new(bgColor ?? DEFAULT_BGCOLOR);
         }
 
         public Viewport(Vector2Int dimensions, SCEColor? bgColor = null)
@@ -15,7 +15,7 @@
         {
         }
 
-        public SCEColor BgColor { get; set; }
+        public Pixel BasePixel { get; set; }
 
         public bool ClearOnRender { get; set; } = true;
 
@@ -28,13 +28,19 @@
         protected virtual void Render()
         {
             if (ClearOnRender)
-                _dpMap.Data.Fill(new Pixel(BgColor));
+            {
+                _dpMap.Fill(BasePixel);
+            }
 
             List<IRenderable> list = new();
 
             foreach (var r in Renderables)
+            {
                 if (r.IsActive)
+                {
                     list.Add(r);
+                }
+            }
 
             list.Sort((left, right) => left.Layer - right.Layer);
 
@@ -48,11 +54,11 @@
                 {
                     if (Transparency)
                     {
-                        _dpMap.PMapTo(dpMap, pos, true);
+                        _dpMap.PMapTo(dpMap, pos);
                     }
                     else
                     {
-                        _dpMap.MapTo(dpMap, pos, true);
+                        _dpMap.MapTo(dpMap, pos);
                     }
                 }
             }

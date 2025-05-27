@@ -230,7 +230,7 @@ namespace SCE
 
         private void ClearAt(int y)
         {
-            _dpMap.Data.FillHorizontal(new Pixel(BgColor), y);
+            _dpMap.Fill(new Pixel(BgColor), Rect2D.Horizontal(y, _dpMap.Width));
         }
 
         #endregion
@@ -240,7 +240,7 @@ namespace SCE
         public void Clear()
         {
             _logs.Clear();
-            _dpMap.Data.Fill(new Pixel(BgColor));
+            _dpMap.Fill(new Pixel(BgColor));
             viewY = 0;
         }
 
@@ -251,7 +251,7 @@ namespace SCE
         public void Resize(int width, int height)
         {
             _dpMap.CleanResize(width, height);
-            _dpMap.Data.Fill(new Pixel(BgColor));
+            _dpMap.Fill(new Pixel(BgColor));
             RenderAll();
         }
 

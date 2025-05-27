@@ -1,6 +1,6 @@
 ﻿namespace SCE
 {
-    internal class Memoizer<I,O>
+    public class Memoizer<I,O>
         where I : notnull
     {
         private readonly Dictionary<I, O> _cacheDict = new();
@@ -12,7 +12,7 @@
 
         public Func<I, O> Func { get; }
 
-        public O CachedCall(I i)
+        public O Invoke(I i)
         {
             if (!_cacheDict.TryGetValue(i, out O? value))
             {

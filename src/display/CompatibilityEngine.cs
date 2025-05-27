@@ -2,7 +2,7 @@
 
 namespace SCE
 {
-    public sealed class CompatibilityEngine : IRenderEngine
+    public sealed class CompatibilityEngine : RenderEngine
     {
         private static readonly Lazy<CompatibilityEngine> _lazy = new(() => new());
 
@@ -16,13 +16,15 @@ namespace SCE
         public static CompatibilityEngine Instance { get => _lazy.Value; }
 
         /// <inheritdoc/>
-        public void Render(DisplayMap dpMap)
+        public override void Render(DisplayMap dpMap)
         {
             Console.SetCursorPosition(0, 0);
+
             StringBuilder sb = new();
-            var lastFgColor = SCEColor.Black;
-            var lastBgColor = SCEColor.Black;
+
+            var lastSet = ColorSet.Zero;
             bool first = true;
+
             for (int y = 0; y < dpMap.Height; ++y)
             {
                 if (y != 0)
@@ -33,30 +35,27 @@ namespace SCE
                 {
                     if (first)
                     {
-                        lastFgColor = dpMap[x, y].FgColor;
-                        lastBgColor = dpMap[x, y].BgColor;
+                        lastSet = dpMap[x, y].ColorSet();
                         first = false;
                     }
-                    var pixel = dpMap[x, y];
-                    if (lastFgColor == pixel.FgColor && lastBgColor == pixel.BgColor)
+                    var set = dpMap[x, y].ColorSet();
+                    if (lastSet == set)
                     {
-                        sb.Append(pixel.Element);
+                        sb.Append(dpMap[x, y].Element);
                     }
                     else
                     {
-                        Console.ForegroundColor = (ConsoleColor)lastFgColor;
-                        Console.BackgroundColor = (ConsoleColor)lastBgColor;
+                        ColorUtils.SetConsoleColor(lastSet);
                         Console.Write(sb);
-                        sb.Clear();
+                        sb.Clear(); 
 
-                        lastFgColor = pixel.FgColor;
-                        lastBgColor = pixel.BgColor;
-                        sb.Append(pixel.Element);
+                        sb.Append(dpMap[x, y].Element);
+
+                        lastSet = set;
                     }
                 }
             }
-            Console.ForegroundColor = (ConsoleColor)lastFgColor;
-            Console.BackgroundColor = (ConsoleColor)lastBgColor;
+            ColorUtils.SetConsoleColor(lastSet);
             Console.Write(sb);
             Console.ResetColor();
         }

@@ -1,19 +1,23 @@
-﻿using System.Diagnostics;
+﻿using CSUtils;
+using System.Diagnostics;
 using System.Text;
 
 namespace SCE
 {
-    public sealed class CCSEngine : IRenderEngine
+    public sealed class CCSEngine : RenderEngine
     {
+        /// <summary>
+        /// Represents the default buffer size.
+        /// </summary>
+        public const int DEFAULT_BUFFER_SIZE = 7;
+
         private static readonly Lazy<CCSEngine> _lazy = new(() => new());
 
-        private readonly CopyCache tabCache = new('\t');
+        private readonly Memoizer<int, string> tabCache = new(x => Utils.Copy('\t', x));
 
-        private readonly CopyCache backspaceCache = new('\b');
+        private readonly Memoizer<int, string> backspaceCache = new(x => Utils.Copy('\b', x));
 
         private readonly Memoizer<int, string> spaceFillCache;
-
-        private readonly StringBuilder spaceFillBuilder = new();
 
         private CCSEngine()
         {
@@ -25,91 +29,38 @@ namespace SCE
         /// </summary>
         public static CCSEngine Instance { get => _lazy.Value; }
 
-        private string SpaceFill(int x)
-        {
-            int tabLength = MathUtils.ClosestHigherMultiple(x, 8);
-            int tabs = tabLength / 8;
-            int backspaces = tabLength - x;
+        /// <summary>
+        /// Gets or sets the side buffer required to prevent side jittering.
+        /// </summary>
+        public int DisplayBuffer { get; set; } = DEFAULT_BUFFER_SIZE;
 
-            spaceFillBuilder.Clear();
-            spaceFillBuilder.Append('\r');
-            spaceFillBuilder.Append(tabCache.CachedCall(tabs));
-            spaceFillBuilder.Append(backspaceCache.CachedCall(backspaces));
-            return spaceFillBuilder.ToString();
-        }
-
-        private ColorSet[] CCSGetRenderInfo(DisplayMap dpMap)
+        private static ColorSet[] GetRenderInfo(DisplayMap dpMap)
         {
-            HashSet<Pixel> pixelSet = new();
-            HashSet<ColorSet> colorsSet = new();
+            HashSet<ColorSet> set = new();
             for (int y = 0; y < dpMap.Height; ++y)
             {
                 for (int x = 0; x < dpMap.Width; ++x)
                 {
-                    var pixel = dpMap[x, y];
-                    if (!pixelSet.Contains(pixel))
-                    {
-                        colorsSet.Add(new ColorSet(pixel.FgColor, pixel.BgColor));
-                    }
+                    set.Add(dpMap[x, y].ColorSet());
                 }
             }
-            return colorsSet.ToArray();
+            return set.ToArray();
         }
 
-        public StringBuilder CCSBuild(DisplayMap dpMap, ColorSet rInfo)
+        private static void Write(string[] strArr, ColorSet[] rInfoArr)
         {
-            StringBuilder sb = new();
-
-            rInfo.Expose(out SCEColor fgColor, out SCEColor bgColor);
-
-            bool different = false;
-            for (int y = 0; y < dpMap.Height; ++y)
+            if (strArr.Length != rInfoArr.Length)
             {
-                if (y != 0)
-                    sb.Append('\n');
-                for (int x = 0; x < dpMap.Width; ++x)
-                {
-                    var pixel = dpMap[x, y];
-                    if (pixel.BgColor == bgColor && (pixel.Element is ' ' or '\0' || pixel.FgColor == fgColor))
-                    {
-                        if (different)
-                        {
-                            sb.Append(spaceFillCache.CachedCall(x));
-                            different = false;
-                        }
-                        sb.Append(pixel.Element);
-                    }
-                    else
-                    {
-                        different = true;
-                    }
-                }
-            }
-            return sb;
-        }
-
-        private StringBuilder[] CCSBuildAll(DisplayMap dpMap, ColorSet[] renderInfoArr)
-        {
-            var bInfoArr = new StringBuilder[renderInfoArr.Length];
-            for (int i = 0; i < renderInfoArr.Length; ++i)
-                bInfoArr[i] = CCSBuild(dpMap, renderInfoArr[i]);
-            return bInfoArr;
-        }
-
-        private void CCSWrite(StringBuilder[] sbArr, ColorSet[] rInfoArr)
-        {
-            if (sbArr.Length != rInfoArr.Length)
                 throw new ArgumentException("Array lengths do not match.");
+            }
 
-            for (int i = 0; i < sbArr.Length; i++)
+            for (int i = 0; i < strArr.Length; i++)
             {
-                var rInfo = rInfoArr[i];
                 try
                 {
                     Console.SetCursorPosition(0, 0);
-                    Console.ForegroundColor = (ConsoleColor)rInfo.FgColor;
-                    Console.BackgroundColor = (ConsoleColor)rInfo.BgColor;
-                    Console.Write(sbArr[i]);
+                    ColorUtils.SetConsoleColor(rInfoArr[i]);
+                    Console.Write(strArr[i]);
                 }
                 catch
                 {
@@ -120,12 +71,68 @@ namespace SCE
             Console.ResetColor();
         }
 
-        /// <inheritdoc/>
-        public void Render(DisplayMap dpMap)
+        private string SpaceFill(int x)
         {
-            var writeInfoArr = CCSGetRenderInfo(dpMap);
-            var buildArray = CCSBuildAll(dpMap, writeInfoArr);
-            CCSWrite(buildArray, writeInfoArr);
+            int tabLength = MathUtils.ClosestHigherMultiple(x, 8);
+            return string.Join("", "\r", tabCache.Invoke(tabLength / 8), backspaceCache.Invoke(tabLength - x));
+        }
+
+        private string Build(DisplayMap dpMap, ColorSet rInfo)
+        {
+            StringBuilder sb = new();
+
+            rInfo.Expose(out SCEColor fgColor, out SCEColor bgColor);
+
+            bool different = false;
+            for (int y = 0; y < dpMap.Height; ++y)
+            {
+                if (y != 0)
+                {
+                    sb.Append('\n');
+                }
+                for (int x = 0; x < dpMap.Width; ++x)
+                {
+                    var pixel = dpMap[x, y];
+                    if (pixel.BgColor == bgColor && (pixel.Element is ' ' or '\0' || pixel.FgColor == fgColor))
+                    {
+                        if (different)
+                        {
+                            sb.Append(spaceFillCache.Invoke(x));
+                            different = false;
+                        }
+                        sb.Append(pixel.Element);
+                    }
+                    else
+                    {
+                        different = true;
+                    }
+                }
+            }
+            return sb.ToString();
+        }
+
+        private string[] BuildAll(DisplayMap dpMap, ColorSet[] renderInfoArr)
+        {
+            var bInfoArr = new string[renderInfoArr.Length];
+            for (int i = 0; i < renderInfoArr.Length; ++i)
+            {
+                bInfoArr[i] = Build(dpMap, renderInfoArr[i]);
+            }
+            return bInfoArr;
+        }
+
+        /// <inheritdoc/>
+        public override void Render(DisplayMap dpMap)
+        {
+            var rInfoArr = GetRenderInfo(dpMap);
+            var strArr = BuildAll(dpMap, rInfoArr);
+            Write(strArr, rInfoArr);
+        }
+
+        ///<inheritdoc/>
+        public override Vector2Int? GetViewportDimensions()
+        {
+            return Display.ConsoleWindowDimensions() - new Vector2Int(DisplayBuffer, 0);
         }
     }
 }

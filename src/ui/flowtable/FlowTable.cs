@@ -7,7 +7,7 @@
         public FlowTable(int width, int height, SCEColor? bgColor = null)
             : base(width, height, bgColor)
         {
-            BgColor = bgColor ?? DEFAULT_BGCOLOR;
+            BasePixel = new(bgColor ?? DEFAULT_BGCOLOR);
         }
 
         public FlowTable(Vector2Int dimensions, SCEColor? bgColor = null)
@@ -15,7 +15,7 @@
         {
         }
 
-        public SCEColor BgColor { get; set; }
+        public Pixel BasePixel { get; set; }
 
         public bool ClearOnRender { get; set; } = true;
 
@@ -30,13 +30,17 @@
         protected virtual void Render()
         {
             if (ClearOnRender)
-                _dpMap.Data.Fill(new Pixel(BgColor));
+            {
+                _dpMap.Fill(BasePixel);
+            }
 
             int i = 0;
             foreach (var r in Renderables)
             {
                 if (!r.IsActive)
+                {
                     continue;
+                }
 
                 var dpMap = r.GetMap();
 
@@ -58,11 +62,11 @@
                 {
                     if (Transparency)
                     {
-                        _dpMap.PMapTo(dpMap, pos, true);
+                        _dpMap.PMapTo(dpMap, pos);
                     }
                     else
                     {
-                        _dpMap.MapTo(dpMap, pos, true);
+                        _dpMap.MapTo(dpMap, pos);
                     }
 
                     int nextI = FlowMode switch

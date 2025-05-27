@@ -115,10 +115,10 @@ namespace SCE
         /// <summary>
         /// Calls start before starting up gamehandler thread.
         /// </summary>
-        public static void Start()
+        public static bool Start()
         {
             CallStart();
-            StartUpdateThread();
+            return StartUpdateThread();
         }
 
         #region Call
@@ -174,12 +174,17 @@ namespace SCE
             isRunning = false;
         }
 
-        public static void StartUpdateThread()
+        public static bool StartUpdateThread()
         {
             if (_updateThread.IsAlive)
-                throw new GameHandlerAlreadyRunningException();
+            {
+                return false;
+            }
+
             isRunning = true;
             _updateThread.Start();
+
+            return true;
         }
 
         #endregion

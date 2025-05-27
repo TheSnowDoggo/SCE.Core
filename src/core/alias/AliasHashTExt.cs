@@ -94,14 +94,21 @@
         public IEnumerable<U> EnumerateType<U>()
         {
             if (_types.TryGetValue(typeof(U), out var set))
+            {
                 foreach (var item in set)
+                {
                     yield return (U)Convert.ChangeType(item, typeof(U));
+                }
+            }
         }
 
         public bool AddType(T item, Type type)
         {
             if (!Contains(item) || type == typeof(T) || !type.IsAssignableFrom(item.GetType()))
+            {
                 return false;
+            }
+
             if (_types.TryGetValue(type, out var set))
             {
                 return set.Add(item);
@@ -116,13 +123,17 @@
         public bool RemoveType(T item, Type type)
         {
             if (!Contains(item) || type == typeof(T) || !type.IsAssignableFrom(item.GetType()))
+            {
                 return false;
+            }
+
             if (_types.TryGetValue(type, out var set) && set.Remove(item))
             {
                 if (set.Count == 0)
                     _types.Remove(type);
                 return true;
             }
+
             return false;
         }
 

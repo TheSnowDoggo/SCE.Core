@@ -125,7 +125,7 @@ namespace SCE
 
         public void Update()
         {
-            _dpMap.Data.Fill(new Pixel(BgColor));
+            _dpMap.Fill(new Pixel(BgColor));
 
             var lineArr = NewlineOverflow ? OverflowSplitLines(Text, Width, Height) :
                 SplitLines(Text, Width, Height);
@@ -134,7 +134,7 @@ namespace SCE
             for (int i = 0; i < lineArr.Length; ++i)
             {
                 int x = AnchorUtils.HorizontalFix(TextAnchor, Width - lineArr[i].Length);
-                _dpMap.MapLine(lineArr[i], new Vector2Int(x, startY + i), TextFgColor, TextBgColor);
+                _dpMap.MapString(lineArr[i], new Vector2Int(x, startY + i), TextFgColor, TextBgColor);
             }
         }
 

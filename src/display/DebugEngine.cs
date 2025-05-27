@@ -2,7 +2,7 @@
 
 namespace SCE
 {
-    public sealed class DebugEngine : IRenderEngine
+    public sealed class DebugEngine : RenderEngine
     {
         private static readonly Lazy<DebugEngine> _lazy = new(() => new());
 
@@ -14,6 +14,10 @@ namespace SCE
         /// Gets the singleton instance of this class.
         /// </summary>
         public static DebugEngine Instance { get => _lazy.Value; }
+
+        public SCEColor FgColor { get; set; } = SCEColor.Gray;
+
+        public SCEColor BgColor { get; set; } = SCEColor.Black;
 
         private static char DebugGetChar(Pixel pixel)
         {
@@ -42,10 +46,12 @@ namespace SCE
         }
 
         /// <inheritdoc/>
-        public void Render(DisplayMap dpMap)
+        public override void Render(DisplayMap dpMap)
         {
+            ColorUtils.SetConsoleColor(FgColor, BgColor);
             Console.SetCursorPosition(0, 0);
             Console.Write(DebugBuild(dpMap));
+            Console.ResetColor();
         }
     }
 }

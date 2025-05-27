@@ -16,6 +16,8 @@
             BgColor = bgColor;
         }
 
+        public static ColorSet Zero { get; } = new(SCEColor.Black, SCEColor.Black);
+
         public SCEColor FgColor { get; }
 
         public SCEColor BgColor { get; }
@@ -26,17 +28,6 @@
 
         public static bool operator !=(ColorSet left, ColorSet right) => !(left == right);
 
-        /// <summary>
-        /// Exposes the foreground and background color properties in this instance.
-        /// </summary>
-        /// <param name="fgColor">The foregrorund <see cref="byte"/> color.</param>
-        /// <param name="bgColor">The backgrround <see cref="byte"/> color.</param>
-        public void Expose(out SCEColor fgColor, out SCEColor bgColor)
-        {
-            fgColor = FgColor;
-            bgColor = BgColor;
-        }
- 
         public bool Equals(ColorSet colorSet)
         {
             return colorSet.FgColor == FgColor && colorSet.BgColor == BgColor;
@@ -55,6 +46,17 @@
         public override string ToString()
         {
             return $"ColorSet({FgColor}, {BgColor})";
+        }
+
+        /// <summary>
+        /// Exposes the foreground and background color properties in this instance.
+        /// </summary>
+        /// <param name="fgColor">The foregrorund <see cref="byte"/> color.</param>
+        /// <param name="bgColor">The backgrround <see cref="byte"/> color.</param>
+        public void Expose(out SCEColor fgColor, out SCEColor bgColor)
+        {
+            fgColor = FgColor;
+            bgColor = BgColor;
         }
     }
 }

@@ -1,0 +1,3 @@
+C:\Users\redst\source\repos\TheSnowDoggo\SCE.Core\bin\Debug\net6.0\publish\win-x86\SCE.Core.pdb
+C:\Users\redst\source\repos\TheSnowDoggo\SCE.Core\bin\Debug\net6.0\publish\win-x86\SCE.Core.xml
+C:\Users\redst\source\repos\TheSnowDoggo\SCE.Core\bin\Debug\net6.0\publish\win-x86\SCE.Core.exe

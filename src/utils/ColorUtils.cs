@@ -6,10 +6,10 @@
     public static class ColorUtils
     {
         /// <summary>
-        /// Gets the contrasting color of either <see cref="Black"/> or <see cref="White"/> depending on whether the given <paramref name="color"/> is light.
+        /// Gets the contrasting color of either <see cref="SCEColor.Black"/> or <see cref="SCEColor.White"/> depending on whether the given <paramref name="color"/> is light.
         /// </summary>
         /// <param name="color">The color to check.</param>
-        /// <returns><see cref="Black"/> if <paramref name="color"/> is light; otherwise, <see cref="White"/>.</returns>
+        /// <returns><see cref="SCEColor.Black"/> if <paramref name="color"/> is light; otherwise, <see cref="SCEColor.White"/>.</returns>
         public static SCEColor GetContrast(SCEColor color)
         {
             return IsRealColor(color) && IsLightColor(color) ? SCEColor.Black : SCEColor.White;
@@ -58,6 +58,31 @@
         public static bool IsRealColor(SCEColor color)
         {
             return color != SCEColor.Transparent;
+        }
+
+        /// <summary>
+        /// Converts SCEColor to ConsoleColor.
+        /// </summary>
+        public static ConsoleColor ToConsoleColor(SCEColor color)
+        {
+            return color != SCEColor.Transparent ? (ConsoleColor)color : ConsoleColor.Black;
+        }
+
+        /// <summary>
+        /// Sets the Console Foreground and Background color.
+        /// </summary>
+        public static void SetConsoleColor(SCEColor fgColor, SCEColor bgColor)
+        {
+            Console.ForegroundColor = ToConsoleColor(fgColor);
+            Console.BackgroundColor = ToConsoleColor(bgColor);
+        }
+
+        /// <summary>
+        /// Sets the Console Foreground and Background color.
+        /// </summary>
+        public static void SetConsoleColor(ColorSet colorSet)
+        {
+            SetConsoleColor(colorSet.FgColor, colorSet.BgColor);
         }
     }
 }

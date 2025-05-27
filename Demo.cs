@@ -60,7 +60,7 @@ namespace SCE
         {
             _img = new(10, 5, SCEColor.DarkBlue);
 
-            _img.Data.FillHorizontal(new Pixel(SCEColor.Magenta), 2);
+            _img.Fill(new Pixel(SCEColor.Magenta), Rect2D.Horizontal(2, _img.Width));
 
             // One limitation of the logger is each log can only occupy one line
             // This may be updated in the future.
@@ -171,12 +171,38 @@ namespace SCE
 
         private void SetupDisplay()
         {
-            Display.Instance.RenderMode = Display.RenderType.CCS;
+            Display.Instance.RenderEngine = CCSEngine.Instance;
 
             // Adds the IRenderables to the display to render.
             Display.Instance.Renderables.AddRange(new IRenderable[] { _fps, _fl, _loggerFl, _img });
 
-            Display.Instance.BgColor = SCEColor.DarkCyan;
+            Display.Instance.BasePixel = new(SCEColor.DarkCyan);
+        }
+
+        private void ChangeWindow(Vector2Int change)
+        {
+            try
+            {
+                Console.SetWindowSize(Console.WindowWidth + change.X, Console.WindowHeight + change.Y);
+                _logger.Log($"Window set to {Display.ConsoleWindowDimensions()}");
+            }
+            catch
+            {
+
+            }
+        }
+
+        private void ChangeBuffer(Vector2Int change)
+        {
+            try
+            {
+                Console.SetBufferSize(Console.BufferWidth + change.X, Console.BufferHeight + change.Y);
+                _logger.Log($"Buffer set to {Console.BufferWidth},{Console.BufferHeight}");
+            }
+            catch
+            {
+
+            }
         }
 
         private void SetupInput()
@@ -189,7 +215,23 @@ namespace SCE
                 { ConsoleKey.DownArrow, +1 },
             };
 
-            InputLayer mane = new(0) { enter, slider };
+            InputMap<Vector2Int> changeWindow = new(ChangeWindow)
+            {
+                { ConsoleKey.UpArrow, Vector2Int.Up },
+                { ConsoleKey.DownArrow, Vector2Int.Down },
+                { ConsoleKey.LeftArrow, Vector2Int.Left },
+                { ConsoleKey.RightArrow, Vector2Int.Right },
+            };
+
+            InputMap<Vector2Int> changeBuffer = new(ChangeBuffer)
+            {
+                { ConsoleKey.W, Vector2Int.Up },
+                { ConsoleKey.S, Vector2Int.Down },
+                { ConsoleKey.A, Vector2Int.Left },
+                { ConsoleKey.D, Vector2Int.Right },
+            };
+
+            InputLayer mane = new(0) { enter, slider, changeBuffer, changeWindow };
 
             InputLayer entry = new(-1) { _ie };
             entry.IsActive = false;

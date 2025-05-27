@@ -29,11 +29,11 @@
                 {
                     if (Transparency)
                     {
-                        dpMap.PMapTo(overMap, pos, true);
+                        dpMap.PMapTo(overMap, pos);
                     }
                     else
                     {
-                        dpMap.MapTo(overMap, pos, true);
+                        dpMap.MapTo(overMap, pos);
                     }
                 }
             }

@@ -1,43 +1,20 @@
-﻿using System.Diagnostics;
-using System.Text;
-namespace SCE
+﻿namespace SCE
 {
     public sealed class Display : SceneBase
     {
         /// <summary>
-        /// Represents the different rendering modes.
+        /// Represents the different resizing modes.
         /// </summary>
-        public enum RenderType
+        public enum ResizeType
         {
-            /// <summary>
-            /// Highly efficient colored rendering.
-            /// </summary>
-            /// <remarks>
-            /// Note: Requires a small buffer (at least 7 characters) on the right side of the screen to avoid jittering.
-            /// </remarks>
-            CCS,
-            /// <summary>
-            /// Slower coloured rendering that is more basic and doesn't require a buffer.
-            /// </summary>
-            /// <remarks>
-            /// Note: Screen tearing can be visible when moving, especially when there are many colors.
-            /// </remarks>
-            Compatibility,
-            /// <summary>
-            /// Super efficient non-colored rendering.
-            /// </summary>
-            /// <remarks>
-            /// Note: Background colors without text are represented by characters.
-            /// </remarks>
-            Debug,
+            Auto,
+            Custom,
+            RenderEngine,
         }
-
-        private const int DEFAULT_BUFFER_SIZE = 7;
-
 
         private static readonly Lazy<Display> _lazy = new(() => new());
 
-        private readonly Viewport viewport = new(Console.WindowWidth, Console.WindowHeight);
+        private readonly Viewport viewport = new(ConsoleWindowDimensions());
 
         private Display()
         {
@@ -50,56 +27,83 @@ namespace SCE
 
         public AliasHash<IRenderable> Renderables { get => viewport.Renderables; }
 
+        public IUpdateLimit? UpdateLimiter { get; set; }
+
+        /// <summary>
+        /// Gets or sets the 
+        /// </summary>
+        public RenderEngine? RenderEngine { get; set; } = CCSEngine.Instance;
+
+        /// <summary>
+        /// Gets or sets the resizing mode.
+        /// </summary>
+        public ResizeType ResizeMode { get; set; } = ResizeType.RenderEngine;
+
+        /// <summary>
+        /// Gets or sets the custom viewport dimensions.
+        /// </summary>
+        public Vector2Int CustomDimensions { get; set; } = ConsoleWindowDimensions();
+
         #region Properties
 
-        public Vector2Int Dimensions { get => viewport.Dimensions; }
-
+        /// <summary>
+        /// Gets the width of the viewport.
+        /// </summary>
         public int Width { get => viewport.Width; }
 
+        /// <summary>
+        /// Gets the height of the viewport.
+        /// </summary>
         public int Height { get => viewport.Height; }
 
-        public SCEColor BgColor
+        /// <summary>
+        /// Gets the dimensions of the viewport.
+        /// </summary>
+        public Vector2Int Dimensions { get => viewport.Dimensions; }
+
+        /// <summary>
+        /// Gets the base pixel used to clear the viewport.
+        /// </summary>
+        public Pixel BasePixel
         {
-            get => viewport.BgColor;
-            set => viewport.BgColor = value;
+            get => viewport.BasePixel;
+            set => viewport.BasePixel = value;
         }
 
+        /// <summary>
+        /// Gets or sets a value representing whether the viewport be cleared every frame.
+        /// </summary>
         public bool ClearOnRender
         {
             get => viewport.ClearOnRender;
             set => viewport.ClearOnRender = value;
         }
 
+        /// <summary>
+        /// Gets or sets a value representing whether out of bounds renderables should be ignored.
+        /// </summary>
         public bool CropOutOfBounds
         {
             get => viewport.CropOutOfBounds;
             set => viewport.CropOutOfBounds = value;
         }
 
-        public Action? OnDisplayResize { get; set; }
+        /// <summary>
+        /// Action called whenever the display viewport changes.
+        /// </summary>
+        public Action? OnDisplayResize;
 
         #endregion
 
-        #region Settings
+        #region Console
 
-        private RenderType renderMode;
-
-        public RenderType RenderMode
+        /// <summary>
+        /// Returns the current Console window dimensions.
+        /// </summary>
+        public static Vector2Int ConsoleWindowDimensions()
         {
-            get => renderMode;
-            set
-            {
-                renderMode = value;
-                if (renderMode == RenderType.Debug)
-                    Console.ResetColor();
-            }
+            return new(Console.WindowWidth, Console.WindowHeight);
         }
-
-        public IUpdateLimit? UpdateLimiter { get; set; }
-
-        public bool CheckForResize { get; set; } = true;
-
-        public int DisplayBuffer { get; set; } = DEFAULT_BUFFER_SIZE;
 
         #endregion
 
@@ -114,66 +118,38 @@ namespace SCE
         public override void Update()
         {
             if (!UpdateLimiter?.OnUpdate() ?? false)
-                return;
-            if (CheckForResize)
-                TryResize();
-
-            var dpMap = viewport.GetMap();
-            switch (RenderMode)
             {
-                case RenderType.CCS:
-                    CCSRender(dpMap);
-                    break;
-                case RenderType.Compatibility:
-                    CompatibilityRender(dpMap);
-                    break;
-                case RenderType.Debug:
-                    DebugRender(dpMap);
-                    break;
+                return;
             }
-        }
 
-        #region Resizing
+            RenderEngine?.Render(viewport.GetMap());
+
+            TryResize();
+        }
 
         private bool TryResize()
         {
-            var winDimensions = GetAdjustedWindowDimensions();
-            if (winDimensions == Dimensions)
-                return false;
-            Console.ResetColor();
-            Console.Clear();
-            viewport.CleanResize(winDimensions);
-            OnDisplayResize?.Invoke();
-            return true;
-        }
-
-        public static Vector2Int GetWindowDimensions()
-        {
-            return new(Console.WindowWidth, Console.WindowHeight);
-        }
-
-        public Vector2Int GetAdjustedWindowDimensions()
-        {
-            return RenderMode switch
+            var newSize = ResizeMode switch
             {
-                RenderType.CCS => GetWindowDimensions() - new Vector2Int(DisplayBuffer, 0),
-                RenderType.Debug or RenderType.Compatibility => GetWindowDimensions(),
+                ResizeType.Auto => ConsoleWindowDimensions(),
+                ResizeType.Custom => CustomDimensions,
+                ResizeType.RenderEngine => RenderEngine?.GetViewportDimensions() ?? ConsoleWindowDimensions(),
                 _ => throw new NotImplementedException()
             };
+
+            if (newSize == Dimensions)
+            {
+                return false;
+            }
+
+            Console.ResetColor();
+            Console.Clear();
+
+            viewport.CleanResize(newSize);
+
+            OnDisplayResize?.Invoke();
+
+            return true;
         }
-
-        #endregion
-
-        #region CCSRender
-
-        
-
-        #endregion
-
-        #region CompatibiliyRender
-
-        
-
-        #endregion
     }
 }

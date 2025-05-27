@@ -5,16 +5,13 @@
     /// </summary>
     public readonly struct Rect2D : IEquatable<Rect2D>
     {
-        #region Dimensions
-
         public readonly int Left;
+
         public readonly int Bottom;
+
         public readonly int Right;
+
         public readonly int Top;
-
-        #endregion
-
-        #region Constructors
 
         public Rect2D(int left, int bottom, int right, int top)
         {
@@ -41,10 +38,6 @@
         {
         }
 
-        #endregion
-
-        #region Properties
-
         public Vector2Int Start() => new(Left, Bottom);
 
         public Vector2Int End() => new(Right, Top);
@@ -56,8 +49,6 @@
         public int Size() => Width() * Height();
 
         public Vector2Int Dimensions() => new(Width(), Height());
-
-        #endregion
 
         #region Operators
 
@@ -164,6 +155,30 @@
         #endregion
 
         #region Utility
+
+        #region Lines
+
+        public static Rect2D Horizontal(int y, int left, int right)
+        {
+            return new(left, y, right, y + 1);
+        }
+
+        public static Rect2D Horizontal(int y, int width)
+        {
+            return Horizontal(y, 0, width);
+        }
+
+        public static Rect2D Vertical(int x, int bottom, int top)
+        {
+            return new(x, bottom, x + 1, top);
+        }
+
+        public static Rect2D Vertical(int x, int height)
+        {
+            return Vertical(x, 0, height);
+        }
+
+        #endregion
 
         #region Overlaps
 

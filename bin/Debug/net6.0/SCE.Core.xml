@@ -9,11 +9,6 @@
             An extension class of <see cref="!:SearchHash&lt;T&gt;"/> with a list.
             </summary>
         </member>
-        <member name="F:SCE.AliasHashLExt`1._list">
-            <summary>
-            The list of items.
-            </summary>
-        </member>
         <member name="M:SCE.AliasHashLExt`1.#ctor">
             <summary>
             Initializes a new instance of the <see cref="T:SCE.AliasHashLExt`1"/> class.
@@ -43,11 +38,6 @@
         <member name="T:SCE.AliasHashTExt`1">
             <summary>
             An extension class of <see cref="T:SCE.AliasHash`1"/> allowing for quick determination of whether this contains an element of a specified type.
-            </summary>
-        </member>
-        <member name="F:SCE.AliasHashTExt`1._types">
-            <summary>
-            Contains each type and the count of each type. 
             </summary>
         </member>
         <member name="M:SCE.AliasHashTExt`1.#ctor">
@@ -135,28 +125,13 @@
             </summary>
             <param name="pixelGrid">The default data.</param>
         </member>
-        <member name="P:SCE.DisplayMap.Elements">
-            <summary>
-            Gets the elements vgrid.
-            </summary>
-        </member>
-        <member name="P:SCE.DisplayMap.FgColors">
-            <summary>
-            Gets the foreground color vgrid.
-            </summary>
-        </member>
-        <member name="P:SCE.DisplayMap.BgColors">
-            <summary>
-            Gets the background color vgrid.
-            </summary>
-        </member>
         <member name="M:SCE.DisplayMap.Clone">
             <summary>
             Creates a shallow copy of the <see cref="T:SCE.DisplayMap"/>.
             </summary>
             <returns>A shallow copy of the <see cref="T:SCE.DisplayMap"/>.</returns>
         </member>
-        <member name="M:SCE.DisplayMap.MapLine(System.String,SCE.Vector2Int,SCE.SCEColor,System.Nullable{SCE.SCEColor})">
+        <member name="M:SCE.DisplayMap.MapString(System.String,SCE.Vector2Int,SCE.SCEColor,SCE.SCEColor)">
             <summary>
             Maps a string line at a specified start position.
             </summary>
@@ -173,7 +148,7 @@
             <param name="pos">The starting zero-based position of the line.</param>
             <param name="colors">The colors to map with.</param>
         </member>
-        <member name="M:SCE.DisplayMap.MapString(System.String,System.Int32,SCE.SCEColor,System.Nullable{SCE.SCEColor})">
+        <member name="M:SCE.DisplayMap.MapString(System.String,System.Int32,SCE.SCEColor,SCE.SCEColor)">
             <summary>
             Maps a string line at a specified y position. 
             </summary>
@@ -190,41 +165,35 @@
             <param name="y">The starting zero-based y position of the line.</param>
             <param name="colors">The colors to map with.</param>
         </member>
-        <member name="M:SCE.DisplayMap.PMapToArea(SCE.Grid2D{SCE.Pixel},SCE.Rect2D,System.Nullable{SCE.Vector2Int},System.Boolean)">
-            <inheritdoc/>
+        <member name="M:SCE.DisplayMap.PMapTo(SCE.Grid2D{SCE.Pixel},SCE.Rect2D,SCE.Vector2Int)">
+            <inheritdoc cref="M:SCE.Grid2D`1.MapTo(SCE.Grid2D{`0},SCE.Rect2D,SCE.Vector2Int)"/>
         </member>
-        <member name="M:SCE.DisplayMap.PMapTo(SCE.Grid2D{SCE.Pixel},System.Nullable{SCE.Vector2Int},System.Boolean)">
-            <inheritdoc/>
+        <member name="M:SCE.DisplayMap.PMapTo(SCE.Grid2D{SCE.Pixel},SCE.Rect2D)">
+            <inheritdoc cref="M:SCE.Grid2D`1.MapTo(SCE.Grid2D{`0},SCE.Rect2D)"/>
         </member>
-        <member name="M:SCE.DisplayMap.PMapAreaFrom(SCE.Grid2D{SCE.Pixel},SCE.Rect2D,System.Nullable{SCE.Vector2Int},System.Boolean)">
-            <inheritdoc/>
+        <member name="M:SCE.DisplayMap.PMapTo(SCE.Grid2D{SCE.Pixel},SCE.Vector2Int)">
+            <inheritdoc cref="M:SCE.Grid2D`1.MapTo(SCE.Grid2D{`0},SCE.Vector2Int)"/>
         </member>
-        <member name="M:SCE.DisplayMap.PMapFrom(SCE.Grid2D{SCE.Pixel},System.Nullable{SCE.Vector2Int},System.Boolean)">
-            <inheritdoc/>
+        <member name="M:SCE.DisplayMap.PMapTo(SCE.Grid2D{SCE.Pixel})">
+            <inheritdoc cref="M:SCE.Grid2D`1.MapTo(SCE.Grid2D{`0})"/>
+        </member>
+        <member name="M:SCE.DisplayMap.PMapFrom(SCE.Grid2D{SCE.Pixel},SCE.Rect2D,SCE.Vector2Int)">
+            <inheritdoc cref="M:SCE.Grid2D`1.MapFrom(SCE.Grid2D{`0},SCE.Rect2D,SCE.Vector2Int)"/>
+        </member>
+        <member name="M:SCE.DisplayMap.PMapFrom(SCE.Grid2D{SCE.Pixel},SCE.Rect2D)">
+            <inheritdoc cref="M:SCE.Grid2D`1.MapFrom(SCE.Grid2D{`0},SCE.Rect2D)"/>
+        </member>
+        <member name="M:SCE.DisplayMap.PMapFrom(SCE.Grid2D{SCE.Pixel},SCE.Vector2Int)">
+            <inheritdoc cref="M:SCE.Grid2D`1.MapFrom(SCE.Grid2D{`0},SCE.Vector2Int)"/>
+        </member>
+        <member name="M:SCE.DisplayMap.PMapFrom(SCE.Grid2D{SCE.Pixel})">
+            <inheritdoc cref="M:SCE.Grid2D`1.MapFrom(SCE.Grid2D{`0})"/>
         </member>
         <member name="T:SCE.Grid2D`1">
             <summary>
             A wrapper class of a 2D-array representing a grid with useful functions.
             </summary>
             <typeparam name="T">The type of the elements in the grid.</typeparam>
-        </member>
-        <member name="P:SCE.Grid2D`1.Width">
-            <summary>
-            Gets the width of the grid.
-            </summary>
-        </member>
-        <member name="P:SCE.Grid2D`1.Height">
-            <summary>
-            Gets the height of the grid.
-            </summary>
-        </member>
-        <member name="P:SCE.Grid2D`1.Dimensions">
-            <summary>
-            Gets the dimensions of the grid as a <see cref="T:SCE.Vector2Int"/>.
-            </summary>
-            <remarks>
-            Dimensions stored as (x:Width, y:Height)
-            </remarks>
         </member>
         <member name="M:SCE.Grid2D`1.#ctor(System.Int32,System.Int32)">
             <summary>
@@ -250,6 +219,24 @@
             Initializes a new instance of the <see cref="T:SCE.Grid2D`1"/> class.
             </summary>
             <param name="grid">The default data for the grid.</param>
+        </member>
+        <member name="P:SCE.Grid2D`1.Width">
+            <summary>
+            Gets the width of the grid.
+            </summary>
+        </member>
+        <member name="P:SCE.Grid2D`1.Height">
+            <summary>
+            Gets the height of the grid.
+            </summary>
+        </member>
+        <member name="P:SCE.Grid2D`1.Dimensions">
+            <summary>
+            Gets the dimensions of the grid as a <see cref="T:SCE.Vector2Int"/>.
+            </summary>
+            <remarks>
+            Dimensions stored as (x:Width, y:Height)
+            </remarks>
         </member>
         <member name="F:SCE.Grid2D`1.OnResize">
             <summary>
@@ -293,7 +280,7 @@
             </summary>
             <returns>A shallow copy of the <see cref="T:SCE.Grid2D`1"/>.</returns>
         </member>
-        <member name="M:SCE.Grid2D`1.InRange(System.Int32,System.Int32)">
+        <member name="M:SCE.Grid2D`1.Contains(System.Int32,System.Int32)">
             <summary>
             Determines whether the specified zero-based coordinates lie within this grid.
             </summary>
@@ -301,63 +288,42 @@
             <param name="y">The y coordinate.</param>
             <returns><see langword="true"/> if the specified coordinates lie within this grid; otherwise, <see langword="false"/>.</returns>
         </member>
-        <member name="M:SCE.Grid2D`1.InRange(SCE.Vector2Int)">
+        <member name="M:SCE.Grid2D`1.Contains(SCE.Vector2Int)">
             <summary>
             Determines whether the specified zero-based coordinates lie within this grid.
             </summary>
             <param name="pos">The <see cref="T:SCE.Vector2Int"/> coordinate.</param>
             <returns><see langword="true"/> if the specified coordinates lie within this grid; otherwise, <see langword="false"/>.</returns>
         </member>
-        <member name="M:SCE.Grid2D`1.GenericCycleArea(System.Func{SCE.Vector2Int,System.Boolean},SCE.Rect2D,System.Boolean)">
+        <member name="M:SCE.Grid2D`1.Fill(System.Func{SCE.Vector2Int,`0},SCE.Rect2D)">
             <summary>
-            Cycles through each position which overlaps the specified <paramref name="area"/> and invokes the specified <paramref name="func"/> in this grid.
+            Fills the grid over a specified area <paramref name="area"/>.
             </summary>
-            <remarks>
-            If the function call returns <see langword="false"/>, cycling will terminate.
-            </remarks>
-            <param name="func">The func to invoke at every position.</param>
-            <param name="area">The area to cycle over.</param>
-            <param name="trimOnOverflow">If <see langword="true"/>, try to trim the area to fit within the bounds of this grid.</param>
+            <param name="fill">The function to fill with.</param>
+            <param name="area">The area to fill over.</param>
         </member>
-        <member name="M:SCE.Grid2D`1.GenericCycleArea(System.Action{SCE.Vector2Int},SCE.Rect2D,System.Boolean)">
+        <member name="M:SCE.Grid2D`1.Fill(`0,SCE.Rect2D)">
             <summary>
-            Cycles through each position which overlaps the specified <paramref name="area"/> and invokes the specified <paramref name="action"/> in this grid.
+            Fills the grid over a specified area <paramref name="area"/>.
             </summary>
-            <param name="action">The action to invoke at every position.</param>
-            <param name="area">The area to cycle over.</param>
-            <param name="trimOnOverflow">If <see langword="true"/>, try to trim the area to fit within the bounds of this grid.</param>
+            <param name="value">The item to fill with.</param>
+            <param name="area">The area to fill over.</param>
         </member>
-        <member name="M:SCE.Grid2D`1.GenericCycle(System.Func{SCE.Vector2Int,System.Boolean})">
+        <member name="M:SCE.Grid2D`1.Fill(System.Func{SCE.Vector2Int,`0})">
             <summary>
-            Cycles through each position and invokes the specified <paramref name="func"/> in this grid.
+            Fills the grid.
             </summary>
-            <remarks>
-            If the function call returns <see langword="false"/>, cycling will terminate.
-            </remarks>
-            <param name="func">The func to invoke at every position.</param>
+            <param name="fill">The function to fill with.</param>
         </member>
-        <member name="M:SCE.Grid2D`1.GenericCycle(System.Action{SCE.Vector2Int})">
+        <member name="M:SCE.Grid2D`1.Fill(`0)">
             <summary>
-            Cycles through each position and invokes the specified <paramref name="action"/> in this grid.
+            Fills the grid.
             </summary>
-            <param name="action">The action to invoke at every position.</param>
+            <param name="value">The item to fill with.</param>
         </member>
-        <member name="M:SCE.Grid2D`1.CustomMapToArea(System.Action{SCE.Vector2Int},SCE.Grid2D{`0},SCE.Rect2D,SCE.Vector2Int,System.Boolean)">
+        <member name="M:SCE.Grid2D`1.EnumerateMapTo(SCE.Grid2D{`0},SCE.Rect2D,SCE.Vector2Int)">
             <summary>
-            Custom maps the area <paramref name="dataGridArea"/> of the specified <paramref name="dataGrid"/> onto this grid with a specified offset <paramref name="thisOffset"/>
-            </summary>
-            <remarks>
-            Often used for mapping a small grid (<paramref name="dataGrid"/>) onto a large grid (this grid).
-            </remarks>
-            <param name="action">The map action to invoke.</param>
-            <param name="dataGrid">The grid to get elements from.</param>
-            <param name="dataGridArea">The area on the <paramref name="dataGrid"/> to get elements from.</param>
-            <param name="thisOffset">The offset position on this grid.</param>
-            <param name="trimOnOverflow">If <see langword="true"/>, try to trim the area to fit within the bounds of this grid.</param>
-        </member>
-        <member name="M:SCE.Grid2D`1.MapToArea(SCE.Grid2D{`0},SCE.Rect2D,System.Nullable{SCE.Vector2Int},System.Boolean)">
-            <summary>
-            Maps the area <paramref name="dataGridArea"/> of the specified <paramref name="dataGrid"/> onto this grid with a specified offset <paramref name="thisOffset"/>
+            Enumerates the mapped area <paramref name="dataGridArea"/> of the specified <paramref name="dataGrid"/> onto this grid with a specified offset <paramref name="thisOffset"/>
             </summary>
             <remarks>
             Often used for mapping a small grid (<paramref name="dataGrid"/>) onto a large grid (this grid).
@@ -365,35 +331,48 @@
             <param name="dataGrid">The grid to get elements from.</param>
             <param name="dataGridArea">The area on the <paramref name="dataGrid"/> to get elements from.</param>
             <param name="thisOffset">The offset position on this grid.</param>
-            <param name="trimOnOverflow">If <see langword="true"/>, try to trim the area to fit within the bounds of this grid.</param>
         </member>
-        <member name="M:SCE.Grid2D`1.MapTo(SCE.Grid2D{`0},System.Nullable{SCE.Vector2Int},System.Boolean)">
+        <member name="M:SCE.Grid2D`1.MapTo(SCE.Grid2D{`0},SCE.Rect2D,SCE.Vector2Int)">
             <summary>
-            Maps the specified <paramref name="dataGrid"/> onto this grid with a specified offset <paramref name="thisOffset"/>
+            Maps the area <paramref name="dataGridArea"/> of the specified <paramref name="dataGrid"/> onto this grid.
+            </summary>
+            <remarks>
+            Often used for mapping a small grid (<paramref name="dataGrid"/>) onto a large grid (this grid).
+            </remarks>
+            <param name="dataGrid">The grid to get elements from.</param>
+            <param name="dataGridArea">The area on the <paramref name="dataGrid"/> to get elements from.</param>
+            <param name="thisOffset">The offset position on this grid.</param>
+        </member>
+        <member name="M:SCE.Grid2D`1.MapTo(SCE.Grid2D{`0},SCE.Rect2D)">
+            <inheritdoc cref="M:SCE.Grid2D`1.MapTo(SCE.Grid2D{`0},SCE.Rect2D,SCE.Vector2Int)"/>
+        </member>
+        <member name="M:SCE.Grid2D`1.MapTo(SCE.Grid2D{`0},SCE.Vector2Int)">
+            <summary>
+            Maps the specified <paramref name="dataGrid"/> onto this grid with a specified offset <paramref name="thisOffset"/>.
             </summary>
             <remarks>
             Often used for mapping a small grid (<paramref name="dataGrid"/>) onto a large grid (this grid).
             </remarks>
             <param name="dataGrid">The grid to get elements from.</param>
             <param name="thisOffset">The offset position on this grid.</param>
-            <param name="trimOnOverflow">If <see langword="true"/>, try to trim the area to fit within the bounds of this grid.</param>
         </member>
-        <member name="M:SCE.Grid2D`1.CustomMapAreaFrom(System.Action{SCE.Vector2Int},SCE.Grid2D{`0},SCE.Rect2D,SCE.Vector2Int,System.Boolean)">
+        <member name="M:SCE.Grid2D`1.MapTo(SCE.Grid2D{`0})">
+            <inheritdoc cref="M:SCE.Grid2D`1.MapTo(SCE.Grid2D{`0},SCE.Vector2Int)"/>
+        </member>
+        <member name="M:SCE.Grid2D`1.EnumerateMapFrom(SCE.Grid2D{`0},SCE.Rect2D,SCE.Vector2Int)">
             <summary>
-            Custom maps by populating the specified area <paramref name="mapArea"/> on this grid from the specified <paramref name="dataGrid"/> with offset <paramref name="dataOffset"/>
+            Enumerates the mapped area maps by enumerating the specified area <paramref name="mapArea"/> on this grid from the specified <paramref name="dataGrid"/> with offset <paramref name="dataOffset"/>
             </summary>
             <remarks>
             Often used for mapping a large grid (<paramref name="dataGrid"/>) onto a small grid (this grid).
             </remarks>
-            <param name="action">The map action to invoke.</param>
             <param name="dataGrid">The grid to get elements from.</param>
             <param name="mapArea">The area on this grid to populate.</param>
             <param name="dataOffset">The offset position on the <paramref name="dataGrid"/>.</param>
-            <param name="trimOnOverflow">If <see langword="true"/>, try to trim the area to fit within the bounds of this grid.</param>
         </member>
-        <member name="M:SCE.Grid2D`1.MapAreaFrom(SCE.Grid2D{`0},SCE.Rect2D,System.Nullable{SCE.Vector2Int},System.Boolean)">
+        <member name="M:SCE.Grid2D`1.MapFrom(SCE.Grid2D{`0},SCE.Rect2D,SCE.Vector2Int)">
             <summary>
-            Custom maps by populating the specified area <paramref name="thisArea"/> on this grid from the specified <paramref name="dataGrid"/> with offset <paramref name="dataOffset"/>
+            Custom maps by populating the specified area <paramref name="thisArea"/> on this grid from the specified <paramref name="dataGrid"/>.
             </summary>
             <remarks>
             Often used for mapping a large grid (<paramref name="dataGrid"/>) onto a small grid (this grid).
@@ -401,18 +380,22 @@
             <param name="dataGrid">The grid to get elements from.</param>
             <param name="thisArea">The area on this grid to populate.</param>
             <param name="dataOffset">The offset position on the <paramref name="dataGrid"/>.</param>
-            <param name="trimOnOverflow">If <see langword="true"/>, try to trim the area to fit within the bounds of this grid.</param>
         </member>
-        <member name="M:SCE.Grid2D`1.MapFrom(SCE.Grid2D{`0},System.Nullable{SCE.Vector2Int},System.Boolean)">
+        <member name="M:SCE.Grid2D`1.MapFrom(SCE.Grid2D{`0},SCE.Rect2D)">
+            <inheritdoc cref="M:SCE.Grid2D`1.MapFrom(SCE.Grid2D{`0},SCE.Rect2D,SCE.Vector2Int)"/>
+        </member>
+        <member name="M:SCE.Grid2D`1.MapFrom(SCE.Grid2D{`0},SCE.Vector2Int)">
             <summary>
-            Custom maps by populating this grid from the specified <paramref name="dataGrid"/> with offset <paramref name="dataOffset"/>
+            Custom maps by populating this grid from the specified <paramref name="dataGrid"/>.
             </summary>
             <remarks>
             Often used for mapping a large grid (<paramref name="dataGrid"/>) onto a small grid (this grid).
             </remarks>
             <param name="dataGrid">The grid to get elements from.</param>
             <param name="dataOffset">The offset position on the <paramref name="dataGrid"/>.</param>
-            <param name="trimOnOverflow">If <see langword="true"/>, try to trim the area to fit within the bounds of this grid.</param>
+        </member>
+        <member name="M:SCE.Grid2D`1.MapFrom(SCE.Grid2D{`0})">
+            <inheritdoc cref="M:SCE.Grid2D`1.MapFrom(SCE.Grid2D{`0},SCE.Vector2Int)"/>
         </member>
         <member name="M:SCE.Grid2D`1.CleanResize(System.Int32,System.Int32)">
             <summary>
@@ -444,76 +427,6 @@
             <summary>
             Clears the contents of the grid.
             </summary>
-        </member>
-        <member name="T:SCE.VirtualGrid2D`2">
-            <summary>
-            Provides modular filling functions for a <see cref="T:SCE.Grid2D`1"/>.
-            </summary>
-            <typeparam name="T">The type of the grid.</typeparam>
-            <typeparam name="V">The type of the values to fill with.</typeparam>
-        </member>
-        <member name="M:SCE.VirtualGrid2D`2.#ctor(SCE.Grid2D{`0},System.Func{`0,`1,`0})">
-            <summary>
-            Initializes a new instance of the <see cref="T:SCE.VirtualGrid2D`2"/> class.
-            </summary>
-            <param name="grid">The grid to use.</param>
-            <param name="fillFunc">The func to be invoked when filling.</param>
-        </member>
-        <member name="P:SCE.VirtualGrid2D`2.Grid">
-            <summary>
-            Gets the grid of this.
-            </summary>
-        </member>
-        <member name="P:SCE.VirtualGrid2D`2.FillFunc">
-            <summary>
-            Gets the filling func of this.
-            </summary>
-        </member>
-        <member name="M:SCE.VirtualGrid2D`2.FillArea(`1,SCE.Rect2D,System.Boolean)">
-            <summary>
-            Fills the grid over a specified area <paramref name="area"/>.
-            </summary>
-            <param name="item">The item to fill with.</param>
-            <param name="area">The area to fill over.</param>
-            <param name="trimOnOverflow">If <see langword="true"/>, try to trim the area to fit within the bounds of this grid.</param>
-        </member>
-        <member name="M:SCE.VirtualGrid2D`2.Fill(`1)">
-            <summary>
-            Fills the grid.
-            </summary>
-            <param name="item">The item to fill with.</param>
-        </member>
-        <member name="M:SCE.VirtualGrid2D`2.FillHorizontalArea(`1,System.Int32,SCE.Vector2Int,System.Boolean)">
-            <summary>
-            Fills the grid at a specified y over a horizontal range <paramref name="xRange"/>.
-            </summary>
-            <param name="item">The item to fill with.</param>
-            <param name="y">The zero-based y to fill at.</param>
-            <param name="xRange">The horizontal range to fill over.</param>
-            <param name="trimOnOverflow">If <see langword="true"/>, try to trim the range to fit within the bounds of this grid.</param>
-        </member>
-        <member name="M:SCE.VirtualGrid2D`2.FillVerticalArea(`1,System.Int32,SCE.Vector2Int,System.Boolean)">
-            <summary>
-            Fills the grid at a specified x over a vertical range <paramref name="yRange"/>.
-            </summary>
-            <param name="item">The item to fill with.</param>
-            <param name="x">The zero-based x to fill at.</param>
-            <param name="yRange">The vertical range to fill over.</param>
-            <param name="trimOnOverflow">If <see langword="true"/>, try to trim the range to fit within the bounds of this grid.</param>
-        </member>
-        <member name="M:SCE.VirtualGrid2D`2.FillHorizontal(`1,System.Int32)">
-            <summary>
-            Fills the grid at a specified y (a horizontal line).
-            </summary>
-            <param name="item">The item to fill with.</param>
-            <param name="y">The zero-based y to fill at.</param>
-        </member>
-        <member name="M:SCE.VirtualGrid2D`2.FillVertical(`1,System.Int32)">
-            <summary>
-            Fills the grid at a specified x (a vertical line).
-            </summary>
-            <param name="item">The item to fill with.</param>
-            <param name="x">The zero-based x to fill at.</param>
         </member>
         <member name="T:SCE.KeyMap`2">
             <summary>
@@ -549,12 +462,6 @@
             A struct storing a <see cref="P:SCE.Pixel.Element"/>, and a <see cref="P:SCE.Pixel.FgColor"/> and <see cref="P:SCE.Pixel.BgColor"/> <see cref="T:System.Byte"/> color.
             Used in <see cref="T:SCE.DisplayMap"/> and derived classes to render to the <see cref="T:SCE.Display"/>.
             </summary>
-        </member>
-        <member name="M:SCE.Pixel.#ctor(SCE.SCEColor)">
-            <summary>
-            Initializes a new instance of the <see cref="T:SCE.Pixel"/> struct given the background color.
-            </summary>
-            <param name="bgColor">The background color of the new instance.</param>
         </member>
         <member name="T:SCE.Rect2D">
             <summary>
@@ -685,40 +592,128 @@
             <param name="maxRange">The maximum x value.</param>
             <returns>A random vector from the specified max-range.</returns>
         </member>
-        <member name="T:SCE.Display.RenderType">
+        <member name="F:SCE.CCSEngine.DEFAULT_BUFFER_SIZE">
             <summary>
-            Represents the different rendering modes.
+            Represents the default buffer size.
             </summary>
         </member>
-        <member name="F:SCE.Display.RenderType.CCS">
+        <member name="P:SCE.CCSEngine.Instance">
             <summary>
-            Highly efficient colored rendering.
+            Gets the singleton instance of this class.
             </summary>
-            <remarks>
-            Note: Requires a small buffer (at least 7 characters) on the right side of the screen to avoid jittering.
-            </remarks>
         </member>
-        <member name="F:SCE.Display.RenderType.Compatibility">
+        <member name="P:SCE.CCSEngine.DisplayBuffer">
             <summary>
-            Slower coloured rendering that is more basic and doesn't require a buffer.
+            Gets or sets the side buffer required to prevent side jittering.
             </summary>
-            <remarks>
-            Note: Screen tearing can be visible when moving, especially when there are many colors.
-            </remarks>
         </member>
-        <member name="F:SCE.Display.RenderType.Debug">
+        <member name="M:SCE.CCSEngine.Render(SCE.DisplayMap)">
+            <inheritdoc/>
+        </member>
+        <member name="M:SCE.CCSEngine.GetViewportDimensions">
+            <inheritdoc/>
+        </member>
+        <member name="P:SCE.CompatibilityEngine.Instance">
             <summary>
-            Super efficient non-colored rendering.
+            Gets the singleton instance of this class.
             </summary>
-            <remarks>
-            Note: Background colors without text are represented by characters.
-            </remarks>
+        </member>
+        <member name="M:SCE.CompatibilityEngine.Render(SCE.DisplayMap)">
+            <inheritdoc/>
+        </member>
+        <member name="P:SCE.DebugEngine.Instance">
+            <summary>
+            Gets the singleton instance of this class.
+            </summary>
+        </member>
+        <member name="M:SCE.DebugEngine.Render(SCE.DisplayMap)">
+            <inheritdoc/>
+        </member>
+        <member name="T:SCE.Display.ResizeType">
+            <summary>
+            Represents the different resizing modes.
+            </summary>
+        </member>
+        <member name="P:SCE.Display.Instance">
+            <summary>
+            Gets the singleton instance of this class.
+            </summary>
+        </member>
+        <member name="P:SCE.Display.RenderEngine">
+            <summary>
+            Gets or sets the 
+            </summary>
+        </member>
+        <member name="P:SCE.Display.ResizeMode">
+            <summary>
+            Gets or sets the resizing mode.
+            </summary>
+        </member>
+        <member name="P:SCE.Display.CustomDimensions">
+            <summary>
+            Gets or sets the custom viewport dimensions.
+            </summary>
+        </member>
+        <member name="P:SCE.Display.Width">
+            <summary>
+            Gets the width of the viewport.
+            </summary>
+        </member>
+        <member name="P:SCE.Display.Height">
+            <summary>
+            Gets the height of the viewport.
+            </summary>
+        </member>
+        <member name="P:SCE.Display.Dimensions">
+            <summary>
+            Gets the dimensions of the viewport.
+            </summary>
+        </member>
+        <member name="P:SCE.Display.BasePixel">
+            <summary>
+            Gets the base pixel used to clear the viewport.
+            </summary>
+        </member>
+        <member name="P:SCE.Display.ClearOnRender">
+            <summary>
+            Gets or sets a value representing whether the viewport be cleared every frame.
+            </summary>
+        </member>
+        <member name="P:SCE.Display.CropOutOfBounds">
+            <summary>
+            Gets or sets a value representing whether out of bounds renderables should be ignored.
+            </summary>
+        </member>
+        <member name="F:SCE.Display.OnDisplayResize">
+            <summary>
+            Action called whenever the display viewport changes.
+            </summary>
+        </member>
+        <member name="M:SCE.Display.ConsoleWindowDimensions">
+            <summary>
+            Returns the current Console window dimensions.
+            </summary>
         </member>
         <member name="M:SCE.Display.Start">
             <inheritdoc/>
         </member>
         <member name="M:SCE.Display.Update">
             <inheritdoc/>
+        </member>
+        <member name="T:SCE.RenderEngine">
+            <summary>
+            Abstract base class for custom render engines.
+            </summary>
+        </member>
+        <member name="M:SCE.RenderEngine.Render(SCE.DisplayMap)">
+            <summary>
+            Renders the built DisplayMap.
+            </summary>
+        </member>
+        <member name="M:SCE.RenderEngine.GetViewportDimensions">
+            <summary>
+            Sets the viewport dimensions.
+            </summary>
         </member>
         <member name="T:SCE.GameHandler">
             <summary>
@@ -972,10 +967,10 @@
         </member>
         <member name="M:SCE.ColorUtils.GetContrast(SCE.SCEColor)">
             <summary>
-            Gets the contrasting color of either <see cref="!:Black"/> or <see cref="!:White"/> depending on whether the given <paramref name="color"/> is light.
+            Gets the contrasting color of either <see cref="F:SCE.SCEColor.Black"/> or <see cref="F:SCE.SCEColor.White"/> depending on whether the given <paramref name="color"/> is light.
             </summary>
             <param name="color">The color to check.</param>
-            <returns><see cref="!:Black"/> if <paramref name="color"/> is light; otherwise, <see cref="!:White"/>.</returns>
+            <returns><see cref="F:SCE.SCEColor.Black"/> if <paramref name="color"/> is light; otherwise, <see cref="F:SCE.SCEColor.White"/>.</returns>
         </member>
         <member name="M:SCE.ColorUtils.IsLightColor(SCE.SCEColor)">
             <summary>
@@ -1009,6 +1004,21 @@
             </summary>
             <param name="color">The <see cref="T:System.Byte"/> color to check.</param>
             <returns><see langword="true"/> if <paramref name="color"/> is a valid <see cref="T:System.ConsoleColor"/>; otherwise, <see langword="false"/>.</returns>
+        </member>
+        <member name="M:SCE.ColorUtils.ToConsoleColor(SCE.SCEColor)">
+            <summary>
+            Converts SCEColor to ConsoleColor.
+            </summary>
+        </member>
+        <member name="M:SCE.ColorUtils.SetConsoleColor(SCE.SCEColor,SCE.SCEColor)">
+            <summary>
+            Sets the Console Foreground and Background color.
+            </summary>
+        </member>
+        <member name="M:SCE.ColorUtils.SetConsoleColor(SCE.ColorSet)">
+            <summary>
+            Sets the Console Foreground and Background color.
+            </summary>
         </member>
         <member name="T:SCE.RotationUtils">
             <summary>

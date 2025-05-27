@@ -1,0 +1,7 @@
+C:\Users\redst\source\repos\TheSnowDoggo\SCE.Core\bin\Release\net6.0\publish\SCE.Core.exe
+C:\Users\redst\source\repos\TheSnowDoggo\SCE.Core\bin\Release\net6.0\publish\SCE.Core.dll
+C:\Users\redst\source\repos\TheSnowDoggo\SCE.Core\bin\Release\net6.0\publish\SCE.Core.deps.json
+C:\Users\redst\source\repos\TheSnowDoggo\SCE.Core\bin\Release\net6.0\publish\SCE.Core.runtimeconfig.json
+C:\Users\redst\source\repos\TheSnowDoggo\SCE.Core\bin\Release\net6.0\publish\SCE.Core.pdb
+C:\Users\redst\source\repos\TheSnowDoggo\SCE.Core\bin\Release\net6.0\publish\CSUtils.dll
+C:\Users\redst\source\repos\TheSnowDoggo\SCE.Core\bin\Release\net6.0\publish\SCE.Core.xml

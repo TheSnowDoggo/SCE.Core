@@ -675,40 +675,93 @@
             <param name="maxRange">The maximum x value.</param>
             <returns>A random vector from the specified max-range.</returns>
         </member>
-        <member name="T:SCE.Display.RenderType">
+        <member name="F:SCE.CCSEngine.DEFAULT_BUFFER_SIZE">
             <summary>
-            Represents the different rendering modes.
+            Represents the default buffer size.
             </summary>
         </member>
-        <member name="F:SCE.Display.RenderType.CCS">
+        <member name="P:SCE.CCSEngine.Instance">
             <summary>
-            Highly efficient colored rendering.
+            Gets the singleton instance of this class.
             </summary>
-            <remarks>
-            Note: Requires a small buffer (at least 7 characters) on the right side of the screen to avoid jittering.
-            </remarks>
         </member>
-        <member name="F:SCE.Display.RenderType.Compatibility">
+        <member name="P:SCE.CCSEngine.DisplayBuffer">
             <summary>
-            Slower coloured rendering that is more basic and doesn't require a buffer.
+            Gets or sets the side buffer required to prevent side jittering.
             </summary>
-            <remarks>
-            Note: Screen tearing can be visible when moving, especially when there are many colors.
-            </remarks>
         </member>
-        <member name="F:SCE.Display.RenderType.Debug">
+        <member name="M:SCE.CCSEngine.Render(SCE.DisplayMap)">
+            <inheritdoc/>
+        </member>
+        <member name="M:SCE.CCSEngine.GetViewportDimensions">
+            <inheritdoc/>
+        </member>
+        <member name="P:SCE.CompatibilityEngine.Instance">
             <summary>
-            Super efficient non-colored rendering.
+            Gets the singleton instance of this class.
             </summary>
-            <remarks>
-            Note: Background colors without text are represented by characters.
-            </remarks>
+        </member>
+        <member name="M:SCE.CompatibilityEngine.Render(SCE.DisplayMap)">
+            <inheritdoc/>
+        </member>
+        <member name="P:SCE.DebugEngine.Instance">
+            <summary>
+            Gets the singleton instance of this class.
+            </summary>
+        </member>
+        <member name="M:SCE.DebugEngine.Render(SCE.DisplayMap)">
+            <inheritdoc/>
+        </member>
+        <member name="T:SCE.Display.ResizeType">
+            <summary>
+            Represents the different resizing modes.
+            </summary>
+        </member>
+        <member name="P:SCE.Display.Instance">
+            <summary>
+            Gets the singleton instance of this class.
+            </summary>
+        </member>
+        <member name="P:SCE.Display.RenderEngine">
+            <summary>
+            Gets or sets the 
+            </summary>
+        </member>
+        <member name="P:SCE.Display.ResizeMode">
+            <summary>
+            Gets or sets the resizing mode.
+            </summary>
+        </member>
+        <member name="P:SCE.Display.CustomDimensions">
+            <summary>
+            Gets or sets the custom viewport dimensions.
+            </summary>
+        </member>
+        <member name="M:SCE.Display.ConsoleWindowDimensions">
+            <summary>
+            Returns the current Console window dimensions.
+            </summary>
         </member>
         <member name="M:SCE.Display.Start">
             <inheritdoc/>
         </member>
         <member name="M:SCE.Display.Update">
             <inheritdoc/>
+        </member>
+        <member name="T:SCE.RenderEngine">
+            <summary>
+            Abstract base class for custom render engines.
+            </summary>
+        </member>
+        <member name="M:SCE.RenderEngine.Render(SCE.DisplayMap)">
+            <summary>
+            Renders the built DisplayMap.
+            </summary>
+        </member>
+        <member name="M:SCE.RenderEngine.GetViewportDimensions">
+            <summary>
+            Sets the viewport dimensions.
+            </summary>
         </member>
         <member name="T:SCE.GameHandler">
             <summary>

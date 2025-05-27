@@ -1,0 +1,41 @@
+{
+  "runtimeTarget": {
+    "name": ".NETCoreApp,Version=v6.0",
+    "signature": ""
+  },
+  "compilationOptions": {},
+  "targets": {
+    ".NETCoreApp,Version=v6.0": {
+      "SCE.Core/3.2.2": {
+        "dependencies": {
+          "SCECSUtils": "1.2.2"
+        },
+        "runtime": {
+          "SCE.Core.dll": {}
+        }
+      },
+      "SCECSUtils/1.2.2": {
+        "runtime": {
+          "lib/net6.0/CSUtils.dll": {
+            "assemblyVersion": "1.2.2.0",
+            "fileVersion": "1.2.2.0"
+          }
+        }
+      }
+    }
+  },
+  "libraries": {
+    "SCE.Core/3.2.2": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "SCECSUtils/1.2.2": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-EHDX74mo0S4HtYka9F7H6cbozaZL+J4d8Dgnb8HwSxnrux1WouSRL+F5piSFfJp1l3+WiTeXvjYmCgXAjxhRog==",
+      "path": "scecsutils/1.2.2",
+      "hashPath": "scecsutils.1.2.2.nupkg.sha512"
+    }
+  }
+}
