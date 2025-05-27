@@ -230,7 +230,7 @@ namespace SCE
 
         private void ClearAt(int y)
         {
-            _dpMap.Fill(new Pixel(BgColor), Rect2D.Horizontal(y, _dpMap.Width));
+            _dpMap.Fill(new Pixel(BgColor), Rect2DInt.Horizontal(y, _dpMap.Width));
         }
 
         #endregion

@@ -2,8 +2,8 @@
 {
     public static class AnchorUtils
     {
-        public const Anchor H_MASK = Anchor.Left | Anchor.Right  | Anchor.Center;
-        public const Anchor V_MASK = Anchor.Top  | Anchor.Bottom | Anchor.Middle;
+        public const Anchor H_MASK = Anchor.Right  | Anchor.Center;
+        public const Anchor V_MASK = Anchor.Bottom | Anchor.Middle;
 
         public static int VerticalFix(Anchor anchor, int offset, int top = 0)
         {
@@ -45,12 +45,44 @@
             return off;
         }
 
+        public static float VerticalFix(Anchor anchor, float offset)
+        {
+            bool mid = (anchor & Anchor.Middle) == Anchor.Middle;
+            bool bottom = (anchor & Anchor.Bottom) == Anchor.Bottom;
+            if (bottom || mid)
+            {
+                return mid ? offset / 2 : offset;
+            }
+            return 0;
+        }
+
+        public static float HorizontalFix(Anchor anchor, float offset)
+        {
+            bool mid = (anchor & Anchor.Center) == Anchor.Center;
+            bool right = (anchor & Anchor.Right) == Anchor.Right;
+            if (right || mid)
+            {
+                return mid ? offset / 2 : offset;
+            }
+            return 0;
+        }
+
         public static Vector2Int DimensionFix(Anchor anchor, Vector2Int dimensions)
         {
             return new(HorizontalFix(anchor, dimensions.X), VerticalFix(anchor, dimensions.Y));
         }
 
+        public static Vector2 DimensionFix(Anchor anchor, Vector2 dimensions)
+        {
+            return new(HorizontalFix(anchor, dimensions.X), VerticalFix(anchor, dimensions.Y));
+        }
+
         public static Vector2Int AnchorTo(Anchor anchor, Vector2Int to, Vector2Int d)
+        {
+            return DimensionFix(anchor, to) - DimensionFix(anchor, d);
+        }
+
+        public static Vector2 AnchorTo(Anchor anchor, Vector2 to, Vector2 d)
         {
             return DimensionFix(anchor, to) - DimensionFix(anchor, d);
         }

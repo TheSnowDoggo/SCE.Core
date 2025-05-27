@@ -32,7 +32,7 @@
         /// <inheritdoc/>
         public override DisplayMapView GetMapView()
         {
-            return _dpMap;
+            return (DisplayMapView)_dpMap;
         }
     }
 }

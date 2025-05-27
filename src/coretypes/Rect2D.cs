@@ -5,15 +5,7 @@
     /// </summary>
     public readonly struct Rect2D : IEquatable<Rect2D>
     {
-        public readonly int Left;
-
-        public readonly int Bottom;
-
-        public readonly int Right;
-
-        public readonly int Top;
-
-        public Rect2D(int left, int bottom, int right, int top)
+        public Rect2D(float left, float bottom, float right, float top)
         {
             if (left >= right || bottom >= top)
             {
@@ -25,34 +17,52 @@
             Top = top;
         }
 
-        public Rect2D(int right, int top)
+        public Rect2D(float right, float top)
             : this(0, 0, right, top)
         {
         }
 
-        public Rect2D(Vector2Int start, Vector2Int end)
+        public Rect2D(Vector2 start, Vector2 end)
             : this(start.X, start.Y, end.X, end.Y)
         {
         }
 
-        public Rect2D(Vector2Int end)
-            : this(Vector2Int.Zero, end)
+        public Rect2D(Vector2 end)
+            : this(Vector2.Zero, end)
         {
         }
 
-        public Vector2Int Start() => new(Left, Bottom);
+        public float Left { get; }
 
-        public Vector2Int End() => new(Right, Top);
+        public float Bottom { get; }
 
-        public int Width() => Right - Left;
+        public float Right { get; }
 
-        public int Height() => Top - Bottom;
+        public float Top { get; }
 
-        public int Size() => Width() * Height();
+        public float Width { get => Right - Left; }
 
-        public Vector2Int Dimensions() => new(Width(), Height());
+        public float Height { get => Top - Bottom; }
 
-        #region Operators
+        public Vector2 Dimensions { get => new(Width, Height); }
+
+        public float Size { get => Width * Height; }
+
+        public Vector2 Start { get => new(Left, Bottom); }
+
+        public Vector2 End { get => new(Right, Top); }
+
+        public static explicit operator Rect2DInt(Rect2D r) => r.ToRect2DInt();
+
+        public Rect2DInt ToRect2DInt()
+        {
+            return new((int)Left, (int)Bottom, (int)Right, (int)Top);
+        }
+
+        public override string ToString()
+        {
+            return string.Join(",", Left, Bottom, Right, Top);
+        }
 
         #region Equality
 
@@ -60,11 +70,26 @@
 
         public static bool operator !=(Rect2D left, Rect2D right) => !(left == right);
 
+        public bool Equals(Rect2D area)
+        {
+            return Left == area.Left && Bottom == area.Bottom && Right == area.Right && Top == area.Top;
+        }
+
+        public override bool Equals(object? obj)
+        {
+            return obj is Rect2D area && Equals(area);
+        }
+
+        public override int GetHashCode()
+        {
+            return HashCode.Combine(Left, Bottom, Right, Top);
+        }
+
         #endregion
 
         #region Innequalities
 
-        public static bool operator >(Rect2D a1, Rect2D a2) => a1.Size() > a2.Size();
+        public static bool operator >(Rect2D a1, Rect2D a2) => a1.Size > a2.Size;
 
         public static bool operator <(Rect2D a1, Rect2D a2) => a2 > a1;
 
@@ -78,7 +103,7 @@
 
         public static Rect2D operator +(Rect2D a1, Rect2D a2) => new(a1.Left + a2.Left, a1.Bottom + a2.Bottom, a1.Right + a2.Right, a1.Top + a2.Top);
 
-        public static Rect2D operator +(Rect2D a1, Vector2Int v) => new(a1.Left + v.X, a1.Bottom + v.Y, a1.Right + v.X, a1.Top + v.Y);
+        public static Rect2D operator +(Rect2D a1, Vector2 v) => new(a1.Left + v.X, a1.Bottom + v.Y, a1.Right + v.X, a1.Top + v.Y);
 
         #endregion
 
@@ -86,7 +111,7 @@
 
         public static Rect2D operator -(Rect2D a1, Rect2D a2) => new(a1.Left - a2.Left, a1.Bottom - a2.Bottom, a1.Right - a2.Right, a1.Top - a2.Top);
 
-        public static Rect2D operator -(Rect2D a1, Vector2Int v) => new(a1.Left - v.X, a1.Bottom - v.Y, a1.Right - v.X, a1.Top - v.Y);
+        public static Rect2D operator -(Rect2D a1, Vector2 v) => new(a1.Left - v.X, a1.Bottom - v.Y, a1.Right - v.X, a1.Top - v.Y);
 
         public static Rect2D operator -(Rect2D a) => new(-a.Left, -a.Bottom, -a.Right, -a.Top);
 
@@ -96,7 +121,7 @@
 
         public static Rect2D operator *(Rect2D a1, Rect2D a2) => new(a1.Left * a2.Left, a1.Bottom * a2.Bottom, a1.Right * a2.Right, a1.Top * a2.Top);
 
-        public static Rect2D operator *(Rect2D a1, Vector2Int v) => new(a1.Left * v.X, a1.Bottom * v.Y, a1.Right * v.X, a1.Top * v.Y);
+        public static Rect2D operator *(Rect2D a1, Vector2 v) => new(a1.Left * v.X, a1.Bottom * v.Y, a1.Right * v.X, a1.Top * v.Y);
 
         #endregion
 
@@ -104,43 +129,13 @@
 
         public static Rect2D operator /(Rect2D a1, Rect2D a2) => new(a1.Left / a2.Left, a1.Bottom / a2.Bottom, a1.Right / a2.Right, a1.Top / a2.Top);
 
-        public static Rect2D operator /(Rect2D a1, Vector2Int v) => new(a1.Left / v.X, a1.Bottom / v.Y, a1.Right / v.X, a1.Top / v.Y);
-
-        #endregion
-
-        #endregion
-
-        #region Equality
-
-        public bool Equals(Rect2D area)
-        {
-            return Left == area.Left && Bottom == area.Bottom && Right == area.Right && Top == area.Top;
-        }
-
-        public override bool Equals(object? obj)
-        {
-            return obj is Rect2D area && Equals(area);
-        }
-        
-        public override int GetHashCode()
-        {
-            return HashCode.Combine(Left, Bottom, Right, Top);
-        }
-
-        #endregion
-
-        #region ToString
-
-        public override string ToString()
-        {
-            return $"{Left},{Bottom},{Right},{Top}";
-        }
+        public static Rect2D operator /(Rect2D a1, Vector2 v) => new(a1.Left / v.X, a1.Bottom / v.Y, a1.Right / v.X, a1.Top / v.Y);
 
         #endregion
 
         #region Deconstruct
 
-        public void Deconstruct(out int left, out int bottom, out int right, out int top)
+        public void Deconstruct(out float left, out float bottom, out float right, out float top)
         {
             left = Left;
             bottom = Bottom;
@@ -148,62 +143,40 @@
             top = Top;
         }
 
-        public void Deconstruct(out Vector2Int start, out Vector2Int end)
+        public void Deconstruct(out Vector2 start, out Vector2 end)
         {
-            start = Start();
-            end = End();
+            start = Start;
+            end = End;
         }
 
         #endregion
 
         #region Utility
 
-        #region Lines
-
-        public static Rect2D Horizontal(int y, int left, int right)
-        {
-            return new(left, y, right, y + 1);
-        }
-
-        public static Rect2D Horizontal(int y, int width)
-        {
-            return Horizontal(y, 0, width);
-        }
-
-        public static Rect2D Vertical(int x, int bottom, int top)
-        {
-            return new(x, bottom, x + 1, top);
-        }
-
-        public static Rect2D Vertical(int x, int height)
-        {
-            return Vertical(x, 0, height);
-        }
-
-        #endregion
-
-        #region Overlaps
-
-        public static bool Overlaps(int l1, int b1, int r1, int t1, int l2, int b2, int r2, int t2)
+        public static bool Overlaps(float l1, float b1, float r1, float t1, float l2, float b2, float r2, float t2)
         {
             if (r1 <= l2 || l1 >= r2) // X sides don't overlap
-                return false;          
-            if (t1 <= b2 || b1 >= t2) // Y sides don't overlap
+            {
                 return false;
+            }
+            if (t1 <= b2 || b1 >= t2) // Y sides don't overlap
+            {
+                return false;
+            }
             return true;
         }
 
-        public bool Overlaps(int l, int b, int r, int t)
+        public bool Overlaps(float l, float b, float r, float t)
         {
             return Overlaps(Left, Bottom, Right, Top, l, b, r, t);
         }
 
-        public static bool Overlaps(Vector2Int start1, Vector2Int end1, Vector2Int start2, Vector2Int end2)
+        public static bool Overlaps(Vector2 start1, Vector2 end1, Vector2 start2, Vector2 end2)
         {
             return Overlaps(start1.X, start1.Y, end1.X, end1.Y, start2.X, start2.Y, end2.X, end2.Y);
         }
 
-        public bool Overlaps(Vector2Int start, Vector2Int end)
+        public bool Overlaps(Vector2 start, Vector2 end)
         {
             return Overlaps(Left, Bottom, Right, Top, start.X, start.Y, end.X, end.Y);
         }
@@ -218,22 +191,20 @@
             return Overlaps(this, other);
         }
 
-        #endregion
-
-        #region GetOverlap
-
-        public static Rect2D GetOverlap(int l1, int b1, int r1, int t1, int l2, int b2, int r2, int t2)
+        public static Rect2D GetOverlap(float l1, float b1, float r1, float t1, float l2, float b2, float r2, float t2)
         {
             if (!Overlaps(l1, b1, r1, t1, l2, b2, r2, t2))
+            {
                 throw new ArgumentException("Areas do not overlap.");
+            }
 
-            Vector2Int v1 = new(Math.Max(l1, l2), Math.Max(b1, b2));
+            Vector2 v1 = new(Math.Max(l1, l2), Math.Max(b1, b2));
 
-            Vector2Int v2 = new(Math.Min(r1, r2), Math.Min(t1, t2));
+            Vector2 v2 = new(Math.Min(r1, r2), Math.Min(t1, t2));
 
-            Vector2Int start = Vector2Int.Min(v1, v2);
+            var start = Vector2.Min(v1, v2);
 
-            Vector2Int end = Vector2Int.Max(v1, v2);
+            var end = Vector2.Max(v1, v2);
 
             return new(start, end);
         }
@@ -243,29 +214,23 @@
             return GetOverlap(a1.Left, a1.Bottom, a1.Right, a1.Top, a2.Left, a2.Bottom, a2.Right, a2.Top);
         }
 
-        #endregion
-
-        #region Trim
-
         /// <summary>
         /// Returns the given <paramref name="area"/> trimmed from this instance.
         /// </summary>
         /// <param name="area">The area to trim.</param>
         /// <returns>The given <paramref name="area"/> trimmed from this instance.</returns>
-        public Rect2D TrimArea(Rect2D other)
+        public Rect2D TrimArea(Rect2D area)
         {
-            if (!Overlaps(this, other))
+            if (!Overlaps(this, area))
+            {
                 throw new ArgumentException("Areas do not overlap.");
+            }
 
-            return new(other.Left < Left ? Left : other.Left,
-                other.Bottom < Bottom ? Bottom : other.Bottom,
-                other.Right > Right ? Right : other.Right,
-                other.Top > Top ? Top : other.Top);
+            return new(area.Left < Left ? Left : area.Left,
+                area.Bottom < Bottom ? Bottom : area.Bottom,
+                area.Right > Right ? Right : area.Right,
+                area.Top > Top ? Top : area.Top);
         }
-
-        #endregion
-
-        #region Bound
 
         /// <summary>
         /// Returns the specified area realigned to be bound inside this area.
@@ -274,49 +239,36 @@
         /// <returns>The specified area realigned to be bound inside this area.</returns>
         public Rect2D Bound(Rect2D area)
         {
-            Vector2Int offset = Vector2Int.Zero;
+            var offset = Vector2.Zero;
 
             if (area.Left < Left)
+            {
                 offset.X += Left - area.Left;
+            }
             if (area.Right > Right)
+            {
                 offset.X += Right - area.Right;
+            }
             if (area.Bottom < Bottom)
+            {
                 offset.Y += Bottom - area.Bottom;
+            }
             if (area.Top > Top)
+            {
                 offset.Y += Top - area.Top;
+            }
 
             return area + offset;
         }
-
-        #endregion
-
-        #region Contains
 
         public bool Contains(Rect2D other)
         {
             return Left <= other.Left && Bottom <= other.Bottom && other.Right <= Right && other.Top <= Top;
         }
 
-        public bool Contains(Vector2Int position)
+        public bool Contains(Vector2 position)
         {
             return Left <= position.X && Bottom <= position.Y && position.X < Right && position.Y < Top;
-        }
-
-        #endregion
-
-        public IEnumerable<Vector2Int> Enumerate(bool rowMajor = true)
-        {
-            int s1 = rowMajor ? Bottom : Left;
-            int s2 = rowMajor ? Left   : Bottom;
-            int e1 = rowMajor ? Top    : Right;
-            int e2 = rowMajor ? Right  : Top;
-            for (int i = s1; i < e1; ++i)
-            {
-                for (int j = s2; j < e2; ++j)
-                {
-                    yield return rowMajor ? new(j, i) : new(i, j);
-                }
-            }
         }
 
         #endregion

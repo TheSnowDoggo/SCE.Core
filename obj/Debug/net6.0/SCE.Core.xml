@@ -134,11 +134,11 @@
             <param name="y">The starting zero-based y position of the line.</param>
             <param name="colors">The colors to map with.</param>
         </member>
-        <member name="M:SCE.DisplayMap.PMapTo(SCE.Grid2DView{SCE.Pixel},SCE.Rect2D,SCE.Vector2Int)">
-            <inheritdoc cref="M:SCE.Grid2D`1.MapTo(SCE.Grid2DView{`0},SCE.Rect2D,SCE.Vector2Int)"/>
+        <member name="M:SCE.DisplayMap.PMapTo(SCE.Grid2DView{SCE.Pixel},SCE.Rect2DInt,SCE.Vector2Int)">
+            <inheritdoc cref="M:SCE.Grid2D`1.MapTo(SCE.Grid2DView{`0},SCE.Rect2DInt,SCE.Vector2Int)"/>
         </member>
-        <member name="M:SCE.DisplayMap.PMapTo(SCE.Grid2DView{SCE.Pixel},SCE.Rect2D)">
-            <inheritdoc cref="M:SCE.Grid2D`1.MapTo(SCE.Grid2DView{`0},SCE.Rect2D)"/>
+        <member name="M:SCE.DisplayMap.PMapTo(SCE.Grid2DView{SCE.Pixel},SCE.Rect2DInt)">
+            <inheritdoc cref="M:SCE.Grid2D`1.MapTo(SCE.Grid2DView{`0},SCE.Rect2DInt)"/>
         </member>
         <member name="M:SCE.DisplayMap.PMapTo(SCE.Grid2DView{SCE.Pixel},SCE.Vector2Int)">
             <inheritdoc cref="M:SCE.Grid2D`1.MapTo(SCE.Grid2DView{`0},SCE.Vector2Int)"/>
@@ -146,11 +146,11 @@
         <member name="M:SCE.DisplayMap.PMapTo(SCE.Grid2DView{SCE.Pixel})">
             <inheritdoc cref="M:SCE.Grid2D`1.MapTo(SCE.Grid2DView{`0})"/>
         </member>
-        <member name="M:SCE.DisplayMap.PMapFrom(SCE.Grid2DView{SCE.Pixel},SCE.Rect2D,SCE.Vector2Int)">
-            <inheritdoc cref="M:SCE.Grid2D`1.MapFrom(SCE.Grid2DView{`0},SCE.Rect2D,SCE.Vector2Int)"/>
+        <member name="M:SCE.DisplayMap.PMapFrom(SCE.Grid2DView{SCE.Pixel},SCE.Rect2DInt,SCE.Vector2Int)">
+            <inheritdoc cref="M:SCE.Grid2D`1.MapFrom(SCE.Grid2DView{`0},SCE.Rect2DInt,SCE.Vector2Int)"/>
         </member>
-        <member name="M:SCE.DisplayMap.PMapFrom(SCE.Grid2DView{SCE.Pixel},SCE.Rect2D)">
-            <inheritdoc cref="M:SCE.Grid2D`1.MapFrom(SCE.Grid2DView{`0},SCE.Rect2D)"/>
+        <member name="M:SCE.DisplayMap.PMapFrom(SCE.Grid2DView{SCE.Pixel},SCE.Rect2DInt)">
+            <inheritdoc cref="M:SCE.Grid2D`1.MapFrom(SCE.Grid2DView{`0},SCE.Rect2DInt)"/>
         </member>
         <member name="M:SCE.DisplayMap.PMapFrom(SCE.Grid2DView{SCE.Pixel},SCE.Vector2Int)">
             <inheritdoc cref="M:SCE.Grid2D`1.MapFrom(SCE.Grid2DView{`0},SCE.Vector2Int)"/>
@@ -234,7 +234,7 @@
         </member>
         <member name="M:SCE.Grid2D`1.GridArea">
             <summary>
-            Gets the zero-based area of the grid as a <see cref="T:SCE.Rect2D"/>.
+            Gets the zero-based area of the grid as a <see cref="T:SCE.Rect2DInt"/>.
             </summary>
         </member>
         <member name="M:SCE.Grid2D`1.Size">
@@ -264,14 +264,14 @@
             <param name="pos">The <see cref="T:SCE.Vector2Int"/> coordinate.</param>
             <returns><see langword="true"/> if the specified coordinates lie within this grid; otherwise, <see langword="false"/>.</returns>
         </member>
-        <member name="M:SCE.Grid2D`1.Fill(System.Func{SCE.Vector2Int,`0},SCE.Rect2D)">
+        <member name="M:SCE.Grid2D`1.Fill(System.Func{SCE.Vector2Int,`0},SCE.Rect2DInt)">
             <summary>
             Fills the grid over a specified area <paramref name="area"/>.
             </summary>
             <param name="fill">The function to fill with.</param>
             <param name="area">The area to fill over.</param>
         </member>
-        <member name="M:SCE.Grid2D`1.Fill(`0,SCE.Rect2D)">
+        <member name="M:SCE.Grid2D`1.Fill(`0,SCE.Rect2DInt)">
             <summary>
             Fills the grid over a specified area <paramref name="area"/>.
             </summary>
@@ -290,7 +290,7 @@
             </summary>
             <param name="value">The item to fill with.</param>
         </member>
-        <member name="M:SCE.Grid2D`1.EnumerateMapTo(SCE.Grid2DView{`0},SCE.Rect2D,SCE.Vector2Int)">
+        <member name="M:SCE.Grid2D`1.EnumerateMapTo(SCE.Grid2DView{`0},SCE.Rect2DInt,SCE.Vector2Int)">
             <summary>
             Enumerates the mapped area <paramref name="dataGridArea"/> of the specified <paramref name="dataGrid"/> onto this grid with a specified offset <paramref name="thisOffset"/>
             </summary>
@@ -301,7 +301,7 @@
             <param name="dataGridArea">The area on the <paramref name="dataGrid"/> to get elements from.</param>
             <param name="thisOffset">The offset position on this grid.</param>
         </member>
-        <member name="M:SCE.Grid2D`1.MapTo(SCE.Grid2DView{`0},SCE.Rect2D,SCE.Vector2Int)">
+        <member name="M:SCE.Grid2D`1.MapTo(SCE.Grid2DView{`0},SCE.Rect2DInt,SCE.Vector2Int)">
             <summary>
             Maps the area <paramref name="dataGridArea"/> of the specified <paramref name="dataGrid"/> onto this grid.
             </summary>
@@ -312,8 +312,8 @@
             <param name="dataGridArea">The area on the <paramref name="dataGrid"/> to get elements from.</param>
             <param name="thisOffset">The offset position on this grid.</param>
         </member>
-        <member name="M:SCE.Grid2D`1.MapTo(SCE.Grid2DView{`0},SCE.Rect2D)">
-            <inheritdoc cref="M:SCE.Grid2D`1.MapTo(SCE.Grid2DView{`0},SCE.Rect2D,SCE.Vector2Int)"/>
+        <member name="M:SCE.Grid2D`1.MapTo(SCE.Grid2DView{`0},SCE.Rect2DInt)">
+            <inheritdoc cref="M:SCE.Grid2D`1.MapTo(SCE.Grid2DView{`0},SCE.Rect2DInt,SCE.Vector2Int)"/>
         </member>
         <member name="M:SCE.Grid2D`1.MapTo(SCE.Grid2DView{`0},SCE.Vector2Int)">
             <summary>
@@ -328,7 +328,7 @@
         <member name="M:SCE.Grid2D`1.MapTo(SCE.Grid2DView{`0})">
             <inheritdoc cref="M:SCE.Grid2D`1.MapTo(SCE.Grid2DView{`0},SCE.Vector2Int)"/>
         </member>
-        <member name="M:SCE.Grid2D`1.EnumerateMapFrom(SCE.Grid2DView{`0},SCE.Rect2D,SCE.Vector2Int)">
+        <member name="M:SCE.Grid2D`1.EnumerateMapFrom(SCE.Grid2DView{`0},SCE.Rect2DInt,SCE.Vector2Int)">
             <summary>
             Enumerates the mapped area maps by enumerating the specified area <paramref name="mapArea"/> on this grid from the specified <paramref name="dataGrid"/> with offset <paramref name="dataOffset"/>
             </summary>
@@ -339,7 +339,7 @@
             <param name="mapArea">The area on this grid to populate.</param>
             <param name="dataOffset">The offset position on the <paramref name="dataGrid"/>.</param>
         </member>
-        <member name="M:SCE.Grid2D`1.MapFrom(SCE.Grid2DView{`0},SCE.Rect2D,SCE.Vector2Int)">
+        <member name="M:SCE.Grid2D`1.MapFrom(SCE.Grid2DView{`0},SCE.Rect2DInt,SCE.Vector2Int)">
             <summary>
             Custom maps by populating the specified area <paramref name="thisArea"/> on this grid from the specified <paramref name="dataGrid"/>.
             </summary>
@@ -350,8 +350,8 @@
             <param name="thisArea">The area on this grid to populate.</param>
             <param name="dataOffset">The offset position on the <paramref name="dataGrid"/>.</param>
         </member>
-        <member name="M:SCE.Grid2D`1.MapFrom(SCE.Grid2DView{`0},SCE.Rect2D)">
-            <inheritdoc cref="M:SCE.Grid2D`1.MapFrom(SCE.Grid2DView{`0},SCE.Rect2D,SCE.Vector2Int)"/>
+        <member name="M:SCE.Grid2D`1.MapFrom(SCE.Grid2DView{`0},SCE.Rect2DInt)">
+            <inheritdoc cref="M:SCE.Grid2D`1.MapFrom(SCE.Grid2DView{`0},SCE.Rect2DInt,SCE.Vector2Int)"/>
         </member>
         <member name="M:SCE.Grid2D`1.MapFrom(SCE.Grid2DView{`0},SCE.Vector2Int)">
             <summary>
@@ -419,7 +419,7 @@
             A class for grid-based pathfinding using A* algorithm.
             </summary>
         </member>
-        <member name="M:SCE.PathFinder.#ctor(SCE.Rect2D,System.Func{SCE.Vector2Int,System.Boolean})">
+        <member name="M:SCE.PathFinder.#ctor(SCE.Rect2DInt,System.Func{SCE.Vector2Int,System.Boolean})">
             <summary>
             Initializes a new instance of the <see cref="T:SCE.PathFinder"/> class.
             </summary>
@@ -445,6 +445,25 @@
             <returns>The given <paramref name="area"/> trimmed from this instance.</returns>
         </member>
         <member name="M:SCE.Rect2D.Bound(SCE.Rect2D)">
+            <summary>
+            Returns the specified area realigned to be bound inside this area.
+            </summary>
+            <param name="area">The area to bound inside this area.</param>
+            <returns>The specified area realigned to be bound inside this area.</returns>
+        </member>
+        <member name="T:SCE.Rect2DInt">
+            <summary>
+            A struct representing a 2D rectangular area defined by start and end corner.
+            </summary>
+        </member>
+        <member name="M:SCE.Rect2DInt.TrimArea(SCE.Rect2DInt)">
+            <summary>
+            Returns the given <paramref name="area"/> trimmed from this instance.
+            </summary>
+            <param name="area">The area to trim.</param>
+            <returns>The given <paramref name="area"/> trimmed from this instance.</returns>
+        </member>
+        <member name="M:SCE.Rect2DInt.Bound(SCE.Rect2DInt)">
             <summary>
             Returns the specified area realigned to be bound inside this area.
             </summary>

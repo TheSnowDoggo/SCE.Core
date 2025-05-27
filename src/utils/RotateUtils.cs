@@ -1,6 +1,6 @@
 ﻿namespace SCE
 {
-    public static class Rotate
+    public static class RotateUtils
     {
         public const float RADIAN_EULAR_CONVERSION_FACTOR = 180 / MathF.PI;
 

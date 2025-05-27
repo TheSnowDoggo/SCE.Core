@@ -22,7 +22,7 @@ namespace SCE
 
         public int Size() { return _grid.Size(); }
 
-        public Rect2D GridArea() { return _grid.GridArea(); }
+        public Rect2DInt GridArea() { return _grid.GridArea(); }
 
         public Grid2D<T> ToGrid2D()
         {
@@ -41,7 +41,7 @@ namespace SCE
             return _grid.GetEnumerator();
         }
 
-        public IEnumerable<Vector2Int> EnumerateGrid(Rect2D area, bool rowMajor = true)
+        public IEnumerable<Vector2Int> EnumerateGrid(Rect2DInt area, bool rowMajor = true)
         {
             return _grid.EnumerateGrid(area, rowMajor);
         }

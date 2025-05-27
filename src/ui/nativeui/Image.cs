@@ -47,7 +47,7 @@
         public virtual DisplayMapView GetMapView()
         {
             OnRender?.Invoke();
-            return ToView();
+            return (DisplayMapView)this;
         }
     }
 }

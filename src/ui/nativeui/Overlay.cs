@@ -38,7 +38,7 @@
                 }
             }
 
-            return dpMap;
+            return (DisplayMapView)dpMap;
         }
     }
 }

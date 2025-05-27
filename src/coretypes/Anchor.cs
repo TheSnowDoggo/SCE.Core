@@ -2,11 +2,10 @@
 {
     public enum Anchor
     {
-        Top    = 1,
-        Bottom = 2,
-        Middle = 4,
-        Left   = 8,
-        Right  = 16,
-        Center = 32,
+        None = 0,
+        Bottom = 1,
+        Middle = 2,
+        Right  = 4,
+        Center = 8,
     }
 }

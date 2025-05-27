@@ -95,9 +95,9 @@
         {
             if (_types.TryGetValue(typeof(U), out var set))
             {
-                foreach (var item in set)
+                foreach (var item in set.Cast<U>())
                 {
-                    yield return (U)Convert.ChangeType(item, typeof(U));
+                    yield return item;
                 }
             }
         }
@@ -130,7 +130,9 @@
             if (_types.TryGetValue(type, out var set) && set.Remove(item))
             {
                 if (set.Count == 0)
+                {
                     _types.Remove(type);
+                }
                 return true;
             }
 
@@ -140,7 +142,9 @@
         public void RemoveTypes(T item)
         {
             foreach (var type in _types.Keys)
+            {
                 RemoveType(item, type);
+            }
         }
 
         #endregion

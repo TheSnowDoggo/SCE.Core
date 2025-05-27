@@ -16,7 +16,7 @@
         {
             var dpMap = Renderable.GetMapView().ToDisplayMap();
             dpMap.Upscale(Scale);
-            return dpMap;
+            return (DisplayMapView)dpMap;
         }
     }
 }

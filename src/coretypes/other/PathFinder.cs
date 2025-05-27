@@ -10,13 +10,13 @@
         /// </summary>
         /// <param name="area">The allowed area to path through.</param>
         /// <param name="collisionFunc">The function determining whether a given position is occupied or not.</param>
-        public PathFinder(Rect2D area, Func<Vector2Int, bool> collisionFunc)
+        public PathFinder(Rect2DInt area, Func<Vector2Int, bool> collisionFunc)
         {
             Area = area;
             CollisionFunc = collisionFunc;
         }
 
-        public Rect2D Area { get; set; }
+        public Rect2DInt Area { get; set; }
 
         public Func<Vector2Int, bool> CollisionFunc { get; set; }
 

@@ -62,9 +62,9 @@ namespace SCE
         {
             _img = new(5, 5, SCEColor.DarkBlue);
 
-            _img.Fill(new Pixel(SCEColor.Magenta), Rect2D.Vertical(2, _img.Height));
+            _img.Fill(new Pixel(SCEColor.Magenta), Rect2DInt.Vertical(2, _img.Height));
 
-            _img.Fill(new Pixel(SCEColor.Cyan), Rect2D.Horizontal(1, _img.Width));
+            _img.Fill(new Pixel(SCEColor.Cyan), Rect2DInt.Horizontal(1, _img.Width));
 
             _scl = new(_img);
 
@@ -85,7 +85,7 @@ namespace SCE
                 // Left bias (default) with round down if the text cannot be fully centered, Right bias rounds up
                 [0] = new Line("- View Logs -")
                 {
-                    Anchor = Anchor.Center | Anchor.Left,
+                    Anchor = Anchor.Center,
                 },
             };
 
@@ -112,7 +112,7 @@ namespace SCE
             {
                 TextFgColor = SCEColor.Black,
                 TextBgColor = SCEColor.Transparent,
-                Anchor = Anchor.Top | Anchor.Right,
+                Anchor = Anchor.Right,
             };
 
             _fl = new(_tbDimensions.X, _tbDimensions.Y * _tbArr.Length)

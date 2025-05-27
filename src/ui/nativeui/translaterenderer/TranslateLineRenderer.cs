@@ -86,7 +86,7 @@
         {
             if (RenderOnUpdate)
                 Render();
-            return _dpMap;
+            return (DisplayMapView)_dpMap;
         }
     }
 }

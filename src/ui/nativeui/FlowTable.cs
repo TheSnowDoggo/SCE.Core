@@ -90,7 +90,7 @@
                 }
             }
 
-            return _dpMap;
+            return (DisplayMapView)_dpMap;
         }
     }
 }
