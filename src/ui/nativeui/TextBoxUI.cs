@@ -158,12 +158,13 @@ namespace SCE
 
                 var lineArr = NewlineOverflow ? OverflowSplitLines(Text, Width, Height) : SplitLines(Text, Width, Height);
 
-                int startY = AnchorUtils.VerticalFix(Anchor, Height - lineArr.Length);
+                int startY = AnchorUtils.VerticalFix(TextAnchor, Height - lineArr.Length);
                 for (int i = 0; i < lineArr.Length; ++i)
                 {
                     int x = AnchorUtils.HorizontalFix(TextAnchor, Width - lineArr[i].Length);
                     _dpMap.MapString(lineArr[i], new Vector2Int(x, startY + i), TextFgColor, TextBgColor);
                 }
+
 
                 renderQueued = false;
             }

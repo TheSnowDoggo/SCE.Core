@@ -34,6 +34,8 @@ namespace SCE
     {
         private readonly TextBoxUI _fps;
 
+        private readonly TextBoxUI _tb;
+
         private readonly InputEntryV2 _ie;
 
         private readonly FlowTable _fl;
@@ -62,9 +64,15 @@ namespace SCE
 
         public Mane()
         {
-            _ce = new(60, 15)
+            _tb = new(10, 6, SCEColor.Magenta)
             {
-                Anchor = Anchor.Bottom | Anchor.Right,
+                Text = "texdt",
+                TextAnchor = Anchor.Center | Anchor.Bottom
+            };
+
+            _ce = new(30, 15)
+            {
+                Anchor = Anchor.Bottom,
             };
 
             _img = new(5, 5, SCEColor.DarkBlue);
@@ -73,7 +81,10 @@ namespace SCE
 
             _img.Fill(new Pixel(SCEColor.Cyan), Rect2DInt.Horizontal(1, _img.Width));
 
-            _scl = new(_img);
+            _scl = new(_img)
+            {
+                Anchor = Anchor.Center | Anchor.Middle,
+            };
 
             // One limitation of the logger is each log can only occupy one line
             // This may be updated in the future.
@@ -165,7 +176,7 @@ namespace SCE
             _logger.Log("Welcome to the SCE Demo!");
             _logger.Log("Have a peek around at some of the many features.");
             
-            _ce.Write("helo wharas dasdas");
+            _ce.Write("this is a console emulator");
         }
 
         public override void Update()
@@ -195,7 +206,7 @@ namespace SCE
             Display.Instance.ResizeMode = Display.ResizeType.Auto;
 
             // Adds the IRenderables to the display to render.
-            Display.Instance.Renderables.AddRange(new IRenderable[] { _fl, _loggerFl, _ce, _fps, _scl });
+            Display.Instance.Renderables.AddRange(new IRenderable[] { _fl, _loggerFl, _ce, _fps, _scl, _tb });
 
             Display.Instance.BasePixel = new(SCEColor.DarkCyan);
         }
