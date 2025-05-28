@@ -8,7 +8,7 @@
     <PackageId>SCECore</PackageId>
     <Title>SCE.Core</Title>
 	<AssemblyName>SCE.Core</AssemblyName>
-    <Version>3.3.2</Version>
+    <Version>3.4.2</Version>
 	<VersionSuffix>Release</VersionSuffix>
     <Authors>Luna Sparkle</Authors>
     <Product>SCE.Core</Product>
@@ -25,13 +25,7 @@
     <RepositoryUrl>https://github.com/TheSnowDoggo/SCE.Core</RepositoryUrl>
     <Company>SCE</Company>
     <PackageProjectUrl>https://github.com/TheSnowDoggo/SCE.Core</PackageProjectUrl>
-    <PackageReleaseNotes>-Modularised display engine
--Added Console Emulator UI and some other UI elements
--Changed Rect2D to Rect2DInt and added Rect2D (stores floats)
--Swapped Rect2D Top to Bottom (Top is less than Bottom)
--Added Grid2D rotation
--Added DisplayMapView and Grid2DView for safer rendering
--Other improvements</PackageReleaseNotes>
+    <PackageReleaseNotes>-New super fast BMEngine rendering engine for enhanced performance, reliability and compatibility for windows.</PackageReleaseNotes>
     <TargetFramework>net6.0</TargetFramework>
   </PropertyGroup>
 
@@ -42,6 +36,10 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
     <NoWarn>1701;1702;1591</NoWarn>
   </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="SCECSUtils" Version="1.3.2" />
+  </ItemGroup>
 
   <ItemGroup>
     <Reference Include="CSUtils">

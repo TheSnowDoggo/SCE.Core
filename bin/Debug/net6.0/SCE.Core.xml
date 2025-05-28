@@ -645,6 +645,11 @@
         <member name="M:SCE.Display.Update">
             <inheritdoc/>
         </member>
+        <member name="T:SCE.BMEngine">
+            <summary>
+            Super fast windows color rendering by directly manipulating the console buffer.
+            </summary>
+        </member>
         <member name="F:SCE.CCSEngine.DEFAULT_BUFFER_SIZE">
             <summary>
             Represents the default buffer size.

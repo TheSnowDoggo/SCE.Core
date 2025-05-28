@@ -1,6 +1,8 @@
 ﻿namespace SCE
 {
-    // Buffer Manipulator Engine
+    /// <summary>
+    /// Super fast windows color rendering by directly manipulating the console buffer.
+    /// </summary>
     public class BMEngine : RenderEngine
     {
         private static readonly Lazy<BMEngine> _lazy = new(() => new());

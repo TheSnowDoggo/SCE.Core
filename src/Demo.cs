@@ -189,6 +189,7 @@ namespace SCE
         {
             DebugEngine.Instance.ShowSIFCodes = true;
 
+            // Damn it is fast.
             Display.Instance.RenderEngine = BMEngine.Instance;
 
             // Adds the IRenderables to the display to render.
