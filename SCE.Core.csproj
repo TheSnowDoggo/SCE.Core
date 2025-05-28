@@ -25,7 +25,7 @@
     <RepositoryUrl>https://github.com/TheSnowDoggo/SCE.Core</RepositoryUrl>
     <Company>SCE</Company>
     <PackageProjectUrl>https://github.com/TheSnowDoggo/SCE.Core</PackageProjectUrl>
-    <PackageReleaseNotes>-Removed clear on display resize which caused performance issues when auto resizing.</PackageReleaseNotes>
+    <PackageReleaseNotes>-Fixed TextBoxUI text anchor.</PackageReleaseNotes>
     <TargetFramework>net6.0</TargetFramework>
   </PropertyGroup>
 
