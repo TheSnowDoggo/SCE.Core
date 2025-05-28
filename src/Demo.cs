@@ -20,7 +20,7 @@ namespace SCE
             GameHandler.Scenes.AddEvery((ih, "inputhandler"), (mane, "mane"), (Display.Instance, "display"));
 
             // Sets the framerate cap in FPS. -1 represents uncapped framerate.
-            GameHandler.FrameCap = -1;
+            GameHandler.FrameCap = 60;
 
             // Starts GameHandler thread (for scenes).
             GameHandler.Start();
@@ -191,6 +191,8 @@ namespace SCE
 
             // Damn it is fast.
             Display.Instance.RenderEngine = BMEngine.Instance;
+
+            Display.Instance.ResizeMode = Display.ResizeType.Auto;
 
             // Adds the IRenderables to the display to render.
             Display.Instance.Renderables.AddRange(new IRenderable[] { _fl, _loggerFl, _ce, _fps, _scl });

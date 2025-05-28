@@ -174,9 +174,6 @@
                 return false;
             }
 
-            Console.ResetColor();
-            Console.Clear();
-
             viewport.CleanResize(newSize);
 
             OnDisplayResize?.Invoke();
