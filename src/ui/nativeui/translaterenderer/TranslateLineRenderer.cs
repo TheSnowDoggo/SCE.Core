@@ -78,14 +78,18 @@
         private void MapPixels(Vector2Int start, Pixel[] pixels)
         {
             for (int i = 0; i < pixels.Length; ++i)
+            {
                 _dpMap[start.X + i, start.Y] = pixels[i];
+            }
         }
 
         /// <inheritdoc/>
         public override DisplayMapView GetMapView()
         {
             if (RenderOnUpdate)
+            {
                 Render();
+            }
             return (DisplayMapView)_dpMap;
         }
     }

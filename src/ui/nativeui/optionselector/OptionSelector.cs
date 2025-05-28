@@ -9,6 +9,8 @@ namespace SCE
 
         private readonly List<Option> _commands = new();
 
+        private bool renderQueued = true;
+
         public OptionSelector(int width, int height, SCEColor? bgColor = null)
         {
             _lineRenderer = new(width, height, bgColor);
@@ -39,7 +41,7 @@ namespace SCE
             set
             {
                 _commands[y] = value;
-                Update();
+                renderQueued = true;
             }
         }
 
@@ -63,7 +65,7 @@ namespace SCE
                     return;
                 }
                 selected = Utils.Mod(value, _commands.Count);
-                Update();
+                renderQueued = true;
             }
         }
 
@@ -75,9 +77,11 @@ namespace SCE
             set
             {
                 if (value >= Height)
+                {
                     return;
+                }
                 scrollOffset = value;
-                Update();
+                renderQueued = true;
             }
         }
 
@@ -89,7 +93,7 @@ namespace SCE
             set
             {
                 selectedColors = value;
-                Update();
+                renderQueued = true;
             }
         }
 
@@ -99,7 +103,7 @@ namespace SCE
             set
             {
                 _lineRenderer.FitToLength = value;
-                Update();
+                renderQueued = true;
             }
         }
 
@@ -109,7 +113,7 @@ namespace SCE
             set
             {
                 _lineRenderer.StackMode = value;
-                Update();
+                renderQueued = true;
             }
         }
 
@@ -118,13 +122,13 @@ namespace SCE
         public void Add(Option command)
         {
             _commands.Add(command);
-            Update();
+            renderQueued = true;
         }
 
         public void AddRange(IEnumerable<Option> collection)
         {
             _commands.AddRange(collection);
-            Update();
+            renderQueued = true;
         }
 
         public void AddEvery(params Option[] commandArr)
@@ -135,42 +139,29 @@ namespace SCE
         public bool Remove(Option command)
         {
             if (_commands.Remove(command))
+            {
                 return false;
-            Update();
+            }
+            renderQueued = true;
             return true;
         }
 
         public void RemoveAt(int index)
         {
             _commands.RemoveAt(index);
-            Update();
+            renderQueued = true;
         }
 
         public void RemoveRange(int index, int count)
         {
             _commands.RemoveRange(index, count);
-            Update();
+            renderQueued = true;
         }
 
         public void Clear()
         {
             _commands.Clear();
             _lineRenderer.Clear();
-        }
-
-        public void Update()
-        {
-            int dif = selected + ScrollOffset - _commands.Count;
-            int scrollOffset = dif < 0 ? ScrollOffset : ScrollOffset - dif - 1;
-            bool mapY = _commands.Count > Height && selected >= Height - scrollOffset;
-            for (int y = 0; y < Height; ++y)
-            {
-                int i = mapY ? selected - (Height - scrollOffset) + y + 1 : y;
-                if (i >= 0 && i < _commands.Count)
-                    _lineRenderer.SetLine(y, new Line(_commands[i].Name, i == selected ? SelectedColors : _commands[i].Colors) { Anchor = _commands[i].Anchor });
-                else
-                    _lineRenderer.ClearLine(y);
-            }
         }
 
         public bool TryRunSelected()
@@ -183,6 +174,31 @@ namespace SCE
         /// <inheritdoc/>
         public override DisplayMapView GetMapView()
         {
+            if (renderQueued)
+            {
+                int dif = selected + ScrollOffset - _commands.Count;
+                int scrollOffset = dif < 0 ? ScrollOffset : ScrollOffset - dif - 1;
+                bool mapY = _commands.Count > Height && selected >= Height - scrollOffset;
+                for (int y = 0; y < Height; ++y)
+                {
+                    int i = mapY ? selected - (Height - scrollOffset) + y + 1 : y;
+                    if (i >= 0 && i < _commands.Count)
+                    {
+                        MsgLine line = new(_commands[i].Name, i == selected ? SelectedColors : _commands[i].Colors)
+                        {
+                            Anchor = _commands[i].Anchor,
+                        };
+                        _lineRenderer.SetLine(y, line);
+                    }
+                    else
+                    {
+                        _lineRenderer.ClearLine(y);
+                    }
+                }
+
+                renderQueued = false;
+            }
+
             return _lineRenderer.GetMapView();
         }
     }

@@ -5,14 +5,8 @@
     /// </summary>
     public class InputLayer : InputGroup, IComparable<InputLayer>
     {
-        public InputLayer(int layer)
+        public InputLayer(int layer = 0)
             : base()
-        {
-            Layer = layer;
-        }
-
-        public InputLayer(int layer, IEnumerable<IInputReceiver> collection)
-            : base(collection)
         {
             Layer = layer;
         }
@@ -23,7 +17,7 @@
         {
             if (other is null)
                 throw new NotImplementedException();
-            return other.Layer - Layer; // Top down sorting
+            return other.Layer - Layer; // Lower = Higher priority
         }
     }
 }

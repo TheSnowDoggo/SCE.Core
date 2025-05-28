@@ -8,12 +8,12 @@
 
         public static Vector2 AngleToVector(float angle)
         {
-            return new Vector2(MathF.Cos(angle), MathF.Sin(angle)).Normalize();
+            return new Vector2(MathF.Cos(angle), MathF.Sin(angle)).SafeNormalize();
         }
 
         public static float VectorToRadians(Vector2 vector)
         {
-            vector = vector.Normalize();
+            vector = vector.SafeNormalize();
             var angle = MathF.Atan(vector.Y / vector.X);
             return vector.X > 0 ? angle : angle + MathF.PI;
         }

@@ -54,12 +54,19 @@ namespace SCE
 
         private readonly Scaler<Image> _scl;
 
+        private readonly ConsoleEmulator _ce;
+
         private int selectIndex;
 
         private double timer;
 
         public Mane()
         {
+            _ce = new(60, 15)
+            {
+                Anchor = Anchor.Bottom | Anchor.Right,
+            };
+
             _img = new(5, 5, SCEColor.DarkBlue);
 
             _img.Fill(new Pixel(SCEColor.Magenta), Rect2DInt.Vertical(2, _img.Height));
@@ -83,7 +90,7 @@ namespace SCE
                 Anchor = Anchor.Right,
                 // Combine Center anchors with Right or Left anchors to determine the center bias.
                 // Left bias (default) with round down if the text cannot be fully centered, Right bias rounds up
-                [0] = new Line("- View Logs -")
+                [0] = new MsgLine("- View Logs -")
                 {
                     Anchor = Anchor.Center,
                 },
@@ -158,6 +165,8 @@ namespace SCE
 
             _logger.Log("Welcome to the SCE Demo!");
             _logger.Log("Have a peek around at some of the many features.");
+
+            _ce.Write("helo wharas dasdas");
         }
 
         public override void Update()
@@ -171,8 +180,9 @@ namespace SCE
             }
             else
             {
-                timer = 0.5;
-                _img.Rotate90(true);
+                timer = 0.1;
+
+                _img.Rotate90(true);   
             }
         }
 
@@ -181,7 +191,7 @@ namespace SCE
             Display.Instance.RenderEngine = CCSEngine.Instance;
 
             // Adds the IRenderables to the display to render.
-            Display.Instance.Renderables.AddRange(new IRenderable[] { _fps, _fl, _loggerFl, _scl });
+            Display.Instance.Renderables.AddRange(new IRenderable[] { _fps, _fl, _loggerFl, _scl, _ce });
 
             Display.Instance.BasePixel = new(SCEColor.DarkCyan);
         }

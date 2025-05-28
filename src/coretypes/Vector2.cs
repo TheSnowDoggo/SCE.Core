@@ -54,10 +54,13 @@
 
         public Vector2 Normalize()
         {
-            var magnitude = Magnitude();
-            if (magnitude == 0)
-                throw new DivideByZeroException("Magnitude cannot be zero.");
-            return new Vector2(X, Y) / magnitude;
+            return new Vector2(X, Y) / Magnitude();
+        }
+
+        public Vector2 SafeNormalize()
+        {
+            var m = Magnitude();
+            return m != 0 ? new Vector2(X, Y) : Zero;
         }
 
         public bool IsNormalized()

@@ -863,7 +863,7 @@
         <member name="M:SCE.Image.GetMapView">
             <inheritdoc/>
         </member>
-        <member name="M:SCE.Line.ToString">
+        <member name="M:SCE.MsgLine.ToString">
             <inheritdoc/>
         </member>
         <member name="M:SCE.Log.ToString">
@@ -871,16 +871,6 @@
         </member>
         <member name="M:SCE.OptionSelector.GetMapView">
             <inheritdoc/>
-        </member>
-        <member name="M:SCE.Translate2DRenderer.#ctor(System.Int32,System.Int32,System.Func{SCE.Vector2Int,SCE.Grid2D{SCE.Pixel}},System.Nullable{SCE.Vector2Int})">
-            <summary>
-            Initializes a new instance of the <see cref="T:SCE.Translate2DRenderer"/> class.
-            </summary>
-        </member>
-        <member name="M:SCE.Translate2DRenderer.#ctor(SCE.Vector2Int,System.Func{SCE.Vector2Int,SCE.Grid2D{SCE.Pixel}},System.Nullable{SCE.Vector2Int})">
-            <summary>
-            Initializes a new instance of the <see cref="T:SCE.Translate2DRenderer"/> class.
-            </summary>
         </member>
         <member name="P:SCE.Translate2DRenderer.RenderFunc">
             <summary>

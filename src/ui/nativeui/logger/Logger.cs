@@ -197,7 +197,9 @@ namespace SCE
         {
             int mappedY = GridTranslate(gridY + ViewTranslate(viewY));
             if (mappedY < 0 || mappedY >= _logs.Count)
+            {
                 ClearAt(gridY);
+            }
             else
             {
                 if (!FitToLength)
@@ -209,7 +211,9 @@ namespace SCE
         private void RenderAll()
         {
             for (int gridY = 0; gridY < Height; ++gridY)
+            {
                 RenderLogAt(gridY);
+            }
         }
 
         private void MapLog(int y, Log log)

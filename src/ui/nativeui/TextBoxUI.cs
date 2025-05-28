@@ -7,6 +7,20 @@ namespace SCE
     {
         private const SCEColor DEFAULT_BGCOLOR = SCEColor.Black;
 
+        private bool renderQueued = true;
+
+        private SCEColor bgColor;
+
+        private string text = string.Empty;
+
+        private SCEColor textFgColor = SCEColor.Gray;
+
+        private SCEColor textBgColor = SCEColor.Transparent;
+
+        private Anchor textAnchor = Anchor.None;
+
+        private bool newlineOverflow = false;
+
         public TextBoxUI(int width, int height, SCEColor? bgColor = null)
             : base(width, height, bgColor)
         {
@@ -18,9 +32,7 @@ namespace SCE
         {
         }
 
-        #region Settings
-
-        private SCEColor bgColor;
+        #region Settings   
 
         public SCEColor BgColor
         {
@@ -28,11 +40,9 @@ namespace SCE
             set
             {
                 bgColor = value;
-                Update();
+                renderQueued = true;
             }
         }
-
-        private string text = string.Empty;
 
         public string Text
         {
@@ -40,11 +50,9 @@ namespace SCE
             set
             {
                 text = value;
-                Update();
+                renderQueued = true;
             }
-        }
-
-        private SCEColor textFgColor = SCEColor.Gray;
+        } 
 
         public SCEColor TextFgColor
         {
@@ -52,11 +60,9 @@ namespace SCE
             set
             {
                 textFgColor = value;
-                Update();
+                renderQueued = true;
             }
         }
-
-        private SCEColor textBgColor = SCEColor.Transparent;
 
         public SCEColor TextBgColor
         {
@@ -64,11 +70,9 @@ namespace SCE
             set
             {
                 textBgColor = value;
-                Update();
+                renderQueued = true;
             }
         }
-
-        private Anchor textAnchor;
 
         public Anchor TextAnchor
         {
@@ -76,11 +80,19 @@ namespace SCE
             set
             {
                 textAnchor = value;
-                Update();
+                renderQueued = true;
             }
         }
 
-        public bool NewlineOverflow { get; set; } = false;
+        public bool NewlineOverflow
+        {
+            get => newlineOverflow;
+            set
+            {
+                newlineOverflow = value;
+                renderQueued = true;
+            }
+        }
 
         #endregion
 
@@ -92,7 +104,9 @@ namespace SCE
             {
                 bool newLine = str[i] == '\n';
                 if (!newLine)
+                {
                     sb.Append(str[i]);
+                }
                 if (newLine || i == str.Length - 1 || (sb.Length == maxLength && str[i + 1] != '\n'))
                 {
                     lineList.Add(sb.ToString());
@@ -119,34 +133,41 @@ namespace SCE
                 }
             }
             if (sb.Length > 0 && lines.Count < maxLines)
-                lines.Add(Utils.Shorten(sb.ToString(), maxLength));
-            return lines.ToArray();
-        }
-
-        public void Update()
-        {
-            _dpMap.Fill(new Pixel(BgColor));
-
-            var lineArr = NewlineOverflow ? OverflowSplitLines(Text, Width, Height) :
-                SplitLines(Text, Width, Height);
-
-            int startY = AnchorUtils.VerticalFix(Anchor, Height - lineArr.Length);
-            for (int i = 0; i < lineArr.Length; ++i)
             {
-                int x = AnchorUtils.HorizontalFix(TextAnchor, Width - lineArr[i].Length);
-                _dpMap.MapString(lineArr[i], new Vector2Int(x, startY + i), TextFgColor, TextBgColor);
+                lines.Add(Utils.Shorten(sb.ToString(), maxLength));
             }
+            return lines.ToArray();
         }
 
         public void Resize(int width, int height)
         {
             _dpMap.CleanResize(width, height);
-            Update();
+            renderQueued = true;
         }
 
         public void Resize(Vector2Int dimensions)
         {
             Resize(dimensions.X, dimensions.Y);
+        }
+
+        public override DisplayMapView GetMapView()
+        {
+            if (renderQueued)
+            {
+                _dpMap.Fill(new Pixel(BgColor));
+
+                var lineArr = NewlineOverflow ? OverflowSplitLines(Text, Width, Height) : SplitLines(Text, Width, Height);
+
+                int startY = AnchorUtils.VerticalFix(Anchor, Height - lineArr.Length);
+                for (int i = 0; i < lineArr.Length; ++i)
+                {
+                    int x = AnchorUtils.HorizontalFix(TextAnchor, Width - lineArr[i].Length);
+                    _dpMap.MapString(lineArr[i], new Vector2Int(x, startY + i), TextFgColor, TextBgColor);
+                }
+
+                renderQueued = false;
+            }
+            return (DisplayMapView)_dpMap;
         }
     }
 }

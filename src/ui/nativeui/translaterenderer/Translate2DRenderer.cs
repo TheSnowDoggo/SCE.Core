@@ -2,22 +2,25 @@
 {
     public class Translate2DRenderer : UIBaseExtR
     {
-        /// <summary>
-        /// Initializes a new instance of the <see cref="Translate2DRenderer"/> class.
-        /// </summary>
-        public Translate2DRenderer(int width, int height, Func<Vector2Int, Grid2D<Pixel>> renderFunc, Vector2Int? renderDimensions = null)
+        public Translate2DRenderer(int width, int height, Func<Vector2Int, Grid2D<Pixel>> renderFunc)
             : base(width, height)
         {
             RenderFunc = renderFunc;
-            if (renderDimensions is Vector2Int vec)
-                RenderDimensions = vec;
         }
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="Translate2DRenderer"/> class.
-        /// </summary>
-        public Translate2DRenderer(Vector2Int dimensions, Func<Vector2Int, Grid2D<Pixel>> renderFunc, Vector2Int? renderDimensions = null)
-            : this(dimensions.X, dimensions.Y, renderFunc, renderDimensions)
+        public Translate2DRenderer(Vector2Int dimensions, Func<Vector2Int, Grid2D<Pixel>> renderFunc)
+            : this(dimensions.X, dimensions.Y, renderFunc)
+        {
+        }
+
+        public Translate2DRenderer(int width, int height, Vector2Int renderDimensions, Func<Vector2Int, Grid2D<Pixel>> renderFunc)
+            : this(width, height, renderFunc)
+        {
+            RenderDimensions = renderDimensions;
+        }
+
+        public Translate2DRenderer(Vector2Int dimensions, Vector2Int renderDimensions, Func<Vector2Int, Grid2D<Pixel>> renderFunc)
+            : this(dimensions.X, dimensions.Y, renderDimensions, renderFunc)
         {
         }
 
@@ -79,7 +82,9 @@
         public override DisplayMapView GetMapView()
         {
             if (RenderOnUpdate)
+            {
                 Render();
+            }
             return base.GetMapView();
         }
     }

@@ -27,7 +27,9 @@
         public bool TryRun()
         {
             if (Action is null)
+            {
                 return false;
+            }
             Action.Invoke();
             return true;
         }

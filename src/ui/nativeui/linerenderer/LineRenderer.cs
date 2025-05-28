@@ -2,16 +2,18 @@
 using CSUtils;
 namespace SCE
 {
-    public class LineRenderer : UIBaseExt, IEnumerable<Line?>
+    public class LineRenderer : UIBaseExt, IEnumerable<MsgLine?>
     {
         private const SCEColor DEFAULT_BGCOLOR = SCEColor.Black;
 
-        private Line?[] lineArr;
+        private MsgLine?[] lineArr;
+
+        private bool renderQueued = true;
 
         public LineRenderer(int width, int height, SCEColor? bgColor = null)
             : base(width, height, bgColor)
         {
-            lineArr = new Line?[Height];
+            lineArr = new MsgLine?[Height];
             this.bgColor = bgColor ?? DEFAULT_BGCOLOR;
         }
 
@@ -22,9 +24,9 @@ namespace SCE
 
         #region IEnumerable
 
-        public IEnumerator<Line?> GetEnumerator()
+        public IEnumerator<MsgLine?> GetEnumerator()
         {
-            return (IEnumerator<Line?>)lineArr.GetEnumerator();
+            return (IEnumerator<MsgLine?>)lineArr.GetEnumerator();
         }
 
         IEnumerator IEnumerable.GetEnumerator()
@@ -34,7 +36,7 @@ namespace SCE
 
         #endregion
 
-        public Line? this[int y]
+        public MsgLine? this[int y]
         {
             get
             {
@@ -59,7 +61,7 @@ namespace SCE
             set
             {
                 bgColor = value;
-                Update();
+                renderQueued = true;
             }
         }
 
@@ -71,7 +73,7 @@ namespace SCE
             set
             {
                 stackMode = value;
-                Update();
+                renderQueued = true;
             }
         }
 
@@ -83,7 +85,7 @@ namespace SCE
             set
             {
                 fitToLength = value;
-                Update();
+                renderQueued = true;
             }
         }
 
@@ -91,7 +93,7 @@ namespace SCE
 
         #region SetLine
 
-        public bool SetLine(int y, Line? line)
+        public bool SetLine(int y, MsgLine? line)
         {
             if (y < 0 || y >= lineArr.Length)
                 return false;
@@ -102,15 +104,15 @@ namespace SCE
 
         public bool SetLine(int y, string message, ColorSet? colorSet = null)
         {
-            return SetLine(y, new Line(message, colorSet));
+            return SetLine(y, new MsgLine(message, colorSet));
         }
 
         public bool SetLine(int y, string message, SCEColor fgColor, SCEColor? bgColor = null)
         {
-            return SetLine(y, new Line(message, fgColor, bgColor));
+            return SetLine(y, new MsgLine(message, fgColor, bgColor));
         }
 
-        public void SetRange(int startY, IEnumerable<Line?> collection)
+        public void SetRange(int startY, IEnumerable<MsgLine?> collection)
         {
             foreach (var line in collection)
                 SetLine(startY++, line);
@@ -131,21 +133,19 @@ namespace SCE
 
         #region Render
 
-        public void Update()
-        {
-            for (int i = 0; i < Height; ++i)
-                RenderLine(i);
-        }
-
         private void RenderLine(int y)
         {
-            if (lineArr[y] is Line line)
+            if (lineArr[y] is MsgLine line)
+            {
                 MapLine(Translate(y), line);
+            }
             else
+            {
                 ClearAt(Translate(y));
+            }
         }
 
-        private void MapLine(int mappedY, Line line)
+        private void MapLine(int mappedY, MsgLine line)
         {
             if (FitToLength)
             {
@@ -181,7 +181,7 @@ namespace SCE
         {
             _dpMap.CleanResize(width, height);
             _dpMap.Fill(new Pixel(BgColor));
-            lineArr = new Line?[height];
+            lineArr = new MsgLine?[height];
         }
 
         public void CleanResize(Vector2Int dimensions)
@@ -193,7 +193,7 @@ namespace SCE
         {
             _dpMap.CleanResize(width, height);
             Array.Resize(ref lineArr, height);
-            Update();
+            renderQueued = true;
         }
 
         public void MapResize(Vector2Int dimensions)
@@ -211,5 +211,20 @@ namespace SCE
         }
 
         #endregion
+
+        public override DisplayMapView GetMapView()
+        {
+            if (renderQueued)
+            {
+                for (int i = 0; i < Height; ++i)
+                {
+                    RenderLine(i);
+                }
+
+                renderQueued = false;
+            }
+
+            return (DisplayMapView)_dpMap;
+        }
     }
 }
