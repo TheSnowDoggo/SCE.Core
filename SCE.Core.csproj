@@ -25,7 +25,7 @@
     <RepositoryUrl>https://github.com/TheSnowDoggo/SCE.Core</RepositoryUrl>
     <Company>SCE</Company>
     <PackageProjectUrl>https://github.com/TheSnowDoggo/SCE.Core</PackageProjectUrl>
-    <PackageReleaseNotes>-New super fast BMEngine rendering engine for enhanced performance, reliability and compatibility for windows.</PackageReleaseNotes>
+    <PackageReleaseNotes>-Removed clear on display resize which caused performance issues when auto resizing.</PackageReleaseNotes>
     <TargetFramework>net6.0</TargetFramework>
   </PropertyGroup>
 

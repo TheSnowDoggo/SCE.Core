@@ -11,7 +11,7 @@
     <readme>README.md</readme>
     <projectUrl>https://github.com/TheSnowDoggo/SCE.Core</projectUrl>
     <description>The Core of SCE required by all SCE assemblies.</description>
-    <releaseNotes>-New super fast BMEngine rendering engine for enhanced performance, reliability and compatibility for windows.</releaseNotes>
+    <releaseNotes>-Removed clear on display resize which caused performance issues when auto resizing.</releaseNotes>
     <copyright>MIT License</copyright>
     <repository url="https://github.com/TheSnowDoggo/SCE.Core" />
     <dependencies>
