@@ -11,9 +11,13 @@
     <readme>README.md</readme>
     <projectUrl>https://github.com/TheSnowDoggo/SCE.Core</projectUrl>
     <description>The Core of SCE required by all SCE assemblies.</description>
-    <releaseNotes>Added flow tables, overlays and InputEntryV2.
-
-Also check out the useful Demo file in the source code!</releaseNotes>
+    <releaseNotes>-Modularised display engine
+-Added Console Emulator UI and some other UI elements
+-Changed Rect2D to Rect2DInt and added Rect2D (stores floats)
+-Swapped Rect2D Top to Bottom (Top is less than Bottom)
+-Added Grid2D rotation
+-Added DisplayMapView and Grid2DView for safer rendering
+-Other improvements</releaseNotes>
     <copyright>MIT License</copyright>
     <repository url="https://github.com/TheSnowDoggo/SCE.Core" />
     <dependencies>

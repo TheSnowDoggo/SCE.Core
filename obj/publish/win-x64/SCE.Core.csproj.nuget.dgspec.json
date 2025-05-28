@@ -5,7 +5,7 @@
   },
   "projects": {
     "C:\\Users\\redst\\source\\repos\\TheSnowDoggo\\SCE.Core\\SCE.Core.csproj": {
-      "version": "3.2.2",
+      "version": "3.3.2",
       "restore": {
         "projectUniqueName": "C:\\Users\\redst\\source\\repos\\TheSnowDoggo\\SCE.Core\\SCE.Core.csproj",
         "projectName": "SCECore",
@@ -45,12 +45,6 @@
       "frameworks": {
         "net6.0": {
           "targetAlias": "net6.0",
-          "dependencies": {
-            "SCECSUtils": {
-              "target": "Package",
-              "version": "[1.2.2, )"
-            }
-          },
           "imports": [
             "net461",
             "net462",

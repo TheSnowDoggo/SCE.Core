@@ -1,5 +1,4 @@
 ﻿using System.Text;
-
 namespace SCE
 {
     public sealed class CompatibilityEngine : RenderEngine
@@ -10,9 +9,6 @@ namespace SCE
         {
         }
 
-        /// <summary>
-        /// Gets the singleton instance of this class.
-        /// </summary>
         public static CompatibilityEngine Instance { get => _lazy.Value; }
 
         /// <inheritdoc/>
@@ -55,8 +51,11 @@ namespace SCE
                     }
                 }
             }
+
             ColorUtils.SetConsoleColor(lastSet);
+
             Console.Write(sb);
+
             Console.ResetColor();
         }
     }

@@ -16,6 +16,12 @@
 
         private readonly Viewport viewport = new(ConsoleWindowDimensions());
 
+        private RenderEngine? renderEngine = BMEngine.Instance;
+
+        private DisplayMap? last;
+
+        private bool skipCull = false;
+
         private Display()
         {
         }
@@ -32,7 +38,15 @@
         /// <summary>
         /// Gets or sets the 
         /// </summary>
-        public RenderEngine? RenderEngine { get; set; } = CCSEngine.Instance;
+        public RenderEngine? RenderEngine
+        {
+            get => renderEngine;
+            set
+            {
+                renderEngine = value;
+                skipCull = true;
+            }
+        }
 
         /// <summary>
         /// Gets or sets the resizing mode.
@@ -43,6 +57,8 @@
         /// Gets or sets the custom viewport dimensions.
         /// </summary>
         public Vector2Int CustomDimensions { get; set; } = ConsoleWindowDimensions();
+
+        public bool RerenderCulling { get; set; } = true;
 
         #region Properties
 
@@ -123,6 +139,20 @@
             }
 
             var dpMap = viewport.GetMapView();
+
+            if (RerenderCulling && !skipCull)
+            {
+                if (last != null && Grid2D<Pixel>.ValueEquals(dpMap, last))
+                {
+                    return;
+                }
+                else
+                {
+                    last = dpMap.ToDisplayMap();
+                }
+            }
+
+            skipCull = false;
 
             RenderEngine?.Render(dpMap);
 

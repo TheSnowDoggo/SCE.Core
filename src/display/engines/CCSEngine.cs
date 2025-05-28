@@ -24,9 +24,6 @@ namespace SCE
             spaceFillCache = new(SpaceFill);
         }
 
-        /// <summary>
-        /// Gets the singleton instance of this class.
-        /// </summary>
         public static CCSEngine Instance { get => _lazy.Value; }
 
         /// <summary>

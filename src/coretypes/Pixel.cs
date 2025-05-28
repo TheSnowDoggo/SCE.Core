@@ -56,6 +56,11 @@
 
         public ColorSet ColorSet() { return new(FgColor, BgColor); }
 
+        public char RenderElement()
+        {
+            return Element != '\0' ? Element : ' ';
+        }
+
         #region Equality
 
         public static bool operator ==(Pixel p1, Pixel p2) => Equals(p1, p2);

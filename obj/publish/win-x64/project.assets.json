@@ -1,56 +1,19 @@
 {
   "version": 3,
   "targets": {
-    "net6.0": {
-      "SCECSUtils/1.2.2": {
-        "type": "package",
-        "compile": {
-          "lib/net6.0/CSUtils.dll": {}
-        },
-        "runtime": {
-          "lib/net6.0/CSUtils.dll": {}
-        }
-      }
-    },
-    "net6.0/win-x64": {
-      "SCECSUtils/1.2.2": {
-        "type": "package",
-        "compile": {
-          "lib/net6.0/CSUtils.dll": {}
-        },
-        "runtime": {
-          "lib/net6.0/CSUtils.dll": {}
-        }
-      }
-    }
+    "net6.0": {},
+    "net6.0/win-x64": {}
   },
-  "libraries": {
-    "SCECSUtils/1.2.2": {
-      "sha512": "EHDX74mo0S4HtYka9F7H6cbozaZL+J4d8Dgnb8HwSxnrux1WouSRL+F5piSFfJp1l3+WiTeXvjYmCgXAjxhRog==",
-      "type": "package",
-      "path": "scecsutils/1.2.2",
-      "files": [
-        ".nupkg.metadata",
-        ".signature.p7s",
-        "LICENSE.txt",
-        "README.md",
-        "lib/net6.0/CSUtils.dll",
-        "scecsutils.1.2.2.nupkg.sha512",
-        "scecsutils.nuspec"
-      ]
-    }
-  },
+  "libraries": {},
   "projectFileDependencyGroups": {
-    "net6.0": [
-      "SCECSUtils >= 1.2.2"
-    ]
+    "net6.0": []
   },
   "packageFolders": {
     "C:\\Users\\redst\\.nuget\\packages\\": {},
     "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
   },
   "project": {
-    "version": "3.2.2",
+    "version": "3.3.2",
     "restore": {
       "projectUniqueName": "C:\\Users\\redst\\source\\repos\\TheSnowDoggo\\SCE.Core\\SCE.Core.csproj",
       "projectName": "SCECore",
@@ -90,12 +53,6 @@
     "frameworks": {
       "net6.0": {
         "targetAlias": "net6.0",
-        "dependencies": {
-          "SCECSUtils": {
-            "target": "Package",
-            "version": "[1.2.2, )"
-          }
-        },
         "imports": [
           "net461",
           "net462",

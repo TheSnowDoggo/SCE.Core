@@ -122,6 +122,27 @@ namespace SCE
             return new(this);
         }
 
+        #region Equality
+
+        public static bool ValueEquals<U>(Grid2DView<U> g1, Grid2DView<U> g2)
+            where U : IEquatable<U>
+        {
+            if (g1.Dimensions != g2.Dimensions)
+            {
+                return false;
+            }
+            foreach (var pos in g1)
+            {
+                if (!g1[pos].Equals(g2[pos]))
+                {
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        #endregion
+
         #region Clone
 
         /// <summary>

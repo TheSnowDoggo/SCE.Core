@@ -650,11 +650,6 @@
             Represents the default buffer size.
             </summary>
         </member>
-        <member name="P:SCE.CCSEngine.Instance">
-            <summary>
-            Gets the singleton instance of this class.
-            </summary>
-        </member>
         <member name="P:SCE.CCSEngine.DisplayBuffer">
             <summary>
             Gets or sets the side buffer required to prevent side jittering.
@@ -666,18 +661,8 @@
         <member name="M:SCE.CCSEngine.GetViewportDimensions">
             <inheritdoc/>
         </member>
-        <member name="P:SCE.CompatibilityEngine.Instance">
-            <summary>
-            Gets the singleton instance of this class.
-            </summary>
-        </member>
         <member name="M:SCE.CompatibilityEngine.Render(SCE.DisplayMapView)">
             <inheritdoc/>
-        </member>
-        <member name="P:SCE.DebugEngine.Instance">
-            <summary>
-            Gets the singleton instance of this class.
-            </summary>
         </member>
         <member name="M:SCE.DebugEngine.Render(SCE.DisplayMapView)">
             <inheritdoc/>

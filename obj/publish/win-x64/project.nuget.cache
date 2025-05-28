@@ -1,10 +1,9 @@
 {
   "version": 2,
-  "dgSpecHash": "XvNEvl4zA4I3WHTHMldswKVs+WgfF9zzn8fagb+nYhWcEMVagdQFHyWb0196iKaGo7uU60CWLNzQvy9zcdTLDA==",
+  "dgSpecHash": "RErNFY3jEU0oyHChHDq951+87ExF+KJZqMy9vPtZl2IKhs67Puz2oa6pvw83vQ+NWxlHutQizdU0M5FrP+kmCQ==",
   "success": true,
   "projectFilePath": "C:\\Users\\redst\\source\\repos\\TheSnowDoggo\\SCE.Core\\SCE.Core.csproj",
   "expectedPackageFiles": [
-    "C:\\Users\\redst\\.nuget\\packages\\scecsutils\\1.2.2\\scecsutils.1.2.2.nupkg.sha512",
     "C:\\Users\\redst\\.nuget\\packages\\microsoft.netcore.app.runtime.win-x64\\6.0.14\\microsoft.netcore.app.runtime.win-x64.6.0.14.nupkg.sha512",
     "C:\\Users\\redst\\.nuget\\packages\\microsoft.windowsdesktop.app.runtime.win-x64\\6.0.14\\microsoft.windowsdesktop.app.runtime.win-x64.6.0.14.nupkg.sha512",
     "C:\\Users\\redst\\.nuget\\packages\\microsoft.aspnetcore.app.runtime.win-x64\\6.0.14\\microsoft.aspnetcore.app.runtime.win-x64.6.0.14.nupkg.sha512"

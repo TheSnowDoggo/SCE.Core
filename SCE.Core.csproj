@@ -25,9 +25,13 @@
     <RepositoryUrl>https://github.com/TheSnowDoggo/SCE.Core</RepositoryUrl>
     <Company>SCE</Company>
     <PackageProjectUrl>https://github.com/TheSnowDoggo/SCE.Core</PackageProjectUrl>
-    <PackageReleaseNotes>Added flow tables, overlays and InputEntryV2.
-
-Also check out the useful Demo file in the source code!</PackageReleaseNotes>
+    <PackageReleaseNotes>-Modularised display engine
+-Added Console Emulator UI and some other UI elements
+-Changed Rect2D to Rect2DInt and added Rect2D (stores floats)
+-Swapped Rect2D Top to Bottom (Top is less than Bottom)
+-Added Grid2D rotation
+-Added DisplayMapView and Grid2DView for safer rendering
+-Other improvements</PackageReleaseNotes>
     <TargetFramework>net6.0</TargetFramework>
   </PropertyGroup>
 

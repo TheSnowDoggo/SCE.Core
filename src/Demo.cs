@@ -115,10 +115,9 @@ namespace SCE
                 IsActive = false,
             };
 
-            _fps = new(20, 1, SCEColor.White)
+            _fps = new(20, 1, SCEColor.Black)
             {
-                TextFgColor = SCEColor.Black,
-                TextBgColor = SCEColor.Transparent,
+                TextFgColor = SCEColor.Gray,
                 Anchor = Anchor.Right,
             };
 
@@ -165,7 +164,7 @@ namespace SCE
 
             _logger.Log("Welcome to the SCE Demo!");
             _logger.Log("Have a peek around at some of the many features.");
-
+            
             _ce.Write("helo wharas dasdas");
         }
 
@@ -188,10 +187,12 @@ namespace SCE
 
         private void SetupDisplay()
         {
-            Display.Instance.RenderEngine = CCSEngine.Instance;
+            DebugEngine.Instance.ShowSIFCodes = true;
+
+            Display.Instance.RenderEngine = BMEngine.Instance;
 
             // Adds the IRenderables to the display to render.
-            Display.Instance.Renderables.AddRange(new IRenderable[] { _fps, _fl, _loggerFl, _scl, _ce });
+            Display.Instance.Renderables.AddRange(new IRenderable[] { _fl, _loggerFl, _ce, _fps, _scl });
 
             Display.Instance.BasePixel = new(SCEColor.DarkCyan);
         }
