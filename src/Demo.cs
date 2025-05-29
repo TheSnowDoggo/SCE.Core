@@ -1,11 +1,70 @@
 ﻿using CSUtils;
-using InputSystem;
 using SCE.UIS;
+using System.Diagnostics;
 namespace SCE
 {
     internal class Demo
     {
         private static void Main()
+        {
+            Test2();
+        }
+
+        private static void Test2()
+        {
+            Console.WriteLine("Installing package...");
+
+            Display dp = new();
+
+            dp.SetupHere(Console.WindowWidth, 1);
+
+            int end = 50000000;
+
+            ProgressBar pb = new(50, 1)
+            {
+                Max = end,
+                BackFill = new(SCEColor.DarkGray),
+            };
+
+            TextBoxUI tb = new(4, 1)
+            {
+                TextFgColor = SCEColor.Green,
+                Offset = new(pb.Width, 0),
+            };
+
+            dp.Renderables.AddEvery(pb, tb);
+
+            dp.Update();
+
+            ++Console.CursorTop;
+
+            var sw = Stopwatch.StartNew();
+
+            for (int i = 0; i < end; ++i)
+            {
+                Utils.IsPrime(i);
+
+                if (sw.Elapsed.TotalSeconds > 0.1 || i == end - 1)
+                {
+                    var prog = (int)Math.Round(i / (float)end * 100.0f);
+
+                    pb.Value = i;
+                    tb.Text = $"{prog:00}%";
+
+                    dp.Update();
+
+                    sw.Restart();
+                }
+            }
+
+            dp.Renderables.Clear();
+
+            Console.WriteLine("Finished!");
+
+            Console.ReadLine();
+        }
+
+        private static void Test1()
         {
             InputHandler ih = new();
 

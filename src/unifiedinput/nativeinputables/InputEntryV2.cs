@@ -1,7 +1,6 @@
 ﻿using System.Text;
 using System.Collections;
-using SCE;
-namespace InputSystem
+namespace SCE
 {
     public class InputEntryV2 : IInputReceiver
     {

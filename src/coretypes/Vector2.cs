@@ -150,24 +150,24 @@
 
         #region OrInnequalities
 
-        public static bool OrLess(Vector2 v1, Vector2 v2)
+        public bool OrLess(Vector2 v)
         {
-            return v1.X < v2.X || v1.Y < v2.Y;
+            return X < v.X || Y < v.Y;
         }
 
-        public static bool OrGreater(Vector2 v1, Vector2 v2)
+        public bool OrGreater(Vector2 v)
         {
-            return v1.X > v2.X || v1.Y > v2.Y;
+            return X > v.X || Y > v.Y;
         }
 
-        public static bool OrLessEqual(Vector2 v1, Vector2 v2)
+        public bool OrLessEqual(Vector2 v)
         {
-            return v1.X <= v2.X || v1.Y <= v2.Y;
+            return X <= v.X || Y <= v.Y;
         }
 
-        public static bool OrGreaterEqual(Vector2 v1, Vector2 v2)
+        public bool OrGreaterEqual(Vector2 v)
         {
-            return v1.X >= v2.X || v1.Y >= v2.Y;
+            return X >= v.X || Y >= v.Y;
         }
 
         #endregion
@@ -268,6 +268,26 @@
         public bool InFullRange(float num)
         {
             return num >= X && num <= Y;
+        }
+
+        // Clamp
+        public Vector2 ClampMin(Vector2 min)
+        {
+            return new(X < min.X ? min.X : X, Y < min.Y ? min.Y : Y);
+        }
+
+        public Vector2 ClampMax(Vector2 max)
+        {
+            return new(X > max.X ? max.X : X, Y > max.Y ? max.Y : Y);
+        }
+
+        public Vector2 Clamp(Vector2 min, Vector2 max)
+        {
+            if (min > max)
+            {
+                throw new ArgumentException("Minimum was greater than the Maximum.");
+            }
+            return ClampMin(min).ClampMax(max);
         }
 
         #endregion

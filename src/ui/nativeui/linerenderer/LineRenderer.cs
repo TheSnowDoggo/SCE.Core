@@ -4,6 +4,8 @@ namespace SCE
 {
     public class LineRenderer : UIBaseExt
     {
+        private readonly HashSet<int> _updates = new();
+
         private readonly ArrayUpdateView<string?> textArrView;
 
         private readonly ArrayUpdateView<LineAttributes> attributeArrView;
@@ -32,8 +34,8 @@ namespace SCE
             textArr = new string?[height];
             attributeArr = new LineAttributes[height];
 
-            textArrView = new(textArr, () => renderQueued = true);
-            attributeArrView = new(attributeArr, () => renderQueued = true);
+            textArrView = new(textArr, i => _updates.Add(i));
+            attributeArrView = new(attributeArr, i => _updates.Add(i));
         }
 
         public LineRenderer(Vector2Int dimensions)
@@ -86,6 +88,7 @@ namespace SCE
             _dpMap.CleanResize(width, height);
             Array.Resize(ref textArr, height);
             Array.Resize(ref attributeArr, height);
+            _updates.Clear();
             renderQueued = true;
         }
 
@@ -96,47 +99,60 @@ namespace SCE
 
         public override DisplayMapView GetMapView()
         {
-            if (renderQueued)
+            if (renderQueued || _updates.Count > 0)
             {
-                for (int i = 0; i < Height; ++i)
+                if (renderQueued)
                 {
-                    var y = StackMode == StackType.TopDown ? i : Height - i - 1;
-
-                    if (textArr[i] is string text)
-                    {
-                        var fg = attributeArr[i].FgColor ?? textFgColor;
-
-                        var bg = attributeArr[i].BgColor ?? textBgColor;
-
-                        var anchor = attributeArr[i].Anchor ?? LineAnchor;
-
-                        var ftl = attributeArr[i].FitToLength ?? FitToLength;
-
-                        if (ftl)
-                        {
-                            text = Utils.FTL(text, Width, ' ', AnchorUtils.ToFillType(anchor));
-
-                            _dpMap.MapString(text, new Vector2Int(0, y), fg, bg);
-                        }
-                        else
-                        {
-                            text = Utils.Shorten(text, Width);
-                            var x = AnchorUtils.HorizontalFix(anchor, Width - text.Length);
-
-                            _dpMap.Fill(BasePixel, Rect2DInt.Horizontal(y, Width));
-                            _dpMap.MapString(text, new Vector2Int(x, y), fg, bg);
-                        }
-                    }
-                    else
-                    {
-                        _dpMap.Fill(BasePixel, Rect2DInt.Horizontal(y, Width));
-                    }
+                    Render(Enumerable.Range(0, Height));
+                    renderQueued = false;
+                }
+                else
+                {
+                    Render(_updates);
                 }
 
-                renderQueued = false;
+                _updates.Clear();
             }
 
             return (DisplayMapView)_dpMap;
+        }
+
+        private void Render(IEnumerable<int> range)
+        {
+            foreach (var i in range)
+            {
+                var y = StackMode == StackType.TopDown ? i : Height - i - 1;
+
+                if (textArr[i] is string text)
+                {
+                    var fg = attributeArr[i].FgColor ?? textFgColor;
+
+                    var bg = attributeArr[i].BgColor ?? textBgColor;
+
+                    var anchor = attributeArr[i].Anchor ?? LineAnchor;
+
+                    var ftl = attributeArr[i].FitToLength ?? FitToLength;
+
+                    if (ftl)
+                    {
+                        text = Utils.FTL(text, Width, ' ', AnchorUtils.ToFillType(anchor));
+
+                        _dpMap.MapString(text, new Vector2Int(0, y), fg, bg);
+                    }
+                    else
+                    {
+                        text = Utils.Shorten(text, Width);
+                        var x = AnchorUtils.HorizontalFix(anchor, Width - text.Length);
+
+                        _dpMap.Fill(BasePixel, Rect2DInt.Horizontal(y, Width));
+                        _dpMap.MapString(text, new Vector2Int(x, y), fg, bg);
+                    }
+                }
+                else
+                {
+                    _dpMap.Fill(BasePixel, Rect2DInt.Horizontal(y, Width));
+                }
+            }
         }
     }
 }

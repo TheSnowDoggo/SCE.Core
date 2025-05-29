@@ -19,11 +19,14 @@ namespace SCE
 
         private readonly Memoizer<int, string> spaceFillCache;
 
-        private CCSEngine()
+        public CCSEngine()
         {
             spaceFillCache = new(SpaceFill);
         }
 
+        /// <summary>
+        /// Gets the lazy instance of this class.
+        /// </summary>
         public static CCSEngine Instance { get => _lazy.Value; }
 
         /// <summary>
@@ -41,19 +44,18 @@ namespace SCE
             return set.ToArray();
         }
 
-        private static void Write(string[] strArr, ColorSet[] rInfoArr)
+        private static void Write(string[] strArr, ColorSet[] rInfoArr, Vector2Int start)
         {
             if (strArr.Length != rInfoArr.Length)
             {
                 throw new ArgumentException("Array lengths do not match.");
             }
 
-            Display.Instance.PreferedPosition.Deconstruct(out int left, out int top);
             for (int i = 0; i < strArr.Length; i++)
             {
                 try
                 {
-                    Console.SetCursorPosition(left, top);
+                    Console.SetCursorPosition(start.X, start.Y);
                     ColorUtils.SetConsoleColor(rInfoArr[i]);
                     Console.Write(strArr[i]);
                 }
@@ -117,11 +119,11 @@ namespace SCE
         }
 
         /// <inheritdoc/>
-        public override void Render(DisplayMapView dpMap)
+        public override void Render(DisplayMapView dpMap, Vector2Int start)
         {
             var rInfoArr = GetRenderInfo(dpMap);
             var strArr = BuildAll(dpMap, rInfoArr);
-            Write(strArr, rInfoArr);
+            Write(strArr, rInfoArr, start);
         }
 
         ///<inheritdoc/>

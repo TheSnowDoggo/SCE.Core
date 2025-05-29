@@ -5,6 +5,10 @@ namespace SCE
     {
         private bool renderQueued = true;
 
+        private bool valueQueued = false;
+
+        private int lastFill = -1;
+
         private float value;
 
         private float min;
@@ -30,19 +34,19 @@ namespace SCE
         public float Value
         {
             get => value;
-            set => MiscUtils.QueueSet(ref this.value, value, ref renderQueued);
+            set => MiscUtils.QueueSet(ref this.value, value, ref valueQueued);
         }
 
         public float Min
         {
             get => min;
-            set => MiscUtils.QueueSet(ref min, value, ref renderQueued);
+            set => MiscUtils.QueueSet(ref min, value, ref valueQueued);
         }
 
         public float Max
         {
             get => max;
-            set => MiscUtils.QueueSet(ref max, value, ref renderQueued);
+            set => MiscUtils.QueueSet(ref max, value, ref valueQueued);
         }
 
         public Pixel BackFill
@@ -76,7 +80,7 @@ namespace SCE
 
         public override DisplayMapView GetMapView()
         {
-            if (renderQueued)
+            if (renderQueued || valueQueued)
             {
                 float t = Utils.Delerp(Value, Min, Max);
 
@@ -84,24 +88,30 @@ namespace SCE
 
                 int fill = (int)MathF.Round(Utils.Lerp(0, h ? Width : Height, t));
 
-                if (h)
+                if (!valueQueued || fill != lastFill)
                 {
-                    for (int x = 0; x < Width; ++x)
+                    lastFill = fill;
+
+                    if (h)
                     {
-                        var prog = FlowMode == FlowType.LeftRight ? x < fill : x >= Width - fill;
-                        _dpMap.Fill(prog ? ProgressFill : BackFill, Rect2DInt.Vertical(x, Height));
+                        for (int x = 0; x < Width; ++x)
+                        {
+                            var prog = FlowMode == FlowType.LeftRight ? x < fill : x >= Width - fill;
+                            _dpMap.Fill(prog ? ProgressFill : BackFill, Rect2DInt.Vertical(x, Height));
+                        }
                     }
-                }
-                else
-                {
-                    for (int y = 0; y < Height; ++y)
+                    else
                     {
-                        var prog = FlowMode == FlowType.TopDown ? y < fill : y >= Height - fill;
-                        _dpMap.Fill(prog ? ProgressFill : BackFill, Rect2DInt.Horizontal(y, Width));
+                        for (int y = 0; y < Height; ++y)
+                        {
+                            var prog = FlowMode == FlowType.TopDown ? y < fill : y >= Height - fill;
+                            _dpMap.Fill(prog ? ProgressFill : BackFill, Rect2DInt.Horizontal(y, Width));
+                        }
                     }
                 }
 
                 renderQueued = false;
+                valueQueued = false;
             }
 
             return (DisplayMapView)_dpMap;

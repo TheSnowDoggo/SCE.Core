@@ -5,9 +5,9 @@ namespace SCE
     {
         private readonly T[] _data;
 
-        private readonly Action _onUpdate;
+        private readonly Action<int> _onUpdate;
 
-        public ArrayUpdateView(T[] data, Action onUpdate)
+        public ArrayUpdateView(T[] data, Action<int> onUpdate)
         {
             _data = data;
             _onUpdate = onUpdate;
@@ -22,7 +22,7 @@ namespace SCE
             {
                 if (MiscUtils.QueueSet(ref _data[index], value))
                 {
-                    _onUpdate.Invoke();
+                    _onUpdate.Invoke(index);
                 }
             }
         }

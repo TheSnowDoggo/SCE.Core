@@ -3,6 +3,8 @@ namespace SCE
 {
     public class VerticalSelector : UIBaseExt
     {
+        private readonly HashSet<int> _updates = new();
+
         private Selection[] selections;
 
         private bool renderQueued = true;
@@ -37,7 +39,13 @@ namespace SCE
         public Selection this[int index]
         {
             get => selections[index];
-            set => MiscUtils.QueueSet(ref selections[index], value, ref renderQueued);
+            set
+            {
+                if (MiscUtils.QueueSet(ref selections[index], value))
+                {
+                    _updates.Add(index);
+                }
+            }
         }
 
         public int Selected
@@ -107,6 +115,7 @@ namespace SCE
         {
             _dpMap.CleanResize(width, height);
             Array.Resize(ref selections, height);
+            _updates.Clear();
             renderQueued = true;
         }
 
@@ -117,56 +126,70 @@ namespace SCE
 
         public override DisplayMapView GetMapView()
         {
-            if (renderQueued)
+            if (renderQueued || _updates.Count > 0)
             {
-                for (int y = 0; y < Height; ++y)
+                if (renderQueued)
                 {
-                    var mapY = StackMode == StackType.TopDown ? y : Height - y - 1;
+                    Render(Enumerable.Range(0, Height));
 
-                    if (selections[y] is Selection s)
-                    {
-                        ColorSet colors;
-                        if (selected == y)
-                        {
-                            s.OnHover?.Invoke();
-                            colors = s.SelectedColors ?? SelectedColors;
-                        }
-                        else
-                        {
-                            colors = s.UnselectedColors ?? UnselectedColors;
-                        }
-
-                        var anchor = s.Anchor ?? SelectionAnchor;
-
-                        var ftl = s.FitToLength ?? FitToLength;
-
-                        if (ftl)
-                        {
-                            var text = Utils.FTL(s.Text, Width, ' ', AnchorUtils.ToFillType(anchor));
-                            
-                            _dpMap.MapString(text, new Vector2Int(0, mapY), colors);
-                        }
-                        else
-                        {
-                            var text = Utils.Shorten(s.Text, Width);
-                            var x = AnchorUtils.HorizontalFix(anchor, Width - text.Length);
-
-                            _dpMap.Fill(BasePixel, Rect2DInt.Horizontal(mapY, Width));
-                            _dpMap.MapString(text, new Vector2Int(x, mapY), colors);
-                        }
-                    }
-                    else
-                    {
-                        Pixel p = !AllowNullSelection ? BasePixel : new(selected == y ? SelectedColors : UnselectedColors);
-
-                        _dpMap.Fill(p, Rect2DInt.Horizontal(mapY, Width));
-                    }
+                    renderQueued = false;
+                }
+                else
+                {
+                    Render(_updates);
                 }
 
-                renderQueued = false;
+                _updates.Clear();
             }
 
             return (DisplayMapView)_dpMap;
+        }
+
+        private void Render(IEnumerable<int> range)
+        {
+            foreach (var i in range)
+            {
+                var y = StackMode == StackType.TopDown ? i : Height - i - 1;
+
+                if (selections[i] is Selection s)
+                {
+                    ColorSet colors;
+                    if (selected == i)
+                    {
+                        s.OnHover?.Invoke();
+                        colors = s.SelectedColors ?? SelectedColors;
+                    }
+                    else
+                    {
+                        colors = s.UnselectedColors ?? UnselectedColors;
+                    }
+
+                    var anchor = s.Anchor ?? SelectionAnchor;
+
+                    var ftl = s.FitToLength ?? FitToLength;
+
+                    if (ftl)
+                    {
+                        var text = Utils.FTL(s.Text, Width, ' ', AnchorUtils.ToFillType(anchor));
+
+                        _dpMap.MapString(text, new Vector2Int(0, y), colors);
+                    }
+                    else
+                    {
+                        var text = Utils.Shorten(s.Text, Width);
+                        var x = AnchorUtils.HorizontalFix(anchor, Width - text.Length);
+
+                        _dpMap.Fill(BasePixel, Rect2DInt.Horizontal(y, Width));
+                        _dpMap.MapString(text, new Vector2Int(x, y), colors);
+                    }
+                }
+                else
+                {
+                    Pixel p = !AllowNullSelection ? BasePixel : new(selected == i ? SelectedColors : UnselectedColors);
+
+                    _dpMap.Fill(p, Rect2DInt.Horizontal(y, Width));
+                }
+            }
         }
     }
 }

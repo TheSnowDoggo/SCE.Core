@@ -6,10 +6,13 @@ namespace SCE
     {
         private static readonly Lazy<DebugEngine> _lazy = new(() => new());
 
-        private DebugEngine()
+        public DebugEngine()
         {
         }
 
+        /// <summary>
+        /// Gets the lazy instance of this class.
+        /// </summary>
         public static DebugEngine Instance { get => _lazy.Value; }
 
         public SCEColor FgColor { get; set; } = SCEColor.Gray;
@@ -46,12 +49,11 @@ namespace SCE
         }
 
         /// <inheritdoc/>
-        public override void Render(DisplayMapView dpMap)
+        public override void Render(DisplayMapView dpMap, Vector2Int start)
         {
             ColorUtils.SetConsoleColor(FgColor, BgColor);
 
-            Display.Instance.PreferedPosition.Deconstruct(out int left, out int top);
-            Console.SetCursorPosition(left, top);
+            Console.SetCursorPosition(start.X, start.Y);
 
             Console.Write(DebugBuild(dpMap));
 

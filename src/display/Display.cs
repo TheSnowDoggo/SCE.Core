@@ -12,29 +12,35 @@
             RenderEngine,
         }
 
+        private const ResizeType DEF_RESIZE_TYPE = ResizeType.RenderEngine;
+
+        private const bool DEF_RERENDER_CULLING = true;
+
         private static readonly Lazy<Display> _lazy = new(() => new());
+
+        private static readonly RenderEngine _defaultEngine = BMEngine.Instance;
 
         private readonly Viewport viewport = new(Vector2Int.Zero)
         {
             Transparency = true,
         };
 
-        private RenderEngine? renderEngine = BMEngine.Instance;
+        private RenderEngine? renderEngine = _defaultEngine;
 
         private DisplayMap? last;
 
         private bool skipCull = false;
 
-        private Vector2Int preferedPosition;
+        private Vector2Int startPosition;
 
         private Vector2Int lastWindowDimensions;
 
-        private Display()
+        public Display()
         {
         }
 
         /// <summary>
-        /// Gets the singleton instance of this class.
+        /// Gets the lazy instance of this class.
         /// </summary>
         public static Display Instance { get => _lazy.Value; }
 
@@ -54,7 +60,7 @@
         /// <summary>
         /// Gets or sets the resizing mode.
         /// </summary>
-        public ResizeType ResizeMode { get; set; } = ResizeType.RenderEngine;
+        public ResizeType ResizeMode { get; set; } = DEF_RESIZE_TYPE;
 
         /// <summary>
         /// Gets or sets the custom viewport dimensions.
@@ -64,15 +70,22 @@
         /// <summary>
         /// Gets or sets a value representing whether the Display should only update when the rendered viewport has changed.
         /// </summary>
-        public bool RerenderCulling { get; set; } = true;
+        public bool RerenderCulling { get; set; } = DEF_RERENDER_CULLING;
 
         /// <summary>
         /// Gets or sets the prefered start position to render at.
         /// </summary>
-        public Vector2Int PreferedPosition
+        public Vector2Int StartPosition
         {
-            get => preferedPosition;
-            set => MiscUtils.QueueSet(ref preferedPosition, value, ref skipCull);
+            get => startPosition;
+            set
+            {
+                if (value.OrLess(Vector2Int.Zero))
+                {
+                    throw new ArgumentException("Start position cannot be less than zero.");
+                }
+                MiscUtils.QueueSet(ref startPosition, value, ref skipCull);
+            }
         }
 
         public Action<Vector2Int>? OnWindowResize;
@@ -127,6 +140,11 @@
             return new(Console.WindowWidth, Console.WindowHeight);
         }
 
+        public static Vector2Int CursorPos()
+        {
+            return new(Console.CursorLeft, Console.CursorTop);
+        }
+
         /// <inheritdoc/>
         public override void Start()
         {
@@ -142,13 +160,13 @@
                 return;
             }
 
+            TryResize();
+
             var dpMap = viewport.GetMapView();
 
             UpdateCull(dpMap);
 
-            RenderEngine?.Render(dpMap);
-
-            TryResize();
+            RenderEngine?.Render(dpMap, StartPosition);    
         }
 
         private void UpdateCull(DisplayMapView dpMap)
@@ -178,7 +196,7 @@
             skipCull = true;
         }
 
-        private bool TryResize()
+        public bool TryResize()
         {
             var windowDimensions = WindowDimensions();
 
@@ -206,6 +224,18 @@
             OnDisplayResize?.Invoke();
 
             return true;
+        }
+
+        public void SetupHere(Vector2Int dimensions)
+        {
+            StartPosition = CursorPos();
+            ResizeMode = ResizeType.Custom;
+            CustomDimensions = dimensions;
+        }
+
+        public void SetupHere(int width, int height)
+        {
+            SetupHere(new Vector2Int(width, height));
         }
     }
 }

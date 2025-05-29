@@ -3,14 +3,17 @@
     /// <summary>
     /// Super fast windows color rendering by directly manipulating the console buffer.
     /// </summary>
-    public class BMEngine : RenderEngine
+    public sealed class BMEngine : RenderEngine
     {
         private static readonly Lazy<BMEngine> _lazy = new(() => new());
 
-        private BMEngine()
+        public BMEngine()
         {
         }
 
+        /// <summary>
+        /// Gets the lazy instance of this class.
+        /// </summary>
         public static BMEngine Instance { get => _lazy.Value; }
 
         private static short ToAttributes(ConsoleColor fg, ConsoleColor bg)
@@ -18,7 +21,7 @@
             return (short)((int)fg | ((int)bg << 4));
         }
 
-        public override void Render(DisplayMapView dpMap)
+        public override void Render(DisplayMapView dpMap, Vector2Int start)
         {
             var arr = new CharInfo[dpMap.Size()];
 
@@ -28,14 +31,12 @@
                 Y = (short)dpMap.Height,
             };
 
-            Display.Instance.PreferedPosition.Deconstruct(out int left, out int top);
-
             SmallRect rect = new()
             {
-                Left   = (short)left,
-                Top    = (short)top,
-                Right  = (short)(size.X + left),
-                Bottom = (short)(size.Y + top),
+                Left   = (short)start.X,
+                Top    = (short)start.Y,
+                Right  = (short)(size.X + start.X),
+                Bottom = (short)(size.Y + start.Y),
             };
 
             int i = 0;
