@@ -555,6 +555,11 @@ namespace SCE
         /// <param name="height">The new height of the grid.</param>
         public void CleanResize(int width, int height)
         {
+            if (width < 0 || height < 0)
+            {
+                throw new ArgumentException("Dimensions cannot be less than 0.");
+            }
+
             data = new T[width, height];
             OnResize?.Invoke();
         }
@@ -575,6 +580,11 @@ namespace SCE
         /// <param name="height">The new height of the grid.</param>
         public void MapResize(int width, int height)
         {
+            if (width < 0 || height < 0)
+            {
+                throw new ArgumentException("Dimensions cannot be less than 0.");
+            }
+
             var transferGrid = new Grid2D<T>(width, height);
 
             var thisArea = GridArea();

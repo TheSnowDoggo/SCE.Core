@@ -6,7 +6,7 @@ namespace SCE
         public const int DEFAULT_BUFFERHEIGHT = 9001;
         public const int DEFAULT_BUFFERWIDTH = 200;
 
-        private readonly LoopStack<Pixel[]> _ls;
+        private readonly LoopStack<Pixel[]?> _ls;
 
         private Vector2Int cursorPos;
 
@@ -90,15 +90,28 @@ namespace SCE
 
         public int TabSize { get; set; } = 8;
 
-        public Pixel[] this[int y]
+        public Pixel[]? this[int y]
         {
-            get => _ls[y];
+            get
+            {
+                var arr = _ls[y];
+                if (arr != null && arr.Length != BufferWidth)
+                {
+                    Array.Resize(ref arr, BufferWidth);
+                }
+                return arr;
+            }
             set
             {
+                if (value != null && value.Length != BufferWidth)
+                {
+                    throw new ArgumentException("Array must match buffer width.");
+                }
                 _ls[y] = value;
-                renderQueued = true;
             }
         }
+
+        #region Write
 
         private void ShiftCursor(int move)
         {
@@ -126,12 +139,7 @@ namespace SCE
 
         private Pixel[] CurrentLine()
         {
-            var arr = _ls[CursorPos.Y] ??= new Pixel[BufferWidth];
-            if (arr.Length != BufferWidth)
-            {
-                Array.Resize(ref arr, BufferWidth);
-            }
-            return arr;
+            return this[CursorPos.Y] ??= new Pixel[BufferWidth];
         }
 
         public void Write(char c)
@@ -199,12 +207,7 @@ namespace SCE
             Newline();
         }
 
-        public void Clear()
-        {
-            _ls.CleanResize(BufferHeight);
-            Scroll = 0;
-            renderQueued = true;
-        }
+        #endregion
 
         public void Resize(int width, int height)
         {
@@ -221,6 +224,13 @@ namespace SCE
             Resize(dimensions.X, dimensions.Y);
         }
 
+        public void Clear()
+        {
+            _ls.CleanResize(BufferHeight);
+            Scroll = 0;
+            renderQueued = true;
+        }
+
         public override DisplayMapView GetMapView()
         {
             if (renderQueued)
@@ -230,9 +240,9 @@ namespace SCE
                     var area = Rect2DInt.Horizontal(y, _dpMap.Width);
 
                     var index = y + Scroll;
-                    if (index < BufferHeight && _ls[index] != null)
+                    var arr = this[index];
+                    if (index < BufferHeight && arr != null)
                     {
-                        var arr = _ls[index];
                         _dpMap.Fill(pos => arr[pos.X], area);
                     }
                     else
