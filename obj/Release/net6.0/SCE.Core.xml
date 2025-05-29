@@ -581,7 +581,7 @@
         </member>
         <member name="P:SCE.Display.Instance">
             <summary>
-            Gets the singleton instance of this class.
+            Gets the lazy instance of this class.
             </summary>
         </member>
         <member name="P:SCE.Display.RenderEngine">
@@ -604,7 +604,7 @@
             Gets or sets a value representing whether the Display should only update when the rendered viewport has changed.
             </summary>
         </member>
-        <member name="P:SCE.Display.PreferedPosition">
+        <member name="P:SCE.Display.StartPosition">
             <summary>
             Gets or sets the prefered start position to render at.
             </summary>
@@ -655,9 +655,19 @@
             Super fast windows color rendering by directly manipulating the console buffer.
             </summary>
         </member>
+        <member name="P:SCE.BMEngine.Instance">
+            <summary>
+            Gets the lazy instance of this class.
+            </summary>
+        </member>
         <member name="F:SCE.CCSEngine.DEFAULT_BUFFER_SIZE">
             <summary>
             Represents the default buffer size.
+            </summary>
+        </member>
+        <member name="P:SCE.CCSEngine.Instance">
+            <summary>
+            Gets the lazy instance of this class.
             </summary>
         </member>
         <member name="P:SCE.CCSEngine.DisplayBuffer">
@@ -665,16 +675,26 @@
             Gets or sets the side buffer required to prevent side jittering.
             </summary>
         </member>
-        <member name="M:SCE.CCSEngine.Render(SCE.DisplayMapView)">
+        <member name="M:SCE.CCSEngine.Render(SCE.DisplayMapView,SCE.Vector2Int)">
             <inheritdoc/>
         </member>
         <member name="M:SCE.CCSEngine.GetViewportDimensions">
             <inheritdoc/>
         </member>
-        <member name="M:SCE.CompatibilityEngine.Render(SCE.DisplayMapView)">
+        <member name="P:SCE.CompatibilityEngine.Instance">
+            <summary>
+            Gets the lazy instance of this class.
+            </summary>
+        </member>
+        <member name="M:SCE.CompatibilityEngine.Render(SCE.DisplayMapView,SCE.Vector2Int)">
             <inheritdoc/>
         </member>
-        <member name="M:SCE.DebugEngine.Render(SCE.DisplayMapView)">
+        <member name="P:SCE.DebugEngine.Instance">
+            <summary>
+            Gets the lazy instance of this class.
+            </summary>
+        </member>
+        <member name="M:SCE.DebugEngine.Render(SCE.DisplayMapView,SCE.Vector2Int)">
             <inheritdoc/>
         </member>
         <member name="T:SCE.RenderEngine">
@@ -682,7 +702,7 @@
             Abstract base class for custom render engines.
             </summary>
         </member>
-        <member name="M:SCE.RenderEngine.Render(SCE.DisplayMapView)">
+        <member name="M:SCE.RenderEngine.Render(SCE.DisplayMapView,SCE.Vector2Int)">
             <summary>
             Renders the built DisplayMap.
             </summary>
@@ -911,6 +931,14 @@
         <member name="M:SCE.Viewport.GetMapView">
             <inheritdoc/>
         </member>
+        <member name="T:SCE.InputEntry">
+            <summary>
+            Superceded by InputEntryV2
+            </summary>
+        </member>
+        <member name="M:SCE.InputEntryV2.LoadKeyInfo(SCE.UISKeyInfo)">
+            <inheritdoc/>
+        </member>
         <member name="T:SCE.InputHandler">
             <summary>
             A legacy class for getting and handling inputs stored in <see cref="T:SCE.InputLayer"/>.
@@ -971,9 +999,6 @@
             <summary>
             Sets the Console Foreground and Background color.
             </summary>
-        </member>
-        <member name="M:InputSystem.InputEntryV2.LoadKeyInfo(SCE.UISKeyInfo)">
-            <inheritdoc/>
         </member>
     </members>
 </doc>

@@ -8,7 +8,7 @@
     <PackageId>SCECore</PackageId>
     <Title>SCE.Core</Title>
 	<AssemblyName>SCE.Core</AssemblyName>
-    <Version>3.9.6</Version>
+    <Version>3.9.7</Version>
 	<VersionSuffix>Release</VersionSuffix>
     <Authors>Luna Sparkle</Authors>
     <Product>SCE.Core</Product>

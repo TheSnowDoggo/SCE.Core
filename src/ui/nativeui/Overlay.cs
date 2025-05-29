@@ -17,7 +17,7 @@
         {
             var dpMap = Renderable.GetMapView().ToDisplayMap();
 
-            if (Map != null)
+            if (Map != null && Map.IsActive)
             {
                 var overMap = Map.GetMapView();
 
