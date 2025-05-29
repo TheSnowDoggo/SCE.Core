@@ -7,7 +7,7 @@
     {
         private const char VectorStringSplitChar = ',';
 
-        private static readonly Random rand = new();
+        private static readonly Random _rand = new();
 
         public int X;
 
@@ -41,93 +41,13 @@
 
         #endregion
 
-        #region Properties
+        #region Property
 
         public Vector2Int Inverse() => new(Y, X);
 
         public int ScalarProduct() => X * Y;
 
         public Vector2Int Midpoint() => (new Vector2Int(X, Y) - 1) / 2;
-
-        #endregion
-
-        #region Operators
-
-        #region Conversion
-
-        public static implicit operator Vector2(Vector2Int v) => v.ToVector2();
-
-        #endregion
-
-        #region Equality
-
-        public static bool operator ==(Vector2Int v1, Vector2Int v2) => v1.Equals(v2);
-
-        public static bool operator !=(Vector2Int v1, Vector2Int v2) => !(v1 == v2);
-
-        #endregion
-
-        #region Innequality
-
-        // Greater than
-        public static bool operator >(Vector2Int v1, Vector2Int v2) => v1.X > v2.X && v1.Y > v2.Y;
-
-        public static bool operator >(Vector2Int v1, int num) => v1.X > num && v1.Y > num;
-
-        // Less than
-        public static bool operator <(Vector2Int v1, Vector2Int v2) => v2 > v1;
-
-        public static bool operator <(Vector2Int v1, int num) => v1.X < num && v1.Y < num;
-
-        // Greater or equal than
-        public static bool operator >=(Vector2Int v1, Vector2Int v2) => !(v1 < v2);
-
-        public static bool operator >=(Vector2Int v1, int num) => !(v1 < num);
-
-        // Less or equal than
-        public static bool operator <=(Vector2Int v1, Vector2Int v2) => !(v1 > v2);
-
-        public static bool operator <=(Vector2Int v1, int num) => !(v1 > num);
-
-        #endregion
-
-        #region Addition
-
-        // Addition
-        public static Vector2Int operator +(Vector2Int v1, Vector2Int v2) => new(v1.X + v2.X, v1.Y + v2.Y);
-
-        public static Vector2Int operator +(Vector2Int v1, int num) => new(v1.X + num, v1.Y + num);
-
-        #endregion
-
-        #region Subtraction
-
-        // Subtraction
-        public static Vector2Int operator -(Vector2Int v1) => new(-v1.X, -v1.Y);
-
-        public static Vector2Int operator -(Vector2Int v1, Vector2Int v2) => new(v1.X - v2.X, v1.Y - v2.Y);
-
-        public static Vector2Int operator -(Vector2Int v1, int num) => new(v1.X - num, v1.Y - num);
-
-        #endregion
-
-        #region Multiplication
-
-        // Multiplication
-        public static Vector2Int operator *(Vector2Int v1, Vector2Int v2) => new(v1.X * v2.X, v1.Y * v2.Y);
-
-        public static Vector2Int operator *(Vector2Int v1, int num) => new(v1.X * num, v1.Y * num);
-
-        #endregion
-
-        #region Division
-
-        // Division
-        public static Vector2Int operator /(Vector2Int v1, Vector2Int v2) => new(v1.X / v2.X, v1.Y / v2.Y);
-
-        public static Vector2Int operator /(Vector2Int v1, int num) => new(v1.X / num, v1.Y / num);
-
-        #endregion
 
         #endregion
 
@@ -150,12 +70,56 @@
 
         #endregion
 
-        #region ToString
+        #region Operators
 
-        public override string ToString()
-        {
-            return $"{X},{Y}";
-        }
+        public static implicit operator Vector2(Vector2Int v) => v.ToVector2();
+
+        // Equality
+        public static bool operator ==(Vector2Int v1, Vector2Int v2) => v1.Equals(v2);
+
+        public static bool operator !=(Vector2Int v1, Vector2Int v2) => !(v1 == v2);
+
+        // Greater than
+        public static bool operator >(Vector2Int v1, Vector2Int v2) => v1.X > v2.X && v1.Y > v2.Y;
+
+        public static bool operator >(Vector2Int v1, int num) => v1.X > num && v1.Y > num;
+
+        // Less than
+        public static bool operator <(Vector2Int v1, Vector2Int v2) => v2 > v1;
+
+        public static bool operator <(Vector2Int v1, int num) => v1.X < num && v1.Y < num;
+
+        // Greater or equal than
+        public static bool operator >=(Vector2Int v1, Vector2Int v2) => !(v1 < v2);
+
+        public static bool operator >=(Vector2Int v1, int num) => !(v1 < num);
+
+        // Less or equal than
+        public static bool operator <=(Vector2Int v1, Vector2Int v2) => !(v1 > v2);
+
+        public static bool operator <=(Vector2Int v1, int num) => !(v1 > num);
+
+        // Addition
+        public static Vector2Int operator +(Vector2Int v1, Vector2Int v2) => new(v1.X + v2.X, v1.Y + v2.Y);
+
+        public static Vector2Int operator +(Vector2Int v1, int num) => new(v1.X + num, v1.Y + num);
+
+        // Subtraction
+        public static Vector2Int operator -(Vector2Int v1) => new(-v1.X, -v1.Y);
+
+        public static Vector2Int operator -(Vector2Int v1, Vector2Int v2) => new(v1.X - v2.X, v1.Y - v2.Y);
+
+        public static Vector2Int operator -(Vector2Int v1, int num) => new(v1.X - num, v1.Y - num);
+
+        // Multiplication
+        public static Vector2Int operator *(Vector2Int v1, Vector2Int v2) => new(v1.X * v2.X, v1.Y * v2.Y);
+
+        public static Vector2Int operator *(Vector2Int v1, int num) => new(v1.X * num, v1.Y * num);
+
+        // Division
+        public static Vector2Int operator /(Vector2Int v1, Vector2Int v2) => new(v1.X / v2.X, v1.Y / v2.Y);
+
+        public static Vector2Int operator /(Vector2Int v1, int num) => new(v1.X / num, v1.Y / num);
 
         #endregion
 
@@ -216,7 +180,53 @@
 
         #endregion
 
-        #region Random
+        #region Utility
+
+        public Vector2 ToVector2()
+        {
+            return new(X, Y);
+        }
+
+        public void Deconstruct(out int x, out int y)
+        {
+            x = X;
+            y = Y;
+        }
+
+        public static Vector2Int Min(Vector2Int v1, Vector2Int v2)
+        {
+            return v1 <= v2 ? v1 : v2;
+        }
+
+        public static Vector2Int Max(Vector2Int v1, Vector2Int v2)
+        {
+            return v1 >= v2 ? v1 : v2;
+        }
+
+        public Vector2Int Abs()
+        {
+            return new(Math.Abs(X), Math.Abs(Y));
+        }
+
+        public bool InRange(Vector2Int min, Vector2Int max)
+        {
+            return this >= min && this < max;
+        }
+
+        public bool InRange(int num)
+        {
+            return num >= X && num < Y;
+        }
+
+        public bool InFullRange(Vector2Int min, Vector2Int max)
+        {
+            return this >= min && this <= max;
+        }
+
+        public bool InFullRange(int num)
+        {
+            return num >= X && num <= Y;
+        }
 
         /// <summary>
         /// Returns a random vector from the specified min and max vectors.
@@ -226,7 +236,7 @@
         /// <returns>A random vector from the specified min and max vectors.</returns>
         public static Vector2Int Rand(Vector2Int min, Vector2Int max)
         {
-            return new(rand.Next(min.X, max.X), rand.Next(min.Y, max.Y));
+            return new(_rand.Next(min.X, max.X), _rand.Next(min.Y, max.Y));
         }
 
         /// <summary>
@@ -252,66 +262,9 @@
 
         #endregion
 
-        #region Deconstruct
-
-        public void Deconstruct(out int x, out int y)
+        public override string ToString()
         {
-            x = X;
-            y = Y;
+            return $"{X},{Y}";
         }
-
-        #endregion
-
-        #region Conversion
-
-        public Vector2 ToVector2()
-        {
-            return new(X, Y);
-        }
-
-        #endregion
-
-        #region Math
-
-        public static Vector2Int Min(Vector2Int v1, Vector2Int v2)
-        {
-            return v1 <= v2 ? v1 : v2;
-        }
-
-        public static Vector2Int Max(Vector2Int v1, Vector2Int v2)
-        {
-            return v1 >= v2 ? v1 : v2;
-        }
-
-        public Vector2Int Abs()
-        {
-            return new(Math.Abs(X), Math.Abs(Y));
-        }
-
-        #endregion
-
-        #region InRange
-
-        public bool InRange(Vector2Int min, Vector2Int max)
-        {
-            return this >= min && this < max;
-        }
-
-        public bool InRange(int num)
-        {
-            return num >= X && num < Y;
-        }
-
-        public bool InFullRange(Vector2Int min, Vector2Int max)
-        {
-            return this >= min && this <= max;
-        }
-
-        public bool InFullRange(int num)
-        {
-            return num >= X && num <= Y;
-        }
-
-        #endregion
     }
 }

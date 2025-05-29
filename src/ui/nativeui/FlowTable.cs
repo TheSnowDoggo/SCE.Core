@@ -1,17 +1,14 @@
 ﻿namespace SCE
 {
-    internal class FlowTable : UIBaseExtR
+    internal class FlowTable : UIBaseExt
     {
-        private const SCEColor DEFAULT_BGCOLOR = SCEColor.Black;
-
-        public FlowTable(int width, int height, SCEColor? bgColor = null)
-            : base(width, height, bgColor)
+        public FlowTable(int width, int height)
+            : base(width, height)
         {
-            BasePixel = new(bgColor ?? DEFAULT_BGCOLOR);
         }
 
-        public FlowTable(Vector2Int dimensions, SCEColor? bgColor = null)
-            : this(dimensions.X, dimensions.Y, bgColor)
+        public FlowTable(Vector2Int dimensions)
+            : this(dimensions.X, dimensions.Y)
         {
         }
 
@@ -19,17 +16,20 @@
 
         public bool ClearOnRender { get; set; } = true;
 
-        public bool CropOutOfBounds { get; set; } = true;
-
-        public bool Transparency { get; set; } = true;
+        public bool Transparency { get; set; } = false;
 
         public FlowType FlowMode { get; set; } = FlowType.TopDown;
 
         public List<IRenderable> Renderables { get; } = new();
 
-        protected virtual void Render()
+        public void Resize(int width, int height)
         {
-            
+            _dpMap.CleanResize(width, height);
+        }
+
+        public void Resize(Vector2Int dimensions)
+        {
+            Resize(dimensions.X, dimensions.Y);
         }
 
         /// <inheritdoc/>
@@ -53,40 +53,38 @@
                 Vector2Int off = FlowMode switch
                 {
                     FlowType.TopDown => new(0, i),
-                    FlowType.BottomUp => new(0, Height - i - dpMap.Height),
+                    FlowType.BottomTop => new(0, Height - i - dpMap.Height),
                     FlowType.LeftRight => new(i, 0),
                     FlowType.RightLeft => new(Width - i - dpMap.Width, 0),
                     _ => throw new NotImplementedException()
                 };
 
-                Vector2Int aRange = FlowMode is FlowType.TopDown or FlowType.BottomUp ? new(Width, dpMap.Height) :
-                    new(dpMap.Width, Height);
+                var h = FlowMode is FlowType.TopDown or FlowType.BottomTop;
+
+                Vector2Int aRange = h ? new(Width, dpMap.Height) : new(dpMap.Width, Height);
 
                 var pos = AnchorUtils.AnchorTo(r.Anchor, aRange, dpMap.Dimensions) + r.Offset + off;
 
-                if (!CropOutOfBounds || _dpMap.GridArea().Overlaps(pos, dpMap.Dimensions + pos))
+                if (Transparency)
                 {
-                    if (Transparency)
-                    {
-                        _dpMap.PMapTo(dpMap, pos);
-                    }
-                    else
-                    {
-                        _dpMap.MapTo(dpMap, pos);
-                    }
+                    _dpMap.PMapTo(dpMap, pos);
+                }
+                else
+                {
+                    _dpMap.MapTo(dpMap, pos);
+                }
 
-                    int nextI = FlowMode switch
-                    {
-                        FlowType.TopDown => pos.Y + dpMap.Height,
-                        FlowType.BottomUp => Height - pos.Y,
-                        FlowType.LeftRight => pos.X + dpMap.Width,
-                        FlowType.RightLeft => Width - pos.X,
-                        _ => throw new NotImplementedException()
-                    };
-                    if (nextI > i)
-                    {
-                        i = nextI;
-                    }
+                int nextI = FlowMode switch
+                {
+                    FlowType.TopDown => pos.Y + dpMap.Height,
+                    FlowType.BottomTop => Height - pos.Y,
+                    FlowType.LeftRight => pos.X + dpMap.Width,
+                    FlowType.RightLeft => Width - pos.X,
+                    _ => throw new NotImplementedException()
+                };
+                if (nextI > i)
+                {
+                    i = nextI;
                 }
             }
 

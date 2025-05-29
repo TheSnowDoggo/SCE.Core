@@ -49,7 +49,10 @@ namespace SCE
         public override void Render(DisplayMapView dpMap)
         {
             ColorUtils.SetConsoleColor(FgColor, BgColor);
-            Console.SetCursorPosition(0, 0);
+
+            Display.Instance.PreferedPosition.Deconstruct(out int left, out int top);
+            Console.SetCursorPosition(left, top);
+
             Console.Write(DebugBuild(dpMap));
 
             Console.ResetColor();

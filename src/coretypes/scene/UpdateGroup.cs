@@ -29,8 +29,12 @@
         public void Update()
         {
             foreach (var update in this)
+            {
                 if (update.IsActive)
+                {
                     update.Update();
+                }
+            }
         }
     }
 }

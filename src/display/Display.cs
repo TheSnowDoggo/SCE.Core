@@ -14,13 +14,20 @@
 
         private static readonly Lazy<Display> _lazy = new(() => new());
 
-        private readonly Viewport viewport = new(ConsoleWindowDimensions());
+        private readonly Viewport viewport = new(Vector2Int.Zero)
+        {
+            Transparency = true,
+        };
 
         private RenderEngine? renderEngine = BMEngine.Instance;
 
         private DisplayMap? last;
 
         private bool skipCull = false;
+
+        private Vector2Int preferedPosition;
+
+        private Vector2Int lastWindowDimensions;
 
         private Display()
         {
@@ -56,9 +63,27 @@
         /// <summary>
         /// Gets or sets the custom viewport dimensions.
         /// </summary>
-        public Vector2Int CustomDimensions { get; set; } = ConsoleWindowDimensions();
+        public Vector2Int CustomDimensions { get; set; }
 
+        /// <summary>
+        /// Gets or sets a value representing whether the Display should only update when the rendered viewport has changed.
+        /// </summary>
         public bool RerenderCulling { get; set; } = true;
+
+        /// <summary>
+        /// Gets or sets the prefered start position to render at.
+        /// </summary>
+        public Vector2Int PreferedPosition
+        {
+            get => preferedPosition;
+            set
+            {
+                preferedPosition = value;
+                skipCull = true;
+            }
+        }
+
+        public Action<Vector2Int>? OnWindowResize;
 
         #region Properties
 
@@ -96,32 +121,19 @@
         }
 
         /// <summary>
-        /// Gets or sets a value representing whether out of bounds renderables should be ignored.
-        /// </summary>
-        public bool CropOutOfBounds
-        {
-            get => viewport.CropOutOfBounds;
-            set => viewport.CropOutOfBounds = value;
-        }
-
-        /// <summary>
         /// Action called whenever the display viewport changes.
         /// </summary>
         public Action? OnDisplayResize;
 
         #endregion
 
-        #region Console
-
         /// <summary>
         /// Returns the current Console window dimensions.
         /// </summary>
-        public static Vector2Int ConsoleWindowDimensions()
+        public static Vector2Int WindowDimensions()
         {
             return new(Console.WindowWidth, Console.WindowHeight);
         }
-
-        #endregion
 
         /// <inheritdoc/>
         public override void Start()
@@ -140,7 +152,21 @@
 
             var dpMap = viewport.GetMapView();
 
-            if (RerenderCulling && !skipCull)
+            UpdateCull(dpMap);
+
+            RenderEngine?.Render(dpMap);
+
+            TryResize();
+        }
+
+        private void UpdateCull(DisplayMapView dpMap)
+        {
+            if (!RerenderCulling)
+            {
+                return;
+            }
+
+            if (!skipCull)
             {
                 if (last != null && Grid2D<Pixel>.ValueEquals(dpMap, last))
                 {
@@ -153,19 +179,28 @@
             }
 
             skipCull = false;
+        }
 
-            RenderEngine?.Render(dpMap);
-
-            TryResize();
+        public void SkipCull()
+        {
+            skipCull = true;
         }
 
         private bool TryResize()
         {
+            var windowDimensions = WindowDimensions();
+
+            if (windowDimensions != lastWindowDimensions)
+            {
+                OnWindowResize?.Invoke(windowDimensions);
+                lastWindowDimensions = windowDimensions;
+            }
+
             var newSize = ResizeMode switch
             {
-                ResizeType.Auto => ConsoleWindowDimensions(),
+                ResizeType.Auto => windowDimensions,
                 ResizeType.Custom => CustomDimensions,
-                ResizeType.RenderEngine => RenderEngine?.GetViewportDimensions() ?? ConsoleWindowDimensions(),
+                ResizeType.RenderEngine => RenderEngine?.GetViewportDimensions() ?? windowDimensions,
                 _ => throw new NotImplementedException()
             };
 
@@ -174,7 +209,7 @@
                 return false;
             }
 
-            viewport.CleanResize(newSize);
+            viewport.Resize(newSize);
 
             OnDisplayResize?.Invoke();
 

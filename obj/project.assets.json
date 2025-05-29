@@ -2,7 +2,7 @@
   "version": 3,
   "targets": {
     "net6.0": {
-      "SCECSUtils/1.3.2": {
+      "SCECSUtils/1.5.5": {
         "type": "package",
         "compile": {
           "lib/net6.0/CSUtils.dll": {}
@@ -14,24 +14,24 @@
     }
   },
   "libraries": {
-    "SCECSUtils/1.3.2": {
-      "sha512": "Bz1QEuVKIR1GeBogs2tOB7r1mq8HEA4+Risk8bSl5EIdg7UkVvOMFe/T2SpxzXGdAF3wbzMNzFrJrT4ro3mrfw==",
+    "SCECSUtils/1.5.5": {
+      "sha512": "gwpYt9D3dQV8j/wHZLhHA1SY9bpSl/lIE4/12AL6cLqWu3aLwmBcqxyC9dWG7PhhFQrgPr5WMgbBJGPUFTsqRA==",
       "type": "package",
-      "path": "scecsutils/1.3.2",
+      "path": "scecsutils/1.5.5",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
         "LICENSE.txt",
         "README.md",
         "lib/net6.0/CSUtils.dll",
-        "scecsutils.1.3.2.nupkg.sha512",
+        "scecsutils.1.5.5.nupkg.sha512",
         "scecsutils.nuspec"
       ]
     }
   },
   "projectFileDependencyGroups": {
     "net6.0": [
-      "SCECSUtils >= 1.3.2"
+      "SCECSUtils >= 1.5.5"
     ]
   },
   "packageFolders": {
@@ -39,7 +39,7 @@
     "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
   },
   "project": {
-    "version": "3.4.4",
+    "version": "3.5.5",
     "restore": {
       "projectUniqueName": "C:\\Users\\redst\\source\\repos\\TheSnowDoggo\\SCE.Core\\SCE.Core.csproj",
       "projectName": "SCECore",
@@ -82,7 +82,7 @@
         "dependencies": {
           "SCECSUtils": {
             "target": "Package",
-            "version": "[1.3.2, )"
+            "version": "[1.5.5, )"
           }
         },
         "imports": [

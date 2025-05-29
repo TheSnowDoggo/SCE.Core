@@ -1,6 +1,5 @@
 ﻿using System.Collections;
 using System.Diagnostics.CodeAnalysis;
-
 namespace SCE
 {
     /// <summary>
@@ -15,6 +14,11 @@ namespace SCE
         private readonly Dictionary<T, U> _tDict;
         private readonly Dictionary<U, T> _uDict;
 
+        public KeyMap()
+            : this(0)
+        {
+        }
+
         public KeyMap(int capacity = 0)
         {
             _tDict = new(capacity);
@@ -26,23 +30,6 @@ namespace SCE
         {
             AddRange(collection);
         }
-
-        #region IEnumerable
-
-        public IEnumerator<(T, U)> GetEnumerator()
-        {
-            foreach (var pair in _tDict)
-            {
-                yield return (pair.Key, pair.Value);
-            }
-        }
-
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            return GetEnumerator();
-        }
-
-        #endregion
 
         public int Count { get => _tDict.Count; }
 
@@ -143,6 +130,23 @@ namespace SCE
         {
             _tDict.Clear();
             _uDict.Clear();
+        }
+
+        #endregion
+
+        #region IEnumerable
+
+        public IEnumerator<(T, U)> GetEnumerator()
+        {
+            foreach (var pair in _tDict)
+            {
+                yield return (pair.Key, pair.Value);
+            }
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return GetEnumerator();
         }
 
         #endregion

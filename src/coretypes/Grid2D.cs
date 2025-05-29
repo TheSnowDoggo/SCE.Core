@@ -117,7 +117,7 @@ namespace SCE
 
         public static implicit operator Grid2DView<T>(Grid2D<T> grid) => grid.ToView();
 
-        public Grid2DView<T> ToView()
+        public virtual Grid2DView<T> ToView()
         {
             return new(this);
         }
@@ -305,7 +305,6 @@ namespace SCE
             }
 
             dataGridArea = thisArea.TrimArea(offsetArea) - thisOffset;
-
             foreach (var pos in dataGrid.EnumerateGrid(dataGridArea))
             {
                 yield return pos;
@@ -380,7 +379,6 @@ namespace SCE
             }
 
             mapArea = dataArea.TrimArea(alignedGetArea) - dataOffset;
-
             foreach (var pos in EnumerateGrid(mapArea))
             {
                 yield return pos;

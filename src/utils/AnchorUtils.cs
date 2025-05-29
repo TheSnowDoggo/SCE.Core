@@ -1,11 +1,28 @@
-﻿namespace SCE
+﻿using CSUtils;
+
+namespace SCE
 {
     public static class AnchorUtils
     {
         public const Anchor H_MASK = Anchor.Right  | Anchor.Center;
         public const Anchor V_MASK = Anchor.Bottom | Anchor.Middle;
 
-        public static int VerticalFix(Anchor anchor, int offset, int top = 0)
+        public static FillType ToFillType(Anchor anchor)
+        {
+            bool right = (anchor & Anchor.Right) == Anchor.Right;
+            bool mid = (anchor & Anchor.Center) == Anchor.Center;
+            // Note the fill types are reversed to anchor the text, not the fill.
+            if (mid)
+            {
+                return right ? FillType.CenterLB : FillType.CenterRB;
+            }
+            else
+            {
+                return right ? FillType.Left : FillType.Right;
+            }
+        }
+
+        public static int VerticalFix(Anchor anchor, int offset, int top, bool invertBias = false)
         {
             int off;
             bool mid = (anchor & Anchor.Middle) == Anchor.Middle;
@@ -15,7 +32,7 @@
                 off = offset;
                 if (mid)
                 {
-                    off = !bottom || off % 2 == 0 ? off / 2 : (off / 2) + 1;
+                    off = (invertBias ? bottom : !bottom) || off % 2 == 0 ? off / 2 : (off / 2) + 1;
                 }
             }
             else
@@ -25,7 +42,12 @@
             return off;
         }
 
-        public static int HorizontalFix(Anchor anchor, int offset, int left = 0)
+        public static int VerticalFix(Anchor anchor, int offset, bool invertBias = false)
+        {
+            return VerticalFix(anchor, offset, 0, invertBias);
+        }
+
+        public static int HorizontalFix(Anchor anchor, int offset, int left, bool invertBias = false)
         {
             int off;
             bool mid = (anchor & Anchor.Center) == Anchor.Center;
@@ -35,7 +57,7 @@
                 off = offset;
                 if (mid)
                 {
-                    off = !right || off % 2 == 0 ? off / 2 : (off / 2) + 1;
+                    off = (invertBias ? right : !right) || off % 2 == 0 ? off / 2 : (off / 2) + 1;
                 }
             }
             else
@@ -43,6 +65,11 @@
                 off = left;
             }
             return off;
+        }
+
+        public static int HorizontalFix(Anchor anchor, int offset, bool invertBias = false)
+        {
+            return HorizontalFix(anchor, offset, 0, invertBias);
         }
 
         public static float VerticalFix(Anchor anchor, float offset)
@@ -67,9 +94,9 @@
             return 0;
         }
 
-        public static Vector2Int DimensionFix(Anchor anchor, Vector2Int dimensions)
+        public static Vector2Int DimensionFix(Anchor anchor, Vector2Int dimensions, bool invertBias = false)
         {
-            return new(HorizontalFix(anchor, dimensions.X), VerticalFix(anchor, dimensions.Y));
+            return new(HorizontalFix(anchor, dimensions.X, invertBias), VerticalFix(anchor, dimensions.Y, invertBias));
         }
 
         public static Vector2 DimensionFix(Anchor anchor, Vector2 dimensions)
@@ -79,7 +106,7 @@
 
         public static Vector2Int AnchorTo(Anchor anchor, Vector2Int to, Vector2Int d)
         {
-            return DimensionFix(anchor, to) - DimensionFix(anchor, d);
+            return DimensionFix(anchor, to) - DimensionFix(anchor, d, true);
         }
 
         public static Vector2 AnchorTo(Anchor anchor, Vector2 to, Vector2 d)

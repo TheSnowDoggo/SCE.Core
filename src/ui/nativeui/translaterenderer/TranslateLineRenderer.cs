@@ -2,6 +2,8 @@
 {
     public class TranslateLineRenderer : UIBaseExtR
     {
+        private int renderWidth = 1;
+
         public TranslateLineRenderer(int width, int height, Func<Vector2Int, Pixel[]> renderFunc)
             : base(width, height)
         {
@@ -33,8 +35,6 @@
         public Func<Vector2Int, Pixel[]> RenderFunc { get; set; }
 
         #region Settings
-
-        private int renderWidth = 1;
 
         /// <summary>
         /// Gets or sets the expected number of pixels per translation.

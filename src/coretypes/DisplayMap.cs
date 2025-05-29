@@ -50,7 +50,7 @@
 
         public static explicit operator DisplayMapView(DisplayMap dpMap) => dpMap.ToView();
 
-        public DisplayMapView ToView()
+        public override DisplayMapView ToView()
         {
             return new(this);
         }

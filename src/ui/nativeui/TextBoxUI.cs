@@ -5,11 +5,9 @@ namespace SCE
 {
     public class TextBoxUI : UIBaseExt
     {
-        private const SCEColor DEFAULT_BGCOLOR = SCEColor.Black;
-
         private bool renderQueued = true;
 
-        private SCEColor bgColor;
+        private Pixel basePixel = new(SCEColor.Black);
 
         private string text = string.Empty;
 
@@ -21,25 +19,24 @@ namespace SCE
 
         private bool newlineOverflow = false;
 
-        public TextBoxUI(int width, int height, SCEColor? bgColor = null)
-            : base(width, height, bgColor)
+        public TextBoxUI(int width, int height)
+            : base(width, height)
         {
-            this.bgColor = bgColor ?? DEFAULT_BGCOLOR;
         }
 
-        public TextBoxUI(Vector2Int dimensions, SCEColor? bgColor = null)
-            : this(dimensions.X, dimensions.Y, bgColor)
+        public TextBoxUI(Vector2Int dimensions)
+            : this(dimensions.X, dimensions.Y)
         {
         }
 
         #region Settings   
 
-        public SCEColor BgColor
+        public Pixel BasePixel
         {
-            get => bgColor;
+            get => basePixel;
             set
             {
-                bgColor = value;
+                basePixel = value;
                 renderQueued = true;
             }
         }
@@ -154,7 +151,7 @@ namespace SCE
         {
             if (renderQueued)
             {
-                _dpMap.Fill(new Pixel(BgColor));
+                _dpMap.Fill(BasePixel);
 
                 var lineArr = NewlineOverflow ? OverflowSplitLines(Text, Width, Height) : SplitLines(Text, Width, Height);
 
@@ -164,7 +161,6 @@ namespace SCE
                     int x = AnchorUtils.HorizontalFix(TextAnchor, Width - lineArr[i].Length);
                     _dpMap.MapString(lineArr[i], new Vector2Int(x, startY + i), TextFgColor, TextBgColor);
                 }
-
 
                 renderQueued = false;
             }

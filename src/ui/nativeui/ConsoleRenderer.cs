@@ -1,7 +1,7 @@
 ﻿using CSUtils;
 namespace SCE
 {
-    internal class ConsoleEmulator : UIBaseExt
+    public class ConsoleRenderer : UIBaseExt
     {
         public const int DEFAULT_BUFFERHEIGHT = 9001;
         public const int DEFAULT_BUFFERWIDTH = 200;
@@ -18,14 +18,14 @@ namespace SCE
 
         private bool renderQueued = true;
 
-        public ConsoleEmulator(int width, int height)
+        public ConsoleRenderer(int width, int height)
             : base(width, height)
         {
             _ls = new(Math.Max(height, DEFAULT_BUFFERHEIGHT));
             bufferWidth = Math.Max(width, DEFAULT_BUFFERWIDTH);
         }
 
-        public ConsoleEmulator(Vector2Int dimensions)
+        public ConsoleRenderer(Vector2Int dimensions)
             : this(dimensions.X, dimensions.Y)
         {
         }
@@ -105,6 +105,12 @@ namespace SCE
         }
 
         public int TabSize { get; set; } = 8;
+
+        public Pixel[] this[int y]
+        {
+            get => _ls[y];
+            set => _ls[y] = value;
+        }
 
         private void ShiftCursor(int move)
         {
@@ -223,7 +229,7 @@ namespace SCE
                     }
                     else
                     {
-                        _dpMap.Fill(new Pixel(SCEColor.Black), area);
+                        _dpMap.Fill(BasePixel, area);
                     }
                 }
 

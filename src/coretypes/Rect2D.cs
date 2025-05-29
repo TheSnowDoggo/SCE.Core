@@ -22,7 +22,7 @@
         }
 
         public Rect2D(float right, float top)
-            : this(0, 0, right, top)
+            : this(0.0f, 0.0f, right, top)
         {
         }
 
@@ -56,8 +56,6 @@
 
         public Vector2 End { get => new(Right, Bottom); }
 
-        public static explicit operator Rect2DInt(Rect2D r) => r.ToRect2DInt();
-
         public Rect2DInt ToRect2DInt()
         {
             return new((int)Left, (int)Top, (int)Right, (int)Bottom);
@@ -69,10 +67,6 @@
         }
 
         #region Equality
-
-        public static bool operator ==(Rect2D left, Rect2D right) => left.Equals(right);
-
-        public static bool operator !=(Rect2D left, Rect2D right) => !(left == right);
 
         public bool Equals(Rect2D area)
         {
@@ -91,7 +85,13 @@
 
         #endregion
 
-        #region Innequalities
+        #region Operators
+
+        public static explicit operator Rect2DInt(Rect2D r) => r.ToRect2DInt();
+
+        public static bool operator ==(Rect2D left, Rect2D right) => left.Equals(right);
+
+        public static bool operator !=(Rect2D left, Rect2D right) => !(left == right);
 
         public static bool operator >(Rect2D a1, Rect2D a2) => a1.Size > a2.Size;
 
@@ -101,17 +101,9 @@
 
         public static bool operator <=(Rect2D a1, Rect2D a2) => !(a1 > a2);
 
-        #endregion
-
-        #region Addition
-
         public static Rect2D operator +(Rect2D a1, Rect2D a2) => new(a1.Left + a2.Left, a1.Top + a2.Top, a1.Right + a2.Right, a1.Bottom + a2.Bottom);
 
         public static Rect2D operator +(Rect2D a1, Vector2 v) => new(a1.Left + v.X, a1.Top + v.Y, a1.Right + v.X, a1.Bottom + v.Y);
-
-        #endregion
-
-        #region Subtraction
 
         public static Rect2D operator -(Rect2D a1, Rect2D a2) => new(a1.Left - a2.Left, a1.Top - a2.Top, a1.Right - a2.Right, a1.Bottom - a2.Bottom);
 
@@ -119,39 +111,13 @@
 
         public static Rect2D operator -(Rect2D a) => new(-a.Left, -a.Top, -a.Right, -a.Bottom);
 
-        #endregion
-
-        #region Multiplication
-
         public static Rect2D operator *(Rect2D a1, Rect2D a2) => new(a1.Left * a2.Left, a1.Top * a2.Top, a1.Right * a2.Right, a1.Bottom * a2.Bottom);
 
         public static Rect2D operator *(Rect2D a1, Vector2 v) => new(a1.Left * v.X, a1.Top * v.Y, a1.Right * v.X, a1.Bottom * v.Y);
 
-        #endregion
-
-        #region Division
-
         public static Rect2D operator /(Rect2D a1, Rect2D a2) => new(a1.Left / a2.Left, a1.Top / a2.Top, a1.Right / a2.Right, a1.Bottom / a2.Bottom);
 
         public static Rect2D operator /(Rect2D a1, Vector2 v) => new(a1.Left / v.X, a1.Top / v.Y, a1.Right / v.X, a1.Bottom / v.Y);
-
-        #endregion
-
-        #region Deconstruct
-
-        public void Deconstruct(out float left, out float top, out float right, out float bottom)
-        {
-            left = Left;
-            top = Top;
-            right = Right;
-            bottom = Bottom;
-        }
-
-        public void Deconstruct(out Vector2 start, out Vector2 end)
-        {
-            start = Start;
-            end = End;
-        }
 
         #endregion
 
@@ -273,6 +239,20 @@
         public bool Contains(Vector2 position)
         {
             return Left <= position.X && Top <= position.Y && position.X < Right && position.Y < Bottom;
+        }
+
+        public void Deconstruct(out float left, out float top, out float right, out float bottom)
+        {
+            left = Left;
+            top = Top;
+            right = Right;
+            bottom = Bottom;
+        }
+
+        public void Deconstruct(out Vector2 start, out Vector2 end)
+        {
+            start = Start;
+            end = End;
         }
 
         #endregion

@@ -56,8 +56,6 @@
 
         public Vector2Int End { get => new(Right, Top); }
 
-        public static implicit operator Rect2D(Rect2DInt r) => r.ToRect2D();
-
         public Rect2D ToRect2D()
         {
             return new(Left, Top, Right, Bottom);
@@ -69,10 +67,6 @@
         }
 
         #region Equality
-
-        public static bool operator ==(Rect2DInt left, Rect2DInt right) => left.Equals(right);
-
-        public static bool operator !=(Rect2DInt left, Rect2DInt right) => !(left == right);
 
         public bool Equals(Rect2DInt area)
         {
@@ -91,7 +85,13 @@
 
         #endregion
 
-        #region Innequalities
+        #region Operators
+
+        public static implicit operator Rect2D(Rect2DInt r) => r.ToRect2D();
+
+        public static bool operator ==(Rect2DInt left, Rect2DInt right) => left.Equals(right);
+
+        public static bool operator !=(Rect2DInt left, Rect2DInt right) => !(left == right);
 
         public static bool operator >(Rect2DInt a1, Rect2DInt a2) => a1.Size > a2.Size;
 
@@ -101,17 +101,9 @@
 
         public static bool operator <=(Rect2DInt a1, Rect2DInt a2) => !(a1 > a2);
 
-        #endregion
-
-        #region Addition
-
         public static Rect2DInt operator +(Rect2DInt a1, Rect2DInt a2) => new(a1.Left + a2.Left, a1.Top + a2.Top, a1.Right + a2.Right, a1.Bottom + a2.Bottom);
 
         public static Rect2DInt operator +(Rect2DInt a1, Vector2Int v) => new(a1.Left + v.X, a1.Top + v.Y, a1.Right + v.X, a1.Bottom + v.Y);
-
-        #endregion
-
-        #region Subtraction
 
         public static Rect2DInt operator -(Rect2DInt a1, Rect2DInt a2) => new(a1.Left - a2.Left, a1.Top - a2.Top, a1.Right - a2.Right, a1.Bottom - a2.Bottom);
 
@@ -119,63 +111,13 @@
 
         public static Rect2DInt operator -(Rect2DInt a) => new(-a.Left, -a.Top, -a.Right, -a.Bottom);
 
-        #endregion
-
-        #region Multiplication
-
         public static Rect2DInt operator *(Rect2DInt a1, Rect2DInt a2) => new(a1.Left * a2.Left, a1.Top * a2.Top, a1.Right * a2.Right, a1.Bottom * a2.Bottom);
 
         public static Rect2DInt operator *(Rect2DInt a1, Vector2Int v) => new(a1.Left * v.X, a1.Top * v.Y, a1.Right * v.X, a1.Bottom * v.Y);
 
-        #endregion
-
-        #region Division
-
         public static Rect2DInt operator /(Rect2DInt a1, Rect2DInt a2) => new(a1.Left / a2.Left, a1.Top / a2.Top, a1.Right / a2.Right, a1.Bottom / a2.Bottom);
 
         public static Rect2DInt operator /(Rect2DInt a1, Vector2Int v) => new(a1.Left / v.X, a1.Top / v.Y, a1.Right / v.X, a1.Bottom / v.Y);
-
-        #endregion
-
-        #region Deconstruct
-
-        public void Deconstruct(out int left, out int top, out int right, out int bottom)
-        {
-            left = Left;
-            top = Top;
-            right = Right;
-            bottom = Bottom;
-        }
-
-        public void Deconstruct(out Vector2Int start, out Vector2Int end)
-        {
-            start = Start;
-            end = End;
-        }
-
-        #endregion
-
-        #region Lines
-
-        public static Rect2DInt Horizontal(int y, int left, int right)
-        {
-            return new(left, y, right, y + 1);
-        }
-
-        public static Rect2DInt Horizontal(int y, int width)
-        {
-            return Horizontal(y, 0, width);
-        }
-
-        public static Rect2DInt Vertical(int x, int top, int bottom)
-        {
-            return new(x, top, x + 1, bottom);
-        }
-
-        public static Rect2DInt Vertical(int x, int height)
-        {
-            return Vertical(x, 0, height);
-        }
 
         #endregion
 
@@ -312,6 +254,44 @@
                     yield return rowMajor ? new(j, i) : new(i, j);
                 }
             }
+        }
+
+        public void Deconstruct(out int left, out int top, out int right, out int bottom)
+        {
+            left = Left;
+            top = Top;
+            right = Right;
+            bottom = Bottom;
+        }
+
+        public void Deconstruct(out Vector2Int start, out Vector2Int end)
+        {
+            start = Start;
+            end = End;
+        }
+
+        #endregion
+
+        #region Lines
+
+        public static Rect2DInt Horizontal(int y, int left, int right)
+        {
+            return new(left, y, right, y + 1);
+        }
+
+        public static Rect2DInt Horizontal(int y, int width)
+        {
+            return Horizontal(y, 0, width);
+        }
+
+        public static Rect2DInt Vertical(int x, int top, int bottom)
+        {
+            return new(x, top, x + 1, bottom);
+        }
+
+        public static Rect2DInt Vertical(int x, int height)
+        {
+            return Vertical(x, 0, height);
         }
 
         #endregion

@@ -2,24 +2,26 @@
 {
     public class Translate2DRenderer : UIBaseExtR
     {
-        public Translate2DRenderer(int width, int height, Func<Vector2Int, Grid2D<Pixel>> renderFunc)
+        private Vector2Int renderDimensions = new(1, 1);
+
+        public Translate2DRenderer(int width, int height, Func<Vector2Int, Grid2DView<Pixel>> renderFunc)
             : base(width, height)
         {
             RenderFunc = renderFunc;
         }
 
-        public Translate2DRenderer(Vector2Int dimensions, Func<Vector2Int, Grid2D<Pixel>> renderFunc)
+        public Translate2DRenderer(Vector2Int dimensions, Func<Vector2Int, Grid2DView<Pixel>> renderFunc)
             : this(dimensions.X, dimensions.Y, renderFunc)
         {
         }
 
-        public Translate2DRenderer(int width, int height, Vector2Int renderDimensions, Func<Vector2Int, Grid2D<Pixel>> renderFunc)
+        public Translate2DRenderer(int width, int height, Vector2Int renderDimensions, Func<Vector2Int, Grid2DView<Pixel>> renderFunc)
             : this(width, height, renderFunc)
         {
             RenderDimensions = renderDimensions;
         }
 
-        public Translate2DRenderer(Vector2Int dimensions, Vector2Int renderDimensions, Func<Vector2Int, Grid2D<Pixel>> renderFunc)
+        public Translate2DRenderer(Vector2Int dimensions, Vector2Int renderDimensions, Func<Vector2Int, Grid2DView<Pixel>> renderFunc)
             : this(dimensions.X, dimensions.Y, renderDimensions, renderFunc)
         {
         }
@@ -30,11 +32,9 @@
         /// <remarks>
         /// The position represents the translated position given the render width.
         /// </remarks>
-        public Func<Vector2Int, Grid2D<Pixel>> RenderFunc { get; set; }
+        public Func<Vector2Int, Grid2DView<Pixel>> RenderFunc { get; set; }
 
         #region Settings
-
-        private Vector2Int renderDimensions = new(1, 1);
 
         /// <summary>
         /// Gets or sets the expected number of pixels per translation.
@@ -73,7 +73,7 @@
             }
         }
 
-        private Func<Vector2Int, Grid2D<Pixel>> GetRenderFunc()
+        private Func<Vector2Int, Grid2DView<Pixel>> GetRenderFunc()
         {
             return RenderFunc ?? throw new NullReferenceException("Render function is null.");
         }

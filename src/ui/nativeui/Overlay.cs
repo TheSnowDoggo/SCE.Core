@@ -25,16 +25,13 @@
 
                 var pos = AnchorUtils.AnchorTo(Map.Anchor, dpMap.Dimensions, overMap.Dimensions) + Map.Offset;
 
-                if (dpMap.GridArea().Overlaps(pos, overMap.Dimensions + pos))
+                if (Transparency)
                 {
-                    if (Transparency)
-                    {
-                        dpMap.PMapTo(overMap, pos);
-                    }
-                    else
-                    {
-                        dpMap.MapTo(overMap, pos);
-                    }
+                    dpMap.PMapTo(overMap, pos);
+                }
+                else
+                {
+                    dpMap.MapTo(overMap, pos);
                 }
             }
 

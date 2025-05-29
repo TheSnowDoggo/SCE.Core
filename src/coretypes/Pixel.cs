@@ -14,7 +14,7 @@
 
         public Pixel(char element, SCEColor fgColor, SCEColor bgColor)
         {
-            this.element = element;
+            Element = element;
             FgColor = fgColor;
             BgColor = bgColor;
         }
@@ -54,6 +54,16 @@
 
         public SCEColor BgColor { get; init; } = DEFAULT_BGCOLOR;
 
+        public static Pixel Merge(Pixel top, Pixel bottom)
+        {
+            return new()
+            {
+                Element = top.Element != '\0' ? top.Element : bottom.Element,
+                FgColor = ColorUtils.GetStackColor(top.FgColor, bottom.FgColor),
+                BgColor = ColorUtils.GetStackColor(top.BgColor, bottom.BgColor),
+            };
+        }
+
         public ColorSet ColorSet() { return new(FgColor, BgColor); }
 
         public char RenderElement()
@@ -86,17 +96,7 @@
 
         public override string ToString()
         {
-            return $"\"{Element}\",{FgColor},{BgColor}";
-        }
-
-        public static Pixel Merge(Pixel top, Pixel bottom)
-        {
-            return new()
-            {
-                Element = top.Element != '\0' ? top.Element : bottom.Element,
-                FgColor = ColorUtils.GetStackColor(top.FgColor, bottom.FgColor),
-                BgColor = ColorUtils.GetStackColor(top.BgColor, bottom.BgColor),
-            };
+            return string.Join(",", Element, FgColor, BgColor);
         }
     }
 }

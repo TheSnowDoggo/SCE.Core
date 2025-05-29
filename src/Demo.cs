@@ -20,7 +20,7 @@ namespace SCE
             GameHandler.Scenes.AddEvery((ih, "inputhandler"), (mane, "mane"), (Display.Instance, "display"));
 
             // Sets the framerate cap in FPS. -1 represents uncapped framerate.
-            GameHandler.FrameCap = 60;
+            GameHandler.FrameCap = -1;
 
             // Starts GameHandler thread (for scenes).
             GameHandler.Start();
@@ -33,8 +33,6 @@ namespace SCE
     internal class Mane : SceneBase
     {
         private readonly TextBoxUI _fps;
-
-        private readonly TextBoxUI _tb;
 
         private readonly InputEntryV2 _ie;
 
@@ -56,24 +54,45 @@ namespace SCE
 
         private readonly Scaler<Image> _scl;
 
-        private readonly ConsoleEmulator _ce;
+        private readonly ConsoleRenderer _ce;
 
         private int selectIndex;
 
         private double timer;
 
+        private readonly ProgressBar _pb;
+
+        private readonly VerticalSelector _vs;
+
         public Mane()
         {
-            _tb = new(10, 6, SCEColor.Magenta)
+            _pb = new(100, 1)
             {
-                Text = "texdt",
-                TextAnchor = Anchor.Center | Anchor.Bottom
+                Max = 200,
+                Anchor = Anchor.Middle | Anchor.Center,
+                FlowMode = FlowType.LeftRight,
             };
 
             _ce = new(30, 15)
             {
                 Anchor = Anchor.Bottom,
             };
+
+            _vs = new(20, 10)
+            {
+                Anchor = Anchor.Right,
+                Offset = new(0, 1),
+            };
+
+            for (int i = 0; i < _vs.Height; ++i)
+            {
+                int num = i + 1;
+                _vs[i] = new()
+                {
+                    Text = $"Selection {num}",
+                    OnSelect = () => _ce.WriteLine($"You selected {num}"),
+                };
+            }
 
             _img = new(5, 5, SCEColor.DarkBlue);
 
@@ -96,16 +115,29 @@ namespace SCE
             };
 
             // The height determines how many lines can be rendered.
-            _lr = new(_logger.Width, 1)
+            _lr = new(_logger.Width, 8)
             {
                 Anchor = Anchor.Right,
                 // Combine Center anchors with Right or Left anchors to determine the center bias.
                 // Left bias (default) with round down if the text cannot be fully centered, Right bias rounds up
-                [0] = new MsgLine("- View Logs -")
+                [0] = new()
                 {
+                    Text = "- View Logs -",
                     Anchor = Anchor.Center,
                 },
+                StackMode = StackType.TopDown,
             };
+
+            for (int i = 1; i < _lr.Height - 2; ++i)
+            {
+                _lr[i] = new()
+                {
+                    Text = $"testing chicken {i}",
+                    Anchor = Anchor.Center,
+                    FgColor = SCEColor.Red,
+                    BgColor = SCEColor.DarkMagenta,
+                };
+            }
 
             // Flow tables are used to stack multiple UI elements in a certain direction
             _loggerFl = new(_logger.Width, _logger.Height + _lr.Height)
@@ -126,7 +158,7 @@ namespace SCE
                 IsActive = false,
             };
 
-            _fps = new(20, 1, SCEColor.Black)
+            _fps = new(20, 1)
             {
                 TextFgColor = SCEColor.Gray,
                 Anchor = Anchor.Right,
@@ -176,7 +208,7 @@ namespace SCE
             _logger.Log("Welcome to the SCE Demo!");
             _logger.Log("Have a peek around at some of the many features.");
             
-            _ce.Write("this is a console emulator");
+            _ce.WriteLine("this is a console emulator");
         }
 
         public override void Update()
@@ -194,6 +226,8 @@ namespace SCE
 
                 _img.Rotate90(true);   
             }
+
+            _pb.Value += (float)(GameHandler.DeltaTime * 10.0);
         }
 
         private void SetupDisplay()
@@ -206,16 +240,16 @@ namespace SCE
             Display.Instance.ResizeMode = Display.ResizeType.Auto;
 
             // Adds the IRenderables to the display to render.
-            Display.Instance.Renderables.AddRange(new IRenderable[] { _fl, _loggerFl, _ce, _fps, _scl, _tb });
+            Display.Instance.Renderables.AddRange(new IRenderable[] { _fl, _loggerFl, _ce, _fps, _scl, _pb, _vs });
 
             Display.Instance.BasePixel = new(SCEColor.DarkCyan);
         }
 
         private void SetupInput()
         {
-            InputAction enter = new(ConsoleKey.Enter, EntryEnter);
+            InputAction enter = new(ConsoleKey.Enter, () => _vs.RunSelected());
 
-            InputMap<int> slider = new(Slide)
+            InputMap<int> slider = new(_vs.MoveSelected)
             {
                 { ConsoleKey.UpArrow,   -1 },
                 { ConsoleKey.DownArrow, +1 },
@@ -238,7 +272,7 @@ namespace SCE
         private void Highlight(SCEColor fg, SCEColor bg)
         {
             Selected.TextFgColor = fg;
-            Selected.BgColor = bg;
+            Selected.BasePixel = new(bg);
         }
 
         private void EntryEnter()

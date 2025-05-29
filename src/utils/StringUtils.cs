@@ -7,8 +7,12 @@ namespace SCE
         {
             int count = 0;
             foreach (var c in str)
+            {
                 if (c == of && ++count >= amount)
+                {
                     return false;
+                }
+            }
             return true;
         }
 
@@ -42,8 +46,12 @@ namespace SCE
         {
             StringBuilder sb = new(str.Length);
             for (int i = 0; i < str.Length; i++)
+            {
                 if (str[i] != chr)
+                {
                     sb.Append(str[i]);
+                }
+            }
             return sb.ToString();
         }
 

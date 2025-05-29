@@ -1,71 +1,65 @@
-﻿using System.Collections;
-using CSUtils;
+﻿using CSUtils;
+
 namespace SCE
 {
-    public class LineRenderer : UIBaseExt, IEnumerable<MsgLine?>
+    public class LineRenderer : UIBaseExt
     {
-        private const SCEColor DEFAULT_BGCOLOR = SCEColor.Black;
-
-        private MsgLine?[] lineArr;
+        private TextLine[] lineArr;
 
         private bool renderQueued = true;
 
-        public LineRenderer(int width, int height, SCEColor? bgColor = null)
-            : base(width, height, bgColor)
+        private Anchor lineAnchor = Anchor.None;
+
+        private Pixel basePixel = new(SCEColor.Black);
+
+        private StackType stackMode = StackType.TopDown;
+
+        private bool fitToLength = false;
+
+        private SCEColor textFgColor = SCEColor.Gray;
+
+        private SCEColor textBgColor = SCEColor.Black;
+
+        public LineRenderer(int width, int height)
+            : base(width, height)
         {
-            lineArr = new MsgLine?[Height];
-            this.bgColor = bgColor ?? DEFAULT_BGCOLOR;
+            lineArr = new TextLine[height];
         }
 
-        public LineRenderer(Vector2Int dimensions, SCEColor? bgColor = null)
-            : this(dimensions.X, dimensions.Y, bgColor)
+        public LineRenderer(Vector2Int dimensions)
+            : this(dimensions.X, dimensions.Y)
         {
         }
 
-        #region IEnumerable
-
-        public IEnumerator<MsgLine?> GetEnumerator()
+        public TextLine this[int index]
         {
-            return (IEnumerator<MsgLine?>)lineArr.GetEnumerator();
-        }
-
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            return GetEnumerator();
-        }
-
-        #endregion
-
-        public MsgLine? this[int y]
-        {
-            get
-            {
-                if (y < 0 || y >= lineArr.Length)
-                    throw new IndexOutOfRangeException("Specified y is invalid.");
-                return lineArr[Translate(y)];
-            }
+            get => lineArr[index];
             set
             {
-                if (!SetLine(y, value))
-                    throw new IndexOutOfRangeException("Specified y is invalid.");
-            }
-        }
-
-        #region Settings
-
-        private SCEColor bgColor;
-
-        public SCEColor BgColor
-        {
-            get => bgColor;
-            set
-            {
-                bgColor = value;
+                lineArr[index] = value;
                 renderQueued = true;
             }
         }
 
-        private StackType stackMode = StackType.TopDown;
+        public Anchor LineAnchor
+        {
+            get => lineAnchor;
+            set
+            {
+                lineAnchor = value;
+                renderQueued = true;
+            }
+        }
+
+        public Pixel BasePixel
+        {
+            get => basePixel;
+            set
+            {
+                basePixel = value;
+                renderQueued = true;
+            }
+        }
 
         public StackType StackMode
         {
@@ -77,8 +71,6 @@ namespace SCE
             }
         }
 
-        private bool fitToLength = false;
-
         public bool FitToLength
         {
             get => fitToLength;
@@ -89,128 +81,37 @@ namespace SCE
             }
         }
 
-        #endregion
-
-        #region SetLine
-
-        public bool SetLine(int y, MsgLine? line)
+        public SCEColor LineFgColor
         {
-            if (y < 0 || y >= lineArr.Length)
-                return false;
-            lineArr[y] = line;
-            RenderLine(y);
-            return true;
-        }
-
-        public bool SetLine(int y, string message, ColorSet? colorSet = null)
-        {
-            return SetLine(y, new MsgLine(message, colorSet));
-        }
-
-        public bool SetLine(int y, string message, SCEColor fgColor, SCEColor? bgColor = null)
-        {
-            return SetLine(y, new MsgLine(message, fgColor, bgColor));
-        }
-
-        public void SetRange(int startY, IEnumerable<MsgLine?> collection)
-        {
-            foreach (var line in collection)
-                SetLine(startY++, line);
-        }
-
-        public bool ClearLine(int y)
-        {
-            return SetLine(y, null);
-        }
-
-        public void ClearRange(int startY, int count)
-        {
-            for (int i = 0; i < count; ++i)
-                ClearLine(startY + i);
-        }
-
-        #endregion
-
-        #region Render
-
-        private void RenderLine(int y)
-        {
-            if (lineArr[y] is MsgLine line)
+            get => textFgColor;
+            set
             {
-                MapLine(Translate(y), line);
-            }
-            else
-            {
-                ClearAt(Translate(y));
+                textFgColor = value;
+                renderQueued = true;
             }
         }
 
-        private void MapLine(int mappedY, MsgLine line)
+        public SCEColor LineBgColor
         {
-            if (FitToLength)
+            get => textBgColor;
+            set
             {
-                _dpMap.MapString(Utils.FTL(line.Message, line.Message.Length, ' ', (Utils.FMode)(Anchor | AnchorUtils.H_MASK)), mappedY, line.Colors);
-            }
-            else
-            {
-                ClearAt(mappedY);
-                _dpMap.MapString(line.Message, new Vector2Int(AnchorUtils.HorizontalFix(line.Anchor, Width - line.Message.Length), mappedY), line.Colors);
+                textBgColor = value;
+                renderQueued = true;
             }
         }
 
-        private void ClearAt(int y)
-        {
-            _dpMap.Fill(new Pixel(BgColor), Rect2DInt.Horizontal(y, _dpMap.Width));
-        }
-
-        #endregion
-
-        #region Clear
-
-        public void Clear()
-        {
-            _dpMap.Fill(new Pixel(BgColor));
-            Array.Clear(lineArr);
-        }
-
-        #endregion
-
-        #region Resize
-
-        public void CleanResize(int width, int height)
-        {
-            _dpMap.CleanResize(width, height);
-            _dpMap.Fill(new Pixel(BgColor));
-            lineArr = new MsgLine?[height];
-        }
-
-        public void CleanResize(Vector2Int dimensions)
-        {
-            CleanResize(dimensions.X, dimensions.Y);
-        }
-
-        public void MapResize(int width, int height)
+        public void Resize(int width, int height)
         {
             _dpMap.CleanResize(width, height);
             Array.Resize(ref lineArr, height);
             renderQueued = true;
         }
 
-        public void MapResize(Vector2Int dimensions)
+        public void Resize(Vector2Int dimensions)
         {
-            MapResize(dimensions.X, dimensions.Y);
+            Resize(dimensions.X, dimensions.Y);
         }
-
-        #endregion
-
-        #region Translate
-
-        private int Translate(int y)
-        {
-            return StackMode == StackType.BottomUp ? y : Height - y - 1;
-        }
-
-        #endregion
 
         public override DisplayMapView GetMapView()
         {
@@ -218,7 +119,37 @@ namespace SCE
             {
                 for (int i = 0; i < Height; ++i)
                 {
-                    RenderLine(i);
+                    var y = StackMode == StackType.TopDown ? i : Height - i - 1;
+
+                    if (lineArr[i] is TextLine tl)
+                    {
+                        var fg = tl.FgColor ?? textFgColor;
+
+                        var bg = tl.BgColor ?? textBgColor;
+
+                        var anchor = tl.Anchor ?? LineAnchor;
+
+                        var ftl = tl.FitToLength ?? FitToLength;
+
+                        if (ftl)
+                        {
+                            var text = Utils.FTL(tl.Text, Width, ' ', AnchorUtils.ToFillType(anchor));
+
+                            _dpMap.MapString(text, new Vector2Int(0, y), fg, bg);
+                        }
+                        else
+                        {
+                            var text = Utils.Shorten(tl.Text, Width);
+                            var x = AnchorUtils.HorizontalFix(anchor, Width - text.Length);
+
+                            _dpMap.Fill(BasePixel, Rect2DInt.Horizontal(y, Width));
+                            _dpMap.MapString(text, new Vector2Int(x, y), fg, bg);
+                        }
+                    }
+                    else
+                    {
+                        _dpMap.Fill(BasePixel, Rect2DInt.Horizontal(y, Width));
+                    }
                 }
 
                 renderQueued = false;

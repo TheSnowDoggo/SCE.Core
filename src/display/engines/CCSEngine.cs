@@ -48,11 +48,12 @@ namespace SCE
                 throw new ArgumentException("Array lengths do not match.");
             }
 
+            Display.Instance.PreferedPosition.Deconstruct(out int left, out int top);
             for (int i = 0; i < strArr.Length; i++)
             {
                 try
                 {
-                    Console.SetCursorPosition(0, 0);
+                    Console.SetCursorPosition(left, top);
                     ColorUtils.SetConsoleColor(rInfoArr[i]);
                     Console.Write(strArr[i]);
                 }
@@ -126,7 +127,7 @@ namespace SCE
         ///<inheritdoc/>
         public override Vector2Int? GetViewportDimensions()
         {
-            return Display.ConsoleWindowDimensions() - new Vector2Int(DisplayBuffer, 0);
+            return Display.WindowDimensions() - new Vector2Int(DisplayBuffer, 0);
         }
     }
 }

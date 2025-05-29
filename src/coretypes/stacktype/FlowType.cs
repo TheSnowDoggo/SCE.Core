@@ -3,7 +3,7 @@
     public enum FlowType
     {
         TopDown,
-        BottomUp,
+        BottomTop,
         LeftRight,
         RightLeft,
     }

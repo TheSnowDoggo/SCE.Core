@@ -599,6 +599,16 @@
             Gets or sets the custom viewport dimensions.
             </summary>
         </member>
+        <member name="P:SCE.Display.RerenderCulling">
+            <summary>
+            Gets or sets a value representing whether the Display should only update when the rendered viewport has changed.
+            </summary>
+        </member>
+        <member name="P:SCE.Display.PreferedPosition">
+            <summary>
+            Gets or sets the prefered start position to render at.
+            </summary>
+        </member>
         <member name="P:SCE.Display.Width">
             <summary>
             Gets the width of the viewport.
@@ -634,7 +644,7 @@
             Action called whenever the display viewport changes.
             </summary>
         </member>
-        <member name="M:SCE.Display.ConsoleWindowDimensions">
+        <member name="M:SCE.Display.WindowDimensions">
             <summary>
             Returns the current Console window dimensions.
             </summary>
@@ -858,6 +868,11 @@
         </member>
         <member name="M:SCE.Log.ToString">
             <inheritdoc/>
+        </member>
+        <member name="T:SCE.OptionSelector">
+            <summary>
+            Superceded by Vertical Selector
+            </summary>
         </member>
         <member name="M:SCE.OptionSelector.GetMapView">
             <inheritdoc/>

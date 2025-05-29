@@ -15,12 +15,14 @@
         public virtual bool CleanResize(int width, int height)
         {
             if (width < 0 || height < 0)
+            {
                 return false;
+            }
             _dpMap.CleanResize(width, height);
             return true;
         }
 
-        public virtual bool CleanResize(Vector2Int dimensions)
+        public bool CleanResize(Vector2Int dimensions)
         {
             return CleanResize(dimensions.X, dimensions.Y);
         }
@@ -28,12 +30,14 @@
         public virtual bool MapResize(int width, int height)
         {
             if (width < 0 || height < 0)
+            {
                 return false;
+            }
             _dpMap.MapResize(width, height);
             return true;
         }
 
-        public virtual bool MapResize(Vector2Int dimensions)
+        public bool MapResize(Vector2Int dimensions)
         {
             return MapResize(dimensions.X, dimensions.Y);
         }

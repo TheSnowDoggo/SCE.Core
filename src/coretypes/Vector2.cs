@@ -39,7 +39,7 @@
 
         #endregion
 
-        #region Properties
+        #region Property
 
         public Vector2 Inverse() => new(Y, X);
 
@@ -68,85 +68,10 @@
             return Magnitude() == 1;
         }
 
-        #endregion
-
-        #region Operators
-
-        #region Conversion
-
-        public static explicit operator Vector2Int(Vector2 v) => v.ToVector2Int();
-
-        #endregion
-
-        #region Equality
-
-        public static bool operator ==(Vector2 v1, Vector2 v2) => v1.Equals(v2);
-
-        public static bool operator !=(Vector2 v1, Vector2 v2) => !(v1 == v2);
-
-        #endregion
-
-        #region Innequality
-
-        // Greater than
-        public static bool operator >(Vector2 v1, Vector2 v2) => v1.X > v2.X && v1.Y > v2.Y;
-
-        public static bool operator >(Vector2 v1, float num) => v1.X > num && v1.Y > num;
-
-        // Less than
-        public static bool operator <(Vector2 v1, Vector2 v2) => v2 > v1;
-
-        public static bool operator <(Vector2 v1, float num) => v1.X < num && v1.Y < num;
-
-        // Greater or equal than
-        public static bool operator >=(Vector2 v1, Vector2 v2) => !(v1 < v2);
-
-        public static bool operator >=(Vector2 v1, float num) => !(v1 < num);
-
-        // Less or equal than
-        public static bool operator <=(Vector2 v1, Vector2 v2) => !(v1 > v2);
-
-        public static bool operator <=(Vector2 v1, float num) => !(v1 > num);
-
-        #endregion
-
-        #region Addition
-
-        // Addition
-        public static Vector2 operator +(Vector2 v1, Vector2 v2) => new(v1.X + v2.X, v1.Y + v2.Y);
-
-        public static Vector2 operator +(Vector2 v1, float num) => new(v1.X + num, v1.Y + num);
-
-        #endregion
-
-        #region Subtraction
-
-        // Subtraction
-        public static Vector2 operator -(Vector2 v1) => new(-v1.X, -v1.Y);
-
-        public static Vector2 operator -(Vector2 v1, Vector2 v2) => new(v1.X - v2.X, v1.Y - v2.Y);
-
-        public static Vector2 operator -(Vector2 v1, float num) => new(v1.X - num, v1.Y - num);
-
-        #endregion
-
-        #region Multiplication
-
-        // Multiplication
-        public static Vector2 operator *(Vector2 v1, Vector2 v2) => new(v1.X * v2.X, v1.Y * v2.Y);
-
-        public static Vector2 operator *(Vector2 v1, float num) => new(v1.X * num, v1.Y * num);
-
-        #endregion
-
-        #region Division
-
-        // Division
-        public static Vector2 operator /(Vector2 v1, Vector2 v2) => new(v1.X / v2.X, v1.Y / v2.Y);
-
-        public static Vector2 operator /(Vector2 v1, float num) => new(v1.X / num, v1.Y / num);
-
-        #endregion
+        public double DistanceFrom(Vector2 other)
+        {
+            return (this - other).Abs().Magnitude();
+        }
 
         #endregion
 
@@ -169,22 +94,57 @@
 
         #endregion
 
-        #region ToString
+        #region Operators
 
-        public override string ToString()
-        {
-            return $"{X},{Y}";
-        }
+        // Convert
+        public static explicit operator Vector2Int(Vector2 v) => v.ToVector2Int();
 
-        public string ToString(string? format)
-        {
-            return $"{X.ToString(format)},{Y.ToString(format)}";
-        }
+        // Equality
+        public static bool operator ==(Vector2 v1, Vector2 v2) => v1.Equals(v2);
 
-        public string ToString(string? format, IFormatProvider? provider)
-        {
-            return ToString(format);
-        }
+        public static bool operator !=(Vector2 v1, Vector2 v2) => !(v1 == v2);
+
+        // Greater than
+        public static bool operator >(Vector2 v1, Vector2 v2) => v1.X > v2.X && v1.Y > v2.Y;
+
+        public static bool operator >(Vector2 v1, float num) => v1.X > num && v1.Y > num;
+
+        // Less than
+        public static bool operator <(Vector2 v1, Vector2 v2) => v2 > v1;
+
+        public static bool operator <(Vector2 v1, float num) => v1.X < num && v1.Y < num;
+
+        // Greater or equal than
+        public static bool operator >=(Vector2 v1, Vector2 v2) => !(v1 < v2);
+
+        public static bool operator >=(Vector2 v1, float num) => !(v1 < num);
+
+        // Less or equal than
+        public static bool operator <=(Vector2 v1, Vector2 v2) => !(v1 > v2);
+
+        public static bool operator <=(Vector2 v1, float num) => !(v1 > num);
+
+        // Addition
+        public static Vector2 operator +(Vector2 v1, Vector2 v2) => new(v1.X + v2.X, v1.Y + v2.Y);
+
+        public static Vector2 operator +(Vector2 v1, float num) => new(v1.X + num, v1.Y + num);
+
+        // Subtraction
+        public static Vector2 operator -(Vector2 v1) => new(-v1.X, -v1.Y);
+
+        public static Vector2 operator -(Vector2 v1, Vector2 v2) => new(v1.X - v2.X, v1.Y - v2.Y);
+
+        public static Vector2 operator -(Vector2 v1, float num) => new(v1.X - num, v1.Y - num);
+
+        // Multiplication
+        public static Vector2 operator *(Vector2 v1, Vector2 v2) => new(v1.X * v2.X, v1.Y * v2.Y);
+
+        public static Vector2 operator *(Vector2 v1, float num) => new(v1.X * num, v1.Y * num);
+
+        // Division
+        public static Vector2 operator /(Vector2 v1, Vector2 v2) => new(v1.X / v2.X, v1.Y / v2.Y);
+
+        public static Vector2 operator /(Vector2 v1, float num) => new(v1.X / num, v1.Y / num);
 
         #endregion
 
@@ -245,7 +205,12 @@
 
         #endregion
 
-        #region Doconstruct
+        #region Utility   
+
+        public Vector2Int ToVector2Int()
+        {
+            return new((int)X, (int)Y);
+        }
 
         public void Deconstruct(out float x, out float y)
         {
@@ -253,19 +218,7 @@
             y = Y;
         }
 
-        #endregion
-
-        #region Conversion
-
-        public Vector2Int ToVector2Int()
-        {
-            return new((int)X, (int)Y);
-        }
-
-        #endregion
-
-        #region Math
-
+        // Math
         public static Vector2 Min(Vector2 v1, Vector2 v2)
         {
             return v1 <= v2 ? v1 : v2;
@@ -296,15 +249,7 @@
             return new(MathF.Round(X, 0, MidpointRounding.AwayFromZero), MathF.Round(Y, 0, MidpointRounding.AwayFromZero));
         }
 
-        public double DistanceFrom(Vector2 other)
-        {
-            return (this - other).Abs().Magnitude();
-        }
-
-        #endregion
-
-        #region InRange
-
+        // InRange
         public bool InRange(Vector2 min, Vector2 max)
         {
             return this >= min && this < max;
@@ -326,5 +271,20 @@
         }
 
         #endregion
+
+        public override string ToString()
+        {
+            return $"{X},{Y}";
+        }
+
+        public string ToString(string? format)
+        {
+            return $"{X.ToString(format)},{Y.ToString(format)}";
+        }
+
+        public string ToString(string? format, IFormatProvider? provider)
+        {
+            return ToString(format);
+        }
     }
 }

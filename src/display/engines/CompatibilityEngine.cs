@@ -14,7 +14,8 @@ namespace SCE
         /// <inheritdoc/>
         public override void Render(DisplayMapView dpMap)
         {
-            Console.SetCursorPosition(0, 0);
+            Display.Instance.PreferedPosition.Deconstruct(out int left, out int top);
+            Console.SetCursorPosition(left, top);
 
             StringBuilder sb = new();
 

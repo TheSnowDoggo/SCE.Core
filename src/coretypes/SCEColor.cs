@@ -1,6 +1,6 @@
 ﻿namespace SCE
 {
-    public enum SCEColor : byte
+    public enum SCEColor
     {
         Black,
         DarkBlue,

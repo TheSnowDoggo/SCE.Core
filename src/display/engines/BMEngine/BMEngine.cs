@@ -28,12 +28,14 @@
                 Y = (short)dpMap.Height,
             };
 
+            Display.Instance.PreferedPosition.Deconstruct(out int left, out int top);
+
             SmallRect rect = new()
             {
-                Left   = 0,
-                Top    = 0,
-                Right  = size.X,
-                Bottom = size.Y,
+                Left   = (short)left,
+                Top    = (short)top,
+                Right  = (short)(size.X + left),
+                Bottom = (short)(size.Y + top),
             };
 
             int i = 0;
