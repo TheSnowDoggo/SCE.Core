@@ -931,6 +931,11 @@
         <member name="M:SCE.Viewport.GetMapView">
             <inheritdoc/>
         </member>
+        <member name="T:SCE.InputEntry">
+            <summary>
+            Superceded by InputEntryV2
+            </summary>
+        </member>
         <member name="M:SCE.InputEntryV2.LoadKeyInfo(SCE.UISKeyInfo)">
             <inheritdoc/>
         </member>

@@ -2,20 +2,20 @@
 using System.Collections;
 namespace SCE
 {
-    public class InputEntryV2 : IInputReceiver
+    public class InputEntryV2 : InputBase
     {
         public class Intercept
         {
-            public Intercept(InputEntryV2 entry, StringBuilder iStream, ConsoleKey key)
+            public Intercept(InputEntryV2 entry, StringBuilder inputStream, ConsoleKey key)
             {
                 Entry = entry;
-                IStream = iStream;
+                InputStream = inputStream;
                 Key = key;
             }
 
             public InputEntryV2 Entry { get; }
 
-            public StringBuilder IStream { get; set; }
+            public StringBuilder InputStream { get; set; }
 
             public ConsoleKey Key { get; set; }
         }
@@ -43,20 +43,6 @@ namespace SCE
                 Mode = mode;
             }
 
-            #region IEnumerable
-
-            public IEnumerator<Func<T, bool>> GetEnumerator()
-            {
-                return _validators.GetEnumerator();
-            }
-
-            IEnumerator IEnumerable.GetEnumerator()
-            {
-                return GetEnumerator();
-            }
-
-            #endregion
-
             public VMode Mode { get; set; }
 
             public void Add(Func<T, bool> func)
@@ -72,15 +58,22 @@ namespace SCE
             public bool Validate(T value)
             {
                 if (Mode == VMode.OrTrueEmpty && _validators.Count == 0)
+                {
                     return true;
+                }
+
                 return ValidateCollection(_validators, value, Mode == VMode.And);
             }
 
             public static bool ValidateCollection(IEnumerable<Func<T, bool>> collection, T value, bool and)
             {
                 foreach (var func in collection)
+                {
                     if (and ? !func(value) : func(value))
+                    {
                         return !and;
+                    }
+                }
                 return and;
             }
 
@@ -98,6 +91,20 @@ namespace SCE
             {
                 return Combine(false, arr);
             }
+
+            #region IEnumerable
+
+            public IEnumerator<Func<T, bool>> GetEnumerator()
+            {
+                return _validators.GetEnumerator();
+            }
+
+            IEnumerator IEnumerable.GetEnumerator()
+            {
+                return GetEnumerator();
+            }
+
+            #endregion
         }
 
         public StringBuilder SBuilder { get; } = new();
@@ -124,8 +131,6 @@ namespace SCE
             Backspace(ConsoleKey.Backspace),
         };
 
-        public bool IsActive { get; set; } = true;
-
         public bool IsReceiving { get; set; } = false;
 
         public int CharacterIndex { get; set; } = -1;
@@ -142,39 +147,43 @@ namespace SCE
         }
 
         /// <inheritdoc/>
-        public void LoadKeyInfo(UISKeyInfo uki)
+        public override void LoadKeyInfo(UISKeyInfo uki)
         {
-            if (!IsReceiving)
+            if (!IsReceiving || (uki.InputMode != InputType.InputStream && uki.InputMode != InputType.ConsoleStream))
+            {
                 return;
-            if (uki.InputMode != InputType.InputStream && uki.InputMode != InputType.ConsoleStream)
-                return;
+            }
 
             var cki = uki.KeyInfo;
             Intercept intercept = new(this, new(cki.KeyChar.ToString()), cki.Key);
 
             if (!Intercepters.Validate(intercept))
             {
-                foreach (char c in intercept.IStream.ToString())
+                foreach (char c in intercept.InputStream.ToString())
                 {
-                    if (AllowedChars.Validate(c) && !DisallowedChars.Validate(c))
+                    if (!AllowedChars.Validate(c) || DisallowedChars.Validate(c))
                     {
-                        if (CharacterIndex < 0 || CharacterIndex >= SBuilder.Length)
-                        {
-                            SBuilder.Append(c);
-                            CharacterIndex = SBuilder.Length;
-                        }
-                        else
-                        {
-                            SBuilder.Insert(CharacterIndex, c);
-                            ++CharacterIndex;
-                        }
+                        continue;   
+                    }
+
+                    if (CharacterIndex < 0 || CharacterIndex >= SBuilder.Length)
+                    {
+                        SBuilder.Append(c);
+                        CharacterIndex = SBuilder.Length;
+                    }
+                    else
+                    {
+                        SBuilder.Insert(CharacterIndex, c);
+                        ++CharacterIndex;
                     }
                 }
             }
                 
             OnKey?.Invoke();
             if (IsReceiving)
+            {
                 OnReceive?.Invoke();
+            }
         }
 
         public void Clear()
@@ -223,9 +232,13 @@ namespace SCE
             return (i) =>
             {
                 if (i.Key != key)
+                {
                     return false;
+                }
+
                 i.Entry.IsReceiving = false;
                 action.Invoke();
+
                 return true;
             };
         }
@@ -240,15 +253,27 @@ namespace SCE
             return (i) =>
             {
                 var sb = i.Entry.SBuilder;
+
                 if (i.Key != key || sb.Length <= 0)
+                {
                     return false;
+                }
+
                 if (i.Entry.CharacterIndex >= sb.Length)
+                {
                     sb.Remove(sb.Length - 1, 1);
+                }
                 else if (i.Entry.CharacterIndex <= 0)
+                {
                     sb.Remove(0, 1);
+                }
                 else
+                {
                     sb.Remove(i.Entry.CharacterIndex - 1, 1);
+                }
+
                 --i.Entry.CharacterIndex;
+
                 return true;
             };
         }
@@ -265,17 +290,21 @@ namespace SCE
 
         public static Func<Intercept, bool> LineLimiter(int lines)
         {
-            return (i) => i.IStream.ToString().Contains('\n') && i.Entry.Input.Count(c => c == '\n') >= lines - 1;
+            return (i) => i.InputStream.ToString().Contains('\n') && i.Entry.Input.Count(c => c == '\n') >= lines - 1;
         }
 
         public static Func<Intercept, bool> LineLengthLimiter(int length)
         {
             return (i) =>
             {
-                if (i.IStream[0] == '\n')
+                if (i.InputStream[0] == '\n')
+                {
                     return false;
+                }
+
                 var str = i.Entry.Input;
                 int index = str.LastIndexOf('\n');
+
                 return (index == -1 ? str.Length : str.Length - index - 1) >= length;
             };
         }
@@ -285,7 +314,10 @@ namespace SCE
             return (map) =>
             {
                 if (map.Key == key)
-                    map.IStream[0] = chr;
+                {
+                    map.InputStream[0] = chr;
+                }
+
                 return false;
             };
         }
@@ -297,11 +329,18 @@ namespace SCE
             return (i) =>
             {
                 if (i.Key != left && i.Key != right)
+                {
                     return false;
+                }
+
                 int move = i.Key == left ? -1 : 1;
                 int next = i.Entry.CharacterIndex + move;
+
                 if (next >= 0 && next <= i.Entry.SBuilder.Length)
+                {
                     i.Entry.CharacterIndex = next;
+                }
+
                 return true;
             };
         }

@@ -11,6 +11,9 @@
     <readme>README.md</readme>
     <projectUrl>https://github.com/TheSnowDoggo/SCE.Core</projectUrl>
     <description>The Core of SCE required by all SCE assemblies.</description>
+    <releaseNotes>-Better errors for DisplayMap resizing.
+-UI optimisations
+-Moved namespace InputSystem to SCE</releaseNotes>
     <copyright>MIT License</copyright>
     <repository url="https://github.com/TheSnowDoggo/SCE.Core" />
     <dependencies>

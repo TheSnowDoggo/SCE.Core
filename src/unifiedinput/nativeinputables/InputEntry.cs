@@ -2,6 +2,9 @@
 
 namespace SCE
 {
+    /// <summary>
+    /// Superceded by InputEntryV2
+    /// </summary>
     public class InputEntry : InputBase
     {
         private const ConsoleKey DEFAULT_ENTRYKEY = ConsoleKey.Enter;
