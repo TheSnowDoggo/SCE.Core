@@ -6,7 +6,7 @@
   "compilationOptions": {},
   "targets": {
     ".NETCoreApp,Version=v6.0": {
-      "SCE.Core/3.5.5": {
+      "SCE.Core/3.8.5": {
         "dependencies": {
           "SCECSUtils": "1.5.5"
         },
@@ -25,7 +25,7 @@
     }
   },
   "libraries": {
-    "SCE.Core/3.5.5": {
+    "SCE.Core/3.8.5": {
       "type": "project",
       "serviceable": false,
       "sha512": ""

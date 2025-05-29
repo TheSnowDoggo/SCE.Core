@@ -48,11 +48,7 @@
         public RenderEngine? RenderEngine
         {
             get => renderEngine;
-            set
-            {
-                renderEngine = value;
-                skipCull = true;
-            }
+            set => MiscUtils.QueueSet(ref renderEngine, value, ref skipCull);
         }
 
         /// <summary>
@@ -76,11 +72,7 @@
         public Vector2Int PreferedPosition
         {
             get => preferedPosition;
-            set
-            {
-                preferedPosition = value;
-                skipCull = true;
-            }
+            set => MiscUtils.QueueSet(ref preferedPosition, value, ref skipCull);
         }
 
         public Action<Vector2Int>? OnWindowResize;

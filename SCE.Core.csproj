@@ -8,7 +8,7 @@
     <PackageId>SCECore</PackageId>
     <Title>SCE.Core</Title>
 	<AssemblyName>SCE.Core</AssemblyName>
-    <Version>3.5.5</Version>
+    <Version>3.8.5</Version>
 	<VersionSuffix>Release</VersionSuffix>
     <Authors>Luna Sparkle</Authors>
     <Product>SCE.Core</Product>
@@ -25,9 +25,8 @@
     <RepositoryUrl>https://github.com/TheSnowDoggo/SCE.Core</RepositoryUrl>
     <Company>SCE</Company>
     <PackageProjectUrl>https://github.com/TheSnowDoggo/SCE.Core</PackageProjectUrl>
-    <PackageReleaseNotes>-Fixed anchor bias
--Added prefered display position
--Added vertical selector to replace option selector.</PackageReleaseNotes>
+    <PackageReleaseNotes>-Added resizing for ConsoleRenderer
+-Added RenderIntercept UI</PackageReleaseNotes>
     <TargetFramework>net6.0</TargetFramework>
   </PropertyGroup>
 

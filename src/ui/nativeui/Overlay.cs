@@ -1,15 +1,13 @@
 ﻿namespace SCE
 {
-    internal class Overlay<T> : UIBase
+    public class Overlay<T> : UIInterceptBase<T>
         where T : IRenderable
     {
         public Overlay(T renderable, IRenderable? map = null)
+            : base(renderable)
         {
-            Renderable = renderable;
             Map = map;
         }
-
-        public T Renderable { get; set; }
 
         public IRenderable? Map { get; set; }
 

@@ -37,91 +37,55 @@ namespace SCE
         public Selection this[int index]
         {
             get => selections[index];
-            set
-            {
-                selections[index] = value;
-                renderQueued = true;
-            }
+            set => MiscUtils.QueueSet(ref selections[index], value, ref renderQueued);
         }
 
         public int Selected
         {
             get => selected;
-            set
-            {
-                selected = value;
-                renderQueued = true;
-            }
+            set => MiscUtils.QueueSet(ref selected, value, ref renderQueued);
         }
 
         public ColorSet SelectedColors
         {
             get => selectedColors;
-            set
-            {
-                selectedColors = value;
-                renderQueued = true;
-            }
+            set => MiscUtils.QueueSet(ref selectedColors, value, ref renderQueued);
         }
 
         public ColorSet UnselectedColors
         {
             get => unselectedColors;
-            set
-            {
-                unselectedColors = value;
-                renderQueued = true;
-            }
+            set => MiscUtils.QueueSet(ref unselectedColors, value, ref renderQueued);
         }
 
         public Anchor SelectionAnchor
         {
             get => selectionAnchor;
-            set
-            {
-                selectionAnchor = value;
-                renderQueued = true;
-            }
+            set => MiscUtils.QueueSet(ref selectionAnchor, value, ref renderQueued);
         }
 
         public Pixel BasePixel
         {
             get => basePixel;
-            set
-            {
-                basePixel = value;
-                renderQueued = true;
-            }
+            set => MiscUtils.QueueSet(ref basePixel, value, ref renderQueued);
         }
 
         public StackType StackMode
         {
             get => stackMode;
-            set
-            {
-                stackMode = value;
-                renderQueued = true;
-            }
+            set => MiscUtils.QueueSet(ref stackMode, value, ref renderQueued);
         }
 
         public bool AllowNullSelection
         {
             get => allowNullSelection;
-            set
-            {
-                allowNullSelection = value;
-                renderQueued = true;
-            }
+            set => MiscUtils.QueueSet(ref allowNullSelection, value, ref renderQueued);
         }
 
         public bool FitToLength
         {
             get => fitToLength;
-            set
-            {
-                fitToLength = value;
-                renderQueued = true;
-            }
+            set => MiscUtils.QueueSet(ref fitToLength, value, ref renderQueued);
         }
 
         public void MoveSelected(int move)

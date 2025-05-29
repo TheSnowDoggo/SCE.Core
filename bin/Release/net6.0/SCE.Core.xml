@@ -634,11 +634,6 @@
             Gets or sets a value representing whether the viewport be cleared every frame.
             </summary>
         </member>
-        <member name="P:SCE.Display.CropOutOfBounds">
-            <summary>
-            Gets or sets a value representing whether out of bounds renderables should be ignored.
-            </summary>
-        </member>
         <member name="F:SCE.Display.OnDisplayResize">
             <summary>
             Action called whenever the display viewport changes.
@@ -863,18 +858,7 @@
         <member name="M:SCE.Image.GetMapView">
             <inheritdoc/>
         </member>
-        <member name="M:SCE.MsgLine.ToString">
-            <inheritdoc/>
-        </member>
         <member name="M:SCE.Log.ToString">
-            <inheritdoc/>
-        </member>
-        <member name="T:SCE.OptionSelector">
-            <summary>
-            Superceded by Vertical Selector
-            </summary>
-        </member>
-        <member name="M:SCE.OptionSelector.GetMapView">
             <inheritdoc/>
         </member>
         <member name="P:SCE.Translate2DRenderer.RenderFunc">

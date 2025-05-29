@@ -30,61 +30,37 @@ namespace SCE
         public float Value
         {
             get => value;
-            set
-            {
-                this.value = value;
-                renderQueued = true;
-            }
+            set => MiscUtils.QueueSet(ref this.value, value, ref renderQueued);
         }
 
         public float Min
         {
             get => min;
-            set
-            {
-                min = value;
-                renderQueued = true;
-            }
+            set => MiscUtils.QueueSet(ref min, value, ref renderQueued);
         }
 
         public float Max
         {
             get => max;
-            set
-            {
-                max = value;
-                renderQueued = true;
-            }
+            set => MiscUtils.QueueSet(ref max, value, ref renderQueued);
         }
 
         public Pixel BackFill
         {
             get => backFill;
-            set
-            {
-                backFill = value;
-                renderQueued = true;
-            }
+            set => MiscUtils.QueueSet(ref backFill, value, ref renderQueued);
         }
 
         public Pixel ProgressFill
         {
             get => progressFill; 
-            set
-            {
-                progressFill = value;
-                renderQueued = true;
-            }
+            set => MiscUtils.QueueSet(ref progressFill, value, ref renderQueued);
         }
 
         public FlowType FlowMode
         {
             get => flowMode;
-            set
-            {
-                flowMode = value;
-                renderQueued = true;
-            }
+            set => MiscUtils.QueueSet(ref flowMode, value, ref renderQueued);
         }
 
         public void Resize(int width, int height)

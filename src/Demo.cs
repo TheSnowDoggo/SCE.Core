@@ -50,11 +50,9 @@ namespace SCE
 
         private readonly Image _cur;
 
-        private readonly Image _img;
-
         private readonly Scaler<Image> _scl;
 
-        private readonly ConsoleRenderer _ce;
+        private readonly ConsoleRenderer _cr;
 
         private int selectIndex;
 
@@ -73,7 +71,7 @@ namespace SCE
                 FlowMode = FlowType.LeftRight,
             };
 
-            _ce = new(30, 15)
+            _cr = new(30, 15)
             {
                 Anchor = Anchor.Bottom,
             };
@@ -90,20 +88,20 @@ namespace SCE
                 _vs[i] = new()
                 {
                     Text = $"Selection {num}",
-                    OnSelect = () => _ce.WriteLine($"You selected {num}"),
+                    OnSelect = () => _cr.WriteLine($"You selected {num}"),
                 };
             }
 
-            _img = new(5, 5, SCEColor.DarkBlue);
-
-            _img.Fill(new Pixel(SCEColor.Magenta), Rect2DInt.Vertical(2, _img.Height));
-
-            _img.Fill(new Pixel(SCEColor.Cyan), Rect2DInt.Horizontal(1, _img.Width));
-
-            _scl = new(_img)
+            Image img = new(5, 5, SCEColor.DarkBlue)
             {
                 Anchor = Anchor.Center | Anchor.Middle,
             };
+
+            img.Fill(new Pixel(SCEColor.Magenta), Rect2DInt.Vertical(2, img.Height));
+
+            img.Fill(new Pixel(SCEColor.Cyan), Rect2DInt.Horizontal(1, img.Width));
+
+            _scl = new(img);
 
             // One limitation of the logger is each log can only occupy one line
             // This may be updated in the future.
@@ -119,20 +117,22 @@ namespace SCE
             {
                 Anchor = Anchor.Right,
                 // Combine Center anchors with Right or Left anchors to determine the center bias.
-                // Left bias (default) with round down if the text cannot be fully centered, Right bias rounds up
-                [0] = new()
-                {
-                    Text = "- View Logs -",
-                    Anchor = Anchor.Center,
-                },
-                StackMode = StackType.TopDown,
+                // Left bias (default) with round down if the text cannot be fully centered, Right bias rounds up              
+                StackMode = StackType.BottomUp,
+                BasePixel = new(SCEColor.Transparent),
             };
 
-            for (int i = 1; i < _lr.Height - 2; ++i)
+            _lr.Text[0] = "- View Logs -";
+            _lr.Attributes[0] = new()
             {
-                _lr[i] = new()
+                Anchor = Anchor.Center,
+            };
+
+            for (int i = 1; i < _lr.Height; ++i)
+            {
+                _lr.Text[i] = $"testing chicken {i}";
+                _lr.Attributes[i] = new()
                 {
-                    Text = $"testing chicken {i}",
                     Anchor = Anchor.Center,
                     FgColor = SCEColor.Red,
                     BgColor = SCEColor.DarkMagenta,
@@ -208,7 +208,7 @@ namespace SCE
             _logger.Log("Welcome to the SCE Demo!");
             _logger.Log("Have a peek around at some of the many features.");
             
-            _ce.WriteLine("this is a console emulator");
+            _cr.WriteLine("this was a console emulator");
         }
 
         public override void Update()
@@ -224,7 +224,7 @@ namespace SCE
             {
                 timer = 0.1;
 
-                _img.Rotate90(true);   
+                _scl.Renderable.Rotate90(true);   
             }
 
             _pb.Value += (float)(GameHandler.DeltaTime * 10.0);
@@ -240,7 +240,7 @@ namespace SCE
             Display.Instance.ResizeMode = Display.ResizeType.Auto;
 
             // Adds the IRenderables to the display to render.
-            Display.Instance.Renderables.AddRange(new IRenderable[] { _fl, _loggerFl, _ce, _fps, _scl, _pb, _vs });
+            Display.Instance.Renderables.AddRange(new IRenderable[] { _fl, _loggerFl, _cr, _fps, _scl, _pb, _vs });
 
             Display.Instance.BasePixel = new(SCEColor.DarkCyan);
         }

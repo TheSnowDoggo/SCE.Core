@@ -1,10 +1,16 @@
 ﻿using CSUtils;
-
+using System;
 namespace SCE
 {
     public class LineRenderer : UIBaseExt
     {
-        private TextLine[] lineArr;
+        private readonly ArrayUpdateView<string?> textArrView;
+
+        private readonly ArrayUpdateView<LineAttributes> attributeArrView;
+
+        private string?[] textArr;
+
+        private LineAttributes[] attributeArr;
 
         private bool renderQueued = true;
 
@@ -23,7 +29,11 @@ namespace SCE
         public LineRenderer(int width, int height)
             : base(width, height)
         {
-            lineArr = new TextLine[height];
+            textArr = new string?[height];
+            attributeArr = new LineAttributes[height];
+
+            textArrView = new(textArr, () => renderQueued = true);
+            attributeArrView = new(attributeArr, () => renderQueued = true);
         }
 
         public LineRenderer(Vector2Int dimensions)
@@ -31,80 +41,51 @@ namespace SCE
         {
         }
 
-        public TextLine this[int index]
-        {
-            get => lineArr[index];
-            set
-            {
-                lineArr[index] = value;
-                renderQueued = true;
-            }
-        }
+        public ArrayUpdateView<string?> Text { get => textArrView; }
+
+        public ArrayUpdateView<LineAttributes> Attributes { get => attributeArrView; }
 
         public Anchor LineAnchor
         {
             get => lineAnchor;
-            set
-            {
-                lineAnchor = value;
-                renderQueued = true;
-            }
+            set => MiscUtils.QueueSet(ref lineAnchor, value, ref renderQueued);
         }
 
         public Pixel BasePixel
         {
             get => basePixel;
-            set
-            {
-                basePixel = value;
-                renderQueued = true;
-            }
+            set => MiscUtils.QueueSet(ref basePixel, value, ref renderQueued);
         }
 
         public StackType StackMode
         {
             get => stackMode;
-            set
-            {
-                stackMode = value;
-                renderQueued = true;
-            }
+            set => MiscUtils.QueueSet(ref stackMode, value, ref renderQueued);
         }
 
         public bool FitToLength
         {
             get => fitToLength;
-            set
-            {
-                fitToLength = value;
-                renderQueued = true;
-            }
+            set => MiscUtils.QueueSet(ref fitToLength, value, ref renderQueued);
         }
 
         public SCEColor LineFgColor
         {
             get => textFgColor;
-            set
-            {
-                textFgColor = value;
-                renderQueued = true;
-            }
+            set => MiscUtils.QueueSet(ref textFgColor, value, ref renderQueued);
         }
 
         public SCEColor LineBgColor
         {
             get => textBgColor;
-            set
-            {
-                textBgColor = value;
-                renderQueued = true;
-            }
+            set => MiscUtils.QueueSet(ref textBgColor, value, ref renderQueued);
         }
 
         public void Resize(int width, int height)
         {
             _dpMap.CleanResize(width, height);
-            Array.Resize(ref lineArr, height);
+            Array.Resize(ref textArr, height);
+            Array.Resize(ref attributeArr, height);
             renderQueued = true;
         }
 
@@ -121,25 +102,25 @@ namespace SCE
                 {
                     var y = StackMode == StackType.TopDown ? i : Height - i - 1;
 
-                    if (lineArr[i] is TextLine tl)
+                    if (textArr[i] is string text)
                     {
-                        var fg = tl.FgColor ?? textFgColor;
+                        var fg = attributeArr[i].FgColor ?? textFgColor;
 
-                        var bg = tl.BgColor ?? textBgColor;
+                        var bg = attributeArr[i].BgColor ?? textBgColor;
 
-                        var anchor = tl.Anchor ?? LineAnchor;
+                        var anchor = attributeArr[i].Anchor ?? LineAnchor;
 
-                        var ftl = tl.FitToLength ?? FitToLength;
+                        var ftl = attributeArr[i].FitToLength ?? FitToLength;
 
                         if (ftl)
                         {
-                            var text = Utils.FTL(tl.Text, Width, ' ', AnchorUtils.ToFillType(anchor));
+                            text = Utils.FTL(text, Width, ' ', AnchorUtils.ToFillType(anchor));
 
                             _dpMap.MapString(text, new Vector2Int(0, y), fg, bg);
                         }
                         else
                         {
-                            var text = Utils.Shorten(tl.Text, Width);
+                            text = Utils.Shorten(text, Width);
                             var x = AnchorUtils.HorizontalFix(anchor, Width - text.Length);
 
                             _dpMap.Fill(BasePixel, Rect2DInt.Horizontal(y, Width));

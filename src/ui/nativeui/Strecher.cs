@@ -1,14 +1,12 @@
 ﻿namespace SCE
 {
-    public class Scaler<T> : UIBase 
+    public class Scaler<T> : UIInterceptBase<T>
         where T : IRenderable
     {
         public Scaler(T renderable)
+            : base(renderable)
         {
-            Renderable = renderable;
         }
-
-        public T Renderable { get; set; }
 
         public Vector2Int Scale { get; set; } = new(2, 1);
 

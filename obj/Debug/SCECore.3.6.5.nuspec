@@ -1,0 +1,31 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2012/06/nuspec.xsd">
+  <metadata>
+    <id>SCECore</id>
+    <version>3.6.5</version>
+    <title>SCE.Core</title>
+    <authors>Luna Sparkle</authors>
+    <requireLicenseAcceptance>true</requireLicenseAcceptance>
+    <license type="file">LICENSE.txt</license>
+    <licenseUrl>https://aka.ms/deprecateLicenseUrl</licenseUrl>
+    <readme>README.md</readme>
+    <projectUrl>https://github.com/TheSnowDoggo/SCE.Core</projectUrl>
+    <description>The Core of SCE required by all SCE assemblies.</description>
+    <releaseNotes>-Changed LineRenderer to make it more efficient to use.
+-Changed some UI to be more efficient.</releaseNotes>
+    <copyright>MIT License</copyright>
+    <repository url="https://github.com/TheSnowDoggo/SCE.Core" />
+    <dependencies>
+      <group targetFramework="net6.0">
+        <dependency id="SCECSUtils" version="1.5.5" exclude="Build,Analyzers" />
+      </group>
+    </dependencies>
+  </metadata>
+  <files>
+    <file src="C:\Users\redst\source\repos\TheSnowDoggo\SCE.Core\bin\Debug\net6.0\SCE.Core.runtimeconfig.json" target="lib\net6.0\SCE.Core.runtimeconfig.json" />
+    <file src="C:\Users\redst\source\repos\TheSnowDoggo\SCE.Core\bin\Debug\net6.0\SCE.Core.dll" target="lib\net6.0\SCE.Core.dll" />
+    <file src="C:\Users\redst\source\repos\TheSnowDoggo\SCE.Core\bin\Debug\net6.0\SCE.Core.xml" target="lib\net6.0\SCE.Core.xml" />
+    <file src="C:\Users\redst\source\repos\TheSnowDoggo\SCE.Core\LICENSE.txt" target="\LICENSE.txt" />
+    <file src="C:\Users\redst\source\repos\TheSnowDoggo\SCE.Core\README.md" target="\README.md" />
+  </files>
+</package>

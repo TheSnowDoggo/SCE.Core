@@ -71,15 +71,7 @@ namespace SCE
         public int Scroll
         {
             get => scroll;
-            set
-            {
-                var last = scroll;
-                scroll = value;
-                if (scroll != last)
-                {
-                    renderQueued = true;
-                }
-            }
+            set => MiscUtils.QueueSet(ref scroll, value, ref renderQueued);
         }
 
         public bool AutoScroll { get; set; } = true;
@@ -93,15 +85,7 @@ namespace SCE
         public Pixel BasePixel
         {
             get => basePixel;
-            set
-            {
-                var last = basePixel;
-                basePixel = value;
-                if (basePixel != last)
-                {
-                    renderQueued = true;
-                }
-            }
+            set => MiscUtils.QueueSet(ref basePixel, value, ref renderQueued);
         }
 
         public int TabSize { get; set; } = 8;
@@ -109,7 +93,11 @@ namespace SCE
         public Pixel[] this[int y]
         {
             get => _ls[y];
-            set => _ls[y] = value;
+            set
+            {
+                _ls[y] = value;
+                renderQueued = true;
+            }
         }
 
         private void ShiftCursor(int move)
@@ -138,7 +126,12 @@ namespace SCE
 
         private Pixel[] CurrentLine()
         {
-            return _ls[CursorPos.Y] ??= new Pixel[BufferWidth];
+            var arr = _ls[CursorPos.Y] ??= new Pixel[BufferWidth];
+            if (arr.Length != BufferWidth)
+            {
+                Array.Resize(ref arr, BufferWidth);
+            }
+            return arr;
         }
 
         public void Write(char c)
@@ -211,6 +204,21 @@ namespace SCE
             _ls.CleanResize(BufferHeight);
             Scroll = 0;
             renderQueued = true;
+        }
+
+        public void Resize(int width, int height)
+        {
+            _dpMap.CleanResize(width, height);
+            if (BufferWidth < width)
+            {
+                BufferWidth = width;
+            }
+            renderQueued = true;
+        }
+
+        public void Resize(Vector2Int dimensions)
+        {
+            Resize(dimensions.X, dimensions.Y);
         }
 
         public override DisplayMapView GetMapView()

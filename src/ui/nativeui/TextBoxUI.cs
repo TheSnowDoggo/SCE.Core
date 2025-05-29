@@ -29,66 +29,42 @@ namespace SCE
         {
         }
 
-        #region Settings   
+        #region Settings
 
         public Pixel BasePixel
         {
             get => basePixel;
-            set
-            {
-                basePixel = value;
-                renderQueued = true;
-            }
+            set => MiscUtils.QueueSet(ref basePixel, value, ref renderQueued);
         }
 
         public string Text
         {
             get => text;
-            set
-            {
-                text = value;
-                renderQueued = true;
-            }
+            set => MiscUtils.QueueSet(ref text, value, ref renderQueued);
         } 
 
         public SCEColor TextFgColor
         {
             get => textFgColor;
-            set
-            {
-                textFgColor = value;
-                renderQueued = true;
-            }
+            set => MiscUtils.QueueSet(ref textFgColor, value, ref renderQueued);
         }
 
         public SCEColor TextBgColor
         {
             get => textBgColor;
-            set
-            {
-                textBgColor = value;
-                renderQueued = true;
-            }
+            set => MiscUtils.QueueSet(ref textBgColor, value, ref renderQueued);
         }
 
         public Anchor TextAnchor
         {
             get => textAnchor;
-            set
-            {
-                textAnchor = value;
-                renderQueued = true;
-            }
+            set => MiscUtils.QueueSet(ref textAnchor, value, ref renderQueued);
         }
 
         public bool NewlineOverflow
         {
             get => newlineOverflow;
-            set
-            {
-                newlineOverflow = value;
-                renderQueued = true;
-            }
+            set => MiscUtils.QueueSet(ref newlineOverflow, value, ref renderQueued);
         }
 
         #endregion
