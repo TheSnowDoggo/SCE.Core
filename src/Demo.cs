@@ -7,7 +7,39 @@ namespace SCE
     {
         private static void Main()
         {
-            Test2();
+            Test1();
+        }
+
+        private static void Test3()
+        {
+            Rect2DInt a1 = new(0, 0, 20, 20);
+
+            Rect2DInt a2 = new(0, 10, 20, 25);
+
+            var s1 = a2.SplitAway(a1);
+
+            ;
+
+            var s2 = a2.SplitAway(a1);
+
+            var d = Display.WindowDimensions();
+
+            Image img = new(d);
+
+            foreach (var area in s1)
+            {
+                img.Fill(new Pixel(SCEColor.Red), area);
+            }
+            foreach (var area in s2)
+            {
+                img.Fill(new Pixel(SCEColor.Blue), area);
+            }
+
+            Display.Instance.Renderables.AddEvery(img);
+
+            GameHandler.Scenes.Add(Display.Instance);
+
+            GameHandler.Start();
         }
 
         private static void Test2()
@@ -103,9 +135,9 @@ namespace SCE
 
         private readonly FlowTable _loggerFl;
 
-        private readonly Overlay<TextBoxUI>[] _tbArr = new Overlay<TextBoxUI>[6];
+        private readonly Overlay<TextBoxUI>[] _tbArr = new Overlay<TextBoxUI>[1];
 
-        private readonly Vector2Int _tbDimensions = new(50, 2);
+        private readonly Vector2Int _tbDimensions = new(10, 10);
 
         private readonly Image _cur;
 
@@ -130,9 +162,9 @@ namespace SCE
                 FlowMode = FlowType.LeftRight,
             };
 
-            _cr = new(30, 15)
+            _cr = new(20, 20)
             {
-                Anchor = Anchor.Bottom,
+                Anchor = Anchor.None,
             };
 
             _vs = new(20, 10)
@@ -172,7 +204,7 @@ namespace SCE
             };
 
             // The height determines how many lines can be rendered.
-            _lr = new(_logger.Width, 8)
+            _lr = new(_logger.Width, 1)
             {
                 Anchor = Anchor.Right,
                 // Combine Center anchors with Right or Left anchors to determine the center bias.
@@ -186,17 +218,6 @@ namespace SCE
             {
                 Anchor = Anchor.Center,
             };
-
-            for (int i = 1; i < _lr.Height; ++i)
-            {
-                _lr.Text[i] = $"testing chicken {i}";
-                _lr.Attributes[i] = new()
-                {
-                    Anchor = Anchor.Center,
-                    FgColor = SCEColor.Red,
-                    BgColor = SCEColor.DarkMagenta,
-                };
-            }
 
             // Flow tables are used to stack multiple UI elements in a certain direction
             _loggerFl = new(_logger.Width, _logger.Height + _lr.Height)
@@ -299,7 +320,8 @@ namespace SCE
             Display.Instance.ResizeMode = Display.ResizeType.Auto;
 
             // Adds the IRenderables to the display to render.
-            Display.Instance.Renderables.AddRange(new IRenderable[] { _fl, _loggerFl, _cr, _fps, _scl, _pb, _vs });
+            //_fl, _loggerFl,  _vs, _cr, _fps, 
+            Display.Instance.Renderables.AddEvery(_scl, _pb);
 
             Display.Instance.BasePixel = new(SCEColor.DarkCyan);
         }

@@ -456,13 +456,6 @@
             A struct representing a 2D rectangular area defined by start and end corner.
             </summary>
         </member>
-        <member name="M:SCE.Rect2DInt.TrimArea(SCE.Rect2DInt)">
-            <summary>
-            Returns the given <paramref name="area"/> trimmed from this instance.
-            </summary>
-            <param name="area">The area to trim.</param>
-            <returns>The given <paramref name="area"/> trimmed from this instance.</returns>
-        </member>
         <member name="M:SCE.Rect2DInt.Bound(SCE.Rect2DInt)">
             <summary>
             Returns the specified area realigned to be bound inside this area.
@@ -998,6 +991,16 @@
         <member name="M:SCE.ColorUtils.SetConsoleColor(SCE.ColorSet)">
             <summary>
             Sets the Console Foreground and Background color.
+            </summary>
+        </member>
+        <member name="M:SCE.MathUtils.Middle``1(``0,``0,``0)">
+            <summary>
+            Returns the middle number of the given values
+            </summary>
+        </member>
+        <member name="M:SCE.MathUtils.InMiddle``1(``0,``0,``0)">
+            <summary>
+            Reterns whether the given value is within the bounds.
             </summary>
         </member>
     </members>

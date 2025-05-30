@@ -25,9 +25,7 @@
     <RepositoryUrl>https://github.com/TheSnowDoggo/SCE.Core</RepositoryUrl>
     <Company>SCE</Company>
     <PackageProjectUrl>https://github.com/TheSnowDoggo/SCE.Core</PackageProjectUrl>
-    <PackageReleaseNotes>-Better errors for DisplayMap resizing.
--UI optimisations
--Moved namespace InputSystem to SCE</PackageReleaseNotes>
+    <PackageReleaseNotes>-made overlap respect active state</PackageReleaseNotes>
     <TargetFramework>net6.0</TargetFramework>
   </PropertyGroup>
 

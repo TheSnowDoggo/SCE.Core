@@ -172,16 +172,17 @@
 
             Vector2 v2 = new(Math.Min(r1, r2), Math.Min(b1, b2));
 
-            var start = Vector2.Min(v1, v2);
-
-            var end = Vector2.Max(v1, v2);
-
-            return new(start, end);
+            return new(v1, v2);
         }
 
         public static Rect2D GetOverlap(Rect2D a1, Rect2D a2)
         {
             return GetOverlap(a1.Left, a1.Top, a1.Right, a1.Bottom, a2.Left, a2.Top, a2.Right, a2.Bottom);
+        }
+
+        public Rect2D GetOverlap(Rect2D other)
+        {
+            return GetOverlap(this, other);
         }
 
         /// <summary>

@@ -196,7 +196,7 @@ namespace SCE
                 yield break;
             }
 
-            area = thisArea.TrimArea(area);
+            area = thisArea.GetOverlap(area);
 
             foreach (var pos in area.Enumerate(rowMajor))
             {
@@ -304,7 +304,7 @@ namespace SCE
                 yield break;
             }
 
-            dataGridArea = thisArea.TrimArea(offsetArea) - thisOffset;
+            dataGridArea = thisArea.GetOverlap(offsetArea) - thisOffset;
             foreach (var pos in dataGrid.EnumerateGrid(dataGridArea))
             {
                 yield return pos;
@@ -378,7 +378,7 @@ namespace SCE
                 yield break;
             }
 
-            mapArea = dataArea.TrimArea(alignedGetArea) - dataOffset;
+            mapArea = dataArea.GetOverlap(alignedGetArea) - dataOffset;
             foreach (var pos in EnumerateGrid(mapArea))
             {
                 yield return pos;

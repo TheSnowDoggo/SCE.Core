@@ -2,8 +2,6 @@
 {
     public class Viewport : UIBaseExt
     {
-        private Pixel basePixel = new(SCEColor.Black);
-
         public Viewport(int width, int height)
             : base(width, height)
         {
@@ -50,7 +48,11 @@
                 }
             }
 
-            list.Sort((left, right) => left.Layer - right.Layer);
+            list.Sort((left, right) => right.Layer - left.Layer);
+
+            List<Rect2DInt> mappedAreas = new();
+
+            var thisArea = _dpMap.GridArea();
 
             foreach (var r in list)
             {
@@ -58,16 +60,39 @@
 
                 var pos = AnchorUtils.AnchorTo(r.Anchor, Dimensions, dpMap.Dimensions) + r.Offset;
 
-                var area = dpMap.GridArea();
+                var area = thisArea.GetOverlap(dpMap.GridArea() + pos);
 
-                if (Transparency)
+                List<Rect2DInt> areasToMap = new() { area };
+                foreach (var mapped in mappedAreas)
                 {
-                    _dpMap.PMapTo(dpMap, area, pos);
+                    List<Rect2DInt> nextAreasToMap = new();
+                    foreach (var map in areasToMap)
+                    {
+                        nextAreasToMap.AddRange(map.SplitAway(mapped));
+                    }
+                    areasToMap.Clear();
+
+                    areasToMap.AddRange(nextAreasToMap);
+                    if (areasToMap.Count == 0)
+                    {
+                        break;
+                    }
                 }
-                else
+
+                foreach (var map in areasToMap)
                 {
-                    _dpMap.MapTo(dpMap, area, pos);
+                    var gridArea = map - pos;
+                    if (Transparency)
+                    {
+                        _dpMap.PMapTo(dpMap, gridArea, pos);
+                    }
+                    else
+                    {
+                        _dpMap.MapFrom(dpMap, map);
+                    }
                 }
+
+                mappedAreas.AddRange(areasToMap);
             }
 
             return (DisplayMapView)_dpMap;

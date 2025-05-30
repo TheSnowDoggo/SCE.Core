@@ -168,15 +168,7 @@
                 throw new ArgumentException("Areas do not overlap.");
             }
 
-            Vector2Int v1 = new(Math.Max(l1, l2), Math.Max(t1, t2));
-
-            Vector2Int v2 = new(Math.Min(r1, r2), Math.Min(b1, b2));
-
-            var start = Vector2Int.Min(v1, v2);
-
-            var end = Vector2Int.Max(v1, v2);
-
-            return new(start, end);
+            return new(Math.Max(l1, l2), Math.Max(t1, t2), Math.Min(r1, r2), Math.Min(b1, b2));
         }
 
         public static Rect2DInt GetOverlap(Rect2DInt a1, Rect2DInt a2)
@@ -184,22 +176,90 @@
             return GetOverlap(a1.Left, a1.Top, a1.Right, a1.Bottom, a2.Left, a2.Top, a2.Right, a2.Bottom);
         }
 
-        /// <summary>
-        /// Returns the given <paramref name="area"/> trimmed from this instance.
-        /// </summary>
-        /// <param name="area">The area to trim.</param>
-        /// <returns>The given <paramref name="area"/> trimmed from this instance.</returns>
-        public Rect2DInt TrimArea(Rect2DInt area)
+        public Rect2DInt GetOverlap(Rect2DInt other)
         {
-            if (!Overlaps(this, area))
+            return GetOverlap(this, other);
+        }
+
+        public Rect2DInt[] SplitAway(Rect2DInt from, bool preferVertical = true)
+        {
+            if (!Overlaps(from))
             {
-                throw new ArgumentException("Areas do not overlap.");
+                return new[] { this };
             }
 
-            return new(area.Left < Left ? Left : area.Left,
-                area.Top < Top ? Top : area.Top,
-                area.Right > Right ? Right : area.Right,
-                area.Bottom > Bottom ? Bottom : area.Bottom);
+            if (from.Contains(this))
+            {
+                return Array.Empty<Rect2DInt>();
+            }
+
+            if (Contains(from))
+            {
+                return new Rect2DInt[]
+                {
+                    new(Left      , Top        , from.Left , from.Bottom),
+                    new(from.Left , Top        , Right     , from.Top   ),
+                    new(from.Right, from.Top   , Right     , Bottom     ),
+                    new(Left      , from.Bottom, from.Right, Bottom     ),
+                };
+            }
+
+            int hMid;
+            int hOut;
+            if (MathUtils.InMiddle(Left, from.Left, Right))
+            {
+                hMid = from.Left;
+                hOut = Left;
+            }
+            else if (MathUtils.InMiddle(Left, from.Right, Right))
+            {
+                hMid = from.Right;
+                hOut = Right;
+            }
+            else
+            {
+                if (Top < from.Top)
+                {
+                    return new Rect2DInt[] { new(Left, Top, Right, from.Top) };
+                }
+                return new Rect2DInt[] { new(Left, from.Bottom, Right, Bottom) };
+            }
+
+            int vMid;
+            int vOut;
+            if (MathUtils.InMiddle(Top, from.Top, Bottom))
+            {
+                vMid = from.Top;
+                vOut = Top;
+            }
+            else if (MathUtils.InMiddle(Top, from.Bottom, Bottom))
+            {
+                vMid = from.Bottom;
+                vOut = Bottom;
+            }
+            else
+            {
+                if (Left < from.Left)
+                {
+                    return new Rect2DInt[] { new(Left, Top, from.Left, Bottom) };
+                }
+                return new Rect2DInt[] { new(from.Right, Top, Right, Bottom) };
+            }
+
+            if (preferVertical)
+            {
+                return new Rect2DInt[]
+                {
+                    new(hOut, Top , hMid                       , Bottom),
+                    new(hMid, vOut, hOut <= hMid ? Right : Left, vMid  ),
+                };
+            }
+
+            return new Rect2DInt[]
+            {
+                new(Left, vOut, Right, vMid                       ),
+                new(hMid, vMid, hOut , vOut <= vMid ? Bottom : Top),
+            };
         }
 
         /// <summary>
