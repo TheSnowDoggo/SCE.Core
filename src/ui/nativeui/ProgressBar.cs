@@ -7,19 +7,7 @@ namespace SCE
 
         private bool valueQueued = false;
 
-        private int lastFill = -1;
-
-        private float value;
-
-        private float min;
-
-        private float max;
-
-        private Pixel backFill = new(SCEColor.Black);
-
-        private Pixel progressFill = new(SCEColor.Green);
-
-        private FlowType flowMode = FlowType.LeftRight;
+        private int lastFill = -1; 
 
         public ProgressBar(int width, int height)
             : base(width, height)
@@ -31,11 +19,15 @@ namespace SCE
         {
         }
 
+        private float value;
+
         public float Value
         {
             get => value;
             set => MiscUtils.QueueSet(ref this.value, value, ref valueQueued);
         }
+
+        private float min;
 
         public float Min
         {
@@ -43,11 +35,15 @@ namespace SCE
             set => MiscUtils.QueueSet(ref min, value, ref valueQueued);
         }
 
+        private float max;
+
         public float Max
         {
             get => max;
             set => MiscUtils.QueueSet(ref max, value, ref valueQueued);
         }
+
+        private Pixel backFill = new(SCEColor.Black);
 
         public Pixel BackFill
         {
@@ -55,11 +51,15 @@ namespace SCE
             set => MiscUtils.QueueSet(ref backFill, value, ref renderQueued);
         }
 
+        private Pixel progressFill = new(SCEColor.Green);
+
         public Pixel ProgressFill
         {
             get => progressFill; 
             set => MiscUtils.QueueSet(ref progressFill, value, ref renderQueued);
         }
+
+        private FlowType flowMode = FlowType.LeftRight;
 
         public FlowType FlowMode
         {
@@ -78,7 +78,7 @@ namespace SCE
             Resize(dimensions.X, dimensions.Y);
         }
 
-        public override DisplayMapView GetMapView()
+        public override MapView<Pixel> GetMapView()
         {
             if (renderQueued || valueQueued)
             {
@@ -114,7 +114,7 @@ namespace SCE
                 valueQueued = false;
             }
 
-            return (DisplayMapView)_dpMap;
+            return _dpMap;
         }
     }
 }

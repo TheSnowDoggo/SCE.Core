@@ -13,9 +13,9 @@
 
         public bool Transparency { get; set; } = true;
 
-        public override DisplayMapView GetMapView()
+        public override MapView<Pixel> GetMapView()
         {
-            var dpMap = Renderable.GetMapView().ToDisplayMap();
+            DisplayMap dpMap = new(Renderable.GetMapView());
 
             if (Map != null && Map.IsActive)
             {
@@ -33,7 +33,7 @@
                 }
             }
 
-            return (DisplayMapView)dpMap;
+            return dpMap;
         }
     }
 }

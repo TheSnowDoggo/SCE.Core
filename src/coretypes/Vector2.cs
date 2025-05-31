@@ -273,15 +273,15 @@
         // Clamp
         public Vector2 ClampMin(Vector2 min)
         {
-            return new(X < min.X ? min.X : X, Y < min.Y ? min.Y : Y);
+            return new(Math.Max(X, min.X), Math.Max(Y, min.Y));
         }
 
         public Vector2 ClampMax(Vector2 max)
         {
-            return new(X > max.X ? max.X : X, Y > max.Y ? max.Y : Y);
+            return new(Math.Min(X, max.X), Math.Min(Y, max.Y));
         }
 
-        public Vector2 Clamp(Vector2 min, Vector2 max)
+        public Vector2 ClampRange(Vector2 min, Vector2 max)
         {
             if (min > max)
             {

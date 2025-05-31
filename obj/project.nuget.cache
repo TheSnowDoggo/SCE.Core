@@ -1,10 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "qQKyaOHKmvQtE4DrtOKmdSVjk2zX21mYpQlMZV2jUqA4d1qdoAxD5jv8+CiXuFNXZ7lBZHn+G3nRuGnKSzZ0HA==",
+  "dgSpecHash": "ImuMqDBpgPT5rvx599iBz5MkEcB4krVBnKwaKK51kv4Jj49PyMH9cZIAt6Z3cmN21+pH4U3etrTObWNDcpXYaw==",
   "success": true,
   "projectFilePath": "C:\\Users\\redst\\source\\repos\\TheSnowDoggo\\SCE.Core\\SCE.Core.csproj",
-  "expectedPackageFiles": [
-    "C:\\Users\\redst\\.nuget\\packages\\scecsutils\\1.5.5\\scecsutils.1.5.5.nupkg.sha512"
-  ],
+  "expectedPackageFiles": [],
   "logs": []
 }

@@ -7,18 +7,6 @@ namespace SCE
     {
         private bool renderQueued = true;
 
-        private Pixel basePixel = new(SCEColor.Black);
-
-        private string text = string.Empty;
-
-        private SCEColor textFgColor = SCEColor.Gray;
-
-        private SCEColor textBgColor = SCEColor.Transparent;
-
-        private Anchor textAnchor = Anchor.None;
-
-        private bool newlineOverflow = false;
-
         public TextBoxUI(int width, int height)
             : base(width, height)
         {
@@ -29,7 +17,7 @@ namespace SCE
         {
         }
 
-        #region Settings
+        private Pixel basePixel = new(SCEColor.Black);
 
         public Pixel BasePixel
         {
@@ -37,11 +25,15 @@ namespace SCE
             set => MiscUtils.QueueSet(ref basePixel, value, ref renderQueued);
         }
 
+        private string text = string.Empty;
+
         public string Text
         {
             get => text;
             set => MiscUtils.QueueSet(ref text, value, ref renderQueued);
-        } 
+        }
+
+        private SCEColor textFgColor = SCEColor.Gray;
 
         public SCEColor TextFgColor
         {
@@ -49,11 +41,15 @@ namespace SCE
             set => MiscUtils.QueueSet(ref textFgColor, value, ref renderQueued);
         }
 
+        private SCEColor textBgColor = SCEColor.Transparent;
+
         public SCEColor TextBgColor
         {
             get => textBgColor;
             set => MiscUtils.QueueSet(ref textBgColor, value, ref renderQueued);
         }
+
+        private Anchor textAnchor = Anchor.None;
 
         public Anchor TextAnchor
         {
@@ -61,55 +57,12 @@ namespace SCE
             set => MiscUtils.QueueSet(ref textAnchor, value, ref renderQueued);
         }
 
+        private bool newlineOverflow = false;
+
         public bool NewlineOverflow
         {
             get => newlineOverflow;
             set => MiscUtils.QueueSet(ref newlineOverflow, value, ref renderQueued);
-        }
-
-        #endregion
-
-        private static string[] OverflowSplitLines(string str, int maxLength, int maxLines)
-        {
-            List<string> lineList = new();
-            StringBuilder sb = new();
-            for (int i = 0; i < str.Length && lineList.Count < maxLines; ++i)
-            {
-                bool newLine = str[i] == '\n';
-                if (!newLine)
-                {
-                    sb.Append(str[i]);
-                }
-                if (newLine || i == str.Length - 1 || (sb.Length == maxLength && str[i + 1] != '\n'))
-                {
-                    lineList.Add(sb.ToString());
-                    sb.Clear();
-                }
-            }
-            return lineList.ToArray();
-        }
-
-        private static string[] SplitLines(string str, int maxLength, int maxLines)
-        {
-            List<string> lines = new(maxLines);
-            StringBuilder sb = new();
-            foreach (char c in str)
-            {
-                if (c == '\n')
-                {
-                    lines.Add(Utils.Shorten(sb.ToString(), maxLength));
-                    sb.Clear();
-                }
-                else
-                {
-                    sb.Append(c);
-                }
-            }
-            if (sb.Length > 0 && lines.Count < maxLines)
-            {
-                lines.Add(Utils.Shorten(sb.ToString(), maxLength));
-            }
-            return lines.ToArray();
         }
 
         public void Resize(int width, int height)
@@ -123,24 +76,34 @@ namespace SCE
             Resize(dimensions.X, dimensions.Y);
         }
 
-        public override DisplayMapView GetMapView()
+        public override MapView<Pixel> GetMapView()
         {
             if (renderQueued)
             {
                 _dpMap.Fill(BasePixel);
 
-                var lineArr = NewlineOverflow ? OverflowSplitLines(Text, Width, Height) : SplitLines(Text, Width, Height);
-
-                int startY = AnchorUtils.VerticalFix(TextAnchor, Height - lineArr.Length);
-                for (int i = 0; i < lineArr.Length; ++i)
+                string[] lines;
+                if (NewlineOverflow)
                 {
-                    int x = AnchorUtils.HorizontalFix(TextAnchor, Width - lineArr[i].Length);
-                    _dpMap.MapString(lineArr[i], new Vector2Int(x, startY + i), TextFgColor, TextBgColor);
+                    lines = Utils.OverflowSplitLines(Text, Width, Height);
+                }
+                else
+                {
+                    lines = Utils.SplitLines(Text, Width, Height); 
+                }
+
+                int startY = AnchorUtils.VerticalFix(TextAnchor, Height - lines.Length);
+
+                for (int i = 0; i < lines.Length; ++i)
+                {
+                    int x = AnchorUtils.HorizontalFix(TextAnchor, Width - lines[i].Length);
+
+                    _dpMap.MapString(lines[i], new Vector2Int(x, startY + i), TextFgColor, TextBgColor);
                 }
 
                 renderQueued = false;
             }
-            return (DisplayMapView)_dpMap;
+            return _dpMap;
         }
     }
 }

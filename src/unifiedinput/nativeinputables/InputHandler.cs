@@ -7,9 +7,9 @@
     {
         private readonly Queue<UISKeyInfo> uisKeyInfoQueue = new();
 
-        private bool quitKey;
+        private bool flush;
 
-        private bool flushKey;
+        private bool flushAll;
 
         public InputHandler()
             : base()
@@ -28,14 +28,14 @@
             uisKeyInfoQueue.Enqueue(uisKeyInfo);
         }
 
-        public void Quit()
-        {
-            quitKey = true;
-        }
-
         public void Flush()
         {
-            flushKey = true;
+            flush = true;
+        }
+
+        public void FlushAll()
+        {
+            flushAll = true;
         }
 
         public void Start()
@@ -44,26 +44,19 @@
 
         public void Update()
         {
-            if (!IsActive)
-            {
-                return;
-            }
-
             List<InputLayer> list = new(Count);
-            foreach (var layer in this)
-            {
-                list.Add(layer);
-            }
+
+            list.AddRange(this);
 
             list.Sort();
 
             int queueCount = uisKeyInfoQueue.Count;
 
-            flushKey = false;
+            flushAll = false;
 
             for (int i = 0; i < queueCount; ++i)
             {
-                quitKey = false;
+                flush = false;
                 var uisKeyInfo = uisKeyInfoQueue.Dequeue();
 
                 foreach (var layer in list)
@@ -72,12 +65,12 @@
                     {
                         layer.LoadKeyInfo(uisKeyInfo);
                     }
-                    if (flushKey)
+                    if (flushAll)
                     {
                         uisKeyInfoQueue.Clear();
                         return;
                     }
-                    if (quitKey)
+                    if (flush)
                     {
                         break;
                     }

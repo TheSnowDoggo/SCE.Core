@@ -31,31 +31,31 @@ namespace SCE
             return c;
         }
 
-        private string DebugBuild(DisplayMapView dpMap)
+        private string DebugBuild(MapView<Pixel> mapView)
         {
-            StringBuilder sb = new(dpMap.Size() + dpMap.Height);
-            for (int y = 0; y < dpMap.Height; ++y)
+            StringBuilder sb = new(mapView.Size() + mapView.Height);
+            for (int y = 0; y < mapView.Height; ++y)
             {
                 if (y != 0)
                 {
                     sb.AppendLine();
                 }
-                for (int x = 0; x < dpMap.Width; ++x)
+                for (int x = 0; x < mapView.Width; ++x)
                 {
-                    sb.Append(DebugGetChar(dpMap[x, y]));
+                    sb.Append(DebugGetChar(mapView[x, y]));
                 }
             }
             return sb.ToString();
         }
 
         /// <inheritdoc/>
-        public override void Render(DisplayMapView dpMap, Vector2Int start)
+        public override void Render(MapView<Pixel> mapView, Vector2Int start)
         {
             ColorUtils.SetConsoleColor(FgColor, BgColor);
 
             Console.SetCursorPosition(start.X, start.Y);
 
-            Console.Write(DebugBuild(dpMap));
+            Console.Write(DebugBuild(mapView));
 
             Console.ResetColor();
         }

@@ -1,9 +1,12 @@
-﻿namespace SCE
+﻿using CSUtils;
+using System.Collections;
+
+namespace SCE
 {
     /// <summary>
     /// A struct representing a 2D rectangular area defined by start and end corner.
     /// </summary>
-    public readonly struct Rect2DInt : IEquatable<Rect2DInt>
+    public readonly struct Rect2DInt : IEnumerable<Vector2Int>, IEquatable<Rect2DInt>
     {
         public Rect2DInt(int left, int top, int right, int bottom)
         {
@@ -181,7 +184,7 @@
             return GetOverlap(this, other);
         }
 
-        public Rect2DInt[] SplitAway(Rect2DInt from, bool preferVertical = true)
+        private Rect2DInt[] SplitAway(Rect2DInt from, bool preferVertical = true)
         {
             if (!Overlaps(from))
             {
@@ -206,12 +209,12 @@
 
             int hMid;
             int hOut;
-            if (MathUtils.InMiddle(Left, from.Left, Right))
+            if (Utils.InMiddle(Left, from.Left, Right))
             {
                 hMid = from.Left;
                 hOut = Left;
             }
-            else if (MathUtils.InMiddle(Left, from.Right, Right))
+            else if (Utils.InMiddle(Left, from.Right, Right))
             {
                 hMid = from.Right;
                 hOut = Right;
@@ -227,12 +230,12 @@
 
             int vMid;
             int vOut;
-            if (MathUtils.InMiddle(Top, from.Top, Bottom))
+            if (Utils.InMiddle(Top, from.Top, Bottom))
             {
                 vMid = from.Top;
                 vOut = Top;
             }
-            else if (MathUtils.InMiddle(Top, from.Bottom, Bottom))
+            else if (Utils.InMiddle(Top, from.Bottom, Bottom))
             {
                 vMid = from.Bottom;
                 vOut = Bottom;
@@ -301,21 +304,6 @@
             return Left <= position.X && Top <= position.Y && position.X < Right && position.Y < Bottom;
         }
 
-        public IEnumerable<Vector2Int> Enumerate(bool rowMajor = true)
-        {
-            int s1 = rowMajor ? Top : Left;
-            int s2 = rowMajor ? Left : Top;
-            int e1 = rowMajor ? Bottom : Right;
-            int e2 = rowMajor ? Right : Bottom;
-            for (int i = s1; i < e1; ++i)
-            {
-                for (int j = s2; j < e2; ++j)
-                {
-                    yield return rowMajor ? new(j, i) : new(i, j);
-                }
-            }
-        }
-
         public void Deconstruct(out int left, out int top, out int right, out int bottom)
         {
             left = Left;
@@ -352,6 +340,46 @@
         public static Rect2DInt Vertical(int x, int height)
         {
             return Vertical(x, 0, height);
+        }
+
+        #endregion
+
+        #region IEnumerable
+
+        public IEnumerable<Vector2Int> Enumerate(bool rowMajor = true)
+        {
+            int s1 = rowMajor ? Top : Left;
+            int s2 = rowMajor ? Left : Top;
+            int e1 = rowMajor ? Bottom : Right;
+            int e2 = rowMajor ? Right : Bottom;
+            for (int i = s1; i < e1; ++i)
+            {
+                for (int j = s2; j < e2; ++j)
+                {
+                    yield return rowMajor ? new(j, i) : new(i, j);
+                }
+            }
+        }
+
+        public IEnumerable<Vector2Int> Enumerate(Rect2DInt area, bool rowMajor = true)
+        {
+            if (Overlaps(area))
+            {
+                foreach (var pos in GetOverlap(area).Enumerate(rowMajor))
+                {
+                    yield return pos;
+                }
+            }
+        }
+
+        public IEnumerator<Vector2Int> GetEnumerator()
+        {
+            return Enumerate().GetEnumerator();
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return GetEnumerator();
         }
 
         #endregion

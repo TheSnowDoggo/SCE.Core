@@ -15,6 +15,6 @@
         public Anchor Anchor { get; set; }
 
         /// <inheritdoc/>
-        public abstract DisplayMapView GetMapView();
+        public abstract MapView<Pixel> GetMapView();
     }
 }

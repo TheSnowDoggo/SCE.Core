@@ -16,7 +16,9 @@
         public int CompareTo(InputLayer? other)
         {
             if (other is null)
-                throw new NotImplementedException();
+            {
+                throw new NullReferenceException("Other is null.");
+            }
             return other.Layer - Layer; // Lower = Higher priority
         }
     }

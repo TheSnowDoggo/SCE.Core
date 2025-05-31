@@ -10,11 +10,11 @@
 
         public Vector2Int Scale { get; set; } = new(2, 1);
 
-        public override DisplayMapView GetMapView()
+        public override MapView<Pixel> GetMapView()
         {
-            var dpMap = Renderable.GetMapView().ToDisplayMap();
+            DisplayMap dpMap = new(Renderable.GetMapView());
             dpMap.Upscale(Scale);
-            return (DisplayMapView)dpMap;
+            return dpMap;
         }
     }
 }

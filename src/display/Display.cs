@@ -162,14 +162,14 @@
 
             TryResize();
 
-            var dpMap = viewport.GetMapView();
+            var mapView = viewport.GetMapView();
 
-            UpdateCull(dpMap);
+            UpdateCull(mapView);
 
-            RenderEngine?.Render(dpMap, StartPosition);    
+            RenderEngine?.Render(mapView, StartPosition);    
         }
 
-        private void UpdateCull(DisplayMapView dpMap)
+        private void UpdateCull(MapView<Pixel> mapView)
         {
             if (!RerenderCulling)
             {
@@ -178,13 +178,13 @@
 
             if (!skipCull)
             {
-                if (last != null && Grid2D<Pixel>.ValueEquals(dpMap, last))
+                if (last != null && Grid2D<Pixel>.ValueEquals(mapView, last))
                 {
                     return;
                 }
                 else
                 {
-                    last = dpMap.ToDisplayMap();
+                    last = new(mapView);
                 }
             }
 

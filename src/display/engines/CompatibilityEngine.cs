@@ -15,7 +15,7 @@ namespace SCE
         public static CompatibilityEngine Instance { get => _lazy.Value; }
 
         /// <inheritdoc/>
-        public override void Render(DisplayMapView dpMap, Vector2Int start)
+        public override void Render(MapView<Pixel> mapView, Vector2Int start)
         {
             Console.SetCursorPosition(start.X, start.Y);
 
@@ -24,23 +24,23 @@ namespace SCE
             var lastSet = ColorSet.Zero;
             bool first = true;
 
-            for (int y = 0; y < dpMap.Height; ++y)
+            for (int y = 0; y < mapView.Height; ++y)
             {
                 if (y != 0)
                 {
                     sb.Append('\n');
                 }
-                for (int x = 0; x < dpMap.Width; ++x)
+                for (int x = 0; x < mapView.Width; ++x)
                 {
                     if (first)
                     {
-                        lastSet = dpMap[x, y].ColorSet();
+                        lastSet = mapView[x, y].ColorSet();
                         first = false;
                     }
-                    var set = dpMap[x, y].ColorSet();
+                    var set = mapView[x, y].ColorSet();
                     if (lastSet == set)
                     {
-                        sb.Append(dpMap[x, y].Element);
+                        sb.Append(mapView[x, y].Element);
                     }
                     else
                     {
@@ -48,7 +48,7 @@ namespace SCE
                         Console.Write(sb);
                         sb.Clear(); 
 
-                        sb.Append(dpMap[x, y].Element);
+                        sb.Append(mapView[x, y].Element);
 
                         lastSet = set;
                     }

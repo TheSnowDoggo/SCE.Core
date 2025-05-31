@@ -34,12 +34,12 @@ namespace SCE
         /// </summary>
         public int DisplayBuffer { get; set; } = DEFAULT_BUFFER_SIZE;
 
-        private static ColorSet[] GetRenderInfo(DisplayMapView dpMap)
+        private static ColorSet[] GetRenderInfo(MapView<Pixel> mapView)
         {
             HashSet<ColorSet> set = new();
-            foreach (var pos in dpMap)
+            foreach (var pos in mapView)
             {
-                set.Add(dpMap[pos].ColorSet());
+                set.Add(mapView[pos].ColorSet());
             }
             return set.ToArray();
         }
@@ -74,22 +74,22 @@ namespace SCE
             return string.Join("", "\r", tabCache.Invoke(tabLength / 8), backspaceCache.Invoke(tabLength - x));
         }
 
-        private string Build(DisplayMapView dpMap, ColorSet rInfo)
+        private string Build(MapView<Pixel> mapView, ColorSet rInfo)
         {
             StringBuilder sb = new();
 
             rInfo.Expose(out SCEColor fgColor, out SCEColor bgColor);
 
             bool different = false;
-            for (int y = 0; y < dpMap.Height; ++y)
+            for (int y = 0; y < mapView.Height; ++y)
             {
                 if (y != 0)
                 {
                     sb.Append('\n');
                 }
-                for (int x = 0; x < dpMap.Width; ++x)
+                for (int x = 0; x < mapView.Width; ++x)
                 {
-                    var pixel = dpMap[x, y];
+                    var pixel = mapView[x, y];
                     if (pixel.BgColor == bgColor && (pixel.Element is ' ' or '\0' || pixel.FgColor == fgColor))
                     {
                         if (different)
@@ -108,21 +108,21 @@ namespace SCE
             return sb.ToString();
         }
 
-        private string[] BuildAll(DisplayMapView dpMap, ColorSet[] renderInfoArr)
+        private string[] BuildAll(MapView<Pixel> mapView, ColorSet[] renderInfoArr)
         {
             var bInfoArr = new string[renderInfoArr.Length];
             for (int i = 0; i < renderInfoArr.Length; ++i)
             {
-                bInfoArr[i] = Build(dpMap, renderInfoArr[i]);
+                bInfoArr[i] = Build(mapView, renderInfoArr[i]);
             }
             return bInfoArr;
         }
 
         /// <inheritdoc/>
-        public override void Render(DisplayMapView dpMap, Vector2Int start)
+        public override void Render(MapView<Pixel> mapView, Vector2Int start)
         {
-            var rInfoArr = GetRenderInfo(dpMap);
-            var strArr = BuildAll(dpMap, rInfoArr);
+            var rInfoArr = GetRenderInfo(mapView);
+            var strArr = BuildAll(mapView, rInfoArr);
             Write(strArr, rInfoArr, start);
         }
 

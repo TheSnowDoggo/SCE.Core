@@ -2,44 +2,6 @@
 {
     public static class MathUtils
     {
-        #region Middle
-
-        /// <summary>
-        /// Returns the middle number of the given values
-        /// </summary>
-        public static T Middle<T>(T a, T b, T c)
-            where T : IComparable<T>
-        {
-            if (a.CompareTo(b) > 0)
-            {
-                if (a.CompareTo(c) < 0)
-                {
-                    return a;
-                }
-                return b.CompareTo(c) < 0 ? c : b;
-            }
-            if (b.CompareTo(c) < 0)
-            {
-                return b;
-            }
-            return a.CompareTo(c) < 0 ? c : a;
-        }
-
-        /// <summary>
-        /// Reterns whether the given value is within the bounds.
-        /// </summary>
-        public static bool InMiddle<T>(T lower, T value, T upper)
-            where T : IComparable<T>
-        {
-            if (lower.CompareTo(upper) > 0)
-            {
-                throw new ArgumentException("Lower bound cannot exceed upper bound.");
-            }
-            return lower.CompareTo(value) < 0 && upper.CompareTo(value) > 0;
-        }
-
-        #endregion
-
         public static float Square(float x)
         {
             return x * x;

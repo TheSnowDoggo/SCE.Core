@@ -33,7 +33,7 @@
         }
 
         /// <inheritdoc/>
-        public override DisplayMapView GetMapView()
+        public override MapView<Pixel> GetMapView()
         {
             if (ClearOnRender)
             {
@@ -48,37 +48,37 @@
                     continue;
                 }
 
-                var dpMap = r.GetMapView();
+                var mapView = r.GetMapView();
 
                 Vector2Int off = FlowMode switch
                 {
                     FlowType.TopDown => new(0, i),
-                    FlowType.BottomTop => new(0, Height - i - dpMap.Height),
+                    FlowType.BottomTop => new(0, Height - i - mapView.Height),
                     FlowType.LeftRight => new(i, 0),
-                    FlowType.RightLeft => new(Width - i - dpMap.Width, 0),
+                    FlowType.RightLeft => new(Width - i - mapView.Width, 0),
                     _ => throw new NotImplementedException()
                 };
 
                 var h = FlowMode is FlowType.TopDown or FlowType.BottomTop;
 
-                Vector2Int aRange = h ? new(Width, dpMap.Height) : new(dpMap.Width, Height);
+                Vector2Int aRange = h ? new(Width, mapView.Height) : new(mapView.Width, Height);
 
-                var pos = AnchorUtils.AnchorTo(r.Anchor, aRange, dpMap.Dimensions) + r.Offset + off;
+                var pos = AnchorUtils.AnchorTo(r.Anchor, aRange, mapView.Dimensions) + r.Offset + off;
 
                 if (Transparency)
                 {
-                    _dpMap.PMapTo(dpMap, pos);
+                    _dpMap.PMapTo(mapView, pos);
                 }
                 else
                 {
-                    _dpMap.MapTo(dpMap, pos);
+                    _dpMap.MapTo(mapView, pos);
                 }
 
                 int nextI = FlowMode switch
                 {
-                    FlowType.TopDown => pos.Y + dpMap.Height,
+                    FlowType.TopDown => pos.Y + mapView.Height,
                     FlowType.BottomTop => Height - pos.Y,
-                    FlowType.LeftRight => pos.X + dpMap.Width,
+                    FlowType.LeftRight => pos.X + mapView.Width,
                     FlowType.RightLeft => Width - pos.X,
                     _ => throw new NotImplementedException()
                 };
@@ -88,7 +88,7 @@
                 }
             }
 
-            return (DisplayMapView)_dpMap;
+            return _dpMap;
         }
     }
 }

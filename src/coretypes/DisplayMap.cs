@@ -39,6 +39,11 @@
         {
         }
 
+        public DisplayMap(MapView<Pixel> mapView)
+            : base(mapView)
+        {
+        }
+
         /// <summary>
         /// Creates a shallow copy of the <see cref="DisplayMap"/>.
         /// </summary>
@@ -46,13 +51,6 @@
         public override DisplayMap Clone()
         {
             return new(base.Clone());
-        }
-
-        public static explicit operator DisplayMapView(DisplayMap dpMap) => dpMap.ToView();
-
-        public override DisplayMapView ToView()
-        {
-            return new(this);
         }
 
         #region Fill
@@ -137,8 +135,8 @@
 
         #region Mapping
 
-        /// <inheritdoc cref="Grid2D{Pixel}.MapTo(Grid2DView{Pixel}, Rect2DInt, Vector2Int)"/>
-        public void PMapTo(Grid2DView<Pixel> dataGrid, Rect2DInt dataGridArea, Vector2Int positionOffset)
+        /// <inheritdoc cref="Grid2D{Pixel}.MapTo(MapView{Pixel}, Rect2DInt, Vector2Int)"/>
+        public void PMapTo(MapView<Pixel> dataGrid, Rect2DInt dataGridArea, Vector2Int positionOffset)
         {
             foreach (var pos in EnumerateMapTo(dataGrid, dataGridArea, positionOffset))
             {
@@ -147,26 +145,26 @@
             }
         }
 
-        /// <inheritdoc cref="Grid2D{Pixel}.MapTo(Grid2DView{Pixel}, Rect2DInt)"/>
-        public void PMapTo(Grid2DView<Pixel> dataGrid, Rect2DInt dataGridArea)
+        /// <inheritdoc cref="Grid2D{Pixel}.MapTo(MapView{Pixel}, Rect2DInt)"/>
+        public void PMapTo(MapView<Pixel> dataGrid, Rect2DInt dataGridArea)
         {
             PMapTo(dataGrid, dataGridArea, Vector2Int.Zero);
         }
 
-        /// <inheritdoc cref="Grid2D{Pixel}.MapTo(Grid2DView{Pixel}, Vector2Int)"/>
-        public void PMapTo(Grid2DView<Pixel> dataGrid, Vector2Int positionOffset)
+        /// <inheritdoc cref="Grid2D{Pixel}.MapTo(MapView{Pixel}, Vector2Int)"/>
+        public void PMapTo(MapView<Pixel> dataGrid, Vector2Int positionOffset)
         {
             PMapTo(dataGrid, dataGrid.GridArea(), positionOffset);
         }
 
-        /// <inheritdoc cref="Grid2D{Pixel}.MapTo(Grid2DView{Pixel})"/>
-        public void PMapTo(Grid2DView<Pixel> dataGrid)
+        /// <inheritdoc cref="Grid2D{Pixel}.MapTo(MapView{Pixel})"/>
+        public void PMapTo(MapView<Pixel> dataGrid)
         {
             PMapTo(dataGrid, dataGrid.GridArea(), Vector2Int.Zero);
         }
 
-        /// <inheritdoc cref="Grid2D{Pixel}.MapFrom(Grid2DView{Pixel}, Rect2DInt, Vector2Int)"/>
-        public void PMapFrom(Grid2DView<Pixel> dataGrid, Rect2DInt thisArea, Vector2Int positionOffset)
+        /// <inheritdoc cref="Grid2D{Pixel}.MapFrom(MapView{Pixel}, Rect2DInt, Vector2Int)"/>
+        public void PMapFrom(MapView<Pixel> dataGrid, Rect2DInt thisArea, Vector2Int positionOffset)
         {
             foreach (var pos in EnumerateMapFrom(dataGrid, thisArea, positionOffset))
             {
@@ -175,20 +173,20 @@
             }
         }
 
-        /// <inheritdoc cref="Grid2D{Pixel}.MapFrom(Grid2DView{Pixel}, Rect2DInt)"/>
-        public void PMapFrom(Grid2DView<Pixel> dataGrid, Rect2DInt thisArea)
+        /// <inheritdoc cref="Grid2D{Pixel}.MapFrom(MapView{Pixel}, Rect2DInt)"/>
+        public void PMapFrom(MapView<Pixel> dataGrid, Rect2DInt thisArea)
         {
             PMapFrom(dataGrid, thisArea, Vector2Int.Zero);
         }
 
-        /// <inheritdoc cref="Grid2D{Pixel}.MapFrom(Grid2DView{Pixel}, Vector2Int)"/>
-        public void PMapFrom(Grid2DView<Pixel> dataGrid, Vector2Int positionOffset)
+        /// <inheritdoc cref="Grid2D{Pixel}.MapFrom(MapView{Pixel}, Vector2Int)"/>
+        public void PMapFrom(MapView<Pixel> dataGrid, Vector2Int positionOffset)
         {
             PMapFrom(dataGrid, GridArea(), positionOffset);
         }
 
-        /// <inheritdoc cref="Grid2D{Pixel}.MapFrom(Grid2DView{Pixel})"/>
-        public void PMapFrom(Grid2DView<Pixel> dataGrid)
+        /// <inheritdoc cref="Grid2D{Pixel}.MapFrom(MapView{Pixel})"/>
+        public void PMapFrom(MapView<Pixel> dataGrid)
         {
             PMapFrom(dataGrid, GridArea(), Vector2Int.Zero);
         }

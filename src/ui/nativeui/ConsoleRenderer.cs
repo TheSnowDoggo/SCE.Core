@@ -5,7 +5,7 @@ namespace SCE
     {
         public const int DEFAULT_BUFFERHEIGHT = 9001;
 
-        private readonly LoopStack<Pixel[]> _ls;
+        private readonly CycleBuffer<Pixel[]> _lineBuffer;
 
         private Vector2Int cursorPos;
 
@@ -20,7 +20,7 @@ namespace SCE
         public ConsoleRenderer(int width, int height)
             : base(width, height)
         {
-            _ls = new(Math.Max(height, DEFAULT_BUFFERHEIGHT));
+            _lineBuffer = new(Math.Max(height, DEFAULT_BUFFERHEIGHT));
             bufferWidth = width;
         }
 
@@ -43,14 +43,14 @@ namespace SCE
 
         public int BufferHeight
         {
-            get => _ls.Length;
+            get => _lineBuffer.Length;
             set
             {
                 if (value < Height)
                 {
                     throw new ArgumentException("Buffer height cannot be less than window width.");
                 }
-                _ls.Resize(value);
+                _lineBuffer.Resize(value);
             }
         }
 
@@ -97,7 +97,7 @@ namespace SCE
                 {
                     throw new IndexOutOfRangeException("Top exceeds buffer height.");
                 }
-                var arr = _ls[top] ??= new Pixel[BufferWidth];
+                var arr = _lineBuffer[top] ??= new Pixel[BufferWidth];
                 if (arr.Length != BufferWidth)
                 {
                     Array.Resize(ref arr, BufferWidth);
@@ -110,7 +110,7 @@ namespace SCE
                 {
                     throw new ArgumentException("Top exceeds buffer height.");
                 }
-                _ls[top] = value;
+                _lineBuffer[top] = value;
             }
         }
 
@@ -144,10 +144,6 @@ namespace SCE
 
         public Vector2Int Translate(int index)
         {
-            if (index < 0 || index >= BufferWidth * BufferHeight)
-            {
-                throw new IndexOutOfRangeException("Index out of bounds.");
-            }
             return new(index % BufferWidth, index / BufferWidth);
         }
 
@@ -202,10 +198,7 @@ namespace SCE
         private void ShiftCursor(int move, bool carriageReturn = true)
         {
             ScrollCursor(move, out int overflow);
-            for (int i = 0; i < overflow; ++i)
-            {
-                _ls.Increase();
-            }
+            _lineBuffer.Shift(overflow);
             if (carriageReturn && overflow > 0)
             {
                 cursorPos.X = 0;
@@ -231,7 +224,11 @@ namespace SCE
             if (++cursorPos.Y >= BufferHeight)
             {
                 cursorPos.Y = BufferHeight - 1;
-                _ls.Increase();
+                _lineBuffer.Shift(1);
+            }
+            else
+            {
+                _lineBuffer[cursorPos.Y] = new Pixel[BufferWidth];
             }
             if (carriageReturn)
             {
@@ -328,12 +325,12 @@ namespace SCE
 
         public void Clear()
         {
-            _ls.CleanResize(BufferHeight);
+            _lineBuffer.CleanResize(BufferHeight);
             Scroll = 0;
             renderQueued = true;
         }
 
-        public override DisplayMapView GetMapView()
+        public override MapView<Pixel> GetMapView()
         {
             if (renderQueued)
             {
@@ -351,7 +348,7 @@ namespace SCE
 
                 renderQueued = false;
             }
-            return (DisplayMapView)_dpMap;
+            return _dpMap;
         }
     }
 }

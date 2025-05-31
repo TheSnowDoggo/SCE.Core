@@ -18,7 +18,7 @@
 
         public bool Transparency { get; set; } = false;
 
-        public AliasHash<IRenderable> Renderables { get; } = new();
+        public AliasHash<IRenderable> Renderables { get; set; } = new();
 
         public void Resize(int width, int height)
         {
@@ -31,7 +31,7 @@
         }
 
         /// <inheritdoc/>
-        public override DisplayMapView GetMapView()
+        public override MapView<Pixel> GetMapView()
         {
             if (ClearOnRender)
             {
@@ -50,52 +50,25 @@
 
             list.Sort((left, right) => right.Layer - left.Layer);
 
-            List<Rect2DInt> mappedAreas = new();
-
-            var thisArea = _dpMap.GridArea();
+            List<Rect2DInt> mapList = new();
 
             foreach (var r in list)
             {
-                var dpMap = r.GetMapView();
+                var mapView = r.GetMapView();
 
-                var pos = AnchorUtils.AnchorTo(r.Anchor, Dimensions, dpMap.Dimensions) + r.Offset;
+                var pos = AnchorUtils.AnchorTo(r.Anchor, Dimensions, mapView.Dimensions) + r.Offset;
 
-                var area = thisArea.GetOverlap(dpMap.GridArea() + pos);
-
-                List<Rect2DInt> areasToMap = new() { area };
-                foreach (var mapped in mappedAreas)
+                if (Transparency)
                 {
-                    List<Rect2DInt> nextAreasToMap = new();
-                    foreach (var map in areasToMap)
-                    {
-                        nextAreasToMap.AddRange(map.SplitAway(mapped));
-                    }
-                    areasToMap.Clear();
-
-                    areasToMap.AddRange(nextAreasToMap);
-                    if (areasToMap.Count == 0)
-                    {
-                        break;
-                    }
+                    _dpMap.PMapTo(mapView, pos);
                 }
-
-                foreach (var map in areasToMap)
+                else
                 {
-                    var gridArea = map - pos;
-                    if (Transparency)
-                    {
-                        _dpMap.PMapTo(dpMap, gridArea, pos);
-                    }
-                    else
-                    {
-                        _dpMap.MapFrom(dpMap, map);
-                    }
+                    _dpMap.MapTo(mapView, pos);
                 }
-
-                mappedAreas.AddRange(areasToMap);
             }
 
-            return (DisplayMapView)_dpMap;
+            return _dpMap;
         }
     }
 }

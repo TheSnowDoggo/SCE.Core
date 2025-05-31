@@ -2,7 +2,7 @@
 {
     public class InputGroup : AliasHashTExt<IInputReceiver>, IInputReceiver
     {
-        private bool quitLayer;
+        private bool flush;
 
         public InputGroup()
             : base()
@@ -16,21 +16,25 @@
         
         public bool IsActive { get; set; } = true;
 
+        public void Flush()
+        {
+            flush = true;
+        }
+
         public void LoadKeyInfo(UISKeyInfo uisKeyInfo)
         {
-            quitLayer = false;
+            flush = false;
             foreach (var inputable in this)
             {
                 if (inputable.IsActive)
+                {
                     inputable.LoadKeyInfo(uisKeyInfo);
-                if (quitLayer)
+                }
+                if (flush)
+                {
                     break;
+                }
             }
-        }
-
-        public void Quit()
-        {
-            quitLayer = true;
         }
     }
 }

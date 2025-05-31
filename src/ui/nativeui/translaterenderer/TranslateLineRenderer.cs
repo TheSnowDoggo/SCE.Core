@@ -84,13 +84,13 @@
         }
 
         /// <inheritdoc/>
-        public override DisplayMapView GetMapView()
+        public override MapView<Pixel> GetMapView()
         {
             if (RenderOnUpdate)
             {
                 Render();
             }
-            return (DisplayMapView)_dpMap;
+            return _dpMap;
         }
     }
 }

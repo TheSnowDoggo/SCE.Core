@@ -12,7 +12,7 @@
 
         public IUpdateLimit? UpdateLimit;
 
-        public override DisplayMapView GetMapView()
+        public override MapView<Pixel> GetMapView()
         {
             if (OnRender != null && (UpdateLimit?.OnUpdate() ?? true))
             {

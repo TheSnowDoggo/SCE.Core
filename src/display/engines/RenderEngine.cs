@@ -8,7 +8,7 @@
         /// <summary>
         /// Renders the built DisplayMap.
         /// </summary>
-        public abstract void Render(DisplayMapView dpMap, Vector2Int start);
+        public abstract void Render(MapView<Pixel> mapView, Vector2Int start);
 
         /// <summary>
         /// Sets the viewport dimensions.

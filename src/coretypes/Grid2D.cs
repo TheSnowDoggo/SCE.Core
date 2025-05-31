@@ -47,6 +47,12 @@ namespace SCE
         {
         }
 
+        public Grid2D(MapView<T> mapView)
+            : this(mapView.Dimensions)
+        {
+            Fill(pos => mapView[pos]);
+        }
+
         /// <summary>
         /// Gets the width of the grid.
         /// </summary>
@@ -124,7 +130,7 @@ namespace SCE
 
         #region Equality
 
-        public static bool ValueEquals<U>(Grid2DView<U> g1, Grid2DView<U> g2)
+        public static bool ValueEquals<U>(MapView<U> g1, MapView<U> g2)
             where U : IEquatable<U>
         {
             if (g1.Dimensions != g2.Dimensions)
@@ -188,38 +194,9 @@ namespace SCE
 
         #region Enumerate
 
-        public IEnumerable<Vector2Int> EnumerateGrid(Rect2DInt area, bool rowMajor = true)
-        {
-            var thisArea = GridArea();
-            if (!Rect2DInt.Overlaps(thisArea, area))
-            {
-                yield break;
-            }
-
-            area = thisArea.GetOverlap(area);
-
-            foreach (var pos in area.Enumerate(rowMajor))
-            {
-                yield return pos;
-            }
-        }
-
-        public IEnumerable<Vector2Int> EnumerateGrid(bool rowMajor = true)
-        {
-            int e1 = rowMajor ? Height : Width;
-            int e2 = rowMajor ? Width  : Height;
-            for (int i = 0; i < e1; ++i)
-            {
-                for (int j = 0; j < e2; ++j)
-                {
-                    yield return rowMajor ? new(j, i) : new(i, j);
-                }
-            }
-        }
-
         public IEnumerator<Vector2Int> GetEnumerator()
         {
-            return EnumerateGrid().GetEnumerator();
+            return GridArea().GetEnumerator();
         }
 
         IEnumerator IEnumerable.GetEnumerator()
@@ -238,7 +215,7 @@ namespace SCE
         /// <param name="area">The area to fill over.</param>
         public void Fill(Func<Vector2Int, T> fill, Rect2DInt area)
         {
-            foreach (var pos in EnumerateGrid(area))
+            foreach (var pos in GridArea().Enumerate(area))
             {
                 this[pos] = fill.Invoke(pos);
             }
@@ -288,7 +265,7 @@ namespace SCE
         /// <param name="dataGrid">The grid to get elements from.</param>
         /// <param name="dataGridArea">The area on the <paramref name="dataGrid"/> to get elements from.</param>
         /// <param name="thisOffset">The offset position on this grid.</param>
-        public IEnumerable<Vector2Int> EnumerateMapTo(Grid2DView<T> dataGrid, Rect2DInt dataGridArea, Vector2Int thisOffset)
+        public IEnumerable<Vector2Int> EnumerateMapTo(MapView<T> dataGrid, Rect2DInt dataGridArea, Vector2Int thisOffset)
         {
             var dataArea = dataGrid.GridArea();
             if (!Rect2DInt.Overlaps(dataArea, dataGridArea))
@@ -305,7 +282,8 @@ namespace SCE
             }
 
             dataGridArea = thisArea.GetOverlap(offsetArea) - thisOffset;
-            foreach (var pos in dataGrid.EnumerateGrid(dataGridArea))
+
+            foreach (var pos in dataArea.Enumerate(dataGridArea))
             {
                 yield return pos;
             }
@@ -320,7 +298,7 @@ namespace SCE
         /// <param name="dataGrid">The grid to get elements from.</param>
         /// <param name="dataGridArea">The area on the <paramref name="dataGrid"/> to get elements from.</param>
         /// <param name="thisOffset">The offset position on this grid.</param>
-        public void MapTo(Grid2DView<T> dataGrid, Rect2DInt dataGridArea, Vector2Int thisOffset)
+        public void MapTo(MapView<T> dataGrid, Rect2DInt dataGridArea, Vector2Int thisOffset)
         {
             foreach (var pos in EnumerateMapTo(dataGrid, dataGridArea, thisOffset))
             {
@@ -328,8 +306,8 @@ namespace SCE
             }
         }
 
-        /// <inheritdoc cref="MapTo(Grid2DView{T}, Rect2DInt, Vector2Int)"/>
-        public void MapTo(Grid2DView<T> dataGrid, Rect2DInt dataGridArea)
+        /// <inheritdoc cref="MapTo(MapView{T}, Rect2DInt, Vector2Int)"/>
+        public void MapTo(MapView<T> dataGrid, Rect2DInt dataGridArea)
         {
             MapTo(dataGrid, dataGridArea, Vector2Int.Zero);
         }
@@ -342,13 +320,13 @@ namespace SCE
         /// </remarks>
         /// <param name="dataGrid">The grid to get elements from.</param>
         /// <param name="thisOffset">The offset position on this grid.</param>
-        public void MapTo(Grid2DView<T> dataGrid, Vector2Int thisOffset)
+        public void MapTo(MapView<T> dataGrid, Vector2Int thisOffset)
         {
             MapTo(dataGrid, dataGrid.GridArea(), thisOffset);
         }
 
-        /// <inheritdoc cref="MapTo(Grid2DView{T}, Vector2Int)"/>
-        public void MapTo(Grid2DView<T> dataGrid)
+        /// <inheritdoc cref="MapTo(MapView{T}, Vector2Int)"/>
+        public void MapTo(MapView<T> dataGrid)
         {
             MapTo(dataGrid, dataGrid.GridArea(), Vector2Int.Zero);
         }
@@ -362,7 +340,7 @@ namespace SCE
         /// <param name="dataGrid">The grid to get elements from.</param>
         /// <param name="mapArea">The area on this grid to populate.</param>
         /// <param name="dataOffset">The offset position on the <paramref name="dataGrid"/>.</param>
-        public IEnumerable<Vector2Int> EnumerateMapFrom(Grid2DView<T> dataGrid, Rect2DInt mapArea, Vector2Int dataOffset)
+        public IEnumerable<Vector2Int> EnumerateMapFrom(MapView<T> dataGrid, Rect2DInt mapArea, Vector2Int dataOffset)
         {
             var thisArea = GridArea();
             if (!Rect2DInt.Overlaps(thisArea, mapArea))
@@ -379,7 +357,7 @@ namespace SCE
             }
 
             mapArea = dataArea.GetOverlap(alignedGetArea) - dataOffset;
-            foreach (var pos in EnumerateGrid(mapArea))
+            foreach (var pos in thisArea.Enumerate(mapArea))
             {
                 yield return pos;
             }
@@ -394,7 +372,7 @@ namespace SCE
         /// <param name="dataGrid">The grid to get elements from.</param>
         /// <param name="thisArea">The area on this grid to populate.</param>
         /// <param name="dataOffset">The offset position on the <paramref name="dataGrid"/>.</param>
-        public void MapFrom(Grid2DView<T> dataGrid, Rect2DInt thisArea, Vector2Int dataOffset)
+        public void MapFrom(MapView<T> dataGrid, Rect2DInt thisArea, Vector2Int dataOffset)
         {
             foreach (var pos in EnumerateMapFrom(dataGrid, thisArea, dataOffset))
             {
@@ -402,8 +380,8 @@ namespace SCE
             }
         }
 
-        /// <inheritdoc cref="MapFrom(Grid2DView{T}, Rect2DInt, Vector2Int)"/>
-        public void MapFrom(Grid2DView<T> dataGrid, Rect2DInt thisArea)
+        /// <inheritdoc cref="MapFrom(MapView{T}, Rect2DInt, Vector2Int)"/>
+        public void MapFrom(MapView<T> dataGrid, Rect2DInt thisArea)
         {
             MapFrom(dataGrid, thisArea, Vector2Int.Zero);
         }
@@ -416,13 +394,13 @@ namespace SCE
         /// </remarks>
         /// <param name="dataGrid">The grid to get elements from.</param>
         /// <param name="dataOffset">The offset position on the <paramref name="dataGrid"/>.</param>
-        public void MapFrom(Grid2DView<T> dataGrid, Vector2Int dataOffset)
+        public void MapFrom(MapView<T> dataGrid, Vector2Int dataOffset)
         {
             MapFrom(dataGrid, GridArea(), dataOffset);
         }
 
-        /// <inheritdoc cref="MapFrom(Grid2DView{T}, Vector2Int)"/>
-        public void MapFrom(Grid2DView<T> dataGrid)
+        /// <inheritdoc cref="MapFrom(MapView{T}, Vector2Int)"/>
+        public void MapFrom(MapView<T> dataGrid)
         {
             MapFrom(dataGrid, GridArea(), Vector2Int.Zero);
         }

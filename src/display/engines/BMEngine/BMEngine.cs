@@ -21,14 +21,14 @@
             return (short)((int)fg | ((int)bg << 4));
         }
 
-        public override void Render(DisplayMapView dpMap, Vector2Int start)
+        public override void Render(MapView<Pixel> mapView, Vector2Int start)
         {
-            var arr = new CharInfo[dpMap.Size()];
+            var arr = new CharInfo[mapView.Size()];
 
             Coord size = new()
             {
-                X = (short)dpMap.Width,
-                Y = (short)dpMap.Height,
+                X = (short)mapView.Width,
+                Y = (short)mapView.Height,
             };
 
             SmallRect rect = new()
@@ -40,12 +40,12 @@
             };
 
             int i = 0;
-            foreach (var pos in dpMap)
+            foreach (var pos in mapView)
             {
-                var fg = ColorUtils.ToConsoleColor(dpMap[pos].FgColor);
-                var bg = ColorUtils.ToConsoleColor(dpMap[pos].BgColor);
+                var fg = ColorUtils.ToConsoleColor(mapView[pos].FgColor);
+                var bg = ColorUtils.ToConsoleColor(mapView[pos].BgColor);
 
-                arr[i].Char.UnicodeChar = dpMap[pos].Element;
+                arr[i].Char.UnicodeChar = mapView[pos].Element;
                 arr[i].Attributes = ToAttributes(fg, bg);
                 ++i;
             }

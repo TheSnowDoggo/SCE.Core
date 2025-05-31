@@ -10,38 +10,6 @@ namespace SCE
             Test1();
         }
 
-        private static void Test3()
-        {
-            Rect2DInt a1 = new(0, 0, 20, 20);
-
-            Rect2DInt a2 = new(0, 10, 20, 25);
-
-            var s1 = a2.SplitAway(a1);
-
-            ;
-
-            var s2 = a2.SplitAway(a1);
-
-            var d = Display.WindowDimensions();
-
-            Image img = new(d);
-
-            foreach (var area in s1)
-            {
-                img.Fill(new Pixel(SCEColor.Red), area);
-            }
-            foreach (var area in s2)
-            {
-                img.Fill(new Pixel(SCEColor.Blue), area);
-            }
-
-            Display.Instance.Renderables.AddEvery(img);
-
-            GameHandler.Scenes.Add(Display.Instance);
-
-            GameHandler.Start();
-        }
-
         private static void Test2()
         {
             Console.WriteLine("Installing package...");
@@ -135,9 +103,9 @@ namespace SCE
 
         private readonly FlowTable _loggerFl;
 
-        private readonly Overlay<TextBoxUI>[] _tbArr = new Overlay<TextBoxUI>[1];
+        private readonly Overlay<TextBoxUI>[] _tbArr = new Overlay<TextBoxUI>[6];
 
-        private readonly Vector2Int _tbDimensions = new(10, 10);
+        private readonly Vector2Int _tbDimensions = new(60, 2);
 
         private readonly Image _cur;
 
@@ -162,9 +130,10 @@ namespace SCE
                 FlowMode = FlowType.LeftRight,
             };
 
-            _cr = new(20, 20)
+            _cr = new(30, 10)
             {
-                Anchor = Anchor.None,
+                Anchor = Anchor.Bottom,
+                BufferHeight = 100,
             };
 
             _vs = new(20, 10)
@@ -304,10 +273,14 @@ namespace SCE
             {
                 timer = 0.1;
 
+                _cr.WriteLine(GameHandler.DeltaTime);
+
                 _scl.Renderable.Rotate90(true);   
             }
 
             _pb.Value += (float)(GameHandler.DeltaTime * 10.0);
+
+           
         }
 
         private void SetupDisplay()
@@ -320,8 +293,8 @@ namespace SCE
             Display.Instance.ResizeMode = Display.ResizeType.Auto;
 
             // Adds the IRenderables to the display to render.
-            //_fl, _loggerFl,  _vs, _cr, _fps, 
-            Display.Instance.Renderables.AddEvery(_scl, _pb);
+            // 
+            Display.Instance.Renderables.AddEvery(_fl, _loggerFl, _vs, _cr, _fps, _scl, _pb);
 
             Display.Instance.BasePixel = new(SCEColor.DarkCyan);
         }

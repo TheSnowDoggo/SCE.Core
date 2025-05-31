@@ -7,23 +7,7 @@ namespace SCE
 
         private Selection[] selections;
 
-        private bool renderQueued = true;
-
-        private int selected = 0;
-
-        private ColorSet selectedColors = new(SCEColor.Black, SCEColor.Gray);
-
-        private ColorSet unselectedColors = new(SCEColor.Gray, SCEColor.Black);
-
-        private Anchor selectionAnchor = Anchor.None;
-
-        private Pixel basePixel = new(SCEColor.Black);
-
-        private StackType stackMode = StackType.TopDown;
-
-        private bool allowNullSelection = false;
-
-        private bool fitToLength = false;
+        private bool renderQueued = true; 
 
         public VerticalSelector(int width, int height)
             : base(width, height)
@@ -48,11 +32,15 @@ namespace SCE
             }
         }
 
+        private int selected = 0;
+
         public int Selected
         {
             get => selected;
             set => MiscUtils.QueueSet(ref selected, value, ref renderQueued);
         }
+
+        private ColorSet selectedColors = new(SCEColor.Black, SCEColor.Gray);
 
         public ColorSet SelectedColors
         {
@@ -60,11 +48,15 @@ namespace SCE
             set => MiscUtils.QueueSet(ref selectedColors, value, ref renderQueued);
         }
 
+        private ColorSet unselectedColors = new(SCEColor.Gray, SCEColor.Black);
+
         public ColorSet UnselectedColors
         {
             get => unselectedColors;
             set => MiscUtils.QueueSet(ref unselectedColors, value, ref renderQueued);
         }
+
+        private Anchor selectionAnchor = Anchor.None;
 
         public Anchor SelectionAnchor
         {
@@ -72,11 +64,15 @@ namespace SCE
             set => MiscUtils.QueueSet(ref selectionAnchor, value, ref renderQueued);
         }
 
+        private Pixel basePixel = new (SCEColor.Black);
+
         public Pixel BasePixel
         {
             get => basePixel;
             set => MiscUtils.QueueSet(ref basePixel, value, ref renderQueued);
         }
+
+        private StackType stackMode = StackType.TopDown;
 
         public StackType StackMode
         {
@@ -84,11 +80,15 @@ namespace SCE
             set => MiscUtils.QueueSet(ref stackMode, value, ref renderQueued);
         }
 
+        private bool allowNullSelection = false;
+
         public bool AllowNullSelection
         {
             get => allowNullSelection;
             set => MiscUtils.QueueSet(ref allowNullSelection, value, ref renderQueued);
         }
+
+        private bool fitToLength = false;
 
         public bool FitToLength
         {
@@ -124,7 +124,7 @@ namespace SCE
             Resize(dimensions.X, dimensions.Y);
         }
 
-        public override DisplayMapView GetMapView()
+        public override MapView<Pixel> GetMapView()
         {
             if (renderQueued || _updates.Count > 0)
             {
@@ -142,7 +142,7 @@ namespace SCE
                 _updates.Clear();
             }
 
-            return (DisplayMapView)_dpMap;
+            return _dpMap;
         }
 
         private void Render(IEnumerable<int> range)

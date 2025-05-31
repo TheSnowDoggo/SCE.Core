@@ -79,7 +79,7 @@
         }
 
         /// <inheritdoc/>
-        public override DisplayMapView GetMapView()
+        public override MapView<Pixel> GetMapView()
         {
             if (RenderOnUpdate)
             {

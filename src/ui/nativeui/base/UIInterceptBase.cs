@@ -18,6 +18,6 @@
 
         public Anchor Anchor { get => Renderable.Anchor; }
 
-        public abstract DisplayMapView GetMapView();
+        public abstract MapView<Pixel> GetMapView();
     }
 }

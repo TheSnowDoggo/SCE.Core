@@ -16,18 +16,6 @@ namespace SCE
 
         private bool renderQueued = true;
 
-        private Anchor lineAnchor = Anchor.None;
-
-        private Pixel basePixel = new(SCEColor.Black);
-
-        private StackType stackMode = StackType.TopDown;
-
-        private bool fitToLength = false;
-
-        private SCEColor textFgColor = SCEColor.Gray;
-
-        private SCEColor textBgColor = SCEColor.Black;
-
         public LineRenderer(int width, int height)
             : base(width, height)
         {
@@ -47,11 +35,15 @@ namespace SCE
 
         public ArrayUpdateView<LineAttributes> Attributes { get => attributeArrView; }
 
+        private Anchor lineAnchor = Anchor.None;
+
         public Anchor LineAnchor
         {
             get => lineAnchor;
             set => MiscUtils.QueueSet(ref lineAnchor, value, ref renderQueued);
         }
+
+        private Pixel basePixel = new(SCEColor.Black);
 
         public Pixel BasePixel
         {
@@ -59,17 +51,15 @@ namespace SCE
             set => MiscUtils.QueueSet(ref basePixel, value, ref renderQueued);
         }
 
+        private StackType stackMode = StackType.TopDown;
+
         public StackType StackMode
         {
             get => stackMode;
             set => MiscUtils.QueueSet(ref stackMode, value, ref renderQueued);
         }
 
-        public bool FitToLength
-        {
-            get => fitToLength;
-            set => MiscUtils.QueueSet(ref fitToLength, value, ref renderQueued);
-        }
+        private SCEColor textFgColor = SCEColor.Gray;
 
         public SCEColor LineFgColor
         {
@@ -77,10 +67,20 @@ namespace SCE
             set => MiscUtils.QueueSet(ref textFgColor, value, ref renderQueued);
         }
 
+        private SCEColor textBgColor = SCEColor.Black;
+
         public SCEColor LineBgColor
         {
             get => textBgColor;
             set => MiscUtils.QueueSet(ref textBgColor, value, ref renderQueued);
+        }
+
+        private bool fitToLength = false;
+
+        public bool FitToLength
+        {
+            get => fitToLength;
+            set => MiscUtils.QueueSet(ref fitToLength, value, ref renderQueued);
         }
 
         public void Resize(int width, int height)
@@ -97,7 +97,7 @@ namespace SCE
             Resize(dimensions.X, dimensions.Y);
         }
 
-        public override DisplayMapView GetMapView()
+        public override MapView<Pixel> GetMapView()
         {
             if (renderQueued || _updates.Count > 0)
             {
@@ -114,7 +114,7 @@ namespace SCE
                 _updates.Clear();
             }
 
-            return (DisplayMapView)_dpMap;
+            return _dpMap;
         }
 
         private void Render(IEnumerable<int> range)

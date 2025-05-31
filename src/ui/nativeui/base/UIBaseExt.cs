@@ -30,9 +30,9 @@
         public Vector2Int Dimensions { get => _dpMap.Dimensions; }
 
         /// <inheritdoc/>
-        public override DisplayMapView GetMapView()
+        public override MapView<Pixel> GetMapView()
         {
-            return (DisplayMapView)_dpMap;
+            return _dpMap;
         }
     }
 }
