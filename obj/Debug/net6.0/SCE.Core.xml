@@ -397,13 +397,6 @@
             Clears the contents of the grid.
             </summary>
         </member>
-        <member name="T:SCE.KeyMap`2">
-            <summary>
-            A 2-way dictionary.
-            </summary>
-            <typeparam name="T">The type of key1.</typeparam>
-            <typeparam name="U">The type of key2.</typeparam>
-        </member>
         <member name="P:SCE.MatrixF.RotateCW90">
             <summary>
             Clockwise 90 rotation (when Y value increases downwards)
@@ -567,81 +560,81 @@
             <param name="maxRange">The maximum x value.</param>
             <returns>A random vector from the specified max-range.</returns>
         </member>
-        <member name="T:SCE.Display.ResizeType">
+        <member name="T:SCE.CustomDisplay.ResizeType">
             <summary>
             Represents the different resizing modes.
             </summary>
+        </member>
+        <member name="P:SCE.CustomDisplay.RenderEngine">
+            <summary>
+            Gets or sets the 
+            </summary>
+        </member>
+        <member name="P:SCE.CustomDisplay.ResizeMode">
+            <summary>
+            Gets or sets the resizing mode.
+            </summary>
+        </member>
+        <member name="P:SCE.CustomDisplay.CustomDimensions">
+            <summary>
+            Gets or sets the custom viewport dimensions.
+            </summary>
+        </member>
+        <member name="P:SCE.CustomDisplay.RerenderCulling">
+            <summary>
+            Gets or sets a value representing whether the Display should only update when the rendered viewport has changed.
+            </summary>
+        </member>
+        <member name="P:SCE.CustomDisplay.StartPosition">
+            <summary>
+            Gets or sets the prefered start position to render at.
+            </summary>
+        </member>
+        <member name="P:SCE.CustomDisplay.Width">
+            <summary>
+            Gets the width of the viewport.
+            </summary>
+        </member>
+        <member name="P:SCE.CustomDisplay.Height">
+            <summary>
+            Gets the height of the viewport.
+            </summary>
+        </member>
+        <member name="P:SCE.CustomDisplay.Dimensions">
+            <summary>
+            Gets the dimensions of the viewport.
+            </summary>
+        </member>
+        <member name="P:SCE.CustomDisplay.BasePixel">
+            <summary>
+            Gets the base pixel used to clear the viewport.
+            </summary>
+        </member>
+        <member name="P:SCE.CustomDisplay.ClearOnRender">
+            <summary>
+            Gets or sets a value representing whether the viewport be cleared every frame.
+            </summary>
+        </member>
+        <member name="F:SCE.CustomDisplay.OnDisplayResize">
+            <summary>
+            Action called whenever the display viewport changes.
+            </summary>
+        </member>
+        <member name="M:SCE.CustomDisplay.WindowDimensions">
+            <summary>
+            Returns the current Console window dimensions.
+            </summary>
+        </member>
+        <member name="M:SCE.CustomDisplay.Start">
+            <inheritdoc/>
+        </member>
+        <member name="M:SCE.CustomDisplay.Update">
+            <inheritdoc/>
         </member>
         <member name="P:SCE.Display.Instance">
             <summary>
             Gets the lazy instance of this class.
             </summary>
-        </member>
-        <member name="P:SCE.Display.RenderEngine">
-            <summary>
-            Gets or sets the 
-            </summary>
-        </member>
-        <member name="P:SCE.Display.ResizeMode">
-            <summary>
-            Gets or sets the resizing mode.
-            </summary>
-        </member>
-        <member name="P:SCE.Display.CustomDimensions">
-            <summary>
-            Gets or sets the custom viewport dimensions.
-            </summary>
-        </member>
-        <member name="P:SCE.Display.RerenderCulling">
-            <summary>
-            Gets or sets a value representing whether the Display should only update when the rendered viewport has changed.
-            </summary>
-        </member>
-        <member name="P:SCE.Display.StartPosition">
-            <summary>
-            Gets or sets the prefered start position to render at.
-            </summary>
-        </member>
-        <member name="P:SCE.Display.Width">
-            <summary>
-            Gets the width of the viewport.
-            </summary>
-        </member>
-        <member name="P:SCE.Display.Height">
-            <summary>
-            Gets the height of the viewport.
-            </summary>
-        </member>
-        <member name="P:SCE.Display.Dimensions">
-            <summary>
-            Gets the dimensions of the viewport.
-            </summary>
-        </member>
-        <member name="P:SCE.Display.BasePixel">
-            <summary>
-            Gets the base pixel used to clear the viewport.
-            </summary>
-        </member>
-        <member name="P:SCE.Display.ClearOnRender">
-            <summary>
-            Gets or sets a value representing whether the viewport be cleared every frame.
-            </summary>
-        </member>
-        <member name="F:SCE.Display.OnDisplayResize">
-            <summary>
-            Action called whenever the display viewport changes.
-            </summary>
-        </member>
-        <member name="M:SCE.Display.WindowDimensions">
-            <summary>
-            Returns the current Console window dimensions.
-            </summary>
-        </member>
-        <member name="M:SCE.Display.Start">
-            <inheritdoc/>
-        </member>
-        <member name="M:SCE.Display.Update">
-            <inheritdoc/>
         </member>
         <member name="T:SCE.BMEngine">
             <summary>

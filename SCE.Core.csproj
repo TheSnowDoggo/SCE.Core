@@ -38,6 +38,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="SCECSUtils" Version="1.7.6" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Reference Include="CSUtils">
       <HintPath>lib\CSUtils.dll</HintPath>
     </Reference>

@@ -1,27 +1,21 @@
 ﻿using CSUtils;
+
 namespace SCE
 {
     public class ConsoleRenderer : UIBaseExt
     {
-        public const int DEFAULT_BUFFERHEIGHT = 9001;
+        private const int DEF_BUFFER_HEIGHT = 9001;
 
-        private readonly CycleBuffer<Pixel[]> _lineBuffer;
-
-        private Vector2Int cursorPos;
-
-        private int bufferWidth;
-
-        private int scroll;
-
-        private Pixel basePixel = new(SCEColor.Black);
+        private CycleBuffer<Pixel> buffer;
 
         private bool renderQueued = true;
 
         public ConsoleRenderer(int width, int height)
             : base(width, height)
         {
-            _lineBuffer = new(Math.Max(height, DEFAULT_BUFFERHEIGHT));
-            bufferWidth = width;
+            bufferDimensions = new(width, Math.Max(DEF_BUFFER_HEIGHT, height));
+
+            buffer = new(bufferDimensions.ScalarProduct());
         }
 
         public ConsoleRenderer(Vector2Int dimensions)
@@ -29,109 +23,16 @@ namespace SCE
         {
         }
 
-        public Vector2Int CursorPos
+        public Pixel this[int index]
         {
-            get => cursorPos;
-            set
-            {
-                if (value < Vector2Int.Zero || value.X >= BufferWidth || value.Y >= BufferHeight)
-                {
-                    throw new ArgumentException("Cursor position invalid.");
-                }
-                cursorPos = value;            }
-        }
-
-        public int BufferHeight
-        {
-            get => _lineBuffer.Length;
-            set
-            {
-                if (value < Height)
-                {
-                    throw new ArgumentException("Buffer height cannot be less than window width.");
-                }
-                _lineBuffer.Resize(value);
-            }
-        }
-
-        public int BufferWidth
-        {
-            get => bufferWidth;
-            set
-            {
-                if (value < Width)
-                {
-                    throw new ArgumentException("Buffer width cannot be less than window width.");
-                }
-                bufferWidth = value;
-            }
-        }
-
-        public int Scroll
-        {
-            get => scroll;
-            set => MiscUtils.QueueSet(ref scroll, value, ref renderQueued);
-        }
-
-        public bool AutoScroll { get; set; } = true;
-
-        public int AutoScrollOffset { get; set; } = 0;
-
-        public SCEColor FgColor { get; set; } = SCEColor.Gray;
-
-        public SCEColor BgColor { get; set; } = SCEColor.Black;
-
-        public Pixel BasePixel
-        {
-            get => basePixel;
-            set => MiscUtils.QueueSet(ref basePixel, value, ref renderQueued);
-        }
-
-        public int TabSize { get; set; } = 8;
-
-        public Pixel[] this[int top]
-        {
-            get
-            {
-                if (top < 0 || top >= BufferHeight)
-                {
-                    throw new IndexOutOfRangeException("Top exceeds buffer height.");
-                }
-                var arr = _lineBuffer[top] ??= new Pixel[BufferWidth];
-                if (arr.Length != BufferWidth)
-                {
-                    Array.Resize(ref arr, BufferWidth);
-                }
-                return arr;
-            }
-            set
-            {
-                if (top < 0 || top >= BufferHeight)
-                {
-                    throw new ArgumentException("Top exceeds buffer height.");
-                }
-                _lineBuffer[top] = value;
-            }
+            get => buffer[index];
+            set => buffer[index] = value;
         }
 
         public Pixel this[int top, int left]
         {
-            get
-            {
-                if (left < 0 || left >= BufferWidth)
-                {
-                    throw new IndexOutOfRangeException("Left exceeds buffer width.");
-                }
-                return this[top][left];
-            }
-            set
-            {
-                if (left < 0 || left >= BufferWidth)
-                {
-                    throw new ArgumentException("Left exceeds buffer width.");
-                }
-                this[top][left] = value;
-            }
+            get => this[Translate(top, left)];
+            set => this[Translate(top, left)] = value;
         }
 
         public Pixel this[Vector2Int pos]
@@ -140,181 +41,279 @@ namespace SCE
             set => this[pos.Y, pos.X] = value;
         }
 
-        #region Write
+        public int Translate(int top, int left)
+        {
+            return top * BufferWidth + left;
+        }
+
+        public int Translate(Vector2Int pos)
+        {
+            return Translate(pos.Y, pos.X);
+        }
 
         public Vector2Int Translate(int index)
         {
             return new(index % BufferWidth, index / BufferWidth);
         }
 
-        public int Translate(Vector2Int pos)
+        private Vector2Int bufferDimensions;
+
+        public Vector2Int BufferDimensions
         {
-            return pos.Y * BufferWidth + pos.X;
+            get => bufferDimensions;
+            set
+            {
+                MapResizeBuffer(value);
+                renderQueued = true;
+            }
         }
 
-        public void ScrollCursor(int scroll, out int overflow)
+        public int BufferWidth
         {
-            overflow = 0;
+            get => BufferDimensions.X;
+            set => BufferDimensions = new(value, BufferDimensions.Y);
+        }
 
-            var nextX = cursorPos.X + scroll;
+        public int BufferHeight
+        {
+            get => BufferDimensions.Y;
+            set => BufferDimensions = new(BufferDimensions.X, value);
+        }
 
-            var lines = (scroll > 0 ? nextX : BufferWidth - nextX - 1) / BufferWidth;
+        public int BufferSize { get => buffer.Length; }
 
-            cursorPos.X = Utils.Mod(nextX, BufferWidth);
-
-            if (scroll > 0)
+        public Vector2Int CursorPos
+        {
+            get => new(CursorLeft, CursorTop);
+            set
             {
-                int nextY = cursorPos.Y + lines;
-                if (nextY >= BufferHeight)
+                CursorLeft = value.X;
+                CursorTop = value.Y;
+            }
+        }
+
+        public int CursorIndex
+        {
+            get => Translate(CursorTop, CursorLeft);
+            set => CursorPos = Translate(value);
+        }
+
+        private int cursorLeft;
+
+        public int CursorLeft
+        {
+            get => cursorLeft;
+            set
+            {
+                if (value < 0 || value >= BufferWidth)
                 {
-                    cursorPos = new Vector2Int(BufferWidth, BufferHeight) - 1;
-                    overflow = 1 + BufferHeight - nextY;
+                    throw new ArgumentException("Cursor left is outside buffer width.");
                 }
-                else
+                cursorLeft = value;
+            }
+        }
+
+        private int cursorTop;
+
+        public int CursorTop
+        {
+            get => cursorTop;
+            set
+            {
+                if (value < 0 || value >= BufferHeight)
                 {
-                    cursorPos.Y += lines;
+                    throw new ArgumentException("Cursor top is outside buffer height.");
                 }
+                cursorTop = value;
+            }
+        }
+
+        private int scroll;
+
+        public int Scroll
+        {
+            get => scroll;
+            set => MiscUtils.QueueSet(ref scroll, value, ref renderQueued);
+        }
+
+        public bool Autoscroll { get; set; } = true;
+
+        public int AutoScrollOffset { get; set; } = 0;
+
+        public SCEColor FgColor { get; set; } = SCEColor.Gray;
+
+        public SCEColor BgColor { get; set; } = SCEColor.Black;
+
+        public int TabSize { get; set; } = 8;
+
+        public void ShiftCursor(int move, bool newlineOverflow = true)
+        {
+            if (move == 0)
+            {
+                return;
+            }
+
+            if (newlineOverflow)
+            {
+                CursorIndex += move;
+
+                int dif = CursorTop + 1 - BufferHeight;
+                if (dif > 0)
+                {
+                    BufferLines(dif);
+                }
+
+                CursorIndex = Utils.Clamp(CursorIndex, 0, BufferSize - 1);
             }
             else
             {
-                int nextY = cursorPos.Y - lines;
-                if (nextY < 0)
-                {
-                    cursorPos = Vector2Int.Zero;
-                    overflow = nextY;
-                }
-                else
-                {
-                    cursorPos.Y -= lines;
-                }
+                CursorLeft = Utils.Clamp(CursorLeft + move, 0, BufferWidth - 1);
             }
         }
 
-        public void ScrollCursor(int scroll)
+        public void BufferLines(int lines)
         {
-            ScrollCursor(scroll, out _);
+            lines = Math.Min(lines, BufferHeight);
+            var count = BufferWidth * lines;
+            buffer.Shift(count);
+            buffer.Fill(Pixel.Empty, BufferSize - count, count);
         }
 
-        private void ShiftCursor(int move, bool carriageReturn = true)
+        public void Newline(int count, bool carriageReturn = true)
         {
-            ScrollCursor(move, out int overflow);
-            _lineBuffer.Shift(overflow);
-            if (carriageReturn && overflow > 0)
+            if (count == 0)
             {
-                cursorPos.X = 0;
-            }
-        }
-
-        public bool Delete()
-        {
-            ScrollCursor(-1, out int overflow);
-            if (overflow != 0)
-            {
-                return false;
+                return;
             }
 
-            this[CursorPos.Y, cursorPos.X] = Pixel.Empty;
-            renderQueued = true;
-
-            return false;
-        }
-
-        private void Newline(bool carriageReturn = true)
-        {
-            if (++cursorPos.Y >= BufferHeight)
+            int next = CursorTop + count;
+            int dif = next + 1 - BufferHeight;
+            if (dif > 0)
             {
-                cursorPos.Y = BufferHeight - 1;
-                _lineBuffer.Shift(1);
+                CursorTop = BufferHeight - 1;
+                BufferLines(dif);
             }
             else
             {
-                _lineBuffer[cursorPos.Y] = new Pixel[BufferWidth];
+                CursorTop = next;
             }
+            
             if (carriageReturn)
             {
-                cursorPos.X = 0;
+                CursorLeft = 0;
             }
         }
 
-        public void Write(char c)
+        public void Newline(bool carriageReturn = true)
         {
-            switch (c)
+            Newline(1, carriageReturn);
+        }
+
+        public void Write(string? str)
+        {
+            if (str == null)
             {
-                case '\b':
-                    if (cursorPos.X > 0)
-                    {
-                        --cursorPos.X;
-                    }
-                    break;
-                case '\t':
-                    ShiftCursor(TabSize);
-                    break;
-                case '\r':
-                    cursorPos.X = 0;
-                    break;
-                case '\v':
-                case '\f':
-                case '\n':
-                    Newline();
-                    break;
-                case '\a':
-                    break;
-                default:
-                    this[CursorPos.Y, CursorPos.X] = new Pixel(c, FgColor, BgColor);
-                    ShiftCursor(1);
-                    break;
+                return;
+            }
+            for (int i = 0; i < str.Length; ++i)
+            {
+                switch (str[i])
+                {
+                    case '\v':
+                    case '\f':
+                    case '\n':
+                        Newline();
+                        break;
+                    case '\r':
+                        CursorLeft = 0;
+                        break;
+                    case '\b':
+                        ShiftCursor(-1, false);
+                        break;
+                    case '\a':
+                        break;
+                    case '\t':
+                        ShiftCursor(TabSize);
+                        break;
+                    default:
+                        this[CursorPos] = new(str[i], FgColor, BgColor);
+                        if (CursorLeft == BufferWidth - 1 && (i == str.Length - 1 || !(str[i + 1] is '\n' or '\f' or '\v')))
+                        {
+                            Newline();
+                        }
+                        else
+                        {
+                            ShiftCursor(1, false);
+                        }
+                        break;
+                }
             }
 
             renderQueued = true;
 
-            if (AutoScroll && CursorPos.Y - Scroll == Height - AutoScrollOffset)
+            if (Autoscroll && CursorTop - Scroll - AutoScrollOffset == Height && CursorTop < BufferHeight - 1)
             {
                 ++Scroll;
             }
         }
 
-        public void Write(string str)
+        public void Write(char c)
         {
-            foreach (var c in str)
-            {
-                Write(c);
-            }
+            Write(c.ToString());
         }
 
         public void Write(object obj)
         {
-            if (obj?.ToString() is string str)
+            if (obj?.ToString() is string s)
             {
-                Write(str);
+                Write(s);
             }
         }
 
         public void WriteLine()
         {
-            Newline();
+            Write("\n");
         }
 
         public void WriteLine(string str)
         {
-            Write(str);
-            Newline();
+            Write(str + "\n");
         }
 
         public void WriteLine(object obj)
         {
-            Write(obj);
-            Newline();
+            if (obj?.ToString() is string s)
+            {
+                WriteLine(s);
+            }
         }
 
-        #endregion
+        public void Shift(int index, int count)
+        {
+            int end = index + count;
+            for (int i = 0; i < count; ++i)
+            {
+                this[end - i] = this[end - i - 1];
+            }
+            this[index] = Pixel.Empty;
+            renderQueued = true;
+        }
+
+        public void Shift(Vector2Int pos, int count)
+        {
+            Shift(Translate(pos), count);
+        }
+
+        public void Delete()
+        {
+            ShiftCursor(-1);
+            this[CursorPos] = Pixel.Empty;
+            renderQueued = true;
+        }
 
         public void Resize(int width, int height)
         {
             _dpMap.CleanResize(width, height);
-            if (BufferWidth < width)
-            {
-                BufferWidth = width;
-            }
             renderQueued = true;
         }
 
@@ -323,10 +322,58 @@ namespace SCE
             Resize(dimensions.X, dimensions.Y);
         }
 
+        public void MapResizeBuffer(int width, int height)
+        {
+            int bufSize = width * height;
+
+            if (height != BufferHeight && width == BufferWidth)
+            {
+                buffer.Resize(bufSize);
+            }
+            else
+            {
+                CycleBuffer<Pixel> newBuffer = new(bufSize);
+
+                int mapWidth = Math.Min(BufferWidth, width);
+                int mapHeight = Math.Min(BufferHeight, height);
+
+                foreach (var pos in new Rect2DInt(mapWidth, mapHeight))
+                {
+                    newBuffer[pos.Y * BufferWidth + pos.X] = this[pos];
+                }
+
+                buffer = newBuffer;
+            }
+
+            bufferDimensions = new(width, height);
+        }
+
+        public void MapResizeBuffer(Vector2Int dimensions)
+        {
+            MapResizeBuffer(dimensions.X, dimensions.Y);
+        }
+
+        public void CleanResizeBuffer(int width, int height)
+        {
+            buffer.CleanResize(width * height);
+            bufferDimensions = new(width, height);
+        }
+
+        public void CleanResizeBuffer(Vector2Int dimensions)
+        {
+            CleanResizeBuffer(dimensions.X, dimensions.Y);
+        }
+
+        public void ClearBuffer()
+        {
+            buffer.Clear();
+        }
+
         public void Clear()
         {
-            _lineBuffer.CleanResize(BufferHeight);
             Scroll = 0;
+            CursorIndex = 0;
+            buffer.Clear();
             renderQueued = true;
         }
 
@@ -334,20 +381,24 @@ namespace SCE
         {
             if (renderQueued)
             {
-                for (int y = 0; y < Height; ++y)
+                for (int i = 0; i < Height; ++i)
                 {
-                    var area = Rect2DInt.Horizontal(y, _dpMap.Width);
+                    var area = Rect2DInt.Horizontal(i, Width);
 
-                    var index = y + Scroll;
-                    var arr = this[index];
-                    if (index < BufferHeight && arr != null)
+                    int y = i + Scroll;
+                    if (y >= 0 && y < BufferHeight)
                     {
-                        _dpMap.Fill(pos => arr[pos.X], area);
+                        _dpMap.Fill(pos => pos.X < BufferWidth ? this[y, pos.X] : Pixel.Empty, area);
+                    }
+                    else
+                    {
+                        _dpMap.Fill(Pixel.Empty, area);
                     }
                 }
 
                 renderQueued = false;
             }
+
             return _dpMap;
         }
     }

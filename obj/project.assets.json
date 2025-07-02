@@ -1,11 +1,43 @@
 {
   "version": 3,
   "targets": {
-    "net6.0": {}
+    "net6.0": {
+      "SCECSUtils/1.7.6": {
+        "type": "package",
+        "compile": {
+          "lib/net6.0/CSUtils.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net6.0/CSUtils.dll": {
+            "related": ".xml"
+          }
+        }
+      }
+    }
   },
-  "libraries": {},
+  "libraries": {
+    "SCECSUtils/1.7.6": {
+      "sha512": "Y7EpKxp6mkZunSbt1StyYVpVB/hvPZtCHUBcWOC6EArT5RB/uO40Vh/h7+anrdwWVeBN7VdETJHWrB7e81mpmA==",
+      "type": "package",
+      "path": "scecsutils/1.7.6",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "LICENSE.txt",
+        "README.md",
+        "lib/net6.0/CSUtils.dll",
+        "lib/net6.0/CSUtils.xml",
+        "scecsutils.1.7.6.nupkg.sha512",
+        "scecsutils.nuspec"
+      ]
+    }
+  },
   "projectFileDependencyGroups": {
-    "net6.0": []
+    "net6.0": [
+      "SCECSUtils >= 1.7.6"
+    ]
   },
   "packageFolders": {
     "C:\\Users\\redst\\.nuget\\packages\\": {},
@@ -52,6 +84,12 @@
     "frameworks": {
       "net6.0": {
         "targetAlias": "net6.0",
+        "dependencies": {
+          "SCECSUtils": {
+            "target": "Package",
+            "version": "[1.7.6, )"
+          }
+        },
         "imports": [
           "net461",
           "net462",

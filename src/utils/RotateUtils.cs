@@ -1,36 +1,26 @@
-﻿namespace SCE
+﻿using CSUtils;
+
+namespace SCE
 {
     public static class RotateUtils
     {
-        public const float RADIAN_EULAR_CONVERSION_FACTOR = 180 / MathF.PI;
-
         #region Conversion
 
-        public static Vector2 AngleToVector(float angle)
+        public static Vector2 AngleToVec(float angle)
         {
             return new Vector2(MathF.Cos(angle), MathF.Sin(angle)).SafeNormalize();
         }
 
-        public static float VectorToRadians(Vector2 vector)
+        public static float VecToRad(Vector2 vector)
         {
             vector = vector.SafeNormalize();
             var angle = MathF.Atan(vector.Y / vector.X);
             return vector.X > 0 ? angle : angle + MathF.PI;
         }
 
-        public static float VectorToDegrees(Vector2 vector)
+        public static float VecToDeg(Vector2 vector)
         {
-            return RadiansToDegrees(VectorToRadians(vector));
-        }
-
-        public static float RadiansToDegrees(float radians)
-        {
-            return radians * RADIAN_EULAR_CONVERSION_FACTOR;
-        }
-
-        public static float DegreesToRadians(float degrees)
-        {
-            return degrees / RADIAN_EULAR_CONVERSION_FACTOR;
+            return Utils.RadToDeg(VecToRad(vector));
         }
 
         #endregion

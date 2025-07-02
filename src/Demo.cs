@@ -1,6 +1,7 @@
 ﻿using CSUtils;
 using SCE.UIS;
 using System.Diagnostics;
+
 namespace SCE
 {
     internal class Demo
@@ -279,8 +280,6 @@ namespace SCE
             }
 
             _pb.Value += (float)(GameHandler.DeltaTime * 10.0);
-
-           
         }
 
         private void SetupDisplay()
@@ -292,8 +291,6 @@ namespace SCE
 
             Display.Instance.ResizeMode = Display.ResizeType.Auto;
 
-            // Adds the IRenderables to the display to render.
-            // 
             Display.Instance.Renderables.AddEvery(_fl, _loggerFl, _vs, _cr, _fps, _scl, _pb);
 
             Display.Instance.BasePixel = new(SCEColor.DarkCyan);

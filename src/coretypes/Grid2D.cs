@@ -413,11 +413,12 @@ namespace SCE
         {
             var newData = new T[Height, Width];
 
-            float val = (Math.Max(Width, Height) - 1) / 2.0f;
+            float mid = (Math.Max(Width, Height) - 1) / 2.0f;
 
-            Vector2 axis = new(val, val);
+            Vector2 axis = new(mid, mid);
 
             var fix = Vector2.Zero;
+
             if (Width > Height)
             {
                 fix = new(0, (Width - Height) / 2.0f);
@@ -429,8 +430,7 @@ namespace SCE
 
             foreach (var pos in this)
             {
-                var rot = clockwise ? RotateUtils.Rotate90CW(pos + fix, axis) :
-                    RotateUtils.Rotate90ACW(pos + fix, axis);
+                var rot = clockwise ? RotateUtils.Rotate90CW(pos + fix, axis) : RotateUtils.Rotate90ACW(pos + fix, axis);
 
                 var next = (Vector2Int)(rot - fix.Inverse());
 

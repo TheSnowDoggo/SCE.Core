@@ -15,7 +15,9 @@
     <copyright>MIT License</copyright>
     <repository url="https://github.com/TheSnowDoggo/SCE.Core" />
     <dependencies>
-      <group targetFramework="net6.0" />
+      <group targetFramework="net6.0">
+        <dependency id="SCECSUtils" version="1.7.6" exclude="Build,Analyzers" />
+      </group>
     </dependencies>
   </metadata>
   <files>

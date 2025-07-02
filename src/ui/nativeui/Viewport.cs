@@ -18,7 +18,7 @@
 
         public bool Transparency { get; set; } = false;
 
-        public AliasHash<IRenderable> Renderables { get; set; } = new();
+        public Func<IEnumerable<IRenderable>>? OnRender { get; set; }
 
         public void Resize(int width, int height)
         {
@@ -38,9 +38,14 @@
                 _dpMap.Fill(BasePixel);
             }
 
+            if (OnRender == null)
+            {
+                return _dpMap;
+            }
+
             List<IRenderable> list = new();
 
-            foreach (var r in Renderables)
+            foreach (var r in OnRender.Invoke())
             {
                 if (r.IsActive)
                 {
@@ -49,8 +54,6 @@
             }
 
             list.Sort((left, right) => right.Layer - left.Layer);
-
-            List<Rect2DInt> mapList = new();
 
             foreach (var r in list)
             {
